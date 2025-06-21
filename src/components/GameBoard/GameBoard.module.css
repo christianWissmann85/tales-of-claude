@@ -1,0 +1,52 @@
+/* src/components/GameBoard/GameBoard.module.css */
+
+/* Define CSS variables for consistent sizing */
+:root {
+  --cell-size: 32px; /* As per TECH_SPEC.md */
+  --cell-font-size: 24px; /* Adjusted for readability of emojis/ASCII */
+}
+
+.gameBoard {
+  display: grid;
+  /* Grid dimensions are set dynamically via inline style in GameBoard.tsx */
+  /* Example: grid-template-columns: repeat(20, 1fr); */
+  /* Example: grid-template-rows: repeat(15, 1fr); */
+
+  width: calc(var(--cell-size) * 20); /* Fixed width for 20 columns */
+  height: calc(var(--cell-size) * 15); /* Fixed height for 15 rows */
+
+  border: 2px solid #333;
+  background-color: #1a1a1a; /* Dark background for contrast */
+  font-family: 'monospace', 'Courier New', Courier, monospace; /* Monospace font for ASCII art consistency */
+  font-size: var(--cell-font-size);
+  color: #eee; /* Light color for text/emojis */
+  overflow: hidden; /* Ensures content stays within the board boundaries */
+  position: relative; /* Needed for absolute positioning of FPS counter */
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Subtle green glow effect */
+  image-rendering: pixelated; /* For crisp pixel art if used */
+}
+
+.gridCell {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  width: var(--cell-size);
+  height: var(--cell-size);
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  user-select: none; /* Prevent text selection on game elements */
+  /* Optional: Add a subtle border for visual grid lines */
+  /* border: 1px solid rgba(255, 255, 255, 0.05); */
+}
+
+.fpsCounter {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: limegreen; /* Distinct color for FPS */
+  padding: 2px 5px;
+  font-size: 0.8em;
+  border-radius: 3px;
+  pointer-events: none; /* Allows clicks/interactions to pass through this overlay */
+  z-index: 100; /* Ensure it's on top of other elements */
+}

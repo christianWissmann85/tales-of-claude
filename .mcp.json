@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "delegate": {
+      "type": "stdio",
+      "command": "delegate",
+      "args": [],
+      "env": {}
+    }
+  }
+}

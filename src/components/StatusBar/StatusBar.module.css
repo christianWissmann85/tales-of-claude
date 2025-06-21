@@ -1,0 +1,116 @@
+/* src/components/StatusBar/StatusBar.module.css */
+
+.statusBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1a1a1a; /* Dark theme background */
+  color: #00ffff; /* Default cyan text */
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace; /* Monospace font */
+  font-size: 0.9em;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px; /* Spacing between sections */
+  box-sizing: border-box; /* Include padding in width */
+  z-index: 1000;
+  border-bottom: 2px solid #00ffff; /* Retro ASCII-style border - bottom line */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); /* Subtle cyan glow for futuristic feel */
+}
+
+.statusBarSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap; /* Prevent wrapping for individual sections */
+}
+
+.statusBarText {
+  color: #00ffff; /* Default cyan text */
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.7); /* Subtle text glow */
+}
+
+.levelText {
+  color: #ffff00; /* Yellow/gold for Level */
+  text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* Yellow glow */
+  font-weight: bold;
+}
+
+.xpText {
+  color: #ffff00; /* Yellow/gold for XP */
+  text-shadow: 0 0 5px rgba(255, 255, 0, 0.7); /* Yellow glow */
+}
+
+.progressBarContainer {
+  width: 120px; /* Fixed width for progress bars */
+  height: 18px;
+  background-color: #333; /* Background for empty part of the bar */
+  border: 1px solid #00ffff; /* Cyan border for progress bar container */
+  position: relative;
+  overflow: hidden; /* Ensure fill stays within bounds */
+  box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.3); /* Inner shadow for depth */
+}
+
+.progressBarFill {
+  height: 100%;
+  transition: width 0.5s ease-in-out; /* Smooth progress bar animation */
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hpBar .progressBarFill {
+  background-color: #ff0000; /* Red for HP */
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.6); /* Red glow */
+}
+
+.energyBar .progressBarFill {
+  background-color: #0000ff; /* Blue for Energy */
+  box-shadow: 0 0 8px rgba(0, 0, 255, 0.6); /* Blue glow */
+}
+
+.xpBar .progressBarFill {
+  background-color: #ffff00; /* Yellow/gold for XP */
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.6); /* Yellow glow */
+}
+
+.progressBarText {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  line-height: 18px; /* Vertically center text */
+  color: #fff; /* White text for readability over bars */
+  font-size: 0.8em;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8); /* Dark shadow for contrast */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .statusBar {
+    flex-direction: column; /* Stack items on smaller screens */
+    align-items: flex-start;
+    padding: 8px 15px;
+    gap: 10px;
+  }
+
+  .progressBarContainer {
+    width: 100px; /* Slightly smaller bars on mobile */
+    height: 16px;
+  }
+
+  .progressBarText {
+    line-height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statusBar {
+    font-size: 0.8em;
+    padding: 5px 10px;
+  }
+  .progressBarContainer {
+    width: 80px;
+  }
+}

@@ -1,0 +1,119 @@
+.dialogueBox {
+  /* Fixed position at bottom of screen */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+
+  /* Dark semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.85);
+
+  /* Retro ASCII borders using box-drawing characters (simulated with box-shadow for a blocky/pixelated look) */
+  /* This creates a layered, chunky border effect common in retro UIs. */
+  border: 2px solid #555; /* Base border */
+  box-shadow:
+    0 0 0 4px #333, /* Inner dark shadow for depth */
+    0 0 0 6px #777, /* Outer lighter shadow for a blocky look */
+    0 0 0 8px #222; /* Even darker outer shadow for more depth */
+
+  /* Monospace font (assuming 'Press Start 2P' is imported or available, otherwise falls back) */
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
+  font-size: 1.1em;
+  line-height: 1.5;
+
+  /* Z-index above game board */
+  z-index: 1000;
+
+  /* Smooth fade-in animation */
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Keyframes for the fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Optional: slight slide-up effect */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styling for NPC names */
+.npcName {
+  color: #FFFF00; /* Yellow for NPC names */
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+}
+
+/* Styling for dialogue text */
+.dialogueText {
+  color: #00FFFF; /* Cyan text color for dialogue */
+  margin-bottom: 20px;
+  white-space: pre-wrap; /* Preserves whitespace and line breaks from content */
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+}
+
+/* Container for choice buttons */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between choice buttons */
+}
+
+/* Styling for individual choice buttons */
+.choiceButton {
+  background-color: rgba(50, 50, 50, 0.7); /* Darker semi-transparent background */
+  color: #00FFFF; /* Cyan text for choices */
+  border: 2px solid #00FFFF; /* Cyan border */
+  padding: 10px 15px;
+  font-family: inherit; /* Inherit monospace font */
+  font-size: 1em;
+  cursor: pointer;
+  text-align: left; /* Align text to the left */
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease; /* Smooth transition for hover effects */
+  box-shadow: 2px 2px 0px 0px #008080; /* Subtle blocky shadow for depth */
+}
+
+/* Hover effects for choice buttons */
+.choiceButton:hover {
+  background-color: #00FFFF; /* Cyan background on hover */
+  color: #000; /* Black text on hover */
+  border-color: #00FFFF; /* Keep border cyan */
+  box-shadow: 4px 4px 0px 0px #00FFFF; /* More pronounced shadow on hover */
+}
+
+/* Active (click) effect for choice buttons */
+.choiceButton:active {
+  transform: translateY(2px) translateX(2px); /* Simulate a button press */
+  box-shadow: 0px 0px 0px 0px #008080; /* Remove shadow on press */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .dialogueBox {
+    padding: 15px;
+    font-size: 1em;
+  }
+  .choiceButton {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dialogueBox {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+}
