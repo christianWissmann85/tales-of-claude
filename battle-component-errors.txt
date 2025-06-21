@@ -1,0 +1,40 @@
+
+> tales-of-claude@0.1.0 type-check
+> tsc --noEmit
+
+src/components/Battle/Battle.tsx(15,8): error TS2307: Cannot find module '../types/global.types' or its corresponding type declarations.
+src/components/Battle/Battle.tsx(16,24): error TS2307: Cannot find module '../models/Player' or its corresponding type declarations.
+src/components/Battle/Battle.tsx(17,25): error TS2307: Cannot find module '../models/Map' or its corresponding type declarations.
+src/components/Battle/Battle.tsx(18,34): error TS2307: Cannot find module '../assets/maps/terminalTown' or its corresponding type declarations.
+src/components/Battle/Battle.tsx(38,54): error TS7006: Parameter 'se' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(40,46): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(41,46): error TS7006: Parameter 'ability' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(80,9): error TS2353: Object literal may only specify known properties, and 'battle' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(91,51): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(92,59): error TS7006: Parameter 'se' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(104,40): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(105,48): error TS7006: Parameter 'se' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(125,77): error TS7006: Parameter 'se' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(140,26): error TS2353: Object literal may only specify known properties, and 'battle' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(143,26): error TS2353: Object literal may only specify known properties, and 'dialogue' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(146,26): error TS2353: Object literal may only specify known properties, and 'dialogue' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(159,9): error TS2353: Object literal may only specify known properties, and 'enemies' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(176,28): error TS2353: Object literal may only specify known properties, and 'items' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(176,45): error TS2339: Property 'items' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(189,28): error TS2353: Object literal may only specify known properties, and 'items' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(189,41): error TS2339: Property 'items' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(189,54): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(202,9): error TS2353: Object literal may only specify known properties, and 'gameFlags' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(203,20): error TS2339: Property 'gameFlags' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(209,26): error TS2353: Object literal may only specify known properties, and 'enemies' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(209,45): error TS2339: Property 'enemies' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(212,26): error TS2353: Object literal may only specify known properties, and 'enemies' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(212,41): error TS2339: Property 'enemies' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(212,56): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(215,26): error TS2353: Object literal may only specify known properties, and 'npcs' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(215,42): error TS2339: Property 'npcs' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(218,26): error TS2353: Object literal may only specify known properties, and 'npcs' does not exist in type 'GameState'.
+src/components/Battle/Battle.tsx(218,38): error TS2339: Property 'npcs' does not exist on type 'GameState'.
+src/components/Battle/Battle.tsx(218,50): error TS7006: Parameter 'n' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(235,4): error TS7006: Parameter 'entity' implicitly has an 'any' type.
+src/components/Battle/Battle.tsx(241,3): error TS2353: Object literal may only specify known properties, and 'enemies' does not exist in type 'GameState'.

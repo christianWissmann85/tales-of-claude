@@ -1,8 +1,8 @@
-
 // src/assets/maps/terminalTown.ts
 
 import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../../types/global.types';
 import { GameMap } from '../../models/Map'; // Import GameMap class as requested
+import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy'; // Import Enemy class and EnemyVariant
 
 const MAP_WIDTH = 20;
 const MAP_HEIGHT = 15;
@@ -75,7 +75,14 @@ const npcs: NPC[] = [
   },
 ];
 
-// 5. Exit to Binary Forest on the east side
+// 5. Enemies: A few to test battles
+const enemies: Enemy[] = [
+  new EnemyClass('enemy_basic_bug_01', EnemyVariant.BasicBug, { x: 2, y: 2 }), // Near spawn
+  new EnemyClass('enemy_syntax_error_01', EnemyVariant.SyntaxError, { x: 10, y: 8 }), // Middle
+  new EnemyClass('enemy_runtime_error_01', EnemyVariant.RuntimeError, { x: 17, y: 12 }), // Near edge
+];
+
+// 6. Exit to Binary Forest on the east side
 const exits: Exit[] = [
   {
     position: { x: MAP_WIDTH - 1, y: 7 }, // Rightmost edge, middle height
@@ -102,20 +109,23 @@ tiles[exits[0].position.y][exits[0].position.x] = { ...exitTile };
 // E = Exit (leads to Binary Forest)
 // N = NPC: The Great Debugger (at 10,5)
 // C = NPC: Compiler Cat (at 3,10)
+// B = Enemy: Basic Bug (at 2,2)
+// S = Enemy: Syntax Error (at 10,8)
+// R = Enemy: Runtime Error (at 17,12)
 
 TTTTTTTTTTTTTTTTTTTT
 TGGGGGGGGGGGGGGGGGGGT
-TGGGGGGGGGGGGGGGGGGGT
+TBGGGGGGGGGGGGGGGGGGGT  <-- Basic Bug (2,2)
 TGGGGGGGGGGGGGGGGGGGT
 TGGGGGGWWWWGGGGGGGGGT  <-- Debugger's Hut (Walls: 7,4 to 9,6)
 TGGGGGGW N WGGGGGGGGGT  <-- The Great Debugger (10,5)
 TGGGGGGW D WGGGGGGGGGT  <-- Door to Debugger's Hut (8,6)
 TGGGGGGWWWWGGGGGGGGGE  <-- Exit to Binary Forest (19,7)
-TGGGGGGGGGGGGGGGGGGGT
+TGGGGGGGGGSGGGGGGGGGT  <-- Syntax Error (10,8)
 TGGGGGGGGGGGGWWWWGGGT  <-- Archive Building (Walls: 12,9 to 14,11)
 TGCGGGGGGGGGGW G WGGGT  <-- Compiler Cat (3,10)
 TGGGGGGGGGGGGW D WGGGT  <-- Door to Archive (13,11)
-TGGGGGGGGGGGGWWWWGGGT
+TGGGGGGGGGGGGWWWWGGGR  <-- Runtime Error (17,12)
 TGGGGGGGGGGGGGGGGGGGT
 TTTTTTTTTTTTTTTTTTTT
 */
@@ -127,6 +137,6 @@ export const terminalTownData: IGameMap = {
   width: MAP_WIDTH,
   height: MAP_HEIGHT,
   tiles: tiles,
-  entities: [...npcs], // Initial entities on the map (only NPCs for now)
+  entities: [...npcs, ...enemies], // Initial entities on the map (NPCs and Enemies)
   exits: exits,
 };

@@ -1,0 +1,396 @@
+/* Battle.module.css */
+
+/*
+ * Retro RPG Terminal Theme
+ * Dark background, bright green text, subtle glows.
+ */
+
+/* --- Global / Base Styles for the Battle Component --- */
+.battleContainer {
+    font-family: 'VT323', monospace; /* A classic retro pixel font */
+    background-color: #1a1a1a; /* Very dark grey, almost black */
+    color: #00ff00; /* Bright green for text */
+    border: 2px solid #00ff00; /* Green border for the main container */
+    box-shadow: 0 0 15px #00ff00; /* Subtle green glow */
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px; /* Limit width for better readability */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 8px; /* Slightly rounded corners */
+    overflow: hidden; /* Ensures shadows/borders don't bleed */
+}
+
+/* --- Headings and Indicators --- */
+.battleTitle {
+    font-size: 3.5em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #39ff14; /* A slightly different green for emphasis */
+    text-shadow: 0 0 15px #39ff14, 0 0 25px rgba(57, 255, 20, 0.5); /* Stronger glow */
+    letter-spacing: 3px;
+    animation: pulseTitle 2s infinite alternate; /* Subtle breathing effect */
+}
+
+@keyframes pulseTitle {
+    from { text-shadow: 0 0 15px #39ff14, 0 0 25px rgba(57, 255, 20, 0.5); }
+    to { text-shadow: 0 0 20px #39ff14, 0 0 35px rgba(57, 255, 20, 0.7); }
+}
+
+.turnIndicator {
+    font-size: 1.8em;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #003300; /* Darker green background */
+    border: 1px solid #00ff00;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 8px #00ff00; /* Inner glow */
+}
+
+/* --- Combatants Layout --- */
+.combatants {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 30px;
+    justify-content: space-around;
+    align-items: flex-start; /* Align items to the top */
+}
+
+.playerSection,
+.enemiesSection {
+    flex: 1; /* Distribute space evenly */
+    min-width: 300px; /* Ensure sections don't get too small */
+    background-color: #0d0d0d; /* Slightly lighter dark background for sections */
+    border: 1px solid #00ff00;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px #00ff00; /* Inner glow */
+}
+
+.playerSection h2,
+.enemiesSection h2 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #00ff00;
+    text-shadow: 0 0 8px #00ff00;
+}
+
+.enemiesSection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* --- Enemy Card Styling --- */
+.enemyCard {
+    background-color: #001a00; /* Even darker green background for cards */
+    border: 1px solid #00ff00;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer; /* Indicates clickability */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    text-align: center;
+    min-width: 150px;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
+}
+
+.enemyCard:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
+    border-color: #39ff14; /* Brighter border on hover */
+}
+
+.enemyCard h3 {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+    color: #39ff14;
+    text-shadow: 0 0 5px #39ff14;
+}
+
+/* --- Target Selection State --- */
+.targetable {
+    border-color: #ffcc00; /* Yellow/orange border to indicate targetable */
+    box-shadow: 0 0 20px #ffcc00, inset 0 0 10px #ffcc00; /* Intense yellow glow */
+    transform: scale(1.03); /* Slightly larger to stand out */
+    cursor: crosshair; /* Crosshair cursor for targeting */
+    animation: targetGlow 1s infinite alternate; /* Pulsating target glow */
+}
+
+@keyframes targetGlow {
+    from { box-shadow: 0 0 20px #ffcc00, inset 0 0 10px #ffcc00; }
+    to { box-shadow: 0 0 30px #ffcc00, inset 0 0 15px #ffcc00; }
+}
+
+/* --- Current Enemy Turn Highlight --- */
+.currentEnemyTurn {
+    border-color: #ff0000; /* Red border for current turn */
+    box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; /* Intense red glow */
+    animation: currentTurnGlow 1s infinite alternate; /* Pulsating red glow */
+}
+
+@keyframes currentTurnGlow {
+    from { box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; }
+    to { box-shadow: 0 0 30px #ff0000, inset 0 0 15px #ff0000; }
+}
+
+
+/* --- HP and Energy Bars --- */
+.hpBarContainer,
+.energyBarContainer {
+    width: 100%;
+    height: 20px;
+    background-color: #333; /* Dark grey background for the empty bar */
+    border: 1px solid #00ff00;
+    border-radius: 3px;
+    margin-top: 5px;
+    position: relative;
+    overflow: hidden; /* Ensures fill stays within bounds */
+    box-shadow: inset 0 0 3px #00ff00;
+}
+
+.hpBarFill {
+    height: 100%;
+    background-color: #00ff00; /* Green for HP */
+    width: 100%; /* Will be overridden by JS */
+    transition: width 0.5s ease-out; /* Smooth transition for HP changes */
+    box-shadow: 0 0 5px #00ff00;
+}
+
+.energyBarFill {
+    height: 100%;
+    background-color: #00ffff; /* Cyan for Energy */
+    width: 100%; /* Will be overridden by JS */
+    transition: width 0.5s ease-out;
+    box-shadow: 0 0 5px #00ffff;
+}
+
+.hpText,
+.energyText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff; /* White text for readability over bars */
+    font-size: 0.9em;
+    text-shadow: 1px 1px 2px #000; /* Slight shadow for contrast */
+}
+
+/* --- Status Effects --- */
+.statusEffects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.statusEffect {
+    background-color: #002200; /* Darker green for status effect background */
+    border: 1px solid #00ff00;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 3px #00ff00;
+    cursor: help; /* Indicates more info on hover */
+}
+
+/* --- Player Actions --- */
+.playerActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #00ff00; /* Separator line */
+}
+
+.actionButton {
+    background-color: #004400; /* Dark green button background */
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 12px 25px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+.actionButton:hover {
+    background-color: #006600; /* Lighter green on hover */
+    box-shadow: 0 0 15px #00ff00; /* Stronger glow */
+    transform: translateY(-2px);
+}
+
+.actionButton:active {
+    background-color: #008800;
+    transform: translateY(0);
+    box-shadow: inset 0 0 10px #00ff00;
+}
+
+.actionButton:disabled {
+    background-color: #333;
+    color: #666;
+    border-color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.7;
+}
+
+/* --- Dropdown Menus (for Abilities/Items) --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownContent {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background-color: #0d0d0d; /* Same as section background */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    z-index: 1;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    padding: 5px 0;
+    left: 50%; /* Center dropdown below button */
+    transform: translateX(-50%);
+    top: 100%; /* Position below the button */
+    margin-top: 5px; /* Small gap */
+}
+
+.dropdownContent a {
+    color: #00ff00;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 1.1em;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dropdownContent a:hover {
+    background-color: #004400; /* Darker green on hover */
+    color: #39ff14; /* Brighter green text */
+}
+
+/* Show the dropdown menu on hover or when activated by JS */
+.dropdown:hover .dropdownContent {
+    display: block;
+}
+
+/* --- Target Selection Message --- */
+.targetSelection {
+    font-size: 1.8em;
+    color: #ffcc00; /* Yellow/orange for warning/instruction */
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: 0 0 10px #ffcc00;
+    animation: blinkText 1.5s infinite alternate; /* Blinking effect */
+}
+
+@keyframes blinkText {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+}
+
+/* --- Battle Log (BIGGER!) --- */
+.battleLog {
+    background-color: #000000; /* Pure black for the log background */
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-family: 'VT323', monospace; /* Ensure log uses the retro font */
+    font-size: 1.1em;
+    line-height: 1.4;
+    overflow-y: auto; /* Enable scrolling for long logs */
+    min-height: 250px; /* MAKE THIS BIGGER! */
+    max-height: 400px; /* Prevent it from getting too big */
+    box-shadow: inset 0 0 10px #00ff00; /* Inner glow for the log */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+}
+
+/* --- Scrollbar Customization (for Webkit browsers) --- */
+.battleLog::-webkit-scrollbar {
+    width: 10px;
+}
+
+.battleLog::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Dark track */
+    border-radius: 10px;
+}
+
+.battleLog::-webkit-scrollbar-thumb {
+    background-color: #00ff00; /* Green thumb */
+    border-radius: 10px;
+    border: 2px solid #004400; /* Darker green border */
+}
+
+.battleLog::-webkit-scrollbar-thumb:hover {
+    background-color: #39ff14; /* Brighter green on hover */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .combatants {
+        flex-direction: column; /* Stack player and enemies vertically */
+        align-items: center;
+    }
+
+    .playerSection,
+    .enemiesSection {
+        width: 95%; /* Take up more width */
+        min-width: unset; /* Remove min-width constraint */
+    }
+
+    .battleTitle {
+        font-size: 2.5em;
+    }
+
+    .actionButton {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .battleLog {
+        min-height: 180px; /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .battleContainer {
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .battleTitle {
+        font-size: 2em;
+    }
+
+    .turnIndicator {
+        font-size: 1.2em;
+    }
+
+    .enemyCard {
+        min-width: 120px;
+        max-width: 150px;
+    }
+
+    .actionButton {
+        width: 100%; /* Full width buttons */
+    }
+}

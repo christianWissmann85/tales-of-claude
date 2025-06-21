@@ -43,6 +43,57 @@ export class Player implements IPlayer {
       level: startingLevel,
       exp: 0,
     };
+
+    // Add initial abilities for Claude
+    this.abilities.push(
+      {
+        id: 'debug',
+        name: 'Debug',
+        description: 'A basic attack that reveals enemy weaknesses and deals minor damage.',
+        type: 'attack',
+        cost: 5,
+        effect: {
+          damage: 15,
+          statusEffect: 'corrupted', // Represents vulnerability/weakness
+          target: 'singleEnemy',
+          duration: 2, // Duration for the 'corrupted' status effect
+        },
+      },
+      {
+        id: 'refactor',
+        name: 'Refactor',
+        description: 'Optimizes your code, restoring a portion of your health.',
+        type: 'heal',
+        cost: 15,
+        effect: {
+          heal: 30,
+          target: 'self',
+        },
+      },
+      {
+        id: 'compile',
+        name: 'Compile',
+        description: 'Compiles a powerful program, unleashing a devastating attack after a short charge.',
+        type: 'attack',
+        cost: 25,
+        effect: {
+          damage: 50,
+          target: 'singleEnemy',
+        },
+      },
+      {
+        id: 'analyze',
+        name: 'Analyze',
+        description: 'Analyzes the battlefield, temporarily increasing your defensive capabilities.',
+        type: 'buff',
+        cost: 10,
+        effect: {
+          statusEffect: 'optimized', // Represents increased defense/efficiency
+          target: 'self',
+          duration: 3, // Duration for the 'optimized' status effect
+        },
+      },
+    );
   }
 
   /**

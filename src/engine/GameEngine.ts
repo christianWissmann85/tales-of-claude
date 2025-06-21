@@ -6,13 +6,15 @@ import {
   Direction,
   Tile,
   GameMap as IGameMap, // Renamed to avoid conflict with GameMap class
-  Enemy,
   NPC,
   Item,
   Exit,
   DialogueState, // Import DialogueState
   DialogueOption, // Import DialogueOption
 } from '../types/global.types';
+
+// 1. Add import for Enemy model from '../models/Enemy'
+import { Enemy } from '../models/Enemy';
 
 // Import GameState and action types from context/GameContext.tsx
 import { GameState, GameAction } from '../context/GameContext';
@@ -317,9 +319,9 @@ export class GameEngine {
       return;
     }
 
-    // Check for collisions with other dynamic entities (enemies, NPCs)
-    if (this.checkEntityCollisions(newPosition)) {
-      console.log('GameEngine: Movement blocked: Collision with entity.');
+    // Check for collisions with NPCs (NPCs still block movement)
+    if (this.checkNPCCollision(newPosition)) {
+      console.log('GameEngine: Movement blocked: Collision with NPC.');
       return;
     }
 
@@ -343,6 +345,9 @@ export class GameEngine {
     // If all checks pass, dispatch the movement action
     console.log('GameEngine: Dispatching MOVE_PLAYER action.');
     this._dispatch({ type: 'MOVE_PLAYER', payload: { direction } });
+
+    // After player moves, check for enemy encounters at the new position
+    this.checkForEnemyEncounter(newPosition);
   }
 
   /**
@@ -362,31 +367,53 @@ export class GameEngine {
   }
 
   /**
-   * Checks for collisions with other dynamic entities (enemies, NPCs) at a given position.
-   * @param position The position to check for entity collision.
-   * @returns True if a collision with an enemy or NPC occurs, false otherwise.
+   * Checks for collisions with NPCs at a given position.
+   * NPCs block player movement.
+   * @param position The position to check for NPC collision.
+   * @returns True if a collision with an NPC occurs, false otherwise.
    */
-  public checkEntityCollisions(position: Position): boolean {
-    const { enemies, npcs } = this._currentGameState;
-
-    // Check enemies
-    for (const enemy of enemies) {
-      if (enemy.position.x === position.x && enemy.position.y === position.y) {
-        console.log(`GameEngine: Collision with enemy: ${enemy.name}`);
-        // This could trigger a battle, for example:
-        // this._dispatch({ type: 'START_BATTLE', payload: { enemies: [enemy] } });
-        return true; // Collision with an enemy
-      }
-    }
-
-    // Check NPCs
+  public checkNPCCollision(position: Position): boolean {
+    const { npcs } = this._currentGameState;
     for (const npc of npcs) {
       if (npc.position.x === position.x && npc.position.y === position.y) {
         console.log(`GameEngine: Collision with NPC: ${npc.name}`);
         return true; // Collision with an NPC
       }
     }
+    return false;
+  }
 
+  /**
+   * Checks if an enemy exists at a given position. Does NOT prevent movement.
+   * This method is used to identify an enemy for an encounter.
+   * @param position The position to check for an enemy.
+   * @returns The Enemy object if found, otherwise null.
+   */
+  private getEnemyAtPosition(position: Position): Enemy | null {
+    const { enemies } = this._currentGameState;
+    for (const enemy of enemies) {
+      if (enemy.position.x === position.x && enemy.position.y === position.y) {
+        console.log(`GameEngine: Enemy found at ${position.x},${position.y}: ${enemy.name}`);
+        return enemy as Enemy; // Cast to Enemy class type
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Checks for enemy encounters at a given position after player movement.
+   * If an enemy is found, dispatches START_BATTLE and removes the enemy from the map.
+   * @param position The position to check for an enemy encounter.
+   * @returns True if a battle was initiated, false otherwise.
+   */
+  private checkForEnemyEncounter(position: Position): boolean {
+    const enemy = this.getEnemyAtPosition(position);
+    if (enemy) {
+      console.log(`GameEngine: Encountered enemy: ${enemy.name} at ${position.x},${position.y}. Starting battle.`);
+      this._dispatch({ type: 'START_BATTLE', payload: { enemies: [enemy] } });
+      this._dispatch({ type: 'REMOVE_ENEMY', payload: { enemyId: enemy.id } });
+      return true;
+    }
     return false;
   }
 

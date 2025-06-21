@@ -230,10 +230,16 @@ const initialNpcs: NPC[] = initialMap.entities.filter(
   (entity): entity is NPC => 'role' in entity
 );
 
+// Extract Enemies from the initial map's entities
+// Enemies are identified by the presence of 'type' property (EnemyType)
+const initialEnemies: Enemy[] = initialMap.entities.filter(
+  (entity): entity is Enemy => 'type' in entity && !('role' in entity)
+);
+
 const defaultGameState: GameState = {
   player: initialPlayer,
   currentMap: initialMap,
-  enemies: [], // Enemies will be loaded from map data if present, or added dynamically
+  enemies: initialEnemies, // Load enemies from map data
   npcs: initialNpcs,    // NPCs will be loaded from map data if present, or added dynamically
   items: [],   // Items will be loaded from map data if present, or added dynamically
   dialogue: null,
