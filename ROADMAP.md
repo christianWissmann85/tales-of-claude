@@ -1,4 +1,3 @@
-```markdown
 # Tales of Claude - Development Roadmap 🗺️
 
 ## Current Status ✅
@@ -78,4 +77,3 @@
 
 ## The Dream
 A fully playable RPG that showcases the power of Human-AI collaboration!
-```
