@@ -3,6 +3,7 @@
 import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../../types/global.types';
 import { GameMap } from '../../models/Map'; // Import GameMap class as requested
 import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy'; // Import Enemy class and EnemyVariant
+import { Item as ItemClass, ItemVariant } from '../../models/Item'; // Import Item class and ItemVariant for creating items
 
 const MAP_WIDTH = 20;
 const MAP_HEIGHT = 15;
@@ -82,6 +83,13 @@ const enemies: Enemy[] = [
   new EnemyClass('enemy_runtime_error_01', EnemyVariant.RuntimeError, { x: 17, y: 12 }), // Near edge
 ];
 
+// 5.5. Items: Some pickups for the player
+const items: Item[] = [
+  { ...ItemClass.createItem(ItemVariant.HealthPotion), id: 'health_potion_1', position: { x: 5, y: 3 } }, // Near spawn
+  { ...ItemClass.createItem(ItemVariant.EnergyDrink), id: 'energy_drink_1', position: { x: 15, y: 10 } }, // Near archive
+  { ...ItemClass.createItem(ItemVariant.HealthPotion), id: 'health_potion_2', position: { x: 8, y: 12 } }, // Bottom area
+];
+
 // 6. Exit to Binary Forest on the east side
 const exits: Exit[] = [
   {
@@ -131,12 +139,13 @@ TTTTTTTTTTTTTTTTTTTT
 */
 
 // Export the map data conforming to the IGameMap interface
+
 export const terminalTownData: IGameMap = {
   id: 'terminalTown',
   name: 'Terminal Town',
   width: MAP_WIDTH,
   height: MAP_HEIGHT,
   tiles: tiles,
-  entities: [...npcs, ...enemies], // Initial entities on the map (NPCs and Enemies)
+  entities: [...npcs, ...enemies, ...items], // Initial entities on the map (NPCs, Enemies, and Items)
   exits: exits,
 };

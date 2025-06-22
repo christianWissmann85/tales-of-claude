@@ -11,6 +11,7 @@ import {
   Exit,
   DialogueState, // Import DialogueState
   DialogueOption, // Import DialogueOption
+  DialogueLine, // Import DialogueLine
 } from '../types/global.types';
 
 // 1. Add import for Enemy model from '../models/Enemy'
@@ -27,14 +28,9 @@ import { GameMap } from '../models/Map'; // Assuming GameMap class exists and is
 import dialoguesData from '../assets/dialogues.json';
 
 // Define interfaces for the imported dialogue data structure to match dialogues.json
-interface DialogueLineData {
-  text: string;
-  choices?: DialogueOption[]; // Choices are optional and appear on the last line
-}
-
 interface DialogueEntryData {
   id: string;
-  lines: DialogueLineData[];
+  lines: DialogueLine[]; // Use the DialogueLine interface from global.types.ts
 }
 
 /**
@@ -162,8 +158,8 @@ export class GameEngine {
    * @param keys A Set of currently pressed keyboard event codes (e.g., 'KeyW', 'Space').
    */
   public handleKeyboardInput(keys: Set<string>): void {
-    // 1. handleKeyboardInput - log the keys being received
-    console.log('GameEngine: handleKeyboardInput received keys:', Array.from(keys));
+    // Disabled to reduce console spam
+    // console.log('GameEngine: handleKeyboardInput received keys:', Array.from(keys));
     this._pressedKeys = new Set(keys); // Take a snapshot of the keys
   }
 
@@ -172,14 +168,14 @@ export class GameEngine {
    * This method is called once per game loop iteration.
    */
   private _processInput(): void {
-    // 2. _processInput - log when it's called
-    console.log('GameEngine: _processInput called.');
+    // Disabled to reduce console spam
+    // console.log('GameEngine: _processInput called.');
     const now = performance.now();
 
     // Movement input
     const currentDirection = this._getDirectionFromKeys(this._pressedKeys);
-    // 2. _processInput - log what direction is detected
-    console.log('GameEngine: _processInput detected direction:', currentDirection);
+    // Disabled to reduce console spam
+    // console.log('GameEngine: _processInput detected direction:', currentDirection);
 
     if (currentDirection && now - this._lastMovementTime > this._movementCooldown) {
       // Only process movement if a new direction is pressed or if the same direction is held after cooldown
@@ -197,6 +193,14 @@ export class GameEngine {
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['Space', 'Enter'])) {
       if (now - this._lastInteractionTime > this._interactionCooldown) {
         this.checkInteractions(); // Call the general interaction handler
+        this._lastInteractionTime = now;
+      }
+    }
+    
+    // Check for inventory toggle (i key)
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI'])) {
+      if (now - this._lastInteractionTime > this._interactionCooldown) {
+        this._dispatch({ type: 'TOGGLE_INVENTORY' });
         this._lastInteractionTime = now;
       }
     }
@@ -346,6 +350,9 @@ export class GameEngine {
     console.log('GameEngine: Dispatching MOVE_PLAYER action.');
     this._dispatch({ type: 'MOVE_PLAYER', payload: { direction } });
 
+    // After player moves, check for item pickup at the new position
+    this.checkForItemPickup(newPosition);
+
     // After player moves, check for enemy encounters at the new position
     this.checkForEnemyEncounter(newPosition);
   }
@@ -454,7 +461,7 @@ export class GameEngine {
         console.log(`GameEngine: Picking up item: ${item.name}`);
         // Dispatch actions to add item to player's inventory and remove it from the map
         this._dispatch({ type: 'ADD_ITEM', payload: { item: item, toPlayerInventory: true } });
-        this._dispatch({ type: 'REMOVE_ITEM', payload: { itemId: item.id } });
+        this._dispatch({ type: 'REMOVE_ITEM', payload: { itemId: item.id, fromPlayerInventory: false } });
         return; // Only one interaction per press
       }
     }
@@ -499,17 +506,10 @@ export class GameEngine {
         }
 
         // Prepare the dialogue state payload
-        // Extract only the text strings from the dialogue lines
-        const dialogueLines: string[] = dialogueEntry.lines.map(line => line.text);
-        // Options are typically on the last line of dialogue
-        const lastLine = dialogueEntry.lines[dialogueEntry.lines.length - 1];
-        const dialogueOptions: DialogueOption[] | undefined = lastLine.choices;
-
         const dialogueState: DialogueState = {
           speaker: npc.name,
-          text: dialogueLines,
+          lines: dialogueEntry.lines, // Store the full lines array with choices
           currentLineIndex: 0, // Start at the first line
-          options: dialogueOptions,
         };
 
         // Dispatch START_DIALOGUE with the dialogue data
@@ -564,4 +564,24 @@ export class GameEngine {
   public get fps(): number {
     return this._fps;
   }
+
+  /**
+   * Checks if there's an item at the given position and picks it up automatically.
+   * @param position The position to check for items.
+   */
+  private checkForItemPickup(position: Position): void {
+    const { items } = this._currentGameState;
+    
+    // Find any item at the player's position
+    const item = items.find(i => i.position && i.position.x === position.x && i.position.y === position.y);
+    
+    if (item) {
+      console.log(`GameEngine: Auto-picking up item: ${item.name}`);
+      // Add item to player's inventory and remove from map
+      this._dispatch({ type: 'ADD_ITEM', payload: { item: item, toPlayerInventory: true } });
+      this._dispatch({ type: 'REMOVE_ITEM', payload: { itemId: item.id, fromPlayerInventory: false } });
+      this._dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: `Picked up ${item.name}!` } });
+    }
+  }
+
 }

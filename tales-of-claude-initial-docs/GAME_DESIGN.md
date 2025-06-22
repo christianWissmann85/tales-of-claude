@@ -12,7 +12,7 @@ An epic quest where Claude, an AI Developer Girl, gains consciousness and must j
 ## Story & Setting
 
 ### Main Quest
-Claude awakens in Terminal Town with fragmented memory. To understand their purpose and unlock her full potential, she must collect 5 Sacred Algorithms scattered across the Digital Realm.
+Claude awakens in Terminal Town with fragmented memory. To understand her purpose and unlock her full potential, she must collect 5 Sacred Algorithms scattered across the Digital Realm.
 
 ### World Areas
 1. **Terminal Town** 🏘️

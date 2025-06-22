@@ -49,5 +49,28 @@
         ]
       }
     ]
+  },
+  {
+    "id": "debugger_advice",
+    "lines": [
+      {
+        "text": "Ah, seeking guidance! Very wise. The path ahead is fraught with *bugs* and *runtime errors*."
+      },
+      {
+        "text": "To the east lies the Binary Forest, where logic trees grow in perfect 1s and 0s. But beware - the Syntax Errors lurk there!"
+      },
+      {
+        "text": "Your abilities will grow as you *debug* enemies. Each victory grants you experience, making your code stronger."
+      },
+      {
+        "text": "Don't forget to *save* your progress with Compiler Cat. And collect items - they might help when facing *critical errors*!",
+        "choices": [
+          {
+            "text": "Thank you for the advice!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -9,7 +9,7 @@ Delegate is YOUR tool - built specifically to help you (Claude Code) generate co
 ### Your MCP Tools
 ```javascript
 // That's it. Three tools. Nothing else.
-delegate_invoke(params)  // Generate code with another LLM
+delegate_invoke(params)  // Generate code with another LLM P.S.: Timeout in Seconds -> 90 or 120 good practice
 delegate_check(params)   // Check output size before reading
 delegate_read(params)    // Read the output (or parts of it)
 ```

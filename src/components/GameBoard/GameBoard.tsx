@@ -6,6 +6,8 @@ import { useKeyboard } from '../../hooks/useKeyboard';
 import { GameEngine } from '../../engine/GameEngine';
 import { MovementSystem } from '../../engine/MovementSystem'; // Imported as requested, though GameEngine handles movement dispatch directly
 import { Position, TileType, Enemy, NPC, Item } from '../../types/global.types';
+import Inventory from '../Inventory/Inventory';
+import { Inventory as InventoryModel } from '../../models/Inventory';
 
 import styles from './GameBoard.module.css';
 
@@ -45,19 +47,19 @@ const GameBoard: React.FC = () => {
   // updates are handled by the separate `useEffect` below.
   useEffect(() => {
     if (!gameEngineRef.current) {
-      console.log("GameBoard: Initializing GameEngine...");
+      console.log('GameBoard: Initializing GameEngine...');
       gameEngineRef.current = new GameEngine(dispatch, state); // `dispatch` is stable, `state` is initial
       gameEngineRef.current.start();
-      console.log("GameBoard: GameEngine started.");
+      console.log('GameBoard: GameEngine started.');
     }
 
     // Cleanup: stop the engine when the component unmounts
     return () => {
       if (gameEngineRef.current) {
-        console.log("GameBoard: Stopping GameEngine...");
+        console.log('GameBoard: Stopping GameEngine...');
         gameEngineRef.current.stop();
         gameEngineRef.current = null; // Clear the ref on unmount for robustness
-        console.log("GameBoard: GameEngine stopped.");
+        console.log('GameBoard: GameEngine stopped.');
       }
     };
   }, []); // FIX: Empty dependency array ensures this runs only once on mount
@@ -94,7 +96,13 @@ const GameBoard: React.FC = () => {
     // 2. Check for NPCs at this position
     const npcAtPos = npcs.find(npc => npc.position.x === x && npc.position.y === y);
     if (npcAtPos) {
-      return entityMap.npc;
+      // Use specific emoji based on NPC role
+      if (npcAtPos.role === 'compiler_cat') {
+        return '🐱'; // Cat emoji for Compiler Cat
+      } else if (npcAtPos.role === 'debugger') {
+        return '🧙'; // Keep wizard for The Great Debugger
+      }
+      return entityMap.npc; // Default NPC emoji
     }
 
     // 3. Check for Enemies at this position
@@ -165,23 +173,62 @@ const GameBoard: React.FC = () => {
     }
   }
 
+  // Create an InventoryModel instance from the player's inventory items
+  // Use useMemo to prevent recreating on every render
+  const playerInventory = React.useMemo(() => {
+    const inventory = new InventoryModel();
+    state.player.inventory.forEach(item => {
+      // Ensure item has required properties before adding
+      if (item && item.id && item.type) {
+        inventory.addItem(item);
+      } else {
+        console.error('Invalid item in player inventory:', item);
+      }
+    });
+    return inventory;
+  }, [state.player.inventory]);
+
+  const handleUseItem = useCallback((itemId: string) => {
+    const item = playerInventory.getItem(itemId);
+    if (item) {
+      // For now, just remove from inventory when used
+      // In a full implementation, we'd handle different item effects
+      dispatch({ type: 'REMOVE_ITEM', payload: { itemId, fromPlayerInventory: true } });
+      dispatch({ type: 'SHOW_INVENTORY', payload: { show: false } });
+    }
+  }, [playerInventory, dispatch]);
+
+  const handleCloseInventory = useCallback(() => {
+    dispatch({ type: 'SHOW_INVENTORY', payload: { show: false } });
+  }, [dispatch]);
+
   return (
-    <div
-      className={styles.gameBoard}
-      // Dynamically set CSS Grid template columns/rows based on display dimensions
-      style={{
-        gridTemplateColumns: `repeat(${DISPLAY_WIDTH}, 1fr)`,
-        gridTemplateRows: `repeat(${DISPLAY_HEIGHT}, 1fr)`,
-      }}
-    >
-      {gridCells}
-      {/* Display FPS counter for debugging, if GameEngine is initialized */}
-      {gameEngineRef.current && (
-        <div className={styles.fpsCounter}>
-          FPS: {gameEngineRef.current.fps}
-        </div>
+    <>
+      <div
+        className={styles.gameBoard}
+        // Dynamically set CSS Grid template columns/rows based on display dimensions
+        style={{
+          gridTemplateColumns: `repeat(${DISPLAY_WIDTH}, 1fr)`,
+          gridTemplateRows: `repeat(${DISPLAY_HEIGHT}, 1fr)`,
+        }}
+      >
+        {gridCells}
+        {/* Display FPS counter for debugging, if GameEngine is initialized */}
+        {gameEngineRef.current && (
+          <div className={styles.fpsCounter}>
+            FPS: {gameEngineRef.current.fps}
+          </div>
+        )}
+      </div>
+      {/* Render inventory UI when visible */}
+      {state.showInventory && (
+        <Inventory
+          inventory={playerInventory}
+          onClose={handleCloseInventory}
+          onUseItem={handleUseItem}
+        />
       )}
-    </div>
+    </>
   );
 };
 

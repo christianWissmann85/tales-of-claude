@@ -158,6 +158,7 @@ export interface CombatEntity {
   attack: number;
   defense: number;
   speed: number;
+  expReward?: number; // Experience points awarded upon defeating this entity (for enemies)
 }
 
 /**
@@ -172,6 +173,7 @@ export interface Enemy extends BaseCharacter {
   type: EnemyType;
   stats: CombatStats; // Enemies also have combat stats
   abilities: Ability[]; // Enemies can have abilities
+  expReward: number; // Experience points awarded upon defeating this enemy
 }
 
 /**
@@ -213,11 +215,18 @@ export interface DialogueOption {
 /**
  * Represents the current state of a dialogue interaction.
  */
+/**
+ * Represents a single line within a dialogue, potentially including choices.
+ */
+export interface DialogueLine {
+  text: string;
+  choices?: DialogueOption[];
+}
+
 export interface DialogueState {
   speaker: string; // Name of the character speaking
-  text: string[]; // Array of text lines to display sequentially (for pagination)
+  lines: DialogueLine[]; // Array of all lines for the current dialogue
   currentLineIndex: number; // Index of the current line being displayed
-  options?: DialogueOption[]; // Optional choices for the player
 }
 
 /**
@@ -243,4 +252,6 @@ export interface GameState {
   dialogue: DialogueState | null; // Current dialogue state, null if no dialogue is active
   battle: BattleState | null; // Current battle state, null if no battle is active
   gameFlags: Record<string, boolean | number | string>; // Generic flags for tracking story progress, puzzles, etc.
+  showInventory: boolean; // Whether the inventory UI is currently displayed
+  notification: string | null; // Current notification message to display
 }

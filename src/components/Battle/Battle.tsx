@@ -50,7 +50,7 @@ const Battle: React.FC = () => {
 
     // Find the current enemy whose turn it is
     const currentEnemyId = localBattleState.turnOrder.find(id =>
-      id !== localBattleState.player.id && localBattleState.enemies.some(e => e.id === id)
+      id !== localBattleState.player.id && localBattleState.enemies.some(e => e.id === id),
     );
 
     if (!currentEnemyId) {
@@ -82,11 +82,11 @@ const Battle: React.FC = () => {
 
   // Helper function to get emoji based on entity name
   const getEmojiForEntity = (entity: CombatEntity) => {
-    if (entity.id === player.id) return '🤖';
-    if (entity.name.includes('Bug')) return '👾';
-    if (entity.name.includes('Virus')) return '🦠';
-    if (entity.name.includes('Corrupted Data')) return '🗑️';
-    if (entity.name.includes('Logic Error')) return '🐛';
+    if (entity.id === player.id){ return '🤖'; }
+    if (entity.name.includes('Bug')){ return '👾'; }
+    if (entity.name.includes('Virus')){ return '🦠'; }
+    if (entity.name.includes('Corrupted Data')){ return '🗑️'; }
+    if (entity.name.includes('Logic Error')){ return '🐛'; }
     return '❓'; // Default emoji for unknown enemies
   };
 
@@ -116,7 +116,7 @@ const Battle: React.FC = () => {
   // --- Player Action Handlers ---
 
   const handlePlayerAttack = (targetId: string) => {
-    if (!localBattleState) return;
+    if (!localBattleState){ return; }
     const updatedBattleState = battleSystem.performAttack(localBattleState, player.id, targetId);
     setLocalBattleState(updatedBattleState); // Update local state
     setIsSelectingTarget(false);
@@ -124,7 +124,7 @@ const Battle: React.FC = () => {
   };
 
   const handlePlayerAbility = (abilityId: string, targetId?: string) => {
-    if (!localBattleState) return;
+    if (!localBattleState){ return; }
     const updatedBattleState = battleSystem.useAbility(localBattleState, player.id, abilityId, targetId);
     setLocalBattleState(updatedBattleState); // Update local state
     setSelectedAbilityId(null);
@@ -133,14 +133,14 @@ const Battle: React.FC = () => {
   };
 
   const handlePlayerItem = (item: Item) => {
-    if (!localBattleState) return;
+    if (!localBattleState){ return; }
     const updatedBattleState = battleSystem.useItem(localBattleState, player.id, item);
     setLocalBattleState(updatedBattleState); // Update local state
     setSelectedItemId(null);
   };
 
   const handleFlee = () => {
-    if (!localBattleState) return;
+    if (!localBattleState){ return; }
     const enemySpeeds = enemies.map(e => e.speed);
     const updatedBattleState = battleSystem.flee(localBattleState, player.id, player.speed, enemySpeeds);
     setLocalBattleState(updatedBattleState); // Update local state (will be null if successful flee)
@@ -148,7 +148,7 @@ const Battle: React.FC = () => {
 
   // Handler for clicking on an enemy when target selection is active
   const handleTargetClick = (targetId: string) => {
-    if (!isSelectingTarget) return;
+    if (!isSelectingTarget){ return; }
 
     if (actionType === 'attack') {
       handlePlayerAttack(targetId);
@@ -203,7 +203,7 @@ const Battle: React.FC = () => {
       <h2 className={styles.battleTitle}>Battle!</h2>
 
       <div className={styles.turnIndicator}>
-        {localBattleState.currentTurn === 'player' ? "Your Turn!" : "Enemy's Turn!"}
+        {localBattleState.currentTurn === 'player' ? 'Your Turn!' : 'Enemy\'s Turn!'}
       </div>
 
       <div className={styles.combatants}>

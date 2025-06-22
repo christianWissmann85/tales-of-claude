@@ -4,6 +4,7 @@ import StatusBar from './components/StatusBar/StatusBar';
 import GameBoard from './components/GameBoard/GameBoard';
 import DialogueBox from './components/DialogueBox/DialogueBox'; // Import DialogueBox
 import Battle from './components/Battle/Battle'; // Import Battle
+import Notification from './components/Notification/Notification'; // Import Notification
 
 // Separate component to access game context
 const GameContent: React.FC = () => {
@@ -29,6 +30,8 @@ const GameContent: React.FC = () => {
       {state.battle ? <Battle /> : <GameBoard />}
       {/* DialogueBox component will automatically show/hide based on game state */}
       <DialogueBox />
+      {/* Notification component for game messages */}
+      <Notification />
     </div>
   );
 };

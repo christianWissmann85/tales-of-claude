@@ -15,6 +15,8 @@ import {
 import { Player } from '../models/Player';
 import { GameMap } from '../models/Map'; // Import the GameMap class
 import { terminalTownData } from '../assets/maps/terminalTown'; // Import terminalTownData
+import SaveGameService from '../services/SaveGame'; // Import SaveGameService
+import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -36,7 +38,11 @@ const clonePlayer = (player: Player): Player => {
   // This is crucial because the Player constructor initializes some fields.
   newPlayer.statusEffects = player.statusEffects.map(se => ({ ...se }));
   newPlayer.stats = { ...player.stats }; // Shallow copy stats object
-  newPlayer.inventory = player.inventory.map(item => ({ ...item })); // Deep copy items in inventory
+  // Deep copy items in inventory, ensuring they retain their full structure
+  newPlayer.inventory = player.inventory.map(item => ({
+    ...item,
+    position: item.position ? { ...item.position } : undefined,
+  }));
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability })); // Deep copy abilities
   return newPlayer;
 };
@@ -58,7 +64,14 @@ type GameAction =
   | { type: 'ADD_ENEMY'; payload: { enemy: Enemy } }
   | { type: 'REMOVE_ENEMY'; payload: { enemyId: string } }
   | { type: 'ADD_NPC'; payload: { npc: NPC } }
-  | { type: 'REMOVE_NPC'; payload: { npcId: string } };
+  | { type: 'REMOVE_NPC'; payload: { npcId: string } }
+  | { type: 'TOGGLE_INVENTORY' }
+  | { type: 'SHOW_INVENTORY'; payload: { show: boolean } }
+  | { type: 'DIALOGUE_CHOICE'; payload: { action: string } }
+  | { type: 'SAVE_GAME' }
+  | { type: 'LOAD_GAME'; payload: { savedState: Partial<GameState> } }
+  | { type: 'SHOW_NOTIFICATION'; payload: { message: string } }
+  | { type: 'CLEAR_NOTIFICATION' };
 
 /**
  * The reducer function that handles state transitions based on dispatched actions.
@@ -101,6 +114,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             speed: e.stats.speed,
             abilities: e.abilities.map(a => ({ ...a })),
             statusEffects: e.statusEffects.map(se => ({ ...se })),
+            expReward: e.expReward, // Include expReward for victory calculations
           })),
           currentTurn: 'player', // Player always starts
           turnOrder: [state.player.id, ...action.payload.enemies.map(e => e.id)].sort(() => Math.random() - 0.5), // Simple random order
@@ -212,6 +226,91 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'REMOVE_NPC':
       return { ...state, npcs: state.npcs.filter(n => n.id !== action.payload.npcId) };
 
+    case 'TOGGLE_INVENTORY':
+      return { ...state, showInventory: !state.showInventory };
+
+    case 'SHOW_INVENTORY':
+      return { ...state, showInventory: action.payload.show };
+
+    case 'DIALOGUE_CHOICE': {
+      const { action: choiceAction } = action.payload;
+      
+      // Handle specific dialogue actions
+      if (choiceAction === 'save_game') {
+        // Save the game
+        const saveSuccess = SaveGameService.saveGame(state);
+        if (saveSuccess) {
+          console.log('Game saved successfully!');
+          return { 
+            ...state, 
+            dialogue: null,
+            notification: 'Game saved successfully! Meow~' 
+          };
+        } else {
+          console.error('Failed to save game');
+          return { 
+            ...state, 
+            dialogue: null,
+            notification: 'Failed to save game! Please try again.' 
+          };
+        }
+      } else if (choiceAction === 'end_dialogue') {
+        return { ...state, dialogue: null };
+      } else if (choiceAction === 'debugger_advice') {
+        // Load new dialogue
+        const newDialogue = dialoguesData.find((d) => d.id === 'debugger_advice');
+        if (newDialogue) {
+          return {
+            ...state,
+            dialogue: {
+              speaker: 'The Great Debugger',
+              lines: newDialogue.lines,
+              currentLineIndex: 0,
+            },
+          };
+        }
+      }
+      // Add more dialogue actions as needed
+      return state;
+    }
+
+    case 'SAVE_GAME': {
+      const saveSuccess = SaveGameService.saveGame(state);
+      if (saveSuccess) {
+        console.log('Game saved successfully!');
+      } else {
+        console.error('Failed to save game');
+      }
+      return state; // State doesn't change
+    }
+
+    case 'LOAD_GAME': {
+      const { savedState } = action.payload;
+      // Merge saved state with current state, preserving class instances
+      const updatedPlayer = clonePlayer(state.player);
+      if (savedState.player) {
+        updatedPlayer.position = savedState.player.position || updatedPlayer.position;
+        updatedPlayer.stats = savedState.player.stats || updatedPlayer.stats;
+        updatedPlayer.inventory = savedState.player.inventory || updatedPlayer.inventory;
+        updatedPlayer.abilities = savedState.player.abilities || updatedPlayer.abilities;
+        updatedPlayer.statusEffects = savedState.player.statusEffects || updatedPlayer.statusEffects;
+      }
+      
+      return {
+        ...state,
+        ...savedState,
+        player: updatedPlayer,
+        // Ensure we maintain class instances
+        currentMap: savedState.currentMap || state.currentMap,
+      };
+    }
+
+    case 'SHOW_NOTIFICATION':
+      return { ...state, notification: action.payload.message };
+    
+    case 'CLEAR_NOTIFICATION':
+      return { ...state, notification: null };
+
     default:
       return state;
   }
@@ -227,24 +326,43 @@ const initialMap = new GameMap(terminalTownData);
 // Extract NPCs from the initial map's entities
 // NPCs are identified by the presence of a 'role' property, unique to them in the GameMap's entities union.
 const initialNpcs: NPC[] = initialMap.entities.filter(
-  (entity): entity is NPC => 'role' in entity
+  (entity): entity is NPC => 'role' in entity,
 );
 
 // Extract Enemies from the initial map's entities
-// Enemies are identified by the presence of 'type' property (EnemyType)
+// Enemies are identified by having 'abilities' array and stats with hp
 const initialEnemies: Enemy[] = initialMap.entities.filter(
-  (entity): entity is Enemy => 'type' in entity && !('role' in entity)
+  (entity): entity is Enemy => 
+    'abilities' in entity && 
+    Array.isArray(entity.abilities) &&
+    'stats' in entity &&
+    'hp' in (entity as any).stats,
 );
+
+// Extract Items from the initial map's entities
+// Items are identified by having a 'type' property that is ItemType (string) not EnemyType
+// and not having 'role' (which NPCs have) or 'abilities' (which Enemies have)
+const initialItems: Item[] = initialMap.entities.filter(
+  (entity): entity is Item => 
+    'type' in entity && 
+    typeof entity.type === 'string' && 
+    !('role' in entity) && 
+    !('abilities' in entity),
+);
+
+
 
 const defaultGameState: GameState = {
   player: initialPlayer,
   currentMap: initialMap,
   enemies: initialEnemies, // Load enemies from map data
   npcs: initialNpcs,    // NPCs will be loaded from map data if present, or added dynamically
-  items: [],   // Items will be loaded from map data if present, or added dynamically
+  items: initialItems,   // Load items from map data
   dialogue: null,
   battle: null,
   gameFlags: {},
+  showInventory: false,
+  notification: null,
 };
 
 /**

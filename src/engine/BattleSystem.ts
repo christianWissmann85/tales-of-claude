@@ -7,6 +7,7 @@ import {
   Item,
   StatusEffect,
   StatusEffectType,
+  ItemType,
 } from '../types/global.types';
 import { Player } from '../models/Player'; // Used for initial battle setup
 import { Enemy } from '../models/Enemy'; // Used for initial battle setup
@@ -14,6 +15,32 @@ import { GameAction } from '../context/GameContext'; // Import GameAction type
 
 class BattleSystem {
   private dispatch: React.Dispatch<GameAction>;
+
+  // Define static item templates for drops
+  private static readonly ITEM_TEMPLATES: { [key: string]: Item } = {
+    HEALTH_POTION: {
+      id: 'health_potion',
+      name: 'Health Potion',
+      description: 'Restores a small amount of HP.',
+      type: 'consumable',
+      effect: 'restoreHp',
+      value: 20,
+    },
+    ENERGY_DRINK: {
+      id: 'energy_drink',
+      name: 'Energy Drink',
+      description: 'Restores a small amount of Energy.',
+      type: 'consumable',
+      effect: 'restoreEnergy',
+      value: 15,
+    },
+    DEBUG_TOOL: {
+      id: 'debug_tool',
+      name: 'Debug Tool',
+      description: 'A mysterious tool. Its purpose is unclear.',
+      type: 'quest', // Using 'quest' as a generic placeholder for now
+    },
+  };
 
   constructor(dispatch: React.Dispatch<GameAction>) {
     this.dispatch = dispatch;
@@ -85,7 +112,7 @@ class BattleSystem {
     return {
       ...battle,
       enemies: battle.enemies.map((e) =>
-        e.id === updatedEntity.id ? { ...updatedEntity } : { ...e }
+        e.id === updatedEntity.id ? { ...updatedEntity } : { ...e },
       ),
     };
   }
@@ -113,7 +140,7 @@ class BattleSystem {
    */
   private applyStatusEffectToCombatEntity(entity: CombatEntity, newEffect: StatusEffect): void {
     const existingEffectIndex = entity.statusEffects.findIndex(
-      (effect) => effect.type === newEffect.type
+      (effect) => effect.type === newEffect.type,
     );
 
     if (existingEffectIndex > -1) {
@@ -201,7 +228,7 @@ class BattleSystem {
     caster: CombatEntity,
     target: CombatEntity, // This 'target' is the primary target for single-target abilities
     ability: Ability,
-    battle: BattleState
+    battle: BattleState,
   ): string[] {
     const logMessages: string[] = [];
     const affectedEntities: CombatEntity[] = [];
@@ -231,7 +258,7 @@ class BattleSystem {
       if (ability.effect.heal !== undefined) {
         currentAbilityTarget.hp = Math.min(
           currentAbilityTarget.maxHp,
-          currentAbilityTarget.hp + ability.effect.heal
+          currentAbilityTarget.hp + ability.effect.heal,
         );
         logMessages.push(`${caster.name} uses ${ability.name} on ${currentAbilityTarget.name}, healing ${ability.effect.heal} HP!`);
       }
@@ -396,7 +423,7 @@ class BattleSystem {
    * @returns A new BattleState if flee failed, or null if battle ended (flee successful).
    */
   public flee(battle: BattleState, playerId: string, playerSpeed: number, enemySpeeds: number[]): BattleState | null {
-    let newBattle = { ...battle };
+    const newBattle = { ...battle };
 
     const avgEnemySpeed = enemySpeeds.length > 0 ? enemySpeeds.reduce((sum, speed) => sum + speed, 0) / enemySpeeds.length : 1;
     const fleeChance = Math.min(0.9, Math.max(0.1, (playerSpeed / (playerSpeed + avgEnemySpeed)) * 0.5 + 0.25)); // Cap chance between 10% and 90%
@@ -448,7 +475,7 @@ class BattleSystem {
     // 1. Prioritize damaging abilities if enough energy
     // 2. Otherwise, use a basic attack
     const availableAbilities = enemy.abilities.filter(
-      (ability) => enemy.energy >= ability.cost
+      (ability) => enemy.energy >= ability.cost,
     );
 
     let chosenAbility: Ability | undefined;
@@ -456,7 +483,7 @@ class BattleSystem {
 
     // Try to find a damaging ability
     const damagingAbilities = availableAbilities.filter(
-      (ability) => ability.type === 'attack' && ability.effect.damage !== undefined
+      (ability) => ability.type === 'attack' && ability.effect.damage !== undefined,
     ).sort((a, b) => (b.effect.damage || 0) - (a.effect.damage || 0)); // Sort by highest damage
 
     if (damagingAbilities.length > 0) {
@@ -464,7 +491,7 @@ class BattleSystem {
     } else {
       // If no damaging abilities, try to find a utility/buff/debuff
       const utilityAbilities = availableAbilities.filter(
-        (ability) => ability.type !== 'attack'
+        (ability) => ability.type !== 'attack',
       );
       if (utilityAbilities.length > 0) {
         chosenAbility = utilityAbilities[0]; // Just pick the first one
@@ -499,6 +526,41 @@ class BattleSystem {
   }
 
   /**
+   * Generates item drops for a defeated enemy based on predefined chances.
+   * @param enemy The defeated CombatEntity (enemy) for which to generate drops.
+   * @returns An array of Item objects that were dropped.
+   */
+  private generateItemDrops(enemy: CombatEntity): Item[] {
+    const droppedItems: Item[] = [];
+    const timestamp = Date.now();
+
+    // Health Potion: 30% chance
+    if (Math.random() < 0.30) {
+      droppedItems.push({
+        ...BattleSystem.ITEM_TEMPLATES.HEALTH_POTION,
+        id: `health_potion_drop_${timestamp}_1`,
+      });
+    }
+    // Energy Drink: 20% chance
+    if (Math.random() < 0.20) {
+      droppedItems.push({
+        ...BattleSystem.ITEM_TEMPLATES.ENERGY_DRINK,
+        id: `energy_drink_drop_${timestamp}_2`,
+      });
+    }
+    // Debug Tool: 10% chance
+    if (Math.random() < 0.10) {
+      droppedItems.push({
+        ...BattleSystem.ITEM_TEMPLATES.DEBUG_TOOL,
+        id: `debug_tool_drop_${timestamp}_3`,
+      });
+    }
+
+    return droppedItems;
+  }
+
+
+  /**
    * Advances the battle to the next turn, handling end-of-turn effects and checking for battle end.
    * @param battle The current BattleState.
    * @returns A new BattleState for the next turn, or null if the battle has ended.
@@ -518,10 +580,25 @@ class BattleSystem {
 
     if (allEnemiesDefeated) {
       newBattle.log.push('All enemies defeated! You won!');
-      // In a full game, EXP and item drops would be calculated here based on original Enemy data.
-      // For this recreation, we assume GameContext handles the final EXP/item calculation.
-      const totalExpGained = 0; // Placeholder
-      const itemsDropped: Item[] = []; // Placeholder
+      
+      let totalExpGained = 0;
+      const itemsDropped: Item[] = [];
+
+      newBattle.enemies.forEach(enemy => {
+        if (enemy.hp <= 0) { // Ensure enemy is actually defeated
+          totalExpGained += enemy.expReward || 0; // Sum up experience
+          const drops = this.generateItemDrops(enemy);
+          itemsDropped.push(...drops);
+        }
+      });
+
+      newBattle.log.push(`You gained ${totalExpGained} experience points!`);
+      if (itemsDropped.length > 0) {
+        const itemNames = itemsDropped.map(item => item.name).join(', ');
+        newBattle.log.push(`You found: ${itemNames}!`);
+      } else {
+        newBattle.log.push('No items dropped this time.');
+      }
 
       this.endBattle(newBattle, true, newBattle.player, totalExpGained, itemsDropped);
       return null; // Battle ended
@@ -553,12 +630,12 @@ class BattleSystem {
             newBattle.log.push(`${nextEntity.name} is no longer frozen.`);
           }
         }
-        newBattle.log.push(`${nextEntity.name} is frozen and skips turn.`);
+        newBattle.log.push(`${nextEntity.name} is frozen and cannot act!`);
       }
 
       turnsSkipped++;
       if (turnsSkipped > maxSkipAttempts) {
-        console.error("Infinite loop detected in turn order advancement. Breaking.");
+        console.error('Infinite loop detected in turn order advancement. Breaking.');
         return null; // Or handle error appropriately, e.g., force end battle
       }
 
@@ -569,7 +646,7 @@ class BattleSystem {
 
     if (!nextEntity) {
       // This should ideally not happen if battle is not over, but as a safeguard
-      console.error("Could not find next active entity, battle might be in an unresolvable state.");
+      console.error('Could not find next active entity, battle might be in an unresolvable state.');
       return null;
     }
 

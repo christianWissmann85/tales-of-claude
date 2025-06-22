@@ -117,3 +117,115 @@
     font-size: 0.9em;
   }
 }
+
+/* Missing CSS classes for DialogueBox.module.css */
+
+/* Keyframes for blinking text (used by .prompt, copied from Battle.module.css) */
+@keyframes blinkText {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+}
+
+.borderTop,
+.borderBottom {
+    color: #00ff00; /* Bright green text */
+    font-family: 'VT323', monospace; /* Retro terminal font */
+    white-space: pre; /* Preserve spaces for ASCII art characters */
+    line-height: 1.5; /* Consistent line height with content */
+    text-shadow: 0 0 5px #00ff00; /* Subtle green glow */
+    background-color: #0d0d0d; /* Dark background matching content area */
+    padding: 0 5px; /* Small horizontal padding for corner alignment */
+    box-sizing: border-box; /* Include padding in the element's total width */
+    width: 100%; /* Span the full width of the dialogueBox's inner content area */
+}
+
+.contentWrapper {
+    display: flex;
+    align-items: stretch; /* Make vertical borders stretch to content height */
+    background-color: #0d0d0d; /* Dark background for the main content area */
+    width: 100%; /* Span the full width of the dialogueBox's inner content area */
+}
+
+.borderLeft,
+.borderRight {
+    color: #00ff00; /* Bright green text */
+    font-family: 'VT323', monospace; /* Retro terminal font */
+    white-space: pre; /* Preserve spaces for ASCII art characters */
+    line-height: 1.5; /* Consistent line height with content */
+    text-shadow: 0 0 5px #00ff00; /* Subtle green glow */
+    background-color: #0d0d0d; /* Dark background matching content area */
+    padding: 0 5px; /* Small horizontal padding */
+    flex-shrink: 0; /* Prevent shrinking of the border columns */
+}
+
+.content {
+    flex-grow: 1; /* Take up all available space between vertical borders */
+    padding: 10px 15px; /* Padding inside the content area */
+    background-color: #0d0d0d; /* Dark background, consistent with Battle.module.css sections */
+    color: #00ff00; /* Bright green text */
+    font-family: 'VT323', monospace; /* Retro terminal font */
+    line-height: 1.5; /* Consistent line height */
+    box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2); /* Subtle inner glow */
+}
+
+.speaker {
+    color: #39ff14; /* Emphasis green for speaker name, from Battle.module.css */
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px #39ff14; /* Stronger glow for emphasis */
+}
+
+.text {
+    margin-bottom: 15px;
+    white-space: pre-wrap; /* Preserve line breaks and spaces for typewriter effect */
+    text-shadow: 0 0 3px rgba(0, 255, 0, 0.5); /* Subtle glow for dialogue text */
+}
+
+.dialogueLine {
+    margin-bottom: 5px; /* Space between individual dialogue lines */
+}
+
+.dialogueLine:last-child {
+    margin-bottom: 0; /* No extra margin on the very last line */
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between options */
+    margin-top: 15px;
+}
+
+.option {
+    background-color: #001a00; /* Darker green background, similar to enemy cards */
+    color: #00ff00; /* Bright green text */
+    border: 1px solid #00ff00; /* Green border */
+    padding: 8px 12px;
+    cursor: pointer;
+    text-align: left; /* Align text to the left, similar to choiceButton */
+    transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active */
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
+}
+
+.option:hover {
+    background-color: #004400; /* Lighter green on hover */
+    box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
+    transform: translateY(-2px); /* Lift effect, similar to actionButton */
+}
+
+.option:active {
+    transform: translateY(0); /* Simulate button press */
+    box-shadow: inset 0 0 10px #00ff00; /* Inner glow on press, similar to actionButton */
+}
+
+.prompt {
+    color: #39ff14; /* Emphasis green for prompt text */
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+    text-shadow: 0 0 8px #39ff14; /* Stronger glow */
+    animation: blinkText 1.5s infinite alternate; /* Blinking effect */
+}

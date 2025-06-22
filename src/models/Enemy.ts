@@ -246,12 +246,12 @@ export class Enemy implements IEnemy {
    */
   chooseAction(battleState: BattleState): { ability: Ability; targetId: string } | null {
     const availableAbilities = this.abilities.filter(
-      (ability) => this.stats.energy >= ability.cost
+      (ability) => this.stats.energy >= ability.cost,
     );
 
     // 1. Prioritize damaging abilities
     const damagingAbilities = availableAbilities.filter(
-      (ability) => ability.type === 'attack' && ability.effect.damage !== undefined
+      (ability) => ability.type === 'attack' && ability.effect.damage !== undefined,
     );
 
     if (damagingAbilities.length > 0) {
@@ -272,7 +272,7 @@ export class Enemy implements IEnemy {
 
     // 2. If no damaging abilities, look for other useful abilities (buffs/debuffs/utility)
     const utilityAbilities = availableAbilities.filter(
-      (ability) => ability.type !== 'attack'
+      (ability) => ability.type !== 'attack',
     );
 
     if (utilityAbilities.length > 0) {
@@ -300,7 +300,7 @@ export class Enemy implements IEnemy {
    */
   applyStatusEffect(newEffect: StatusEffect): void {
     const existingEffectIndex = this.statusEffects.findIndex(
-      (effect) => effect.type === newEffect.type
+      (effect) => effect.type === newEffect.type,
     );
 
     if (existingEffectIndex > -1) {

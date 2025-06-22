@@ -1,6 +1,0 @@
-
-> tales-of-claude@0.1.0 type-check
-> tsc --noEmit
-
-src/engine/BattleSystem.ts(71,3): error TS1443: Module declaration names may only use ' or " quoted strings.
-src/engine/BattleSystem.ts(75,4): error TS1005: ';' expected.
