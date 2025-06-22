@@ -48,7 +48,6 @@ class SaveGameService {
       // Methods are not serialized, which is expected as they will be re-attached on load.
       const jsonState = JSON.stringify(state);
       localStorage.setItem(SaveGameService.SAVE_KEY, jsonState);
-      console.log('Game saved successfully!');
       return true;
     } catch (error) {
       console.error('Failed to save game:', error);
@@ -69,7 +68,6 @@ class SaveGameService {
     try {
       const savedData = localStorage.getItem(SaveGameService.SAVE_KEY);
       if (!savedData) {
-        console.log('No saved game found.');
         return null;
       }
 
@@ -92,7 +90,7 @@ class SaveGameService {
       // Manually copy over all other properties from the parsed plain object to the new instance.
       // This ensures that current HP, EXP, inventory contents, etc., are restored.
       loadedPlayer.statusEffects = parsedState.player.statusEffects.map(se => ({ ...se }));
-      loadedPlayer.stats = { ...parsedState.player.stats }; // Shallow copy stats object
+      loadedPlayer.updateBaseStats(parsedState.player.stats); // Use the new method to update stats
       loadedPlayer.inventory = parsedState.player.inventory.map(item => ({ ...item })); // Deep copy items in inventory
       loadedPlayer.abilities = parsedState.player.abilities.map(ability => ({ ...ability })); // Deep copy abilities
 
@@ -125,7 +123,6 @@ class SaveGameService {
         } : null,
       };
 
-      console.log('Game loaded successfully!', finalGameState);
       return finalGameState;
 
     } catch (error) {
@@ -159,7 +156,6 @@ class SaveGameService {
   static deleteSave(): void {
     try {
       localStorage.removeItem(SaveGameService.SAVE_KEY);
-      console.log('Saved game deleted successfully!');
     } catch (error) {
       console.error('Failed to delete save game:', error);
       // This catch block handles potential errors if localStorage is inaccessible.

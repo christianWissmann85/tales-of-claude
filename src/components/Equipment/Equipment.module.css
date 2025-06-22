@@ -1,0 +1,343 @@
+/* Equipment.module.css */
+
+/* --- CSS Variables for Theme Consistency --- */
+:root {
+    --bg-dark: #1a1a1a;
+    --bg-medium: #2a2a2a;
+    --bg-light: #3a3a3a; /* Slightly lighter for slot backgrounds */
+    --text-light: #e0e0e0;
+    --accent-color: #00ff00; /* Bright green */
+    --accent-color-hover: #33ff33; /* Lighter green for hover */
+    --border-color: #00cc00; /* Slightly darker green for borders */
+    --error-color: #ff4444; /* For potential error messages or warnings */
+
+    --font-mono: 'Share Tech Mono', monospace; /* A good retro monospace font */
+    /* Fallback fonts if Share Tech Mono isn't available */
+    --font-fallback: 'Roboto Mono', 'VT323', 'Fira Code', 'monospace';
+
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --border-radius-sm: 3px;
+    --border-radius-md: 5px;
+}
+
+/* --- 1. Dark Modal Overlay --- */
+.equipmentOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark, semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other content */
+    backdrop-filter: blur(2px); /* Optional: subtle blur effect */
+}
+
+/* --- 2. Centered Equipment Container --- */
+.equipmentContainer {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); /* Green glow effect */
+    color: var(--text-light);
+    font-family: var(--font-mono), var(--font-fallback);
+    max-width: 800px; /* Limit max width on large screens */
+    width: 90%; /* Responsive width */
+    max-height: 90%; /* Prevent overflow on smaller screens */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    position: relative; /* For positioning the close button */
+    animation: fadeInScale 0.3s ease-out forwards; /* Entry animation */
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* --- 6. Close Button --- */
+.closeButton {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-size: 1.8em;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    line-height: 1; /* Prevent extra space around the 'X' */
+    transition: color 0.2s ease, transform 0.2s ease;
+    font-family: var(--font-mono), var(--font-fallback);
+}
+
+.closeButton:hover {
+    color: var(--accent-color-hover);
+    transform: rotate(5deg);
+}
+
+.closeButton:active {
+    transform: rotate(10deg) scale(0.95);
+}
+
+/* --- Equipment Header --- */
+.equipmentHeader {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--accent-color);
+    font-size: 1.8em;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
+    letter-spacing: 1px;
+}
+
+/* --- Equipment Grid/Slots Container --- */
+.equipmentGrid {
+    display: grid;
+    /* Responsive grid: 2 columns on mobile, 3-4 on desktop */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* --- 4. Style Equipment Slots as Cards/Boxes --- */
+.equipmentSlot {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    text-align: center;
+    color: var(--text-light);
+    font-family: var(--font-mono), var(--font-fallback);
+    min-height: 120px; /* Ensure consistent height for all slots */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute content vertically */
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.1); /* Subtle internal glow */
+    transition: all 0.2s ease-in-out; /* Smooth transitions for hover effects */
+}
+
+/* Empty Slot Styling */
+.emptySlot {
+    background-color: var(--bg-medium); /* Slightly darker for empty */
+    color: var(--border-color); /* Green text for "Empty" */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    opacity: 0.7;
+    border-style: dashed; /* Dashed border for empty slots */
+}
+
+.emptySlot:hover {
+    transform: none; /* No lift effect for empty slots */
+    box-shadow: none;
+    opacity: 1;
+}
+
+/* Equipped Slot Styling */
+.equippedSlot {
+    cursor: pointer;
+    position: relative; /* For unequip hint positioning */
+    overflow: hidden; /* Hide overflow for unequip hint */
+}
+
+.equippedSlot:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 20px rgba(0, 255, 0, 0.4); /* Stronger glow on hover */
+    border-color: var(--accent-color-hover);
+}
+
+/* Slot Labels */
+.slotLabel {
+    font-size: 0.8em;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Item Name */
+.itemName {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--text-light);
+    margin-bottom: 5px;
+    white-space: nowrap; /* Prevent item name from wrapping */
+    overflow: hidden; /* Hide overflow if name is too long */
+    text-overflow: ellipsis; /* Add ellipsis for long names */
+}
+
+/* Item Stats */
+.itemStats {
+    font-size: 0.8em;
+    color: var(--text-light);
+    flex-grow: 1; /* Allow stats to take up available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center stats vertically if few */
+}
+
+.itemStats p {
+    margin: 2px 0;
+    line-height: 1.3;
+}
+
+.itemStats span {
+    color: var(--accent-color-hover); /* Highlight stat values */
+}
+
+/* Hover effect for equipped items (clickable to unequip) */
+.unequipHint {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background for hint */
+    color: var(--accent-color-hover);
+    font-size: 0.75em;
+    padding: 5px 0;
+    opacity: 0;
+    transform: translateY(100%); /* Start off-screen */
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none; /* Allow clicks to pass through when hidden */
+    text-align: center;
+}
+
+.equippedSlot:hover .unequipHint {
+    opacity: 1;
+    transform: translateY(0); /* Slide up on hover */
+    pointer-events: auto; /* Enable clicks when visible */
+}
+
+/* --- 5. Style the Total Stats Section --- */
+.totalStats {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-medium);
+    border-radius: var(--border-radius-md);
+    color: var(--text-light);
+    font-family: var(--font-mono), var(--font-fallback);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.totalStats h3 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.4em;
+    text-align: center;
+    text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+}
+
+.totalStats p {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.totalStats p:last-child {
+    border-top: 1px dashed var(--border-color);
+    padding-top: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.totalStats strong {
+    color: var(--accent-color-hover);
+    font-size: 1.1em;
+}
+
+/* --- 7. Responsiveness (Media Queries) --- */
+
+/* Tablets and smaller desktops */
+@media (max-width: 768px) {
+    .equipmentContainer {
+        padding: var(--spacing-md);
+        width: 95%;
+    }
+
+    .equipmentGrid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Fewer columns */
+        gap: var(--spacing-sm);
+    }
+
+    .closeButton {
+        font-size: 1.5em;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+
+    .equipmentHeader {
+        font-size: 1.5em;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .equipmentSlot {
+        min-height: 100px;
+        padding: 6px;
+    }
+
+    .itemName {
+        font-size: 1em;
+    }
+
+    .itemStats {
+        font-size: 0.75em;
+    }
+
+    .totalStats h3 {
+        font-size: 1.2em;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 480px) {
+    .equipmentContainer {
+        padding: var(--spacing-sm);
+        max-height: 95%; /* Allow more height on very small screens */
+    }
+
+    .equipmentGrid {
+        grid-template-columns: 1fr; /* Single column layout for very small screens */
+        gap: var(--spacing-sm);
+    }
+
+    .closeButton {
+        font-size: 1.3em;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+
+    .equipmentHeader {
+        font-size: 1.3em;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .equipmentSlot {
+        min-height: 90px;
+        padding: 5px;
+    }
+
+    .itemName {
+        font-size: 0.95em;
+    }
+
+    .itemStats {
+        font-size: 0.7em;
+    }
+
+    .totalStats h3 {
+        font-size: 1.1em;
+    }
+}

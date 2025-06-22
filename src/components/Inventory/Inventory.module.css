@@ -1,267 +1,625 @@
 /* src/components/Inventory/Inventory.module.css */
 
-/*
- * Inventory Component - Retro RPG Terminal Theme
- * Consistent with Battle.module.css for a unified look.
- */
+/* --- 0. Global Variables & Base Styles --- */
+:root {
+  /* Colors */
+  --inventory-bg-color: #2a2e38; /* Dark background for the inventory itself */
+  --inventory-border-color: #4a505c; /* Border color for elements */
+  --text-color-primary: #e0e6f0; /* Light text for main content */
+  --text-color-secondary: #aeb8c7; /* Slightly muted text for descriptions/placeholders */
+  --accent-color: #6a9955; /* Greenish accent for active states, buttons */
+  --danger-color: #cc6666; /* Reddish for cancel/destructive actions */
+  --overlay-bg: rgba(0, 0, 0, 0.7); /* Semi-transparent black for overlays */
+  --item-bg-color: #3e4450; /* Background for individual items/inputs */
 
-/* 1. Container: fixed position, centered, dark background with border, z-index 1000 */
+  /* Rarity Colors */
+  --rarity-common: #808080; /* Gray */
+  --rarity-uncommon: #55a630; /* Green */
+  --rarity-rare: #3070b0; /* Blue */
+  --rarity-epic: #9a40b0; /* Purple */
+
+  /* Spacing & Sizing */
+  --transition-speed: 0.3s;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --padding-sm: 10px;
+  --padding-md: 15px;
+  --padding-lg: 20px;
+}
+
+/* --- 1. Overlay and Container Styling with Smooth Animations --- */
+.inventoryOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--overlay-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it's above most page content */
+  opacity: 0;
+  visibility: hidden; /* Hidden by default */
+  transition: opacity var(--transition-speed) ease-in-out,
+              visibility var(--transition-speed) ease-in-out;
+}
+
+.inventoryOverlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 .inventoryContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000; /* High z-index to appear on top of other content */
-
-    /* Retro theme styling */
-    font-family: 'VT323', monospace; /* Use the retro pixel font */
-    background-color: #0d0d0d; /* Slightly lighter dark background for sections, consistent with Battle */
-    color: #00ff00; /* Bright green for text */
-    border: 2px solid #00ff00; /* Green border */
-    box-shadow: 0 0 20px #00ff00, inset 0 0 10px #00ff00; /* Stronger glow for a prominent modal */
-    padding: 25px;
-    border-radius: 8px;
-    max-width: 800px; /* Reasonable max width for inventory */
-    width: 90%; /* Responsive width */
-    max-height: 90vh; /* Max height, allow scrolling if content is too long */
-    overflow-y: auto; /* Enable scrolling for content if it exceeds max-height */
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  background: var(--inventory-bg-color);
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  width: 90%;
+  max-width: 900px; /* Max width for desktop */
+  height: 80%;
+  max-height: 600px; /* Max height for desktop */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ensures content stays within rounded corners */
+  transform: scale(0.95); /* Slightly scaled down for initial state */
+  opacity: 0;
+  transition: transform var(--transition-speed) ease-out,
+              opacity var(--transition-speed) ease-out;
 }
 
-/* Scrollbar customization for inventory container (consistent with Battle.module.css) */
-.inventoryContainer::-webkit-scrollbar {
-    width: 10px;
+.overlay.visible .inventoryContainer {
+  transform: scale(1); /* Scale up on visible */
+  opacity: 1;
 }
 
-.inventoryContainer::-webkit-scrollbar-track {
-    background: #1a1a1a;
-    border-radius: 10px;
+/* --- 2. Tab Navigation with Active State Indicators --- */
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid var(--inventory-border-color);
+  padding: 0 var(--padding-md);
+  background: #343945; /* Slightly different background for tabs */
 }
 
-.inventoryContainer::-webkit-scrollbar-thumb {
-    background-color: #00ff00;
-    border-radius: 10px;
-    border: 2px solid #004400;
+.tabButton {
+  background: none;
+  border: none;
+  padding: var(--padding-sm) var(--padding-md);
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  transition: color var(--transition-speed) ease-in-out;
 }
 
-.inventoryContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #39ff14;
+.tabButton:hover {
+  color: var(--text-color-primary);
 }
 
-/* 2. Header: flex row with title and close button */
-.inventoryHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px dashed #00ff00; /* Separator line */
-    padding-bottom: 10px;
+.tabButton.active {
+  color: var(--accent-color);
+  font-weight: bold;
 }
 
-.inventoryTitle {
-    font-size: 2.5em; /* Slightly smaller than battle title, but still prominent */
-    color: #39ff14; /* Brighter green for emphasis */
-    text-shadow: 0 0 10px #39ff14;
-    letter-spacing: 2px;
+.tabButton.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--accent-color);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  transform: scaleX(1); /* Ensures the underline is fully visible */
+  transition: transform var(--transition-speed) ease-in-out;
 }
 
-/* 3. Close button: red X, hover effect */
-.closeButton {
-    background: none;
-    border: none;
-    color: #ff0000; /* Red X */
-    font-size: 2.5em;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0 10px;
-    transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
-    text-shadow: 0 0 5px #ff0000; /* Initial subtle red glow */
+/* --- 3. Search Bar, Sort Dropdown, and Capacity Indicator Styling --- */
+.controlsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--padding-md);
+  gap: var(--padding-sm);
+  flex-wrap: wrap; /* Allows elements to wrap on smaller screens */
 }
 
-.closeButton:hover {
-    color: #ff3333; /* Lighter red on hover */
-    text-shadow: 0 0 15px #ff3333, 0 0 25px rgba(255, 51, 51, 0.5); /* Stronger glow */
-    transform: scale(1.1); /* Slight enlarge on hover */
+.searchBar,
+.sortDropdown {
+  flex-grow: 1; /* Allows them to take available space */
+  padding: var(--padding-sm);
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--item-bg-color);
+  color: var(--text-color-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transition-speed) ease-in-out;
 }
 
-.closeButton:active {
-    color: #cc0000;
-    text-shadow: 0 0 5px #cc0000;
-    transform: scale(1.0);
+.searchBar::placeholder {
+  color: var(--text-color-secondary);
 }
 
-/* 4. Grid: 4 columns, gap between items */
-.inventoryGrid {
-    display: grid;
-    /* Responsive 4 columns, adjusts for smaller screens */
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 20px; /* Gap between items */
-    padding: 10px;
-    border: 1px solid #003300; /* Darker green border for the grid area */
-    border-radius: 5px;
-    background-color: #001a00; /* Even darker green background for the grid */
-    box-shadow: inset 0 0 5px #00ff00; /* Inner glow */
+.searchBar:focus,
+.sortDropdown:focus {
+  border-color: var(--accent-color);
 }
 
-/* 5. Item slots: bordered boxes, hover effect, cursor pointer */
-.itemSlot {
-    background-color: #002200; /* Darker green for item slots */
-    border: 1px solid #00ff00;
-    padding: 15px 10px;
-    border-radius: 5px;
+.sortDropdown {
+  max-width: 150px; /* Specific width for dropdown */
+  cursor: pointer;
+}
+
+.capacityIndicator {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap; /* Prevents breaking "X/Y" */
+  margin-left: var(--padding-sm);
+  display: flex; /* Use flex to align text and bar */
+  align-items: center;
+  gap: 5px;
+}
+
+.capacityBar {
+  width: 100px;
+  height: 8px;
+  background-color: var(--item-bg-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.capacityFill {
+  height: 100%;
+  background-color: var(--accent-color);
+  border-radius: var(--border-radius-sm);
+  transition: width 0.5s ease-in-out; /* Smooth fill animation */
+}
+
+/* --- 4. Grid Layout for Items with Hover Effects --- */
+.itemGrid {
+  flex-grow: 1; /* Takes remaining vertical space */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid columns */
+  gap: var(--padding-sm);
+  padding: var(--padding-md);
+  overflow-y: auto; /* Enable scrolling for many items */
+  scrollbar-width: thin; /* Firefox scrollbar */
+  scrollbar-color: var(--accent-color) var(--item-bg-color); /* Firefox scrollbar colors */
+}
+
+/* Custom Scrollbar for Webkit (Chrome, Safari, Edge) */
+.itemGrid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.itemGrid::-webkit-scrollbar-track {
+  background: var(--item-bg-color);
+  border-radius: 10px;
+}
+
+.itemGrid::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 10px;
+  border: 2px solid var(--item-bg-color); /* Creates a gap effect */
+}
+
+.inventoryItem {
+  background-color: var(--item-bg-color);
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--padding-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* Pushes quantity to bottom */
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--transition-speed) ease-in-out,
+              box-shadow var(--transition-speed) ease-in-out,
+              border-color var(--transition-speed) ease-in-out;
+  user-select: none; /* Prevents text selection when dragging */
+}
+
+.inventoryItem:hover {
+  transform: translateY(-3px); /* Slight lift effect */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-color);
+}
+
+.itemImage {
+  width: 70px;
+  height: 70px;
+  object-fit: contain; /* Ensures image fits without distortion */
+  margin-bottom: 5px;
+  pointer-events: none; /* Prevents image drag interfering with item drag */
+}
+
+.itemName {
+  font-size: 0.85rem;
+  color: var(--text-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds "..." for long names */
+  width: 100%; /* Ensures ellipsis works */
+  margin-bottom: 3px;
+}
+
+.itemQuantity {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for readability */
+  color: var(--text-color-primary);
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+  min-width: 20px; /* Ensures consistent size for single digits */
+  text-align: center;
+}
+
+/* --- 5. Rarity Color Classes --- */
+/* These classes apply a colored border and subtle shadow based on rarity */
+.rarity-common {
+  border-color: var(--rarity-common);
+  box-shadow: 0 0 5px var(--rarity-common);
+}
+.rarity-uncommon {
+  border-color: var(--rarity-uncommon);
+  box-shadow: 0 0 5px var(--rarity-uncommon);
+}
+.rarity-rare {
+  border-color: var(--rarity-rare);
+  box-shadow: 0 0 5px var(--rarity-rare);
+}
+.rarity-epic {
+  border-color: var(--rarity-epic);
+  box-shadow: 0 0 5px var(--rarity-epic);
+}
+
+/* --- 6. Tooltip Styling with Proper Positioning --- */
+.tooltip {
+  position: absolute;
+  background-color: #20232a; /* Darker background for tooltip */
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--padding-sm);
+  color: var(--text-color-primary);
+  font-size: 0.85rem;
+  z-index: 1050; /* Higher than inventory, lower than modals */
+  pointer-events: none; /* Allows clicks/hovers to pass through to elements below */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  max-width: 250px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-item-name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  /* Color will be overridden by rarity-specific classes below */
+}
+
+.tooltip-item-description {
+  color: var(--text-color-secondary);
+  margin-bottom: 5px;
+}
+
+.tooltip-item-stats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tooltip-item-stats li {
+  margin-bottom: 3px;
+  color: var(--text-color-primary);
+}
+
+/* Tooltip rarity specific name colors */
+.tooltip-rarity-common .tooltip-item-name { color: var(--rarity-common); }
+.tooltip-rarity-uncommon .tooltip-item-name { color: var(--rarity-uncommon); }
+.tooltip-rarity-rare .tooltip-item-name { color: var(--rarity-rare); }
+.tooltip-rarity-epic .tooltip-item-name { color: var(--rarity-epic); }
+
+
+/* --- 7. Context Menu Styling --- */
+.contextMenu {
+  position: absolute;
+  background-color: #20232a;
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  z-index: 1100; /* Higher than tooltip */
+  padding: 5px 0; /* Vertical padding only */
+  min-width: 150px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9); /* Slightly scaled down for entry animation */
+  transform-origin: top left; /* Ensures it scales from the click point */
+  transition: opacity 0.2s ease-out, visibility 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.contextMenu.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.contextMenuItem {
+  padding: 8px var(--padding-md);
+  color: var(--text-color-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.contextMenuItem:hover {
+  background-color: var(--accent-color);
+  color: #fff; /* White text on hover */
+}
+
+.contextMenuItem.disabled {
+  color: var(--text-color-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.contextMenuItem.disabled:hover {
+  background-color: transparent; /* No hover effect for disabled */
+  color: var(--text-color-secondary);
+}
+
+/* --- 8. Quantity Selector Modal Styling --- */
+.quantityModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--overlay-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200; /* Highest z-index for modals */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-speed) ease-in-out,
+              visibility var(--transition-speed) ease-in-out;
+}
+
+.quantityModalOverlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.quantityModal {
+  background: var(--inventory-bg-color);
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  padding: var(--padding-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--padding-md);
+  transform: translateY(-20px); /* Slight lift for entry animation */
+  opacity: 0;
+  transition: transform var(--transition-speed) ease-out,
+              opacity var(--transition-speed) ease-out;
+  max-width: 350px;
+  width: 90%; /* Responsive width */
+}
+
+.quantityModalOverlay.visible .quantityModal {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.quantityModal h3 {
+  color: var(--text-color-primary);
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.quantityInput {
+  width: 100%;
+  padding: var(--padding-sm);
+  border: 1px solid var(--inventory-border-color);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--item-bg-color);
+  color: var(--text-color-primary);
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield; /* Hide arrows for number input in Firefox */
+}
+
+/* Hide arrows for number input in Webkit browsers (Chrome, Safari, Edge) */
+.quantityInput::-webkit-outer-spin-button,
+.quantityInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantityButtons {
+  display: flex;
+  gap: var(--padding-sm);
+  width: 100%;
+  justify-content: center;
+}
+
+.quantityButton {
+  flex: 1; /* Makes buttons share space equally */
+  padding: var(--padding-sm);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease-in-out,
+              transform 0.1s ease-in-out;
+}
+
+.quantityButton.confirm {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+.quantityButton.confirm:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 85%, black); /* Darken on hover */
+  transform: translateY(-1px); /* Slight lift */
+}
+
+.quantityButton.cancel {
+  background-color: var(--danger-color);
+  color: #fff;
+}
+
+.quantityButton.cancel:hover {
+  background-color: color-mix(in srgb, var(--danger-color) 85%, black); /* Darken on hover */
+  transform: translateY(-1px);
+}
+
+/* --- 9. Smooth Transitions and Animations (already integrated) --- */
+/* Most transitions are defined on individual elements using `transition` property.
+   Overlay and modal entry/exit use `opacity` and `transform` with `transition`. */
+
+/* --- 10. Responsive Design Considerations --- */
+@media (max-width: 768px) {
+  .inventoryContainer {
+    width: 95%;
+    height: 90%;
+    max-height: unset; /* Allow height to adjust on smaller screens */
+  }
+
+  .controlsContainer {
+    flex-direction: column; /* Stack controls vertically */
+    align-items: stretch; /* Make them full width */
+    gap: var(--padding-sm);
+  }
+
+  .searchBar,
+  .sortDropdown {
+    width: 100%;
+    max-width: unset; /* Remove max-width constraint */
+  }
+
+  .capacityIndicator {
+    width: 100%;
     text-align: center;
-    position: relative; /* For quantity badge positioning */
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
-    min-height: 100px; /* Ensure a minimum size for slots */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
-}
+    margin-left: 0;
+    justify-content: center; /* Center content within indicator */
+  }
 
-.itemSlot:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
-    border-color: #39ff14; /* Brighter border on hover */
-}
+  .capacityBar {
+    width: 150px; /* Make it a bit wider on small screens for better visibility */
+  }
 
-/* Placeholder for item icon/image if needed */
-.itemIcon {
+  .itemGrid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Smaller item size */
+    gap: 8px;
+    padding: var(--padding-sm);
+  }
+
+  .inventoryItem {
+    padding: 8px;
+  }
+
+  .itemImage {
     width: 60px;
     height: 60px;
-    background-color: #004400; /* Placeholder background */
-    border: 1px solid #00ff00;
-    border-radius: 3px;
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    color: #00ffff; /* Cyan for placeholder icon */
-    text-shadow: 0 0 5px #00ffff;
-}
+  }
 
-/* 6. Item name: white text */
-.itemName {
-    color: #fff; /* White text for item names */
-    font-size: 1.2em;
-    margin-top: 5px; /* Space from potential item icon/image */
-    text-shadow: 0 0 3px #000; /* Slight shadow for contrast */
-    word-break: break-word; /* Ensure long names wrap */
-}
+  .itemName {
+    font-size: 0.75rem;
+  }
 
-/* 7. Quantity badge: small, top-right corner */
-.quantityBadge {
-    position: absolute;
-    top: -8px; /* Adjust to be slightly outside the border */
-    right: -8px; /* Adjust to be slightly outside the border */
-    background-color: #ffcc00; /* Yellow/orange for attention */
-    color: #000; /* Black text for contrast */
-    font-size: 0.9em;
-    font-weight: bold;
-    padding: 3px 7px;
-    border-radius: 50%; /* Circular badge */
-    min-width: 25px; /* Ensure it's always a circle */
-    height: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 8px #ffcc00; /* Glow for the badge */
-    border: 1px solid #ffaa00;
-    z-index: 1; /* Ensure it's above the slot */
-}
+  .itemQuantity {
+    font-size: 0.65rem;
+    padding: 1px 4px;
+  }
 
-/* 8. Empty message: centered, gray text */
-.emptyMessage {
-    text-align: center;
-    color: #aaa; /* Gray text */
-    font-size: 1.5em;
-    margin-top: 30px;
-    padding: 20px;
-    border: 1px dashed #666;
-    border-radius: 5px;
-    background-color: #1a1a1a;
-    box-shadow: inset 0 0 5px #666;
-}
+  .tabButton {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .inventoryContainer {
-        width: 95%;
-        padding: 15px;
-    }
+  .tooltip {
+    max-width: 200px;
+    font-size: 0.8rem;
+  }
 
-    .inventoryTitle {
-        font-size: 2em;
-    }
+  .tooltip-item-name {
+    font-size: 0.9rem;
+  }
 
-    .closeButton {
-        font-size: 2em;
-    }
+  .contextMenu {
+    min-width: 120px;
+  }
 
-    .inventoryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust column size */
-        gap: 15px;
-    }
+  .contextMenuItem {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
 
-    .itemSlot {
-        min-height: 90px;
-        padding: 10px 5px;
-    }
+  .quantityModal {
+    padding: var(--padding-md);
+    gap: var(--padding-sm);
+  }
 
-    .itemName {
-        font-size: 1em;
-    }
+  .quantityModal h3 {
+    font-size: 1rem;
+  }
 
-    .quantityBadge {
-        font-size: 0.8em;
-        padding: 2px 6px;
-        min-width: 20px;
-        height: 20px;
-    }
-
-    .emptyMessage {
-        font-size: 1.2em;
-    }
+  .quantityInput,
+  .quantityButton {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
 }
 
 @media (max-width: 480px) {
-    .inventoryContainer {
-        padding: 10px;
-    }
+  .itemGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Even smaller items */
+    gap: 6px;
+  }
 
-    .inventoryTitle {
-        font-size: 1.8em;
-    }
+  .inventoryItem {
+    padding: 6px;
+  }
 
-    .closeButton {
-        font-size: 1.8em;
-    }
+  .itemImage {
+    width: 50px;
+    height: 50px;
+  }
 
-    .inventoryGrid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Further adjust column size */
-        gap: 10px;
-    }
+  .itemName {
+    font-size: 0.7rem;
+  }
 
-    .itemSlot {
-        min-height: 70px;
-        padding: 8px 4px;
-    }
+  .itemQuantity {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+    bottom: 3px;
+    right: 3px;
+  }
 
-    .itemName {
-        font-size: 0.9em;
-    }
+  .tabsContainer {
+    padding: 0 var(--padding-sm);
+  }
 
-    .quantityBadge {
-        font-size: 0.7em;
-        padding: 1px 5px;
-        min-width: 18px;
-        height: 18px;
-        top: -6px;
-        right: -6px;
-    }
+  .tabButton {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
 }

@@ -13,10 +13,12 @@ import {
   CombatEntity,
 } from '../types/global.types';
 import { Player } from '../models/Player';
+import { TalentTree } from '../models/TalentTree';
 import { GameMap } from '../models/Map'; // Import the GameMap class
 import { terminalTownData } from '../assets/maps/terminalTown'; // Import terminalTownData
 import SaveGameService from '../services/SaveGame'; // Import SaveGameService
 import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
+import { QuestManager } from '../models/QuestManager'; // Import QuestManager
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -26,6 +28,8 @@ import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
 interface GameState extends IGameState {
   player: Player; // Use the Player class instance
   currentMap: GameMap; // Use the GameMap class instance
+  showCharacterScreen?: boolean; // Add character screen visibility state
+  gamePhase: 'splash' | 'intro' | 'playing'; // Add game phase tracking
 }
 
 /**
@@ -37,13 +41,33 @@ const clonePlayer = (player: Player): Player => {
   // Manually copy over all other properties from the old player instance
   // This is crucial because the Player constructor initializes some fields.
   newPlayer.statusEffects = player.statusEffects.map(se => ({ ...se }));
-  newPlayer.stats = { ...player.stats }; // Shallow copy stats object
+  newPlayer.updateBaseStats(player.getBaseStats()); // Copy base stats using the new methods
   // Deep copy items in inventory, ensuring they retain their full structure
   newPlayer.inventory = player.inventory.map(item => ({
     ...item,
     position: item.position ? { ...item.position } : undefined,
   }));
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability })); // Deep copy abilities
+  // Copy equipped items
+  if (player.weaponSlot) newPlayer.weaponSlot = { ...player.weaponSlot };
+  if (player.armorSlot) newPlayer.armorSlot = { ...player.armorSlot };
+  if (player.accessorySlot) newPlayer.accessorySlot = { ...player.accessorySlot };
+  // Copy quest tracking
+  newPlayer.activeQuestIds = [...player.activeQuestIds];
+  newPlayer.completedQuestIds = [...player.completedQuestIds];
+  
+  // Copy talent system
+  newPlayer.talentPoints = player.talentPoints;
+  
+  // Deep copy the TalentTree by recreating invested points
+  const clonedTalentTree = new TalentTree();
+  player.talentTree.getAllTalents().forEach(originalTalent => {
+    for (let i = 0; i < originalTalent.currentRank; i++) {
+      clonedTalentTree.investPoint(originalTalent.id);
+    }
+  });
+  newPlayer.talentTree = clonedTalentTree;
+  
   return newPlayer;
 };
 
@@ -67,11 +91,16 @@ type GameAction =
   | { type: 'REMOVE_NPC'; payload: { npcId: string } }
   | { type: 'TOGGLE_INVENTORY' }
   | { type: 'SHOW_INVENTORY'; payload: { show: boolean } }
+  | { type: 'TOGGLE_QUEST_LOG' }
+  | { type: 'SHOW_QUEST_LOG'; payload: { show: boolean } }
+  | { type: 'TOGGLE_CHARACTER_SCREEN' }
+  | { type: 'SHOW_CHARACTER_SCREEN'; payload: { show: boolean } }
   | { type: 'DIALOGUE_CHOICE'; payload: { action: string } }
   | { type: 'SAVE_GAME' }
   | { type: 'LOAD_GAME'; payload: { savedState: Partial<GameState> } }
   | { type: 'SHOW_NOTIFICATION'; payload: { message: string } }
-  | { type: 'CLEAR_NOTIFICATION' };
+  | { type: 'CLEAR_NOTIFICATION' }
+  | { type: 'SET_GAME_PHASE'; payload: { phase: 'splash' | 'intro' | 'playing' } };
 
 /**
  * The reducer function that handles state transitions based on dispatched actions.
@@ -116,7 +145,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             statusEffects: e.statusEffects.map(se => ({ ...se })),
             expReward: e.expReward, // Include expReward for victory calculations
           })),
-          currentTurn: 'player', // Player always starts
+          currentTurn: state.player.id, // Player always starts (using entity ID)
           turnOrder: [state.player.id, ...action.payload.enemies.map(e => e.id)].sort(() => Math.random() - 0.5), // Simple random order
           log: [],
         },
@@ -159,15 +188,30 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       const updatedPlayer = clonePlayer(state.player);
       updatedPlayer.position = { ...playerNewPosition }; // Update player's position on the new map
 
-      // Clear dynamic entities from previous map.
-      // The new map instance (newMap) will manage its own initial entities internally.
+      // Extract entities from the new map
+      const newNpcs = newMap.entities.filter((entity): entity is NPC => 'role' in entity);
+      const newEnemies = newMap.entities.filter(
+        (entity): entity is Enemy => 
+          'abilities' in entity && 
+          Array.isArray(entity.abilities) &&
+          'stats' in entity &&
+          'hp' in (entity as any).stats
+      );
+      const newItems = newMap.entities.filter(
+        (entity): entity is Item => 
+          'type' in entity && 
+          typeof entity.type === 'string' && 
+          !('role' in entity) && 
+          !('abilities' in entity)
+      );
+
       return {
         ...state,
         currentMap: newMap,
         player: updatedPlayer,
-        enemies: [],
-        npcs: [],
-        items: [],
+        enemies: newEnemies,
+        npcs: newNpcs,
+        items: newItems,
         dialogue: null,
         battle: null,
       };
@@ -201,7 +245,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
     case 'UPDATE_PLAYER_STATS': {
       const updatedPlayer = clonePlayer(state.player);
-      updatedPlayer.stats = { ...updatedPlayer.stats, ...action.payload.stats };
+      updatedPlayer.updateBaseStats(action.payload.stats);
       return { ...state, player: updatedPlayer };
     }
 
@@ -232,16 +276,32 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'SHOW_INVENTORY':
       return { ...state, showInventory: action.payload.show };
 
+    case 'TOGGLE_QUEST_LOG':
+      return { ...state, showQuestLog: !state.showQuestLog };
+
+    case 'SHOW_QUEST_LOG':
+      return { ...state, showQuestLog: action.payload.show };
+
+    case 'TOGGLE_CHARACTER_SCREEN':
+      return { ...state, showCharacterScreen: !state.showCharacterScreen };
+
+    case 'SHOW_CHARACTER_SCREEN':
+      return { ...state, showCharacterScreen: action.payload.show };
+
     case 'DIALOGUE_CHOICE': {
       const { action: choiceAction } = action.payload;
       
       // Handle specific dialogue actions
       if (choiceAction === 'save_game') {
-        // Save the game
-        const saveSuccess = SaveGameService.saveGame(state);
+        // Save the game with quest manager state
+        const questManager = QuestManager.getInstance();
+        const stateWithQuests = {
+          ...state,
+          questManagerState: questManager.saveState()
+        };
+        const saveSuccess = SaveGameService.saveGame(stateWithQuests);
         if (saveSuccess) {
-          console.log('Game saved successfully!');
-          return { 
+            return { 
             ...state, 
             dialogue: null,
             notification: 'Game saved successfully! Meow~' 
@@ -254,11 +314,34 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             notification: 'Failed to save game! Please try again.' 
           };
         }
+      } else if (choiceAction === 'load_game') {
+        // Load the game
+        const loadedState = SaveGameService.loadGame();
+        if (loadedState) {
+          // Load quest manager state
+          const questManager = QuestManager.getInstance();
+          if (loadedState.questManagerState) {
+            questManager.loadState(loadedState.questManagerState);
+          }
+          return { 
+            ...loadedState, 
+            dialogue: null,
+            notification: 'Game loaded successfully! Welcome back!',
+            gamePhase: 'playing' // Ensure we're in playing phase after loading
+          };
+        } else {
+          return { 
+            ...state, 
+            dialogue: null,
+            notification: 'No saved game found or loading failed!' 
+          };
+        }
       } else if (choiceAction === 'end_dialogue') {
         return { ...state, dialogue: null };
-      } else if (choiceAction === 'debugger_advice') {
+      } else if (choiceAction === 'debugger_advice' || choiceAction === 'offer_bug_hunt_quest') {
         // Load new dialogue
-        const newDialogue = dialoguesData.find((d) => d.id === 'debugger_advice');
+        const dialogueId = choiceAction === 'debugger_advice' ? 'debugger_advice' : 'offer_bug_hunt_quest';
+        const newDialogue = dialoguesData.find((d) => d.id === dialogueId);
         if (newDialogue) {
           return {
             ...state,
@@ -269,15 +352,30 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             },
           };
         }
+      } else if (choiceAction === 'start_quest_bug_hunt') {
+        // Start the Bug Hunt quest
+        const questManager = QuestManager.getInstance();
+        const quest = questManager.getQuestById('bug_hunt');
+        if (quest && questManager.startQuest('bug_hunt')) {
+          return {
+            ...state,
+            dialogue: null,
+            notification: `Quest started: ${quest.name}!`
+          };
+        }
       }
       // Add more dialogue actions as needed
       return state;
     }
 
     case 'SAVE_GAME': {
-      const saveSuccess = SaveGameService.saveGame(state);
+      const questManager = QuestManager.getInstance();
+      const stateWithQuests = {
+        ...state,
+        questManagerState: questManager.saveState()
+      };
+      const saveSuccess = SaveGameService.saveGame(stateWithQuests);
       if (saveSuccess) {
-        console.log('Game saved successfully!');
       } else {
         console.error('Failed to save game');
       }
@@ -290,7 +388,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       const updatedPlayer = clonePlayer(state.player);
       if (savedState.player) {
         updatedPlayer.position = savedState.player.position || updatedPlayer.position;
-        updatedPlayer.stats = savedState.player.stats || updatedPlayer.stats;
+        if (savedState.player.stats) {
+          updatedPlayer.updateBaseStats(savedState.player.stats);
+        }
         updatedPlayer.inventory = savedState.player.inventory || updatedPlayer.inventory;
         updatedPlayer.abilities = savedState.player.abilities || updatedPlayer.abilities;
         updatedPlayer.statusEffects = savedState.player.statusEffects || updatedPlayer.statusEffects;
@@ -310,6 +410,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     
     case 'CLEAR_NOTIFICATION':
       return { ...state, notification: null };
+
+    case 'SET_GAME_PHASE':
+      return { ...state, gamePhase: action.payload.phase };
 
     default:
       return state;
@@ -362,7 +465,10 @@ const defaultGameState: GameState = {
   battle: null,
   gameFlags: {},
   showInventory: false,
+  showQuestLog: false,
+  showCharacterScreen: false,
   notification: null,
+  gamePhase: 'splash', // Start with splash screen
 };
 
 /**
@@ -391,6 +497,23 @@ interface GameProviderProps {
  */
 const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, defaultGameState);
+
+  // Initialize QuestManager and check for saved game when the game starts
+  React.useEffect(() => {
+    const questManager = QuestManager.getInstance();
+    questManager.initializeQuests();
+    
+    // Check if there's a saved game and offer to load it
+    if (SaveGameService.hasSaveGame()) {
+      // Show a notification about available save
+      dispatch({ 
+        type: 'SHOW_NOTIFICATION', 
+        payload: { 
+          message: 'Save game found! Talk to Compiler Cat to load it.' 
+        } 
+      });
+    }
+  }, []);
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

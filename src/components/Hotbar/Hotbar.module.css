@@ -1,0 +1,210 @@
+/* src/components/Hotbar/Hotbar.module.css */
+
+/* --- CSS Variables for Dark Theme --- */
+:root {
+  --hotbar-bg: #1a1a1a; /* Very dark grey for the hotbar background */
+  --hotbar-border: #333; /* Dark grey border for the hotbar container */
+
+  --slot-bg: #2c2c2c; /* Dark grey for individual slot background */
+  --slot-border: #444; /* Slightly lighter grey for slot borders */
+  --slot-hover-bg: #3a3a3a; /* Darker grey on hover */
+  --slot-active-bg: #007bff; /* Accent blue for active/selected slot background */
+  --slot-active-border: #00aaff; /* Lighter blue for active slot border */
+
+  --text-color: #e0e0e0; /* Light grey for general text */
+  --placeholder-color: #555; /* Medium grey for empty slot indicators */
+  --quantity-bg: #000000cc; /* Semi-transparent black for quantity badge */
+
+  --cooldown-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for cooldown overlay */
+  --cooldown-text-color: #e0e0e0; /* Light text for cooldown timer */
+
+  --drag-over-border: #00cc99; /* Green accent for drag-over effect */
+  --drag-placeholder-border: #666; /* Grey for the original slot when dragging */
+}
+
+/* --- 1. Hotbar Container Styling --- */
+.hotbarContainer {
+  position: fixed; /* Position relative to the viewport */
+  bottom: 20px; /* Distance from the bottom of the screen */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for true centering */
+  display: flex; /* Arrange slots in a row */
+  gap: 10px; /* Space between individual slots */
+  padding: 15px 20px; /* Padding inside the hotbar container */
+  background-color: var(--hotbar-bg);
+  border: 1px solid var(--hotbar-border);
+  border-radius: 12px; /* Rounded corners for the container */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+  z-index: 1000; /* Ensure it stays on top of other content */
+  user-select: none; /* Prevent text selection within the hotbar */
+}
+
+/* --- 2. Individual Slot Styling --- */
+.hotbarSlot {
+  position: relative; /* For positioning item icon, quantity, cooldown */
+  width: 64px; /* Standard square slot size */
+  height: 64px;
+  background-color: var(--slot-bg);
+  border: 2px solid var(--slot-border);
+  border-radius: 8px; /* Slightly rounded corners for slots */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab; /* Indicate draggable items */
+  transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active states */
+  overflow: hidden; /* Crucial for cooldown overlay to clip */
+}
+
+/* Hover Effect */
+.hotbarSlot:hover {
+  background-color: var(--slot-hover-bg);
+  border-color: var(--slot-active-border); /* Highlight border on hover */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); /* Subtle blue glow on hover */
+}
+
+/* --- 3. Active/Pressed State Animations --- */
+.hotbarSlot.active {
+  background-color: var(--slot-active-bg); /* Accent background for active slot */
+  border-color: var(--slot-active-border);
+  box-shadow: 0 0 15px var(--slot-active-border); /* Stronger glow for active */
+  transform: scale(1.05); /* Slightly enlarge the active slot */
+}
+
+.hotbarSlot.pressed {
+  transform: scale(0.95); /* Slightly shrink when pressed/clicked */
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5); /* Inset shadow for pressed look */
+  background-color: var(--slot-hover-bg);
+  border-color: var(--slot-active-border);
+}
+
+/* --- 4. Drag and Drop Visual Feedback --- */
+.hotbarSlot.dragging {
+  opacity: 0.5; /* Make the original slot semi-transparent */
+  border-style: dashed; /* Change border to dashed */
+  border-color: var(--drag-placeholder-border); /* Indicate it's a placeholder */
+}
+
+.hotbarSlot.dragOver {
+  border-color: var(--drag-over-border); /* Green border for valid drop target */
+  box-shadow: 0 0 12px var(--drag-over-border); /* Green glow for drop target */
+  transform: scale(1.05); /* Enlarge the target slot */
+}
+
+/* --- 5. Item Icon and Quantity Badge Styling --- */
+.itemIcon {
+  width: 90%; /* Icon takes up most of the slot */
+  height: 90%;
+  object-fit: contain; /* Ensure image fits without distortion */
+  pointer-events: none; /* Allows drag events to be registered on the parent slot */
+  user-select: none; /* Prevent browser text selection */
+  -webkit-user-drag: none; /* Prevent browser's default image drag */
+}
+
+.quantityBadge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background-color: var(--quantity-bg);
+  color: var(--text-color);
+  font-size: 0.75em;
+  padding: 2px 5px;
+  border-radius: 4px;
+  min-width: 18px; /* Ensure badge is wide enough for single digits */
+  text-align: center;
+  line-height: 1; /* Compact line height */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Small shadow for badge */
+}
+
+/* --- 6. Empty Slot Placeholder Styling --- */
+.emptySlot {
+  /* Inherits base styles from .hotbarSlot */
+  background-color: var(--slot-bg);
+  border-style: dashed; /* Dashed border to signify emptiness */
+  border-color: var(--placeholder-color);
+}
+
+.emptySlot::before {
+  content: ''; /* Create a pseudo-element for an inner placeholder */
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: 1px dashed var(--placeholder-color);
+  border-radius: 4px;
+  opacity: 0.3; /* Subtle appearance */
+}
+
+/* --- 7. Cooldown Overlay Effect --- */
+.cooldownOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Full height when cooldown starts */
+  background-color: var(--cooldown-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cooldown-text-color);
+  font-size: 1.2em;
+  font-weight: bold;
+  pointer-events: none; /* Allow interaction with the slot underneath */
+  opacity: 1; /* Fully opaque when active */
+  /* Transition for height (fill-up) and opacity (fade out) */
+  transition: height 0.3s ease-out, opacity 0.3s ease-out;
+  transform-origin: bottom; /* Makes the fill animation start from the bottom */
+
+  /* Example of how height would be controlled by JS based on cooldown percentage: */
+  /* height: calc(100% * (cooldownRemaining / totalCooldown)); */
+  /* opacity: (cooldownRemaining > 0 ? 1 : 0); */
+}
+
+/* --- 8. Responsive Design for Smaller Screens --- */
+@media (max-width: 768px) {
+  .hotbarContainer {
+    bottom: 15px;
+    padding: 10px 15px;
+    gap: 8px;
+  }
+
+  .hotbarSlot {
+    width: 56px; /* Slightly smaller slots */
+    height: 56px;
+    border-radius: 6px;
+  }
+
+  .quantityBadge {
+    font-size: 0.7em;
+    padding: 1px 4px;
+    min-width: 16px;
+  }
+
+  .cooldownOverlay {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .hotbarContainer {
+    bottom: 10px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .hotbarSlot {
+    width: 48px; /* Even smaller slots for very small screens */
+    height: 48px;
+    border-radius: 5px;
+  }
+
+  .quantityBadge {
+    font-size: 0.65em;
+    padding: 1px 3px;
+    min-width: 14px;
+  }
+
+  .emptySlot::before {
+    width: 24px;
+    height: 24px;
+  }
+}
+```

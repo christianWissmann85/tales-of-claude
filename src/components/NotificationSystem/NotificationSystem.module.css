@@ -1,0 +1,288 @@
+:root {
+    --notification-bg-dark: #1a1a1a;
+    --notification-text-light: #e0e0e0;
+    --notification-border-color: #555;
+    --notification-border-secondary-color: #333;
+    --notification-inner-shadow-color: #222;
+    --notification-hover-bg: #2c2c2c;
+
+    --success-bg: #28a745;
+    --success-border: #1e7e34;
+    --success-text: #e0ffe0;
+    --success-progress: linear-gradient(90deg, #28a745, #4caf50);
+
+    --warning-bg: #ffc107;
+    --warning-border: #e0a800;
+    --warning-text: #333;
+    --warning-progress: linear-gradient(90deg, #ffc107, #ffeb3b);
+
+    --info-bg: #007bff;
+    --info-border: #0056b3;
+    --info-text: #e0f0ff;
+    --info-progress: linear-gradient(90deg, #007bff, #2196f3);
+
+    --error-bg: #dc3545;
+    --error-border: #bd2130;
+    --error-text: #ffe0e0;
+    --error-progress: linear-gradient(90deg, #dc3545, #f44336);
+
+    --achievement-bg-start: #ffd700;
+    --achievement-bg-end: #8a2be2;
+    --achievement-text: #fff;
+    --achievement-border: #ffeb3b;
+    --achievement-glow-color: #ffeb3b;
+    --achievement-glow-color-alt: #9c27b0;
+
+    --button-bg: #444;
+    --button-text: #e0e0e0;
+    --button-border: #666;
+    --button-hover-bg: #666;
+    --button-hover-text: #fff;
+}
+
+.notificationSystem {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    z-index: 1000;
+    pointer-events: none;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.notificationSystem::-webkit-scrollbar {
+    display: none;
+}
+.notificationSystem {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.notification {
+    --notification-current-bg: var(--notification-bg-dark);
+    --notification-current-text: var(--notification-text-light);
+    --notification-current-border: var(--notification-border-color);
+    --notification-current-border-secondary: var(--notification-border-secondary-color);
+    --notification-current-inner-shadow: var(--notification-inner-shadow-color);
+
+    pointer-events: auto;
+    width: 300px;
+    padding: 15px;
+    background-color: var(--notification-current-bg);
+    color: var(--notification-current-text);
+    font-family: 'Press Start 2P', cursive, monospace;
+    font-size: 0.85em;
+    border: 2px solid var(--notification-current-border);
+    box-shadow: 0 0 0 2px var(--notification-current-border-secondary),
+                inset 0 0 0 1px var(--notification-current-inner-shadow);
+    position: relative;
+    overflow: hidden;
+    
+    animation: slideInRight 0.5s ease-out forwards;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification:hover {
+    background-color: var(--notification-hover-bg);
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 2px var(--notification-current-border-secondary),
+                inset 0 0 0 1px var(--notification-current-inner-shadow),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.notification.exiting {
+    animation: fadeOut 0.5s ease-in forwards;
+}
+
+.notification.success {
+    --notification-current-bg: var(--success-bg);
+    --notification-current-text: var(--success-text);
+    --notification-current-border: var(--success-border);
+    --notification-current-border-secondary: var(--success-border);
+    --notification-current-inner-shadow: rgba(0,0,0,0.2);
+    --notification-current-progress: var(--success-progress);
+}
+
+.notification.warning {
+    --notification-current-bg: var(--warning-bg);
+    --notification-current-text: var(--warning-text);
+    --notification-current-border: var(--warning-border);
+    --notification-current-border-secondary: var(--warning-border);
+    --notification-current-inner-shadow: rgba(0,0,0,0.2);
+    --notification-current-progress: var(--warning-progress);
+}
+
+.notification.info {
+    --notification-current-bg: var(--info-bg);
+    --notification-current-text: var(--info-text);
+    --notification-current-border: var(--info-border);
+    --notification-current-border-secondary: var(--info-border);
+    --notification-current-inner-shadow: rgba(0,0,0,0.2);
+    --notification-current-progress: var(--info-progress);
+}
+
+.notification.error {
+    --notification-current-bg: var(--error-bg);
+    --notification-current-text: var(--error-text);
+    --notification-current-border: var(--error-border);
+    --notification-current-border-secondary: var(--error-border);
+    --notification-current-inner-shadow: rgba(0,0,0,0.2);
+    --notification-current-progress: var(--error-progress);
+}
+
+.notification.achievement {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 400px;
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient(45deg, var(--achievement-bg-start), var(--achievement-bg-end));
+    color: var(--achievement-text);
+    border: 3px solid var(--achievement-border);
+    border-radius: 5px;
+    box-shadow: 0 0 15px var(--achievement-glow-color),
+                0 0 30px var(--achievement-glow-color-alt);
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards,
+               achievementGlow 2s infinite alternate ease-in-out;
+    z-index: 1001;
+    pointer-events: auto;
+}
+
+.notification.achievement:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 20px var(--achievement-glow-color),
+                0 0 40px var(--achievement-glow-color-alt);
+}
+
+.notificationHeader {
+    font-size: 1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+}
+
+.notificationMessage {
+    font-size: 0.9em;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.notificationActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.progressBarContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.progressBarFill {
+    height: 100%;
+    width: 0%;
+    background: var(--notification-current-progress, linear-gradient(90deg, #444, #666));
+    animation: progressBarFill linear forwards;
+}
+
+.notificationButton {
+    padding: 8px 12px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid var(--button-border);
+    font-family: 'Press Start 2P', cursive, monospace;
+    font-size: 0.75em;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+    -webkit-font-smoothing: none;
+    image-rendering: pixelated;
+}
+
+.notificationButton:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-text);
+    border-color: var(--button-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+.notificationButton:active {
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0,0,0,0.5);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
+
+@keyframes progressBarFill {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes achievementGlow {
+    0% {
+        box-shadow: 0 0 15px var(--achievement-glow-color),
+                    0 0 30px var(--achievement-glow-color-alt);
+    }
+    50% {
+        box-shadow: 0 0 25px var(--achievement-glow-color),
+                    0 0 50px var(--achievement-glow-color-alt);
+    }
+    100% {
+        box-shadow: 0 0 15px var(--achievement-glow-color),
+                    0 0 30px var(--achievement-glow-color-alt);
+    }
+}

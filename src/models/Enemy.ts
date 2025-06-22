@@ -21,6 +21,7 @@ export enum EnemyVariant {
   SyntaxError = 'SyntaxError',
   RuntimeError = 'RuntimeError',
   NullPointer = 'NullPointer',
+  SegfaultSovereign = 'SegfaultSovereign', // Added new boss enemy variant
 }
 
 /**
@@ -55,7 +56,7 @@ export class Enemy implements IEnemy {
       name: 'Basic Bug',
       type: 'bug',
       baseStats: {
-        hp: 30, maxHp: 30, energy: 10, maxEnergy: 10, attack: 8, defense: 5, speed: 7,
+        hp: 25, maxHp: 25, energy: 10, maxEnergy: 10, attack: 6, defense: 3, speed: 7,
       },
       abilities: [
         {
@@ -64,7 +65,7 @@ export class Enemy implements IEnemy {
           description: 'A basic bite attack.',
           type: 'attack',
           cost: 0,
-          effect: { damage: 5, target: 'singleEnemy' },
+          effect: { damage: 4, target: 'singleEnemy' },
         },
       ],
       expReward: 10,
@@ -73,7 +74,7 @@ export class Enemy implements IEnemy {
       name: 'Syntax Error',
       type: 'logic_error',
       baseStats: {
-        hp: 45, maxHp: 45, energy: 20, maxEnergy: 20, attack: 10, defense: 7, speed: 8,
+        hp: 40, maxHp: 40, energy: 20, maxEnergy: 20, attack: 8, defense: 5, speed: 8,
       },
       abilities: [
         {
@@ -82,7 +83,7 @@ export class Enemy implements IEnemy {
           description: 'Confuses the target, dealing damage and corrupting them.',
           type: 'attack',
           cost: 5,
-          effect: { damage: 8, statusEffect: 'corrupted', duration: 3, target: 'singleEnemy' },
+          effect: { damage: 7, statusEffect: 'corrupted', duration: 2, target: 'singleEnemy' },
         },
         {
           id: 'syntax_strike',
@@ -90,7 +91,7 @@ export class Enemy implements IEnemy {
           description: 'A quick, precise strike.',
           type: 'attack',
           cost: 0,
-          effect: { damage: 6, target: 'singleEnemy' },
+          effect: { damage: 5, target: 'singleEnemy' },
         },
       ],
       expReward: 25,
@@ -99,7 +100,7 @@ export class Enemy implements IEnemy {
       name: 'Runtime Error',
       type: 'virus',
       baseStats: {
-        hp: 60, maxHp: 60, energy: 30, maxEnergy: 30, attack: 12, defense: 10, speed: 6,
+        hp: 55, maxHp: 55, energy: 30, maxEnergy: 30, attack: 10, defense: 8, speed: 6,
       },
       abilities: [
         {
@@ -108,7 +109,7 @@ export class Enemy implements IEnemy {
           description: 'Deals heavy damage, but costs a lot of energy.',
           type: 'attack',
           cost: 15,
-          effect: { damage: 20, target: 'singleEnemy' },
+          effect: { damage: 16, target: 'singleEnemy' },
         },
         {
           id: 'system_overload',
@@ -124,7 +125,7 @@ export class Enemy implements IEnemy {
           description: 'A standard attack.',
           type: 'attack',
           cost: 0,
-          effect: { damage: 7, target: 'singleEnemy' },
+          effect: { damage: 6, target: 'singleEnemy' },
         },
       ],
       expReward: 40,
@@ -133,7 +134,7 @@ export class Enemy implements IEnemy {
       name: 'Null Pointer',
       type: 'corrupted_data',
       baseStats: {
-        hp: 50, maxHp: 50, energy: 25, maxEnergy: 25, attack: 15, defense: 8, speed: 9,
+        hp: 45, maxHp: 45, energy: 25, maxEnergy: 25, attack: 12, defense: 6, speed: 9,
       },
       abilities: [
         {
@@ -142,7 +143,7 @@ export class Enemy implements IEnemy {
           description: 'Attempts to dereference the target, dealing massive damage.',
           type: 'attack',
           cost: 10,
-          effect: { damage: 18, target: 'singleEnemy' },
+          effect: { damage: 14, target: 'singleEnemy' },
         },
         {
           id: 'void_gaze',
@@ -150,7 +151,7 @@ export class Enemy implements IEnemy {
           description: 'Freezes the target, preventing actions.',
           type: 'debuff',
           cost: 8,
-          effect: { statusEffect: 'frozen', duration: 2, target: 'singleEnemy' },
+          effect: { statusEffect: 'frozen', duration: 1, target: 'singleEnemy' },
         },
         {
           id: 'null_strike',
@@ -158,10 +159,67 @@ export class Enemy implements IEnemy {
           description: 'A quick, unsettling strike.',
           type: 'attack',
           cost: 0,
-          effect: { damage: 9, target: 'singleEnemy' },
+          effect: { damage: 7, target: 'singleEnemy' },
         },
       ],
       expReward: 60,
+    },
+    // New Boss Enemy Variant: SegfaultSovereign
+    [EnemyVariant.SegfaultSovereign]: {
+      name: 'The Segfault Sovereign',
+      type: 'boss',
+      baseStats: {
+        hp: 180, maxHp: 180, energy: 100, maxEnergy: 100, attack: 18, defense: 12, speed: 10,
+      },
+      abilities: [
+        {
+          id: 'sovereign_crash',
+          name: 'Sovereign Crash',
+          description: 'Unleashes a devastating crash, dealing heavy damage.',
+          type: 'attack',
+          cost: 20,
+          effect: { damage: 20, target: 'singleEnemy' },
+        },
+        {
+          id: 'memory_leak',
+          name: 'Memory Leak',
+          description: 'Drains target\'s energy and HP over time.',
+          type: 'debuff', // Categorized as debuff as its primary effect is a status
+          cost: 15,
+          // Applies 'corrupted' status which deals damage over time.
+          // Energy drain would typically be handled by a specific status effect property
+          // or a direct effect applied by the BattleManager upon ability use if not a status.
+          // For simplicity, using 'corrupted' with damagePerTurn.
+          effect: { statusEffect: 'corrupted', duration: 3, target: 'singleEnemy' },
+        },
+        {
+          id: 'null_dereference',
+          name: 'Null Dereference',
+          description: 'Attempts a risky dereference, dealing massive damage but can miss.',
+          type: 'attack',
+          cost: 30,
+          effect: { damage: 28, target: 'singleEnemy' },
+        },
+        {
+          id: 'stack_overflow',
+          name: 'Stack Overflow',
+          description: 'Confuses and damages all enemies.',
+          type: 'attack', // Categorized as attack as it deals direct damage
+          cost: 25,
+          // 'Confuses' can be represented by 'corrupted' status for now, as it's a generic negative status.
+          // A dedicated 'confused' status type would be ideal if game mechanics require it.
+          effect: { damage: 12, statusEffect: 'corrupted', duration: 2, target: 'allEnemies' },
+        },
+        {
+          id: 'segfault_strike',
+          name: 'Segfault Strike',
+          description: 'A basic, unstable strike.',
+          type: 'attack',
+          cost: 0,
+          effect: { damage: 10, target: 'singleEnemy' },
+        },
+      ],
+      expReward: 200,
     },
   };
 

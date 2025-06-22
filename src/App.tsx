@@ -5,10 +5,13 @@ import GameBoard from './components/GameBoard/GameBoard';
 import DialogueBox from './components/DialogueBox/DialogueBox'; // Import DialogueBox
 import Battle from './components/Battle/Battle'; // Import Battle
 import Notification from './components/Notification/Notification'; // Import Notification
+import SplashScreen from './components/SplashScreen/SplashScreen'; // Import SplashScreen
+import OpeningScene from './components/OpeningScene/OpeningScene'; // Import OpeningScene
+import { NotificationSystem } from './components/NotificationSystem/NotificationSystem'; // Import NotificationSystem
 
 // Separate component to access game context
 const GameContent: React.FC = () => {
-  const { state } = useGameContext();
+  const { state, dispatch } = useGameContext();
   
   const gameFrameStyle: React.CSSProperties = {
     display: 'flex',
@@ -23,6 +26,26 @@ const GameContent: React.FC = () => {
     margin: 'auto', // Center the game frame horizontally on the page
   };
 
+  // Handle splash screen completion
+  const handleSplashComplete = () => {
+    dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'intro' } });
+  };
+
+  // Handle opening scene completion
+  const handleIntroComplete = () => {
+    dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'playing' } });
+  };
+
+  // Render different screens based on game phase
+  if (state.gamePhase === 'splash') {
+    return <SplashScreen onStart={handleSplashComplete} />;
+  }
+
+  if (state.gamePhase === 'intro') {
+    return <OpeningScene onComplete={handleIntroComplete} />;
+  }
+
+  // Render the main game
   return (
     <div style={gameFrameStyle}>
       <StatusBar />
@@ -53,7 +76,9 @@ const App: React.FC = () => {
   return (
     <div style={gameScreenContainerStyle}>
       <GameProvider>
-        <GameContent />
+        <NotificationSystem>
+          <GameContent />
+        </NotificationSystem>
       </GameProvider>
     </div>
   );

@@ -1,0 +1,148 @@
+:root {
+  --border-color: #777;
+  --border-shadow-color: #000;
+  --xp-start-color: #ffeb3b; /* Yellow */
+  --xp-end-color: #ffc107;   /* Gold */
+  --hp-start-color: #b71c1c; /* Dark Red */
+  --hp-mid-color: #ffeb3b;   /* Yellow */
+  --hp-end-color: #4caf50;   /* Bright Green */
+  --energy-start-color: #2196f3; /* Dark Blue */
+  --energy-end-color: #00bcd4; /* Cyan */
+  --level-up-glow-color: #00ffff; /* Cyan for level up glow */
+}
+
+/* Main container for the progress bar module */
+.playerProgressBar {
+  position: fixed; /* Compact layout suitable for corner placement */
+  bottom: 20px;
+  left: 20px; /* Can be changed to 'right' for other corners */
+  z-index: 1000; /* Ensure it's above other content */
+
+  font-family: 'Press Start 2P', 'Courier New', Courier, monospace; /* Monospace font for retro feel */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  padding: 10px 15px; /* Internal padding for content */
+  color: #eee; /* Default text color */
+  text-shadow: 1px 1px 2px var(--border-shadow-color); /* Text shadows for readability */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* General shadow for depth */
+
+  width: 280px; /* Fixed width for compact layout */
+  font-size: 0.75em; /* Smaller font for compact layout */
+  line-height: 1.4; /* Better line spacing for readability */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+
+  /* ASCII Border - side lines */
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  position: relative; /* Required for absolute positioning of pseudo-elements */
+}
+
+/* ASCII Border - top and bottom lines with corners using pseudo-elements */
+.playerProgressBar::before,
+.playerProgressBar::after {
+  content: ''; /* Content will be set by specific pseudo-elements */
+  position: absolute;
+  left: -1px; /* Overlap the border slightly to align with corners */
+  right: -1px; /* Overlap the border slightly */
+  height: 1em; /* Height of a single line of text */
+  font-family: inherit; /* Inherit the monospace font */
+  white-space: pre; /* Preserve whitespace for ASCII art */
+  color: var(--border-color);
+  text-shadow: 0 0 2px var(--border-shadow-color);
+  line-height: 1; /* Ensure single line height */
+  overflow: hidden; /* Hide any overflow if content is too long */
+  box-sizing: border-box;
+}
+
+.playerProgressBar::before {
+  top: -1em; /* Position above the element */
+  /* ASCII string length (39 characters) calculated to fit 280px width with 0.75em font-size */
+  content: '┌───────────────────────────────────────┐';
+}
+
+.playerProgressBar::after {
+  bottom: -1em; /* Position below the element */
+  /* ASCII string length (39 characters) */
+  content: '└───────────────────────────────────────┘';
+}
+
+/* Individual bar container styling */
+.barContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px; /* Spacing between bars */
+}
+
+.barContainer:last-child {
+  margin-bottom: 0; /* No margin after the last bar */
+}
+
+/* Label for each bar (e.g., "XP:", "HP:") */
+.label {
+  width: 30px; /* Fixed width for consistent alignment */
+  text-align: right;
+  margin-right: 8px;
+  color: #aaa; /* Slightly subdued label color */
+}
+
+/* Progress bar track styling */
+.progressBar {
+  flex-grow: 1; /* Allows the bar to take up remaining space */
+  height: 12px; /* Height of the progress bar */
+  background-color: rgba(255, 255, 255, 0.1); /* Background of the empty bar */
+  border: 1px solid var(--border-color); /* Border around the progress bar */
+  position: relative; /* For positioning the fill inside */
+  overflow: hidden; /* Ensures the fill stays within the bar's bounds */
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+}
+
+/* Progress bar fill styling */
+.fill {
+  height: 100%;
+  width: 0%; /* Initial width for animation, controlled by JS */
+  transition: width 0.5s ease-out; /* Smooth animation for width changes */
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* XP Bar specific gradient: yellow to gold */
+.xpBar .fill {
+  background: linear-gradient(to right, var(--xp-start-color), var(--xp-end-color));
+}
+
+/* HP Bar specific gradient: dark red to bright green based on percentage */
+/* The gradient itself is fixed in CSS. The visual "percentage" is achieved by adjusting
+   the `width` of the `.fill` element via JavaScript. If the *color* of the fill
+   itself needs to change dynamically (e.g., red when low HP, green when high HP),
+   that would typically be handled by JavaScript setting a custom CSS property
+   or direct background-color based on the current HP value. */
+.hpBar .fill {
+  background: linear-gradient(to right, var(--hp-start-color) 0%, var(--hp-mid-color) 50%, var(--hp-end-color) 100%);
+}
+
+/* Energy Bar specific gradient: dark blue to cyan */
+.energyBar .fill {
+  background: linear-gradient(to right, var(--energy-start-color), var(--energy-end-color));
+}
+
+/* Level Up Animation */
+/* Glow effect keyframes */
+@keyframes levelUpGlow {
+  0% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 20px var(--level-up-glow-color), 0 0 40px rgba(0, 255, 255, 0.6); }
+  100% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 255, 0.3); }
+}
+
+/* Scale effect keyframes */
+@keyframes levelUpScale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Class to apply the level up animation (add this class to .playerProgressBar via JS) */
+.levelUp {
+  animation:
+    levelUpGlow 1.5s ease-in-out infinite, /* Infinite glow */
+    levelUpScale 1.5s ease-in-out infinite; /* Infinite subtle scale */
+}

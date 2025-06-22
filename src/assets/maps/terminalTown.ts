@@ -88,6 +88,10 @@ const items: Item[] = [
   { ...ItemClass.createItem(ItemVariant.HealthPotion), id: 'health_potion_1', position: { x: 5, y: 3 } }, // Near spawn
   { ...ItemClass.createItem(ItemVariant.EnergyDrink), id: 'energy_drink_1', position: { x: 15, y: 10 } }, // Near archive
   { ...ItemClass.createItem(ItemVariant.HealthPotion), id: 'health_potion_2', position: { x: 8, y: 12 } }, // Bottom area
+  { ...ItemClass.createItem(ItemVariant.CodeFragment), id: 'code_fragment_1', position: { x: 13, y: 7 } }, // For quest
+  // Starting equipment for new players
+  { ...ItemClass.createItem(ItemVariant.RustySword), id: 'rusty_sword_1', position: { x: 1, y: 2 } }, // Near starting position
+  { ...ItemClass.createItem(ItemVariant.BasicShield), id: 'basic_shield_1', position: { x: 2, y: 1 } }, // Near starting position
 ];
 
 // 6. Exit to Binary Forest on the east side

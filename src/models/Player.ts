@@ -9,15 +9,43 @@ import {
   StatusEffect,
   PlayerStats,
 } from '../types/global.types';
+import { TalentTree } from './TalentTree'; // 1. Import TalentTree
+
+/**
+ * Defines the types of equipment slots available to a player.
+ */
+export type EquipmentSlotType = 'weapon' | 'armor' | 'accessory';
+
+/**
+ * Represents an item that can be equipped by the player.
+ * For now, we'll use the item's id to determine the slot type.
+ */
+export interface EquippableItem extends Item {
+  type: 'equipment';
+  equipmentSlotType?: EquipmentSlotType;
+}
 
 export class Player implements IPlayer {
   id: string;
   name: string;
   position: Position;
   statusEffects: StatusEffect[];
-  stats: PlayerStats;
+  private _baseStats: PlayerStats;
   inventory: Item[];
   abilities: Ability[];
+
+  // Equipment slots
+  weaponSlot?: EquippableItem;
+  armorSlot?: EquippableItem;
+  accessorySlot?: EquippableItem;
+
+  // Quest tracking
+  activeQuestIds: string[];
+  completedQuestIds: string[];
+
+  // Talent System Properties
+  talentTree: TalentTree; // 2. Add property: talentTree
+  talentPoints: number; // 3. Add property: talentPoints
 
   constructor(id: string, name: string, startPosition: Position) {
     this.id = id;
@@ -27,12 +55,21 @@ export class Player implements IPlayer {
     this.inventory = [];
     this.abilities = [];
 
+    // Initialize equipment slots
+    this.weaponSlot = undefined;
+    this.armorSlot = undefined;
+    this.accessorySlot = undefined;
+
+    // Initialize quest tracking
+    this.activeQuestIds = [];
+    this.completedQuestIds = [];
+
     // Starting stats from GAME_DESIGN.md
     const startingHp = 100;
     const startingEnergy = 50;
     const startingLevel = 1;
 
-    this.stats = {
+    this._baseStats = {
       hp: startingHp,
       maxHp: startingHp,
       energy: startingEnergy,
@@ -43,6 +80,10 @@ export class Player implements IPlayer {
       level: startingLevel,
       exp: 0,
     };
+
+    // 4. Initialize talentTree and talentPoints
+    this.talentTree = new TalentTree();
+    this.talentPoints = 0; // Starts at 0
 
     // Add initial abilities for Claude
     this.abilities.push(
@@ -97,6 +138,25 @@ export class Player implements IPlayer {
   }
 
   /**
+   * Getter for player stats that includes equipment bonuses.
+   */
+  get stats(): PlayerStats {
+    const calculatedStats: PlayerStats = { ...this._baseStats };
+
+    // Add bonuses from equipped items
+    const equippedItems = this.getEquippedItems();
+    for (const item of equippedItems) {
+      if (item.stats) {
+        if (item.stats.attack) calculatedStats.attack += item.stats.attack;
+        if (item.stats.defense) calculatedStats.defense += item.stats.defense;
+        if (item.stats.speed) calculatedStats.speed += item.stats.speed;
+      }
+    }
+
+    return calculatedStats;
+  }
+
+  /**
    * Moves the player in the specified direction.
    * @param direction The direction to move ('up', 'down', 'left', 'right').
    */
@@ -123,7 +183,7 @@ export class Player implements IPlayer {
    * @param amount The amount of damage to take.
    */
   takeDamage(amount: number): void {
-    this.stats.hp = Math.max(0, this.stats.hp - amount);
+    this._baseStats.hp = Math.max(0, this._baseStats.hp - amount);
   }
 
   /**
@@ -132,7 +192,7 @@ export class Player implements IPlayer {
    * @param amount The amount of HP to restore.
    */
   heal(amount: number): void {
-    this.stats.hp = Math.min(this.stats.maxHp, this.stats.hp + amount);
+    this._baseStats.hp = Math.min(this._baseStats.maxHp, this._baseStats.hp + amount);
   }
 
   /**
@@ -142,11 +202,20 @@ export class Player implements IPlayer {
    * @returns True if energy was used, false if not enough energy.
    */
   useEnergy(amount: number): boolean {
-    if (this.stats.energy >= amount) {
-      this.stats.energy -= amount;
+    if (this._baseStats.energy >= amount) {
+      this._baseStats.energy -= amount;
       return true;
     }
     return false;
+  }
+
+  /**
+   * Restores the player's energy by the specified amount.
+   * Energy will not exceed max energy.
+   * @param amount The amount of energy to restore.
+   */
+  restoreEnergy(amount: number): void {
+    this._baseStats.energy = Math.min(this._baseStats.maxEnergy, this._baseStats.energy + amount);
   }
 
   /**
@@ -155,26 +224,31 @@ export class Player implements IPlayer {
    * @param amount The amount of experience to add.
    */
   addExperience(amount: number): void {
-    this.stats.exp += amount;
-    const expNeededForNextLevel = this.stats.level * 100;
+    this._baseStats.exp += amount;
+    const expNeededForNextLevel = this._baseStats.level * 100;
 
-    while (this.stats.exp >= expNeededForNextLevel) {
-      this.stats.exp -= expNeededForNextLevel; // Carry over excess XP
+    while (this._baseStats.exp >= expNeededForNextLevel) {
+      this._baseStats.exp -= expNeededForNextLevel; // Carry over excess XP
       this.levelUp();
     }
   }
 
   /**
-   * Levels up the player, increasing stats.
+   * Levels up the player, increasing stats and granting talent points.
    * +10 HP, +5 Energy per level.
+   * 5. Adds 3 talent points per level.
    */
   levelUp(): void {
-    this.stats.level++;
-    this.stats.maxHp += 10;
-    this.stats.maxEnergy += 5;
+    this._baseStats.level++;
+    this._baseStats.maxHp += 10;
+    this._baseStats.maxEnergy += 5;
     // Restore HP and Energy to new max values upon level up
-    this.stats.hp = this.stats.maxHp;
-    this.stats.energy = this.stats.maxEnergy;
+    this._baseStats.hp = this._baseStats.maxHp;
+    this._baseStats.energy = this._baseStats.maxEnergy;
+
+    // Add talent points
+    this.talentPoints += 3;
+    console.log(`Player leveled up to ${this._baseStats.level}! Gained 3 talent points. Total: ${this.talentPoints}`);
   }
 
   /**
@@ -218,5 +292,169 @@ export class Player implements IPlayer {
     if (!this.abilities.some(a => a.id === ability.id)) {
       this.abilities.push(ability);
     }
+  }
+
+  /**
+   * Equips an item to the appropriate slot.
+   * If a slot is already occupied, the old item is returned.
+   * @param item The item to equip.
+   * @returns The previously equipped item, or undefined.
+   */
+  equip(item: Item): EquippableItem | undefined {
+    if (item.type !== 'equipment') {
+      console.warn(`Cannot equip item ${item.name}: not an equipment type`);
+      return undefined;
+    }
+
+    const equippableItem = item as EquippableItem;
+    
+    // Determine slot type from item id if not explicitly set
+    let slotType: EquipmentSlotType;
+    if (equippableItem.equipmentSlotType) {
+      slotType = equippableItem.equipmentSlotType;
+    } else {
+      // Infer from item id
+      if (item.id.includes('sword') || item.id.includes('weapon')) {
+        slotType = 'weapon';
+      } else if (item.id.includes('armor') || item.id.includes('shield')) {
+        slotType = 'armor';
+      } else if (item.id.includes('ring') || item.id.includes('amulet') || item.id.includes('accessory')) {
+        slotType = 'accessory';
+      } else {
+        // Default to accessory if can't determine
+        slotType = 'accessory';
+      }
+    }
+
+    let previousItem: EquippableItem | undefined;
+
+    switch (slotType) {
+      case 'weapon':
+        previousItem = this.weaponSlot;
+        this.weaponSlot = equippableItem;
+        break;
+      case 'armor':
+        previousItem = this.armorSlot;
+        this.armorSlot = equippableItem;
+        break;
+      case 'accessory':
+        previousItem = this.accessorySlot;
+        this.accessorySlot = equippableItem;
+        break;
+    }
+
+    // Remove equipped item from inventory
+    this.removeItem(item.id);
+
+    // Add previous item back to inventory if there was one
+    if (previousItem) {
+      this.addItem(previousItem);
+    }
+
+    return previousItem;
+  }
+
+  /**
+   * Unequips an item from the specified slot.
+   * @param slotType The slot to unequip from.
+   * @returns The unequipped item, or undefined.
+   */
+  unequip(slotType: EquipmentSlotType): EquippableItem | undefined {
+    let unequippedItem: EquippableItem | undefined;
+
+    switch (slotType) {
+      case 'weapon':
+        unequippedItem = this.weaponSlot;
+        this.weaponSlot = undefined;
+        break;
+      case 'armor':
+        unequippedItem = this.armorSlot;
+        this.armorSlot = undefined;
+        break;
+      case 'accessory':
+        unequippedItem = this.accessorySlot;
+        this.accessorySlot = undefined;
+        break;
+    }
+
+    // Add unequipped item back to inventory
+    if (unequippedItem) {
+      this.addItem(unequippedItem);
+    }
+
+    return unequippedItem;
+  }
+
+  /**
+   * Returns all currently equipped items.
+   * @returns Array of equipped items.
+   */
+  getEquippedItems(): EquippableItem[] {
+    const equipped: EquippableItem[] = [];
+    if (this.weaponSlot) equipped.push(this.weaponSlot);
+    if (this.armorSlot) equipped.push(this.armorSlot);
+    if (this.accessorySlot) equipped.push(this.accessorySlot);
+    return equipped;
+  }
+
+  /**
+   * Updates the player's base stats.
+   * Used for loading save games or applying permanent stat changes.
+   * @param updates Partial stats to update.
+   */
+  updateBaseStats(updates: Partial<PlayerStats>): void {
+    this._baseStats = { ...this._baseStats, ...updates };
+  }
+
+  /**
+   * Gets the player's base stats (without equipment bonuses).
+   * Useful for save/load operations.
+   * @returns The base stats object.
+   */
+  getBaseStats(): PlayerStats {
+    return { ...this._baseStats };
+  }
+
+  /**
+   * 6. Attempts to spend a talent point on a specific talent.
+   * Checks if player has talent points, calls talentTree.investPoint,
+   * and decrements talentPoints if successful.
+   * @param talentId The ID of the talent to invest in.
+   * @returns True if the point was successfully spent, false otherwise.
+   */
+  spendTalentPoint(talentId: string): boolean {
+    if (this.talentPoints <= 0) {
+      console.warn('Player has no talent points available to spend.');
+      return false;
+    }
+
+    // Try to invest the point in the talent tree
+    const success = this.talentTree.investPoint(talentId);
+
+    if (success) {
+      this.talentPoints--; // Decrement player's master pool
+      console.log(`Successfully spent a talent point on ${talentId}. Player talent points remaining: ${this.talentPoints}`);
+    }
+    return success;
+  }
+
+  /**
+   * 7. Resets all talents to rank 0 and refunds all spent points to talentPoints.
+   */
+  resetTalents(): void {
+    let spentPoints = 0;
+    // Calculate points spent before resetting
+    this.talentTree.getAllTalents().forEach(talent => {
+      spentPoints += talent.currentRank;
+    });
+
+    // Call talentTree's reset method, which internally refunds points to its own pool
+    this.talentTree.resetTalents();
+    
+    // Add the calculated spent points back to the player's master pool.
+    // This keeps player.talentPoints in sync with talentTree.availablePoints
+    // as talentTree.resetTalents() also adds these points back to its internal pool.
+    this.talentPoints += spentPoints;
+    console.log(`All talents reset. ${spentPoints} points refunded. Player talent points total: ${this.talentPoints}`);
   }
 }

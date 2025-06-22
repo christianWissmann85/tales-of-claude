@@ -3,6 +3,7 @@
 /*
  * Retro RPG Terminal Theme
  * Dark background, bright green text, subtle glows.
+ * Enhanced for an epic Final Fantasy-style battle experience.
  */
 
 /* --- Global / Base Styles for the Battle Component --- */
@@ -11,49 +12,100 @@
     background-color: #1a1a1a; /* Very dark grey, almost black */
     color: #00ff00; /* Bright green for text */
     border: 2px solid #00ff00; /* Green border for the main container */
-    box-shadow: 0 0 15px #00ff00; /* Subtle green glow */
-    padding: 20px;
+    box-shadow: 0 0 20px #00ff00, inset 0 0 5px #00ff00; /* Stronger subtle green glow */
+    padding: 25px; /* Slightly more padding */
     margin: 20px auto;
     max-width: 1200px; /* Limit width for better readability */
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    border-radius: 8px; /* Slightly rounded corners */
+    gap: 25px; /* Slightly more gap */
+    border-radius: 10px; /* Slightly more rounded corners */
     overflow: hidden; /* Ensures shadows/borders don't bleed */
+    position: relative; /* For absolute positioning of background */
+    min-height: 80vh; /* Ensure it takes up a good portion of the viewport */
 }
+
+/* --- New: Subtle ASCII Art Battle Background --- */
+.battleBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Behind everything */
+    font-family: 'VT323', monospace;
+    font-size: 0.8em; /* Smaller font for background art */
+    color: #002200; /* Very dark green for subtle background */
+    white-space: pre; /* Preserve whitespace and formatting */
+    overflow: hidden; /* Hide any overflow */
+    text-align: center;
+    line-height: 1; /* Tight line spacing */
+    opacity: 0.3; /* Make it subtle */
+    pointer-events: none; /* Don't block clicks */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 /* --- Headings and Indicators --- */
 .battleTitle {
-    font-size: 3.5em;
+    font-size: 4em; /* Larger title */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #39ff14; /* A slightly different green for emphasis */
-    text-shadow: 0 0 15px #39ff14, 0 0 25px rgba(57, 255, 20, 0.5); /* Stronger glow */
-    letter-spacing: 3px;
-    animation: pulseTitle 2s infinite alternate; /* Subtle breathing effect */
+    text-shadow: 0 0 20px #39ff14, 0 0 35px rgba(57, 255, 20, 0.6); /* Stronger glow */
+    letter-spacing: 4px; /* More prominent letter spacing */
+    animation: pulseTitle 2s infinite alternate ease-in-out; /* Subtle breathing effect */
+    will-change: text-shadow;
 }
 
 @keyframes pulseTitle {
-    from { text-shadow: 0 0 15px #39ff14, 0 0 25px rgba(57, 255, 20, 0.5); }
-    to { text-shadow: 0 0 20px #39ff14, 0 0 35px rgba(57, 255, 20, 0.7); }
+    from { text-shadow: 0 0 20px #39ff14, 0 0 35px rgba(57, 255, 20, 0.6); }
+    to { text-shadow: 0 0 25px #39ff14, 0 0 45px rgba(57, 255, 20, 0.8); }
 }
 
 .turnIndicator {
-    font-size: 1.8em;
+    font-size: 2em; /* Larger */
     text-align: center;
-    padding: 10px 15px;
+    padding: 12px 20px; /* More padding */
     background-color: #003300; /* Darker green background */
-    border: 1px solid #00ff00;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: inset 0 0 8px #00ff00; /* Inner glow */
+    border: 2px solid #00ff00; /* Thicker border */
+    margin-bottom: 25px;
+    border-radius: 8px; /* More rounded */
+    box-shadow: inset 0 0 10px #00ff00; /* Stronger inner glow */
+    position: relative; /* For arrow animation */
+    overflow: hidden; /* Hide arrows outside */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* New: Animated arrows for turn indicator */
+.turnIndicator::before,
+.turnIndicator::after {
+    content: '>>'; /* ASCII arrows */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: #39ff14;
+    animation: slideArrows 1.5s infinite ease-in-out;
+    text-shadow: 0 0 5px #39ff14;
+}
+.turnIndicator::before {
+    left: 15px;
+}
+.turnIndicator::after {
+    right: 15px;
+    content: '<<'; /* Opposite direction */
+    animation-delay: 0.75s; /* Stagger the animation */
 }
 
 /* --- Combatants Layout --- */
 .combatants {
     display: flex;
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 30px;
+    gap: 40px; /* More gap */
     justify-content: space-around;
     align-items: flex-start; /* Align items to the top */
 }
@@ -61,84 +113,88 @@
 .playerSection,
 .enemiesSection {
     flex: 1; /* Distribute space evenly */
-    min-width: 300px; /* Ensure sections don't get too small */
+    min-width: 350px; /* Ensure sections don't get too small */
     background-color: #0d0d0d; /* Slightly lighter dark background for sections */
-    border: 1px solid #00ff00;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: inset 0 0 5px #00ff00; /* Inner glow */
+    border: 2px solid #00ff00; /* Thicker border */
+    padding: 20px; /* More padding */
+    border-radius: 8px; /* More rounded */
+    box-shadow: inset 0 0 8px #00ff00; /* Stronger inner glow */
 }
 
 .playerSection h2,
 .enemiesSection h2 {
-    font-size: 2em;
+    font-size: 2.2em; /* Larger headings */
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     color: #00ff00;
-    text-shadow: 0 0 8px #00ff00;
+    text-shadow: 0 0 10px #00ff00; /* Stronger glow */
+    letter-spacing: 1px;
 }
 
 .enemiesSection {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px; /* More gap between enemies */
     justify-content: center;
 }
 
 /* --- Enemy Card Styling --- */
 .enemyCard {
     background-color: #001a00; /* Even darker green background for cards */
-    border: 1px solid #00ff00;
-    padding: 10px;
-    border-radius: 5px;
+    border: 2px solid #00ff00; /* Thicker border */
+    padding: 15px; /* More padding */
+    border-radius: 8px; /* More rounded */
     cursor: pointer; /* Indicates clickability */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
     text-align: center;
-    min-width: 150px;
-    max-width: 200px;
+    min-width: 160px;
+    max-width: 220px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.6); /* Stronger initial glow */
+    position: relative; /* For damage numbers */
 }
 
 .enemyCard:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
+    transform: translateY(-8px) scale(1.02); /* More pronounced lift and slight scale */
+    box-shadow: 0 0 20px #00ff00; /* Stronger glow on hover */
     border-color: #39ff14; /* Brighter border on hover */
 }
 
 .enemyCard h3 {
-    font-size: 1.5em;
-    margin-bottom: 5px;
+    font-size: 1.7em; /* Larger */
+    margin-bottom: 8px;
     color: #39ff14;
-    text-shadow: 0 0 5px #39ff14;
+    text-shadow: 0 0 8px #39ff14; /* Stronger glow */
 }
 
 /* --- Target Selection State --- */
 .targetable {
     border-color: #ffcc00; /* Yellow/orange border to indicate targetable */
-    box-shadow: 0 0 20px #ffcc00, inset 0 0 10px #ffcc00; /* Intense yellow glow */
-    transform: scale(1.03); /* Slightly larger to stand out */
+    box-shadow: 0 0 25px #ffcc00, inset 0 0 12px #ffcc00; /* Intense yellow glow */
+    transform: scale(1.05); /* Slightly larger to stand out */
     cursor: crosshair; /* Crosshair cursor for targeting */
-    animation: targetGlow 1s infinite alternate; /* Pulsating target glow */
+    animation: targetGlow 1s infinite alternate ease-in-out; /* Pulsating target glow */
+    will-change: transform, box-shadow;
 }
 
 @keyframes targetGlow {
-    from { box-shadow: 0 0 20px #ffcc00, inset 0 0 10px #ffcc00; }
-    to { box-shadow: 0 0 30px #ffcc00, inset 0 0 15px #ffcc00; }
+    from { box-shadow: 0 0 25px #ffcc00, inset 0 0 12px #ffcc00; }
+    to { box-shadow: 0 0 40px #ffcc00, inset 0 0 20px #ffcc00; }
 }
 
 /* --- Current Enemy Turn Highlight --- */
 .currentEnemyTurn {
     border-color: #ff0000; /* Red border for current turn */
-    box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; /* Intense red glow */
-    animation: currentTurnGlow 1s infinite alternate; /* Pulsating red glow */
+    box-shadow: 0 0 25px #ff0000, inset 0 0 12px #ff0000; /* Intense red glow */
+    animation: currentTurnGlow 1s infinite alternate ease-in-out; /* Pulsating red glow */
+    will-change: box-shadow;
 }
 
 @keyframes currentTurnGlow {
-    from { box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; }
-    to { box-shadow: 0 0 30px #ff0000, inset 0 0 15px #ff0000; }
+    from { box-shadow: 0 0 25px #ff0000, inset 0 0 12px #ff0000; }
+    to { box-shadow: 0 0 40px #ff0000, inset 0 0 20px #ff0000; }
 }
 
 
@@ -146,30 +202,34 @@
 .hpBarContainer,
 .energyBarContainer {
     width: 100%;
-    height: 20px;
+    height: 22px; /* Slightly taller */
     background-color: #333; /* Dark grey background for the empty bar */
     border: 1px solid #00ff00;
-    border-radius: 3px;
-    margin-top: 5px;
+    border-radius: 4px;
+    margin-top: 8px;
     position: relative;
     overflow: hidden; /* Ensures fill stays within bounds */
-    box-shadow: inset 0 0 3px #00ff00;
+    box-shadow: inset 0 0 4px #00ff00;
 }
 
 .hpBarFill {
     height: 100%;
     background-color: #00ff00; /* Green for HP */
     width: 100%; /* Will be overridden by JS */
-    transition: width 0.5s ease-out; /* Smooth transition for HP changes */
-    box-shadow: 0 0 5px #00ff00;
+    transition: width 0.6s ease-out; /* Smoother transition for HP changes */
+    box-shadow: 0 0 8px #00ff00;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+    background-size: 10px 10px; /* Subtle stripes */
 }
 
 .energyBarFill {
     height: 100%;
     background-color: #00ffff; /* Cyan for Energy */
     width: 100%; /* Will be overridden by JS */
-    transition: width 0.5s ease-out;
-    box-shadow: 0 0 5px #00ffff;
+    transition: width 0.6s ease-out;
+    box-shadow: 0 0 8px #00ffff;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+    background-size: 10px 10px; /* Subtle stripes */
 }
 
 .hpText,
@@ -179,65 +239,71 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff; /* White text for readability over bars */
-    font-size: 0.9em;
-    text-shadow: 1px 1px 2px #000; /* Slight shadow for contrast */
+    font-size: 1em; /* Slightly larger */
+    text-shadow: 1px 1px 3px #000; /* Stronger shadow for contrast */
 }
 
 /* --- Status Effects --- */
 .statusEffects {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
+    gap: 8px; /* More gap */
+    margin-top: 12px;
     justify-content: center;
 }
 
 .statusEffect {
     background-color: #002200; /* Darker green for status effect background */
     border: 1px solid #00ff00;
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 0.8em;
+    padding: 4px 10px; /* More padding */
+    border-radius: 4px;
+    font-size: 0.9em; /* Slightly larger */
     text-transform: uppercase;
-    box-shadow: inset 0 0 3px #00ff00;
+    box-shadow: inset 0 0 4px #00ff00;
     cursor: help; /* Indicates more info on hover */
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.statusEffect:hover {
+    background-color: #003300;
+    box-shadow: inset 0 0 8px #00ff00;
 }
 
 /* --- Player Actions --- */
 .playerActions {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px; /* More gap */
     justify-content: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed #00ff00; /* Separator line */
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px dashed #00ff00; /* Thicker separator line */
 }
 
 .actionButton {
     background-color: #004400; /* Dark green button background */
     color: #00ff00;
-    border: 1px solid #00ff00;
-    padding: 12px 25px;
-    font-size: 1.2em;
+    border: 2px solid #00ff00; /* Thicker border */
+    padding: 15px 30px; /* More padding */
+    font-size: 1.3em; /* Larger font */
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px; /* More rounded */
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    letter-spacing: 2px; /* More prominent letter spacing */
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Stronger initial glow */
 }
 
 .actionButton:hover {
     background-color: #006600; /* Lighter green on hover */
-    box-shadow: 0 0 15px #00ff00; /* Stronger glow */
-    transform: translateY(-2px);
+    box-shadow: 0 0 20px #00ff00; /* Stronger glow */
+    transform: translateY(-3px); /* More pronounced lift */
 }
 
 .actionButton:active {
     background-color: #008800;
     transform: translateY(0);
-    box-shadow: inset 0 0 10px #00ff00;
+    box-shadow: inset 0 0 12px #00ff00; /* Stronger inner glow */
 }
 
 .actionButton:disabled {
@@ -247,7 +313,7 @@
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
-    opacity: 0.7;
+    opacity: 0.6; /* More opaque when disabled */
 }
 
 /* --- Dropdown Menus (for Abilities/Items) --- */
@@ -260,30 +326,31 @@
     display: none; /* Hidden by default */
     position: absolute;
     background-color: #0d0d0d; /* Same as section background */
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
-    z-index: 1;
+    min-width: 180px; /* Wider */
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.8); /* Stronger shadow */
+    z-index: 10; /* Ensure it's above other elements */
     border: 1px solid #00ff00;
     border-radius: 5px;
-    padding: 5px 0;
+    padding: 8px 0; /* More padding */
     left: 50%; /* Center dropdown below button */
     transform: translateX(-50%);
     top: 100%; /* Position below the button */
-    margin-top: 5px; /* Small gap */
+    margin-top: 8px; /* Small gap */
 }
 
 .dropdownContent a {
     color: #00ff00;
-    padding: 12px 16px;
+    padding: 14px 18px; /* More padding */
     text-decoration: none;
     display: block;
-    font-size: 1.1em;
+    font-size: 1.2em; /* Larger font */
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .dropdownContent a:hover {
     background-color: #004400; /* Darker green on hover */
     color: #39ff14; /* Brighter green text */
+    text-shadow: 0 0 5px #39ff14;
 }
 
 /* Show the dropdown menu on hover or when activated by JS */
@@ -293,40 +360,42 @@
 
 /* --- Target Selection Message --- */
 .targetSelection {
-    font-size: 1.8em;
+    font-size: 2em; /* Larger */
     color: #ffcc00; /* Yellow/orange for warning/instruction */
     text-align: center;
-    margin-top: 20px;
-    text-shadow: 0 0 10px #ffcc00;
-    animation: blinkText 1.5s infinite alternate; /* Blinking effect */
+    margin-top: 25px;
+    text-shadow: 0 0 12px #ffcc00, 0 0 20px rgba(255, 204, 0, 0.7); /* Stronger glow */
+    animation: blinkText 1.5s infinite alternate ease-in-out; /* Blinking effect */
+    will-change: opacity;
 }
 
 @keyframes blinkText {
     from { opacity: 1; }
-    to { opacity: 0.6; }
+    to { opacity: 0.5; } /* More pronounced blink */
 }
 
-/* --- Battle Log (BIGGER!) --- */
+/* --- Battle Log --- */
 .battleLog {
     background-color: #000000; /* Pure black for the log background */
     color: #00ff00;
     border: 2px solid #00ff00;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 5px;
+    padding: 20px; /* More padding */
+    margin-top: 25px;
+    border-radius: 8px; /* More rounded */
     font-family: 'VT323', monospace; /* Ensure log uses the retro font */
-    font-size: 1.1em;
-    line-height: 1.4;
+    font-size: 1.2em; /* Larger font */
+    line-height: 1.5; /* More line height for readability */
     overflow-y: auto; /* Enable scrolling for long logs */
-    min-height: 250px; /* MAKE THIS BIGGER! */
-    max-height: 400px; /* Prevent it from getting too big */
-    box-shadow: inset 0 0 10px #00ff00; /* Inner glow for the log */
+    min-height: 280px; /* MAKE THIS BIGGER! */
+    max-height: 450px; /* Prevent it from getting too big */
+    box-shadow: inset 0 0 12px #00ff00; /* Stronger inner glow for the log */
     white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    word-break: break-word; /* Ensure long words break */
 }
 
 /* --- Scrollbar Customization (for Webkit browsers) --- */
 .battleLog::-webkit-scrollbar {
-    width: 10px;
+    width: 12px; /* Wider scrollbar */
 }
 
 .battleLog::-webkit-scrollbar-track {
@@ -337,37 +406,347 @@
 .battleLog::-webkit-scrollbar-thumb {
     background-color: #00ff00; /* Green thumb */
     border-radius: 10px;
-    border: 2px solid #004400; /* Darker green border */
+    border: 3px solid #004400; /* Thicker, darker green border */
 }
 
 .battleLog::-webkit-scrollbar-thumb:hover {
     background-color: #39ff14; /* Brighter green on hover */
 }
 
+/* --- NEW: Damage/Heal Numbers --- */
+.damageNumber {
+    position: absolute;
+    font-family: 'VT323', monospace;
+    font-size: 3em; /* Very large for impact */
+    font-weight: bold;
+    pointer-events: none; /* Important: allows clicks through */
+    white-space: nowrap;
+    z-index: 100; /* Above other elements */
+    animation: floatUpFade 1.8s ease-out forwards; /* Longer, smoother animation */
+    will-change: transform, opacity; /* Optimize animation */
+    text-align: center; /* Center text */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.damageNumber.damage {
+    color: #ff0000; /* Red for damage */
+    text-shadow: 0 0 12px #ff0000, 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.5);
+}
+
+.damageNumber.heal {
+    color: #00ff00; /* Green for heal */
+    text-shadow: 0 0 12px #00ff00, 0 0 25px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5);
+}
+
+/* --- NEW: Attack Slash Animations --- */
+.attackSlash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px; /* Base width */
+    height: 15px; /* Base height */
+    background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    transform-origin: center center;
+    pointer-events: none;
+    z-index: 90; /* Below damage numbers */
+    opacity: 0; /* Start hidden */
+    animation: slashMove 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Custom easing */
+    will-change: transform, opacity;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); /* Glow for slashes */
+}
+
+.attackSlash.slash1 {
+    width: 220px;
+    height: 18px;
+    background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+    transform: translate(-50%, -50%) rotate(15deg);
+    animation-delay: 0s;
+    filter: drop-shadow(0 0 10px rgba(255,204,0,0.9));
+}
+
+.attackSlash.slash2 {
+    width: 200px;
+    height: 15px;
+    background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    transform: translate(-50%, -50%) rotate(-25deg);
+    animation-delay: 0.05s;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.9));
+}
+
+.attackSlash.slash3 {
+    width: 210px;
+    height: 16px;
+    background: linear-gradient(90deg, transparent, #ff0000, transparent);
+    transform: translate(-50%, -50%) rotate(35deg);
+    animation-delay: 0.1s;
+    filter: drop-shadow(0 0 10px rgba(255,0,0,0.9));
+}
+
+.attackSlash.slash4 {
+    width: 230px;
+    height: 19px;
+    background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    transform: translate(-50%, -50%) rotate(-10deg);
+    animation-delay: 0.15s;
+    filter: drop-shadow(0 0 10px rgba(0,255,255,0.9));
+}
+
+
+/* --- NEW: Victory/Defeat Screens --- */
+.victoryScreen,
+.defeatScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.98); /* Almost opaque black */
+    z-index: 2000; /* On top of everything */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: fadeIn 0.8s ease-out forwards; /* Slower fade in */
+}
+
+.victoryScreen {
+    color: #ffcc00; /* Gold for victory */
+    text-shadow: 0 0 25px #ffcc00, 0 0 50px rgba(255, 204, 0, 0.8);
+}
+
+.defeatScreen {
+    color: #ff0000; /* Red for defeat */
+    text-shadow: 0 0 25px #ff0000, 0 0 50px rgba(255, 0, 0, 0.8);
+}
+
+.victoryArt,
+.defeatArt {
+    font-family: 'VT323', monospace;
+    white-space: pre; /* Preserve ASCII art formatting */
+    font-size: clamp(1.5em, 6vw, 4em); /* More responsive and larger font size */
+    line-height: 1;
+    margin-bottom: 40px;
+    animation: pulseGlow 2.5s infinite alternate ease-in-out; /* Slower, more epic pulse */
+    will-change: text-shadow;
+}
+
+.victoryArt {
+    color: #ffcc00;
+    text-shadow: 0 0 20px #ffcc00, 0 0 40px rgba(255, 204, 0, 0.8);
+}
+
+.defeatArt {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000, 0 0 40px rgba(255, 0, 0, 0.8);
+}
+
+.continueButton {
+    background-color: #004400;
+    color: #00ff00;
+    border: 3px solid #00ff00; /* Thicker border */
+    padding: 18px 35px; /* Larger padding */
+    font-size: 1.8em; /* Larger font */
+    cursor: pointer;
+    border-radius: 10px; /* More rounded */
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 3px; /* More prominent */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* Stronger initial glow */
+    margin-top: 30px;
+    animation: buttonPulseGlow 1.8s infinite alternate ease-in-out; /* Dedicated button pulse */
+    will-change: box-shadow, transform;
+}
+
+.continueButton:hover {
+    background-color: #006600;
+    box-shadow: 0 0 30px #00ff00;
+    transform: translateY(-8px) scale(1.02); /* More pronounced lift and scale */
+}
+
+.continueButton:active {
+    background-color: #008800;
+    transform: translateY(0);
+    box-shadow: inset 0 0 20px #00ff00;
+}
+
+/* --- NEW: Keyframe Animations --- */
+
+@keyframes floatUpFade {
+    0% {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+    }
+    70% {
+        transform: translate(-50%, -50px) scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -100px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+@keyframes slashMove {
+    0% {
+        transform: translate(-150%, -50%) rotate(var(--slash-rotate, 0deg));
+        opacity: 0;
+    }
+    20% {
+        opacity: 1; /* Appear quickly */
+    }
+    80% {
+        transform: translate(50%, -50%) rotate(var(--slash-rotate, 0deg));
+        opacity: 1;
+    }
+    100% {
+        transform: translate(150%, -50%) rotate(var(--slash-rotate, 0deg));
+        opacity: 0;
+    }
+}
+
+@keyframes slideArrows {
+    0% { transform: translateY(-50%) translateX(0); opacity: 0.7; }
+    50% { transform: translateY(-50%) translateX(15px); opacity: 1; } /* More movement */
+    100% { transform: translateY(-50%) translateX(0); opacity: 0.7; }
+}
+
+@keyframes pulseGlow { /* Generic pulse for victory/defeat text */
+    from { text-shadow: 0 0 20px var(--glow-color, #00ff00), 0 0 40px var(--glow-color-alpha, rgba(0, 255, 0, 0.7)); }
+    to { text-shadow: 0 0 30px var(--glow-color, #00ff00), 0 0 60px var(--glow-color-alpha, rgba(0, 255, 0, 0.9)); }
+}
+/* Applying specific colors for victory/defeat art */
+.victoryArt { --glow-color: #ffcc00; --glow-color-alpha: rgba(255, 204, 0, 0.7); animation: pulseGlow 2.5s infinite alternate ease-in-out; }
+.defeatArt { --glow-color: #ff0000; --glow-color-alpha: rgba(255, 0, 0, 0.7); animation: pulseGlow 2.5s infinite alternate ease-in-out; }
+
+
+@keyframes buttonPulseGlow { /* Specific pulse for buttons */
+    from { box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); }
+    to { box-shadow: 0 0 30px rgba(0, 255, 0, 1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* --- Responsive Adjustments --- */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+    .battleContainer {
+        padding: 20px;
+        gap: 20px;
+    }
+    .battleTitle {
+        font-size: 3em;
+    }
+    .turnIndicator {
+        font-size: 1.6em;
+    }
+    .playerSection,
+    .enemiesSection {
+        min-width: 90%; /* Take up more width */
+        padding: 15px;
+    }
     .combatants {
         flex-direction: column; /* Stack player and enemies vertically */
         align-items: center;
+        gap: 30px;
     }
-
-    .playerSection,
-    .enemiesSection {
-        width: 95%; /* Take up more width */
-        min-width: unset; /* Remove min-width constraint */
+    .actionButton {
+        padding: 12px 25px;
+        font-size: 1.1em;
     }
-
-    .battleTitle {
+    .battleLog {
+        min-height: 220px;
+        max-height: 350px;
+        font-size: 1.1em;
+    }
+    .damageNumber {
         font-size: 2.5em;
     }
+    .attackSlash {
+        width: 180px;
+        height: 12px;
+    }
+    .victoryArt, .defeatArt {
+        font-size: clamp(1em, 5vw, 3em);
+    }
+    .continueButton {
+        font-size: 1.3em;
+        padding: 15px 30px;
+    }
+}
 
-    .actionButton {
-        padding: 10px 20px;
+@media (max-width: 768px) {
+    .battleContainer {
+        padding: 15px;
+        margin: 15px auto;
+        gap: 15px;
+    }
+    .battleTitle {
+        font-size: 2.5em;
+        letter-spacing: 2px;
+    }
+    .turnIndicator {
+        font-size: 1.4em;
+        padding: 10px 15px;
+    }
+    .turnIndicator::before,
+    .turnIndicator::after {
         font-size: 1em;
     }
-
+    .playerSection h2,
+    .enemiesSection h2 {
+        font-size: 1.8em;
+    }
+    .enemyCard {
+        min-width: 140px;
+        max-width: 180px;
+        padding: 10px;
+    }
+    .enemyCard h3 {
+        font-size: 1.4em;
+    }
+    .hpText, .energyText {
+        font-size: 0.85em;
+    }
+    .actionButton {
+        width: 100%; /* Full width buttons */
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+    .dropdownContent {
+        min-width: 140px;
+    }
+    .dropdownContent a {
+        font-size: 1em;
+        padding: 10px 14px;
+    }
+    .targetSelection {
+        font-size: 1.5em;
+    }
     .battleLog {
-        min-height: 180px; /* Adjust for smaller screens */
+        min-height: 180px;
+        max-height: 300px;
+        font-size: 1em;
+        padding: 15px;
+    }
+    .damageNumber {
+        font-size: 2em;
+    }
+    .attackSlash {
+        width: 150px;
+        height: 10px;
+    }
+    .victoryArt, .defeatArt {
+        font-size: clamp(0.8em, 4vw, 2.5em);
+    }
+    .continueButton {
+        font-size: 1.1em;
+        padding: 12px 25px;
     }
 }
 
@@ -375,22 +754,71 @@
     .battleContainer {
         padding: 10px;
         margin: 10px auto;
+        gap: 10px;
     }
-
     .battleTitle {
         font-size: 2em;
+        letter-spacing: 1px;
     }
-
     .turnIndicator {
+        font-size: 1.1em;
+        padding: 8px 10px;
+    }
+    .playerSection,
+    .enemiesSection {
+        padding: 10px;
+    }
+    .playerSection h2,
+    .enemiesSection h2 {
+        font-size: 1.5em;
+    }
+    .enemyCard {
+        min-width: 100px;
+        max-width: 130px;
+        padding: 8px;
+    }
+    .enemyCard h3 {
         font-size: 1.2em;
     }
-
-    .enemyCard {
-        min-width: 120px;
-        max-width: 150px;
+    .hpBarContainer, .energyBarContainer {
+        height: 18px;
     }
-
+    .hpText, .energyText {
+        font-size: 0.8em;
+    }
+    .statusEffect {
+        font-size: 0.7em;
+        padding: 2px 6px;
+    }
+    .playerActions {
+        gap: 10px;
+        padding-top: 10px;
+    }
     .actionButton {
-        width: 100%; /* Full width buttons */
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+    .targetSelection {
+        font-size: 1.2em;
+    }
+    .battleLog {
+        min-height: 150px;
+        max-height: 250px;
+        font-size: 0.9em;
+        padding: 10px;
+    }
+    .damageNumber {
+        font-size: 1.8em;
+    }
+    .attackSlash {
+        width: 120px;
+        height: 8px;
+    }
+    .victoryArt, .defeatArt {
+        font-size: clamp(0.6em, 3vw, 2em);
+    }
+    .continueButton {
+        font-size: 0.9em;
+        padding: 10px 20px;
     }
 }

@@ -12,6 +12,8 @@ import {
 import { Player } from '../models/Player'; // Used for initial battle setup
 import { Enemy } from '../models/Enemy'; // Used for initial battle setup
 import { GameAction } from '../context/GameContext'; // Import GameAction type
+import { QuestManager } from '../models/QuestManager'; // Import QuestManager
+import { TalentEffect, TalentSpecialEffect } from '../models/TalentTree'; // Import TalentEffect and TalentSpecialEffect
 
 class BattleSystem {
   private dispatch: React.Dispatch<GameAction>;
@@ -119,6 +121,7 @@ class BattleSystem {
 
   /**
    * Calculates the damage an attacker deals to a target, considering base attack and defense.
+   * Applies talent bonuses if the attacker is a Player and an ability is used.
    * @param attacker The attacking CombatEntity.
    * @param target The defending CombatEntity.
    * @param ability Optional ability used, for additional damage.
@@ -129,8 +132,18 @@ class BattleSystem {
     if (ability && ability.effect.damage !== undefined) {
       baseDamage += ability.effect.damage;
     }
-    const finalDamage = Math.max(0, baseDamage - target.defense);
-    return finalDamage;
+    let finalDamage = Math.max(0, baseDamage - target.defense);
+
+    // Apply talent damage bonus if attacker is a Player and an ability is provided
+    if (attacker instanceof Player && ability) {
+      const talentDamageBonus = attacker.talentTree.getTalentBonus(ability.id, 'damage_bonus');
+      if (talentDamageBonus > 0) {
+        finalDamage *= (1 + talentDamageBonus);
+        // console.log(`Talent damage bonus applied: ${talentDamageBonus * 100}% for ${ability.name}. New damage: ${finalDamage}`);
+      }
+    }
+
+    return Math.round(finalDamage); // Round to nearest integer for cleaner damage numbers
   }
 
   /**
@@ -166,10 +179,10 @@ class BattleSystem {
    */
   private updateStatusEffectsForCombatEntity(entity: CombatEntity): string[] {
     const logMessages: string[] = [];
+    // IMPORTANT: Operate on a copy of the array to allow modification during iteration
+    // and then reassign to entity.statusEffects.
+    let currentEffects = [...entity.statusEffects];
     const effectsToRemove: number[] = [];
-
-    // Create a mutable copy of statusEffects for iteration and modification
-    const currentEffects = [...entity.statusEffects];
 
     currentEffects.forEach((effect, index) => {
       // Apply per-turn effects based on type
@@ -185,6 +198,8 @@ class BattleSystem {
           // The 'frozen' effect primarily skips turns, which is handled in advanceTurn.
           // This log message indicates its presence.
           logMessages.push(`${entity.name} is frozen!`);
+          // Duration decrement for 'frozen' is handled in advanceTurn if it skips a turn.
+          // No decrement here to avoid double decrement if it skips.
           break;
         case 'optimized':
           // Speed multiplier would be applied by BattleManager when calculating turn order
@@ -196,8 +211,8 @@ class BattleSystem {
           break;
       }
 
-      // Note: Duration decrement for 'frozen' is handled in advanceTurn if it skips a turn.
-      // For other effects, decrement here.
+      // Decrement duration for effects that don't skip turns.
+      // For 'frozen', its duration is decremented in advanceTurn when it actually skips.
       if (effect.type !== 'frozen') {
         effect.duration--;
       }
@@ -212,12 +227,13 @@ class BattleSystem {
     for (let i = effectsToRemove.length - 1; i >= 0; i--) {
       currentEffects.splice(effectsToRemove[i], 1);
     }
-    entity.statusEffects = currentEffects; // Update the entity's status effects
+    entity.statusEffects = currentEffects; // Update the entity's status effects with the new array
     return logMessages;
   }
 
   /**
    * Applies the effects of an ability from a caster to a target(s).
+   * Applies talent bonuses for healing and special effects if the caster is a Player.
    * @param caster The CombatEntity casting the ability.
    * @param target The CombatEntity target of the ability (can be caster itself).
    * @param ability The ability being used.
@@ -233,6 +249,7 @@ class BattleSystem {
     const logMessages: string[] = [];
     const affectedEntities: CombatEntity[] = [];
 
+    // Determine base affected entities
     if (ability.effect.target === 'self') {
       affectedEntities.push(caster);
     } else if (ability.effect.target === 'singleEnemy') {
@@ -246,6 +263,7 @@ class BattleSystem {
       }
     }
 
+    // Apply base effects to determined targets
     affectedEntities.forEach((currentAbilityTarget) => {
       // Apply damage
       if (ability.effect.damage !== undefined) {
@@ -256,11 +274,22 @@ class BattleSystem {
 
       // Apply healing
       if (ability.effect.heal !== undefined) {
+        let actualHealAmount = ability.effect.heal;
+        // Apply talent heal bonus if caster is a Player
+        if (caster instanceof Player) {
+          const talentHealBonus = caster.talentTree.getTalentBonus(ability.id, 'heal_bonus');
+          if (talentHealBonus > 0) {
+            actualHealAmount *= (1 + talentHealBonus);
+            // console.log(`Talent heal bonus applied: ${talentHealBonus * 100}% for ${ability.name}. New heal: ${actualHealAmount}`);
+          }
+        }
+        actualHealAmount = Math.round(actualHealAmount); // Round heal amount
+
         currentAbilityTarget.hp = Math.min(
           currentAbilityTarget.maxHp,
-          currentAbilityTarget.hp + ability.effect.heal,
+          currentAbilityTarget.hp + actualHealAmount,
         );
-        logMessages.push(`${caster.name} uses ${ability.name} on ${currentAbilityTarget.name}, healing ${ability.effect.heal} HP!`);
+        logMessages.push(`${caster.name} uses ${ability.name} on ${currentAbilityTarget.name}, healing ${actualHealAmount} HP!`);
       }
 
       // Apply status effect
@@ -279,6 +308,90 @@ class BattleSystem {
         logMessages.push(`${caster.name} applies ${ability.effect.statusEffect} to ${currentAbilityTarget.name}!`);
       }
     });
+
+    // Apply special effects from talents if caster is a Player
+    if (caster instanceof Player) {
+      const specialEffects = caster.talentTree.getTalentSpecialEffects(ability.id);
+
+      specialEffects.forEach(effect => {
+        if (effect.specialEffect) {
+          // Check for chance if defined, otherwise assume 100% if appliesAtRank is met
+          const hasChance = effect.chance !== undefined;
+          const roll = Math.random();
+          const shouldApply = !hasChance || roll < effect.chance!;
+
+          if (shouldApply) {
+            switch (effect.specialEffect) {
+              case 'remove_buffs':
+                // Apply to all affected enemies (if ability targets enemies)
+                // 'target' here is the primary target, but for 'allEnemies' abilities, we need to iterate battle.enemies
+                const targetsForBuffRemoval = ability.effect.target === 'allEnemies' ? battle.enemies.filter(e => e.hp > 0) : [target];
+                targetsForBuffRemoval.forEach(entity => {
+                  const initialEffectCount = entity.statusEffects.length;
+                  // Filter out 'optimized' (example buff) or any other beneficial effects
+                  entity.statusEffects = entity.statusEffects.filter(se => se.type !== 'optimized');
+                  if (entity.statusEffects.length < initialEffectCount) {
+                    logMessages.push(`${entity.name}'s buffs were removed by ${caster.name}'s ${ability.name}!`);
+                  }
+                });
+                break;
+              case 'group_heal':
+                // This special effect makes a single-target heal (like Refactor) heal all player-controlled entities.
+                // Since 'Refactor' already targets 'self', this means it will heal the player, and potentially other party members.
+                // For now, it just ensures the player is healed, and logs it as a group heal.
+                if (ability.effect.heal !== undefined) {
+                  let actualHealAmount = ability.effect.heal;
+                  const talentHealBonus = caster.talentTree.getTalentBonus(ability.id, 'heal_bonus');
+                  if (talentHealBonus > 0) {
+                    actualHealAmount *= (1 + talentHealBonus);
+                  }
+                  actualHealAmount = Math.round(actualHealAmount);
+
+                  // Heal the player (already done by base effect if target is self, but explicit for "group" context)
+                  battle.player.hp = Math.min(battle.player.maxHp, battle.player.hp + actualHealAmount);
+                  logMessages.push(`${caster.name}'s ${ability.name} also heals ${battle.player.name} for ${actualHealAmount} HP (group heal)!`);
+
+                  // Future: Iterate through battle.playerParty and heal them too
+                  // for (const ally of battle.playerParty) {
+                  //   ally.hp = Math.min(ally.maxHp, ally.hp + actualHealAmount);
+                  //   logMessages.push(`${caster.name}'s ${ability.name} also heals ${ally.name} for ${actualHealAmount} HP!`);
+                  // }
+                }
+                break;
+              case 'stun':
+                // Apply 'frozen' status effect to the primary target(s)
+                const stunDuration = 1; // Example duration for stun
+                const stunEffect: StatusEffect = { type: 'frozen', duration: stunDuration };
+                // Apply to all affected enemies (if ability targets enemies)
+                const targetsForStun = ability.effect.target === 'allEnemies' ? battle.enemies.filter(e => e.hp > 0) : [target];
+                targetsForStun.forEach(entity => {
+                  this.applyStatusEffectToCombatEntity(entity, stunEffect);
+                  logMessages.push(`${entity.name} is stunned by ${caster.name}'s ${ability.name}!`);
+                });
+                break;
+              case 'reveal_weakness':
+                // Apply 'corrupted' status effect or similar debuff to the primary target(s)
+                const weaknessDuration = 2; // Example duration
+                const weaknessEffect: StatusEffect = { type: 'corrupted', duration: weaknessDuration, damagePerTurn: 5 }; // Example: makes them take damage per turn
+                // Apply to all affected enemies (if ability targets enemies)
+                const targetsForWeakness = ability.effect.target === 'allEnemies' ? battle.enemies.filter(e => e.hp > 0) : [target];
+                targetsForWeakness.forEach(entity => {
+                  this.applyStatusEffectToCombatEntity(entity, weaknessEffect);
+                  logMessages.push(`${entity.name}'s weaknesses are revealed by ${caster.name}'s ${ability.name}!`);
+                });
+                break;
+              default:
+                // Handle other special effects or log an unknown type
+                console.warn(`Unknown special effect type: ${effect.specialEffect}`);
+                break;
+            }
+          } else if (hasChance) {
+            // Log if a chance-based effect failed to proc (optional, can be noisy)
+            // logMessages.push(`${caster.name}'s ${ability.name} attempted to apply ${effect.specialEffect} but failed (${(effect.chance! * 100).toFixed(0)}% chance).`);
+          }
+        }
+      });
+    }
 
     return logMessages;
   }
@@ -301,7 +414,9 @@ class BattleSystem {
       return newBattle;
     }
 
-    const damage = this.calculateDamage(attacker, target);
+    // Basic attacks do not use abilities, so no talent bonus for damage here.
+    // Talent bonuses are tied to specific abilities and are applied in calculateDamage if an ability is passed.
+    const damage = this.calculateDamage(attacker, target); // Still call calculateDamage for defense calculation
 
     // Apply damage to a cloned target entity
     const updatedTarget = { ...target, hp: Math.max(0, target.hp - damage) };
@@ -353,17 +468,20 @@ class BattleSystem {
         return newBattle;
       }
     } else if (ability.effect.target === 'self') {
-      actualTarget = updatedCaster; // Target is the caster itself
+      actualTarget = this.findEntity(newBattle, updatedCaster.id); // Get updated caster from newBattle
     } else if (ability.effect.target === 'allEnemies') {
       // No specific single target needed, apply to all relevant entities
+      actualTarget = undefined; // Set to undefined as it's not a single target
     } else {
       newBattle.log.push('Error: Invalid target for ability or target not specified.');
       return newBattle;
     }
 
     // Apply ability effects and get log messages
-    // Pass updatedCaster and actualTarget (which are references to entities within newBattle)
-    const effectLogs = this.applyAbilityEffect(updatedCaster, actualTarget || updatedCaster, ability, newBattle);
+    // Pass updatedCaster (which is a reference to entity within newBattle)
+    // If actualTarget is undefined (e.g., for 'allEnemies'), pass a placeholder like updatedCaster itself,
+    // as applyAbilityEffect handles 'allEnemies' internally.
+    const effectLogs = this.applyAbilityEffect(this.findEntity(newBattle, updatedCaster.id)!, actualTarget || updatedCaster, ability, newBattle);
     newBattle.log = [...newBattle.log, ...effectLogs];
 
     // Ensure all entities are updated in the newBattle state after effects
@@ -447,7 +565,8 @@ class BattleSystem {
   public handleEnemyTurn(battle: BattleState, enemyId: string): BattleState | null {
     let newBattle = { ...battle };
 
-    const enemy = this.findEntity(newBattle, enemyId);
+    // Find the enemy entity within the newBattle state
+    let enemy = this.findEntity(newBattle, enemyId);
     if (!enemy) {
       newBattle.log.push('Error: Enemy not found for turn.');
       return newBattle;
@@ -456,11 +575,22 @@ class BattleSystem {
     // Apply per-turn status effects
     const statusLog = this.updateStatusEffectsForCombatEntity(enemy);
     newBattle.log = [...newBattle.log, ...statusLog];
+    // IMPORTANT: After modifying 'enemy' by reference in updateStatusEffectsForCombatEntity,
+    // ensure 'newBattle' reflects this change immutability.
+    newBattle = this.updateEntityInBattleState(newBattle, enemy);
+
+
+    // Re-find enemy from potentially updated newBattle state (important if updateEntityInBattleState created new object)
+    enemy = this.findEntity(newBattle, enemyId);
+    if (!enemy) { // Should not happen, but for type safety
+      newBattle.log.push('Error: Enemy disappeared after status effect update.');
+      return newBattle;
+    }
 
     // Check if enemy is defeated after status effects
     if (enemy.hp <= 0) {
       newBattle.log.push(`${enemy.name} was defeated by status effects!`);
-      newBattle = this.updateEntityInBattleState(newBattle, { ...enemy, hp: 0 }); // Ensure HP is 0
+      // No need to update again, as it was already updated above if status effects changed HP
       return this.advanceTurn(newBattle); // Advance turn as enemy is defeated
     }
 
@@ -468,6 +598,7 @@ class BattleSystem {
     const isFrozen = enemy.statusEffects.some(se => se.type === 'frozen');
     if (isFrozen) {
       newBattle.log.push(`${enemy.name} is frozen and cannot act!`);
+      // The duration decrement for frozen is handled in advanceTurn.
       return this.advanceTurn(newBattle); // Skip turn, advance
     }
 
@@ -495,7 +626,7 @@ class BattleSystem {
       );
       if (utilityAbilities.length > 0) {
         chosenAbility = utilityAbilities[0]; // Just pick the first one
-        if (chosenAbility.effect.target === 'self') {
+        if (chosenAbility && chosenAbility.effect.target === 'self') {
           targetEntity = enemy;
         }
       }
@@ -506,16 +637,20 @@ class BattleSystem {
       const updatedEnemy = { ...enemy, energy: enemy.energy - chosenAbility.cost };
       newBattle = this.updateEntityInBattleState(newBattle, updatedEnemy);
 
-      const effectLogs = this.applyAbilityEffect(updatedEnemy, targetEntity, chosenAbility, newBattle);
+      // Re-get updatedEnemy reference from newBattle for applyAbilityEffect
+      const currentEnemyRef = this.findEntity(newBattle, updatedEnemy.id)!;
+      const effectLogs = this.applyAbilityEffect(currentEnemyRef, targetEntity, chosenAbility, newBattle);
       newBattle.log = [...newBattle.log, ...effectLogs];
     } else {
       // Default to basic attack if no abilities can be used
-      const damage = this.calculateDamage(enemy, newBattle.player);
+      const damage = this.calculateDamage(enemy, newBattle.player); // No ability, so no talent bonus for enemy basic attack
       newBattle.player.hp = Math.max(0, newBattle.player.hp - damage);
       newBattle.log.push(`${enemy.name} attacks ${newBattle.player.name}, dealing ${damage} damage!`);
     }
 
     // Ensure all entities are updated in the newBattle state after effects
+    // This is crucial if applyAbilityEffect modified entities directly (which it does via reference)
+    // We need to re-map to ensure immutability is maintained at the top level.
     newBattle = {
       ...newBattle,
       player: { ...newBattle.player },
@@ -584,11 +719,23 @@ class BattleSystem {
       let totalExpGained = 0;
       const itemsDropped: Item[] = [];
 
+      // Track defeated enemies for quest progress
+      const questManager = QuestManager.getInstance();
+      
       newBattle.enemies.forEach(enemy => {
         if (enemy.hp <= 0) { // Ensure enemy is actually defeated
           totalExpGained += enemy.expReward || 0; // Sum up experience
           const drops = this.generateItemDrops(enemy);
           itemsDropped.push(...drops);
+          
+          // Update quest progress for defeating this enemy
+          // Extract enemy type from ID (e.g., "enemy_basic_bug_01" -> "bug")
+          const enemyType = enemy.id.includes('bug') ? 'bug' : 
+                           enemy.id.includes('virus') ? 'virus' :
+                           enemy.id.includes('corrupted_data') ? 'corrupted_data' :
+                           enemy.id.includes('logic_error') ? 'logic_error' : 'unknown';
+          
+          questManager.updateQuestProgress('defeat_enemy', enemyType, 1);
         }
       });
 
@@ -605,8 +752,8 @@ class BattleSystem {
     }
 
     // 2. Determine next turn
-    const currentTurnEntityId = newBattle.currentTurn === 'player' ? newBattle.player.id : newBattle.turnOrder.find(id => newBattle.enemies.some(e => e.id === id && e.id === newBattle.currentTurn)) || '';
-    const currentTurnIndex = newBattle.turnOrder.indexOf(currentTurnEntityId);
+    // currentTurn is now directly the ID of the entity whose turn it is.
+    const currentTurnIndex = newBattle.turnOrder.indexOf(newBattle.currentTurn);
 
     let nextTurnIndex = (currentTurnIndex + 1) % newBattle.turnOrder.length;
     let nextEntityId = newBattle.turnOrder[nextTurnIndex];
@@ -619,15 +766,18 @@ class BattleSystem {
     while (nextEntity && (nextEntity.hp <= 0 || nextEntity.statusEffects.some(se => se.type === 'frozen'))) {
       if (nextEntity.hp <= 0) {
         newBattle.log.push(`${nextEntity.name} is defeated and skips turn.`);
-      } else if (nextEntity.statusEffects.some(se => se.type === 'frozen')) {
-        // Decrement frozen duration here, as it's a turn-skipping effect
+      } else { // Must be frozen
         const frozenEffect = nextEntity.statusEffects.find(se => se.type === 'frozen');
         if (frozenEffect) {
           frozenEffect.duration--;
+          // Update the entity in newBattle to reflect the duration change
+          newBattle = this.updateEntityInBattleState(newBattle, nextEntity); // Crucial for immutability
           if (frozenEffect.duration <= 0) {
             // Remove the effect by filtering it out from a new array
             nextEntity.statusEffects = nextEntity.statusEffects.filter(se => se.type !== 'frozen');
             newBattle.log.push(`${nextEntity.name} is no longer frozen.`);
+            // Update again after removing effect
+            newBattle = this.updateEntityInBattleState(newBattle, nextEntity);
           }
         }
         newBattle.log.push(`${nextEntity.name} is frozen and cannot act!`);
@@ -650,13 +800,15 @@ class BattleSystem {
       return null;
     }
 
-    // Fix for line 253:
+    // Set currentTurn based on entity type
     newBattle.currentTurn = nextEntity.id === newBattle.player.id ? 'player' : 'enemy';
 
     newBattle.log.push(`--- ${nextEntity.name}'s Turn ---`);
 
     // Ensure all entities are updated in the newBattle state after any modifications
     // (e.g., status effect duration changes)
+    // This final re-mapping ensures that any direct modifications to entity objects
+    // (like statusEffects array or HP) are reflected in new, immutable objects for React.
     newBattle = {
       ...newBattle,
       player: { ...newBattle.player },

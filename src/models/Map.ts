@@ -1,6 +1,7 @@
 // src/models/Map.ts
 
 import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../types/global.types';
+import { NPCModel } from './NPC'; // Import the NPCModel class
 
 /**
  * Represents a game map, managing its tiles, entities, and exits.
@@ -31,7 +32,36 @@ export class GameMap implements IGameMap { // Added 'implements IGameMap' for cl
     this.entities = []; // Initialize as an array
     // Add initial entities, updating tile occupancy
     data.entities.forEach(entity => {
-      this.addEntity(entity); // Use the refactored addEntity
+      // Check if the entity is a plain object representing an NPC.
+      // This heuristic relies on properties unique to NPCs ('role', 'dialogueId')
+      // and the absence of properties typical for Enemies ('health', 'damage')
+      // or Items ('value', 'weight').
+      // The prompt states Enemies are already instantiated, so `instanceof Enemy`
+      // would also work for them, but this approach handles plain data objects.
+      if (
+        'role' in entity &&
+        'dialogueId' in entity &&
+        typeof (entity as any).role === 'string' && // Ensure role is a string
+        typeof (entity as any).dialogueId === 'string' && // Ensure dialogueId is a string
+        !('health' in entity && 'damage' in entity) && // Not an Enemy (assuming Enemy has health/damage)
+        !('value' in entity && 'weight' in entity) // Not an Item (assuming Item has value/weight)
+      ) {
+        // It's a plain NPC object, instantiate it using NPCModel
+        const npcInstance = new NPCModel(
+          entity.id,
+          entity.name,
+          entity.position,
+          (entity as any).statusEffects || [], // statusEffects might be optional or undefined in plain data
+          (entity as any).role,
+          (entity as any).dialogueId,
+          (entity as any).questStatus // questStatus is optional
+        );
+        this.addEntity(npcInstance);
+      } else {
+        // It's either an already instantiated Enemy, or an Item (plain or instantiated),
+        // or any other entity type that doesn't match the NPC criteria.
+        this.addEntity(entity);
+      }
     });
   }
 

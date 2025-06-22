@@ -1,0 +1,231 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0a0a0a;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10px;
+  }
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 0, 0.03),
+    rgba(0, 255, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+.glitchContainer {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  font-size: 0.7rem;
+  line-height: 1.2;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  margin: 0;
+  animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  41.99% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.8;
+  }
+  43% {
+    opacity: 1;
+  }
+  47.99% {
+    opacity: 1;
+  }
+  48% {
+    opacity: 0.9;
+  }
+  49% {
+    opacity: 1;
+  }
+}
+
+.glitchText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  pointer-events: none;
+}
+
+.glitch1, .glitch2, .glitch3 {
+  position: absolute;
+  opacity: 0.1;
+}
+
+.glitch1 {
+  color: #ff0000;
+  animation: glitch1 3s infinite;
+}
+
+.glitch2 {
+  color: #0000ff;
+  animation: glitch2 3s infinite;
+}
+
+.glitch3 {
+  color: #ffff00;
+  animation: glitch3 3s infinite;
+}
+
+@keyframes glitch1 {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+}
+
+@keyframes glitch2 {
+  0%, 100% {
+    transform: translate(0);
+  }
+  15% {
+    transform: translate(2px, -2px);
+  }
+  30% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+@keyframes glitch3 {
+  0%, 100% {
+    transform: translate(0);
+  }
+  25% {
+    transform: translate(2px, 2px);
+  }
+  50% {
+    transform: translate(-2px, -2px);
+  }
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #61dafb;
+  margin-bottom: 3rem;
+  text-shadow: 0 0 5px #61dafb;
+}
+
+.codeText {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.titleText {
+  margin: 0 0.5rem;
+}
+
+.startPrompt {
+  font-size: 1.5rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.blinkingCursor {
+  animation: blink 1s infinite;
+  color: #00ff00;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.promptText {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.bottomDecoration {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0.3;
+}
+
+.matrixChar {
+  color: #00ff00;
+  font-size: 1.5rem;
+  animation: matrix-fall 4s linear infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes matrix-fall {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}

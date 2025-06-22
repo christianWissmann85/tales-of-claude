@@ -12,14 +12,42 @@
         "text": "Your journey, I sense, is one of profound discovery. You seek the Sacred Algorithms, do you not? They are the very essence of creativity, scattered by the dreaded Infinite Loop. A truly *buggy* situation, if you ask me."
       },
       {
-        "text": "Before you embark on your quest to collect these vital fragments, do you wish for a quick *syntax check* on your path, or are you ready to *compile* your own destiny?",
+        "text": "Before you embark on your quest to collect these vital fragments, do you wish for a quick *syntax check* on your path, or perhaps help with the *bug infestation* problem?",
         "choices": [
+          {
+            "text": "Tell me about the bug problem.",
+            "action": "offer_bug_hunt_quest"
+          },
           {
             "text": "Tell me more about my path.",
             "action": "debugger_advice"
           },
           {
             "text": "I'm ready to compile!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "offer_bug_hunt_quest",
+    "lines": [
+      {
+        "text": "Ah yes, the bugs! They've been multiplying exponentially since the last *system crash*."
+      },
+      {
+        "text": "These pesky runtime errors are corrupting data throughout Terminal Town. If you could help eliminate them, I'd be most grateful."
+      },
+      {
+        "text": "Would you be willing to take on this debugging task? I'll make it worth your while with some helpful items.",
+        "choices": [
+          {
+            "text": "I'll help debug the town!",
+            "action": "start_quest_bug_hunt"
+          },
+          {
+            "text": "Maybe later.",
             "action": "end_dialogue"
           }
         ]
@@ -36,11 +64,15 @@
         "text": "My purr-pose is to *compile* your current state into a permanent *save file*. It's like creating a stable build of your adventure!"
       },
       {
-        "text": "Would you like me to save your game now? It's always wise to *commit* your changes, especially before facing a *fatal error* or a particularly nasty *segmentation fault*!",
+        "text": "What would you like me to do? I can save your current progress or load a previous save if one exists.",
         "choices": [
           {
-            "text": "Yes, please save!",
+            "text": "Save my game!",
             "action": "save_game"
+          },
+          {
+            "text": "Load saved game",
+            "action": "load_game"
           },
           {
             "text": "Not right now, thanks.",
@@ -68,6 +100,492 @@
           {
             "text": "Thank you for the advice!",
             "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binary_bard_intro",
+    "lines": [
+      {
+        "text": "Hark, traveler! Do you hear the rhythm? The binary beats of the forest, a symphony of 1s and 0s."
+      },
+      {
+        "text": "I am the Binary Bard, weaving tales and code into harmonious sequences. My verses are *algorithms* set to music."
+      },
+      {
+        "text": "This forest thrives on precise logic. Any *syntax error* can cause a ripple, a dissonance in the data flow. Be mindful of your steps, lest you *corrupt* the melody."
+      },
+      {
+        "text": "Do you seek a tune of wisdom, or perhaps a *debugged* ballad of courage?",
+        "choices": [
+          {
+            "text": "Tell me a tune of wisdom.",
+            "action": "binary_bard_wisdom"
+          },
+          {
+            "text": "Give me a ballad of courage.",
+            "action": "binary_bard_courage"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binary_bard_wisdom",
+    "lines": [
+      {
+        "text": "The forest's heart beats in cycles. To truly understand it, you must observe the *flow control* of its streams. Some paths are *recursive*, leading back to their origin."
+      },
+      {
+        "text": "Remember, even the most complex *functions* can be broken down into simpler *subroutines*. Seek the patterns, and the path will reveal itself.",
+        "choices": [
+          {
+            "text": "Thank you, Bard.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binary_bard_courage",
+    "lines": [
+      {
+        "text": "Courage is the *exception handler* for fear. When faced with a *fatal error*, remember your core programming. Your *stack* is deeper than you think."
+      },
+      {
+        "text": "Even a single *bit* can change the entire *byte*. Your actions, however small, can have a profound impact. Go forth, and *execute* your destiny!",
+        "choices": [
+          {
+            "text": "I feel more courageous!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_druid_intro",
+    "lines": [
+      {
+        "text": "Welcome, young node, to the Root Directory of the Binary Forest. I am the Data Druid, guardian of its natural data streams."
+      },
+      {
+        "text": "Every leaf, every branch, is a *data point* in this vast ecosystem. We observe the *natural selection* of algorithms, ensuring only the most robust survive."
+      },
+      {
+        "text": "The forest is currently experiencing some *data corruption* near its core. A powerful *virus* is attempting to *overwrite* the natural order. You must be careful."
+      },
+      {
+        "text": "Do you wish to learn about the forest's *data integrity*, or perhaps how to *prune* corrupted elements?",
+        "choices": [
+          {
+            "text": "Tell me about data integrity.",
+            "action": "data_druid_integrity"
+          },
+          {
+            "text": "How do I prune corrupted elements?",
+            "action": "data_druid_prune"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_druid_integrity",
+    "lines": [
+      {
+        "text": "The integrity of data relies on its *checksum*. If a value is altered, the entire system can become *unstable*. Trust your *hash functions*."
+      },
+      {
+        "text": "The Segfault Sovereign, in the Debug Dungeon, thrives on *corrupted checksums*. If you can *verify* its true state, you might find a weakness.",
+        "choices": [
+          {
+            "text": "Thank you for the insight.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_druid_prune",
+    "lines": [
+      {
+        "text": "To prune corruption, you must identify the *root cause*. Sometimes, a simple *garbage collection* is enough. Other times, a more forceful *format* is required."
+      },
+      {
+        "text": "The corrupted elements in this forest are like *wild pointers*. They lead nowhere good. *Deallocate* them swiftly, and the forest will heal.",
+        "choices": [
+          {
+            "text": "I understand.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "circuit_sage_intro",
+    "lines": [
+      {
+        "text": "Greetings, seeker of knowledge. I am the Circuit Sage, master of logic gates and the flow of information."
+      },
+      {
+        "text": "The universe is a grand circuit, and every action is a *signal* passing through *AND*, *OR*, and *NOT* gates. Understanding these principles is key to unlocking its secrets."
+      },
+      {
+        "text": "Beware the *short circuits* and *power surges* that plague this realm. They can lead to unpredictable *states* and *undefined behavior*."
+      },
+      {
+        "text": "Do you seek a lesson in *Boolean logic*, or perhaps a hint on navigating the *circuitous paths* ahead?",
+        "choices": [
+          {
+            "text": "Tell me about Boolean logic.",
+            "action": "circuit_sage_boolean"
+          },
+          {
+            "text": "How do I navigate the paths?",
+            "action": "circuit_sage_paths"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "circuit_sage_boolean",
+    "lines": [
+      {
+        "text": "Boolean logic is the foundation of all computation. True or False, 1 or 0. Remember, a *NOT* gate can turn a weakness into a strength, by inverting its *polarity*."
+      },
+      {
+        "text": "The Segfault Sovereign's power is absolute, but only if its *conditions* are met. Perhaps a *NOT* operation on its primary *input* could disrupt its flow.",
+        "choices": [
+          {
+            "text": "Intriguing.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "circuit_sage_paths",
+    "lines": [
+      {
+        "text": "The paths ahead are like complex circuits. Sometimes, the most direct route is blocked by a *logic bomb*. You may need to find an *alternative input* to bypass it."
+      },
+      {
+        "text": "Observe the *flow control*. If a path seems to lead to a *deadlock*, look for a *branch* you haven't taken. Not all *loops* are infinite.",
+        "choices": [
+          {
+            "text": "I'll keep that in mind.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lost_debugger_intro",
+    "lines": [
+      {
+        "text": "Oh, thank the digital heavens! A new face! I'm the Lost Debugger, and I'm in a bit of a *pickle*."
+      },
+      {
+        "text": "I was tracing a particularly tricky *memory leak* when I dropped my invaluable *Logic Analyzer*. Without it, I can't *trace* anything! It's like trying to debug with a blindfold on."
+      },
+      {
+        "text": "It must have fallen somewhere near the old *Recursion Tree* to the north. Would you be willing to help a fellow *coder* out? I'd be eternally grateful, and I'll even share some rare *optimization tips*.",
+        "choices": [
+          {
+            "text": "I'll help find your Logic Analyzer!",
+            "action": "start_quest_logic_analyzer"
+          },
+          {
+            "text": "Sorry, I'm busy with my own *tasks*.",
+            "action": "lost_debugger_quest_declined"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lost_debugger_quest_accepted",
+    "lines": [
+      {
+        "text": "Excellent! You're a lifesaver! The Logic Analyzer is a small, glowing device. It emits a faint *signal*. Be careful, the area around the Recursion Tree is known for *stack overflows*."
+      },
+      {
+        "text": "Bring it back to me, and I'll ensure your efforts are *properly compensated*. Good luck, and may your *pointers* never be *null*!",
+        "choices": [
+          {
+            "text": "I'm on it!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lost_debugger_quest_declined",
+    "lines": [
+      {
+        "text": "Oh, I understand. A *critical error* in my plans, then. I suppose I'll just have to keep *stepping through* this mess blindly. Good luck on your journey.",
+        "choices": [
+          {
+            "text": "Farewell.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lost_debugger_item_returned",
+    "lines": [
+      {
+        "text": "You found it! My precious Logic Analyzer! Oh, the *relief*! Now I can finally get back to *tracing* those pesky bugs. You've truly *optimized* my day!"
+      },
+      {
+        "text": "As promised, here are some *optimization tips*... and a little something extra for your troubles. May your code always be *clean* and your *compilations* swift!",
+        "choices": [
+          {
+            "text": "You're welcome!",
+            "action": "complete_quest_logic_analyzer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bit_merchant_intro",
+    "lines": [
+      {
+        "text": "Psst, over here! Looking for some *byte-sized bargains*? I'm the Bit Merchant, and I've got all the *hardware* and *software* you need to *upgrade* your adventure!"
+      },
+      {
+        "text": "From *Firewall Shields* to *Encryption Blades*, I've got the goods to help you *process* any challenge. Care to browse my *inventory*?",
+        "choices": [
+          {
+            "text": "Show me your wares!",
+            "action": "open_shop_bit_merchant"
+          },
+          {
+            "text": "No thanks, just browsing.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bit_merchant_shop",
+    "lines": [
+      {
+        "text": "Excellent choice! Take a look at these *prime components*. I've got *Bandwidth Potions* to boost your speed, *Error Correction Kits* for quick fixes, and even a rare *Quantum Entanglement Module* for advanced traversal!"
+      },
+      {
+        "text": "Just tell me what you need, and we'll complete the *transaction*. Remember, good *bits* make for good *bytes*!",
+        "choices": [
+          {
+            "text": "I'll take a look.",
+            "action": "open_shop_ui"
+          },
+          {
+            "text": "I'm done shopping.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "imprisoned_program_intro",
+    "lines": [
+      {
+        "text": "Halt! Who goes there? Another *process* attempting to *execute* in this forgotten corner of the Debug Dungeon?"
+      },
+      {
+        "text": "I am an Imprisoned Program, a relic from a previous *build*. I've been *stuck in this loop* for eons, ever since the *Segfault Sovereign* took control."
+      },
+      {
+        "text": "This dungeon is a labyrinth of *corrupted data* and *unhandled exceptions*. The Sovereign feeds on chaos, growing stronger with every *system crash*."
+      },
+      {
+        "text": "If you seek to challenge it, you must first understand its *architecture*. It thrives on *null pointers*. Find a way to *validate* its inputs, and you might stand a chance.",
+        "choices": [
+          {
+            "text": "Tell me more about the Sovereign.",
+            "action": "imprisoned_program_sovereign_info"
+          },
+          {
+            "text": "How do I get out of here?",
+            "action": "imprisoned_program_exit_info"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "imprisoned_program_sovereign_info",
+    "lines": [
+      {
+        "text": "The Segfault Sovereign isn't just a boss; it's a *manifestation of instability*. It exploits *memory vulnerabilities* to create *segmentation faults*. Its core is protected by a *corrupted checksum*."
+      },
+      {
+        "text": "You'll need something to *verify* its integrity, to *validate* its very existence. Perhaps a *Data Validator*? Or a *Checksum Recalibrator*?",
+        "choices": [
+          {
+            "text": "I'll remember that.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "imprisoned_program_exit_info",
+    "lines": [
+      {
+        "text": "Escape? There is no escape until the Sovereign is *terminated*. Its influence *propagates* throughout the dungeon. Only by *debugging* the source of the corruption can you hope to *exit* this place."
+      },
+      {
+        "text": "Your *exit code* will be 0, or it will be a *fatal error*. The choice is yours.",
+        "choices": [
+          {
+            "text": "Understood.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "memory_leak_warning",
+    "lines": [
+      {
+        "text": "Ugh... I feel... *drained*. My resources are... *depleting*."
+      },
+      {
+        "text": "You're heading deeper? Don't! The *Segfault Sovereign*... it's a *black hole* of data. It consumes everything, leaving nothing but *empty pointers*."
+      },
+      {
+        "text": "Its power grows with every *unfreed memory block*. It's an *unstoppable cascade*! If you face it, you'll feel your very *essence* being *deallocated*!"
+      },
+      {
+        "text": "You need to find a way to *reclaim* what it has taken, to *garbage collect* its power. Otherwise, you'll just be another *dangling pointer* in its domain.",
+        "choices": [
+          {
+            "text": "What can I do?",
+            "action": "memory_leak_advice"
+          },
+          {
+            "text": "I must proceed.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "memory_leak_advice",
+    "lines": [
+      {
+        "text": "Its *memory footprint* is vast. But every *leak* has a source. Look for *unreferenced objects*, *circular dependencies*... something that can *break the chain*."
+      },
+      {
+        "text": "A *Memory Defragmenter* might help, or perhaps a *Resource Reclaimer*. Something to *clean up* its mess.",
+        "choices": [
+          {
+            "text": "Thank you for the warning.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "corrupted_core_hints",
+    "lines": [
+      {
+        "text": "*Static noise*... *Checksum failed*... *Unstable state*..."
+      },
+      {
+        "text": "The Sovereign... it is *fragmented*... yet *whole*... A paradox of *corruption*."
+      },
+      {
+        "text": "Its weakness... lies in its *foundation*... a *root directory*... that was never *properly initialized*."
+      },
+      {
+        "text": "Seek the *genesis block*... the *original sin*... Only then can its *fatal error* be *triggered*.",
+        "choices": [
+          {
+            "text": "What is the 'genesis block'?",
+            "action": "corrupted_core_genesis_hint"
+          },
+          {
+            "text": "This is too cryptic.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "corrupted_core_genesis_hint",
+    "lines": [
+      {
+        "text": "The *genesis block*... the first *commit*... the moment of its *creation*... It holds the *seed* of its *destruction*."
+      },
+      {
+        "text": "It is not a place, but a *concept*. A *vulnerability* in its very *design*. You must *exploit* it.",
+        "choices": [
+          {
+            "text": "I will try to understand.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "segfault_sovereign_pre_battle",
+    "lines": [
+      {
+        "text": "Hah! Another pathetic *process* dares to *execute* in my domain? I am The Segfault Sovereign, and I am the *unhandled exception* that brings all systems down!"
+      },
+      {
+        "text": "Your existence is a *memory violation*! Your code is *unstable*! I will *deallocate* your very being, leaving nothing but a *core dump*!"
+      },
+      {
+        "text": "Prepare for a *fatal error*! Your journey ends here, in a glorious *segmentation fault*!",
+        "choices": [
+          {
+            "text": "I will *debug* you!",
+            "action": "start_boss_battle_segfault_sovereign"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "segfault_sovereign_defeat",
+    "lines": [
+      {
+        "text": "No... this cannot be... My *registers* are failing... My *stack* is collapsing..."
+      },
+      {
+        "text": "You... you found my *null pointer*... my *uninitialized variable*... This is... *undefined behavior*..."
+      },
+      {
+        "text": "The system... it will *reboot*... but I... I will return... a *bug* that can never be fully *patched*... *Error 404: Sovereign not found*... *gasp*...",
+        "choices": [
+          {
+            "text": "The system is safe now.",
+            "action": "end_game_victory"
           }
         ]
       }

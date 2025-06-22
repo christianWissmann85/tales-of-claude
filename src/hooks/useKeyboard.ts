@@ -10,6 +10,7 @@ const RIGHT_KEYS = ['ArrowRight', 'KeyD'];
 const INTERACT_KEYS = ['Space', 'Enter'];
 const CANCEL_KEYS = ['Escape', 'KeyX'];
 const MENU_KEYS = ['KeyM', 'Tab'];
+const CHARACTER_KEYS = ['KeyC'];
 
 /**
  * A custom React hook for handling keyboard input in a game context.
@@ -21,6 +22,7 @@ const MENU_KEYS = ['KeyM', 'Tab'];
  * - `isInteracting`: A boolean indicating if the interaction key (Space or Enter) is pressed.
  * - `isCancelling`: A boolean indicating if the cancel key (Escape or X) is pressed.
  * - `isMenuOpen`: A boolean indicating if the menu key (M or Tab) is pressed.
+ * - `isCharacterOpen`: A boolean indicating if the character key (C) is pressed.
  * - `getDirection`: A function that returns the current unambiguous cardinal Direction ('up', 'down', 'left', 'right')
  *                   if only one is pressed, otherwise returns `null`.
  */
@@ -37,7 +39,8 @@ export const useKeyboard = () => {
       RIGHT_KEYS.includes(event.code) ||
       INTERACT_KEYS.includes(event.code) ||
       CANCEL_KEYS.includes(event.code) ||
-      MENU_KEYS.includes(event.code)
+      MENU_KEYS.includes(event.code) ||
+      CHARACTER_KEYS.includes(event.code)
     ) {
       event.preventDefault();
     }
@@ -85,6 +88,7 @@ export const useKeyboard = () => {
   const isInteracting = isAnyOfKeysPressed(INTERACT_KEYS);
   const isCancelling = isAnyOfKeysPressed(CANCEL_KEYS);
   const isMenuOpen = isAnyOfKeysPressed(MENU_KEYS);
+  const isCharacterOpen = isAnyOfKeysPressed(CHARACTER_KEYS);
 
   /**
    * Determines the current unambiguous cardinal direction based on pressed keys.
@@ -117,6 +121,7 @@ export const useKeyboard = () => {
     isInteracting,
     isCancelling,
     isMenuOpen,
+    isCharacterOpen,
     getDirection, // Return the function itself
   };
 };

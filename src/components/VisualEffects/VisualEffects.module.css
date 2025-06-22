@@ -1,0 +1,232 @@
+```css
+/* src/components/VisualEffects/VisualEffects.module.css */
+
+/*
+  Visual Effects Module Styling
+  This module provides various game-appropriate visual effects using CSS animations.
+  Each effect is designed to be smooth and responsive, enhancing the user experience.
+*/
+
+/* --- 1. Screen Shake Animation --- */
+/*
+  Applies a subtle, rapid screen shake effect.
+  Typically applied to a main game container or a specific element
+  to indicate impact or a significant event.
+*/
+.screenShake {
+  animation: vf-shake 0.15s cubic-bezier(.36,.07,.19,.97) both;
+  /* 'both' ensures the element returns to its original state after the animation */
+  transform-origin: 50% 50%; /* Ensures the shake is centered around the element */
+  backface-visibility: hidden; /* Helps prevent flickering in some browsers */
+  perspective: 1000px; /* For better 3D transform rendering */
+}
+
+@keyframes vf-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* --- 2. Particle Animation (Floats up and fades out) --- */
+/*
+  Container for particles. Helps manage their positioning relative to a source.
+  Should be positioned absolutely relative to its parent.
+*/
+.particleContainer {
+  position: absolute;
+  pointer-events: none; /* Allows clicks to pass through elements beneath */
+  overflow: hidden; /* Ensures particles don't escape bounds if not desired */
+  /* Adjust width/height as needed for the specific use case where particles originate */
+}
+
+/* Individual particle style */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.8); /* Default white particle, semi-transparent */
+  border-radius: 50%; /* Circle shape */
+  opacity: 0; /* Starts invisible, fades in then out */
+  transform: translateY(0) scale(1);
+  animation: vf-floatUpFade 1.5s ease-out forwards; /* Floats up and fades away */
+  /* For multiple particles, add random delays and initial positions via JavaScript */
+}
+
+/* Example modifier classes for different particle appearances */
+.particleRed { background-color: rgba(255, 0, 0, 0.8); }
+.particleBlue { background-color: rgba(0, 100, 255, 0.8); }
+.particleLarge { width: 10px; height: 10px; }
+.particleSmall { width: 4px; height: 4px; }
+
+@keyframes vf-floatUpFade {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    opacity: 1; /* Briefly brighter at the start */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.5); /* Floats up and shrinks */
+  }
+}
+
+/* --- 3. Glow Effect with Pulsing Animation --- */
+/*
+  Applies a pulsing glow effect, typically to buttons, icons, or important elements
+  to draw attention or indicate interactivity.
+*/
+.glowEffect {
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.7); /* Initial subtle glow */
+  animation: vf-pulseGlow 2s infinite alternate ease-in-out;
+}
+
+@keyframes vf-pulseGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 255, 255, 0.8);
+    transform: scale(1.02); /* Subtle scale for a more organic pulse */
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: scale(1);
+  }
+}
+
+/* --- 4. Map Fade Overlay Transitions (Fade to black, Fade from black) --- */
+/*
+  Full-screen overlay for scene transitions (e.g., loading new areas, cutscenes).
+*/
+.mapFadeOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  z-index: 9999; /* Ensure it's on top of almost everything */
+  pointer-events: none; /* By default, allow interaction with elements beneath */
+}
+
+.mapFadeOverlay.fadeIn {
+  animation: vf-fadeInBlack 1s ease-out forwards;
+  pointer-events: auto; /* Block interaction during the fade-in */
+}
+
+.mapFadeOverlay.fadeOut {
+  animation: vf-fadeOutBlack 1s ease-in forwards;
+}
+
+@keyframes vf-fadeInBlack {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes vf-fadeOutBlack {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* --- 5. Level Up Sparkle Effect (Rotating stars/sparkles) --- */
+/*
+  Container for the level up effect, positioning it relative to the character/UI element.
+*/
+.levelUpSparkleContainer {
+  position: absolute;
+  width: 100px; /* Adjust size based on desired effect area */
+  height: 100px;
+  pointer-events: none;
+  overflow: visible; /* Allow sparkles to extend beyond the container bounds */
+}
+
+/* Individual sparkle/star element */
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: gold; /* Gold color for level up */
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg) scale(0); /* Centered, no rotation, no scale */
+  animation: vf-sparkleAppear 0.8s ease-out forwards,
+             vf-sparkleRotate 1.5s linear infinite; /* Appear and rotate continuously */
+  /* For multiple sparkles, add random delays and initial positions via JavaScript */
+}
+
+/* Create a simple star-like shape using a pseudo-element */
+.sparkle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit; /* Inherit gold color */
+  transform: rotate(45deg); /* Creates a diamond shape */
+  border-radius: 2px; /* Soften edges slightly */
+}
+
+@keyframes vf-sparkleAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.2); /* Briefly larger and rotated */
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(360deg) scale(0);
+  }
+}
+
+@keyframes vf-sparkleRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- 6. Combat Hit Flash Effect (White flash overlay) --- */
+/*
+  Full-screen white flash for combat hits, indicating damage or a critical action.
+*/
+.hitFlashOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0); /* Starts transparent */
+  z-index: 9998; /* Below map fade, but above most UI elements */
+  pointer-events: none; /* Always allow clicks to pass through */
+  animation: vf-hitFlash 0.2s ease-out forwards; /* Quick flash and fade */
+}
+
+@keyframes vf-hitFlash {
+  0% { opacity: 0; }
+  50% { opacity: 0.8; } /* Brief peak brightness */
+  100% { opacity: 0; }
+}
+
+/* --- Utility Classes / Helper Styles --- */
+/*
+  These are general utility classes that might be useful for managing effects
+  or controlling element visibility in conjunction with animations.
+*/
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+/* Apply to elements that should have smooth transitions for non-animated property changes */
+.smoothTransition {
+  transition: all 0.3s ease-in-out;
+}
+```

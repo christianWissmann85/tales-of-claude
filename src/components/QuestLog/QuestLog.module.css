@@ -1,0 +1,446 @@
+/* src/components/QuestLog/QuestLog.module.css */
+
+/*
+ * QuestLog Component - Retro RPG Terminal Theme
+ * Consistent with DialogueBox.module.css and Inventory.module.css for a unified look.
+ */
+
+/* 1. Overall Overlay and Container */
+/* The overlay covers the entire screen with a semi-transparent dark background */
+.questLogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* High z-index to appear on top of other game elements */
+  opacity: 0; /* Start hidden for fade-in animation */
+  animation: fadeIn 0.3s ease-out forwards; /* Smooth fade-in effect */
+}
+
+/* Keyframes for the fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* The main Quest Log container, styled like a retro terminal window */
+.questLogContainer {
+  /* Retro theme styling, consistent with Inventory.module.css */
+  font-family: 'VT323', monospace; /* Use the retro pixel font */
+  background-color: #0d0d0d; /* Dark background for the main content area */
+  color: #00ff00; /* Bright green for text */
+  border: 2px solid #00ff00; /* Green border */
+  box-shadow: 0 0 20px #00ff00, inset 0 0 10px #00ff00; /* Strong glow for prominence */
+  padding: 25px;
+  border-radius: 8px; /* Slightly rounded corners for a softer retro look */
+  max-width: 900px; /* Reasonable maximum width */
+  width: 90%; /* Responsive width */
+  max-height: 90vh; /* Maximum height, allowing vertical scrolling if content is long */
+  overflow: hidden; /* Hide overflow for the main container, inner sections will scroll */
+  display: flex;
+  flex-direction: column; /* Stack header, tabs, and content vertically */
+  gap: 20px; /* Space between major sections */
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+}
+
+/* Custom scrollbar styling for inner scrollable areas (quest list and details) */
+.questList::-webkit-scrollbar,
+.questDetails::-webkit-scrollbar {
+    width: 10px;
+}
+
+.questList::-webkit-scrollbar-track,
+.questDetails::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+.questList::-webkit-scrollbar-thumb,
+.questDetails::-webkit-scrollbar-thumb {
+    background-color: #00ff00;
+    border-radius: 10px;
+    border: 2px solid #004400;
+}
+
+.questList::-webkit-scrollbar-thumb:hover,
+.questDetails::-webkit-scrollbar-thumb:hover {
+    background-color: #39ff14;
+}
+
+/* 2. Header Section */
+.questLogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed #00ff00; /* Dashed separator line */
+  padding-bottom: 10px;
+}
+
+.questLogTitle {
+  font-size: 2.5em; /* Prominent title size */
+  color: #39ff14; /* Brighter green for emphasis */
+  text-shadow: 0 0 10px #39ff14; /* Glowing text effect */
+  letter-spacing: 2px; /* Spaced out letters for retro feel */
+}
+
+/* Close button - copied directly from Inventory.module.css for consistency */
+.closeButton {
+    background: none;
+    border: none;
+    color: #ff0000; /* Red 'X' */
+    font-size: 2.5em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+    text-shadow: 0 0 5px #ff0000; /* Initial subtle red glow */
+}
+
+.closeButton:hover {
+    color: #ff3333; /* Lighter red on hover */
+    text-shadow: 0 0 15px #ff3333, 0 0 25px rgba(255, 51, 51, 0.5); /* Stronger glow */
+    transform: scale(1.1); /* Slight enlarge on hover */
+}
+
+.closeButton:active {
+    color: #cc0000;
+    text-shadow: 0 0 5px #cc0000;
+    transform: scale(1.0);
+}
+
+/* 3. Category Tabs */
+.questLogTabs {
+  display: flex;
+  justify-content: center; /* Center the tabs horizontally */
+  gap: 15px; /* Space between tab buttons */
+  margin-bottom: 20px;
+}
+
+.tabButton {
+  background-color: #001a00; /* Darker green background */
+  color: #00ff00; /* Bright green text */
+  border: 1px solid #00ff00;
+  padding: 10px 20px;
+  font-family: inherit; /* Inherit the monospace font */
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active */
+  box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tabButton:hover {
+  background-color: #004400; /* Lighter green on hover */
+  box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.tabButton.active {
+  background-color: #39ff14; /* Brighter green for the active tab */
+  color: #0d0d0d; /* Dark text on active tab for contrast */
+  border-color: #39ff14;
+  box-shadow: 0 0 20px #39ff14, inset 0 0 10px #39ff14; /* Stronger glow for active */
+  transform: translateY(0); /* Reset lift effect for active tab */
+}
+
+/* 4. Two-column Content Layout (Quest List & Details) */
+.questLogContent {
+  display: flex;
+  gap: 20px; /* Space between the two columns */
+  flex-grow: 1; /* Allows content to take up remaining vertical space */
+  min-height: 0; /* Important for flex items with overflow, prevents content from pushing container */
+}
+
+.questList,
+.questDetails {
+  background-color: #001a00; /* Even darker green background for inner panels */
+  border: 1px solid #003300; /* Darker green border */
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2); /* Subtle inner glow */
+  overflow-y: auto; /* Enable scrolling for content within each column */
+  flex-shrink: 0; /* Prevent these columns from shrinking below their content size */
+}
+
+.questList {
+  flex: 1; /* Takes 1 part of available space (e.g., 1/3 of the content width) */
+  min-width: 250px; /* Minimum width for the quest list column */
+}
+
+.questDetails {
+  flex: 2; /* Takes 2 parts of available space (e.g., 2/3 of the content width) */
+  min-width: 350px; /* Minimum width for the quest details column */
+}
+
+/* 5. Quest List Items */
+.questItem {
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out; /* Smooth transitions for hover and selection */
+  position: relative; /* For positioning the selected indicator */
+  border-radius: 3px;
+  white-space: nowrap; /* Prevent quest names from wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+}
+
+.questItem:last-child {
+  margin-bottom: 0; /* No extra margin on the last item */
+}
+
+.questItem:hover {
+  background-color: #002a00; /* Slightly lighter green on hover */
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.5); /* Subtle glow on hover */
+}
+
+/* Quest item states based on theme requirements */
+.questItem.activeQuest {
+  color: #00ff00; /* Green for active quests */
+}
+
+.questItem.availableQuest {
+  color: #ffff00; /* Yellow for available quests */
+}
+
+.questItem.completedQuest {
+  color: #888; /* Gray for completed quests */
+  text-decoration: line-through; /* Strikethrough for completed quests */
+  opacity: 0.7; /* Slightly faded for completed quests */
+}
+
+/* Selected quest highlighting with '>' indicator */
+.questItem.selected {
+  background-color: #004400; /* Darker green background for selected item */
+  border: 1px solid #39ff14; /* Brighter green border for selected */
+  box-shadow: 0 0 15px #39ff14; /* Stronger glow for selected */
+  padding-left: 25px; /* Increase left padding to make space for the indicator */
+}
+
+.questItem.selected .indicator {
+  position: absolute;
+  left: 5px; /* Position the indicator to the left */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the indicator */
+  color: #ffcc00; /* Yellow for the indicator */
+  font-weight: bold;
+}
+
+/* 6. Quest Details Section */
+.detailTitle {
+  font-size: 1.8em;
+  color: #39ff14; /* Brighter green for the detail title */
+  text-shadow: 0 0 8px #39ff14;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.detailDescription {
+  font-size: 1em;
+  color: #00ffff; /* Cyan text for description, similar to dialogue text */
+  margin-bottom: 15px;
+  white-space: pre-wrap; /* Preserve line breaks and spaces */
+  line-height: 1.5;
+}
+
+.objectives {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px dashed #003300; /* Separator for objectives section */
+}
+
+.objectives h4 {
+  font-size: 1.2em;
+  color: #00ff00;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.objective {
+  font-size: 1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the indicator and objective text */
+}
+
+/* Progress indicators for objectives */
+.objective.completed {
+  color: #00ff00; /* Green for completed objectives */
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.objective.active {
+  color: #ffff00; /* Yellow for active objectives */
+}
+
+.objective.pending {
+  color: #aaa; /* Gray for pending objectives */
+}
+
+/* Icons for objectives using pseudo-elements */
+.objective.completed::before {
+  content: '✓'; /* Checkmark symbol */
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.objective.active::before {
+  content: '□'; /* Empty square symbol */
+  color: #ffff00;
+  font-weight: bold;
+}
+
+.objective.pending::before {
+  content: '□'; /* Empty square symbol */
+  color: #aaa;
+  font-weight: bold;
+}
+
+.questReward {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px dashed #003300; /* Separator for rewards section */
+  font-size: 1.1em;
+  color: #ffcc00; /* Gold/yellow for rewards */
+  font-weight: bold;
+  text-shadow: 0 0 5px #ffcc00; /* Subtle glow for rewards */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .questLogContainer {
+    max-width: 800px;
+    padding: 20px;
+  }
+  .questLogTitle {
+    font-size: 2em;
+  }
+  .closeButton {
+    font-size: 2em;
+  }
+  .tabButton {
+    padding: 8px 15px;
+    font-size: 1em;
+  }
+  .questLogContent {
+    flex-direction: column; /* Stack columns vertically on smaller screens */
+  }
+  .questList,
+  .questDetails {
+    flex: none; /* Remove flex grow/shrink to allow full width */
+    width: 100%; /* Take full width when stacked */
+    min-width: unset; /* Remove min-width constraints */
+    max-height: 40vh; /* Limit height for scrolling when stacked */
+  }
+  .detailTitle {
+    font-size: 1.5em;
+  }
+  .detailDescription {
+    font-size: 0.95em;
+  }
+  .objective {
+    font-size: 0.95em;
+  }
+  .questReward {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 768px) {
+  .questLogContainer {
+    width: 95%;
+    padding: 15px;
+  }
+  .questLogTitle {
+    font-size: 1.8em;
+  }
+  .closeButton {
+    font-size: 1.8em;
+  }
+  .questLogTabs {
+    flex-wrap: wrap; /* Allow tabs to wrap to the next line */
+    gap: 10px;
+  }
+  .tabButton {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+  .questList,
+  .questDetails {
+    padding: 10px;
+  }
+  .questItem {
+    font-size: 0.95em;
+    padding: 6px 10px;
+  }
+  .questItem.selected {
+    padding-left: 20px;
+  }
+  .questItem.selected .indicator {
+    left: 3px;
+  }
+  .detailTitle {
+    font-size: 1.3em;
+  }
+  .detailDescription {
+    font-size: 0.9em;
+  }
+  .objective {
+    font-size: 0.9em;
+  }
+  .questReward {
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 480px) {
+  .questLogContainer {
+    padding: 10px;
+  }
+  .questLogTitle {
+    font-size: 1.5em;
+  }
+  .closeButton {
+    font-size: 1.5em;
+  }
+  .tabButton {
+    font-size: 0.8em;
+    padding: 5px 10px;
+  }
+  .questList,
+  .questDetails {
+    padding: 8px;
+  }
+  .questItem {
+    font-size: 0.9em;
+    padding: 5px 8px;
+  }
+  .questItem.selected {
+    padding-left: 18px;
+  }
+  .questItem.selected .indicator {
+    left: 2px;
+  }
+  .detailTitle {
+    font-size: 1.1em;
+  }
+  .detailDescription {
+    font-size: 0.85em;
+  }
+  .objective {
+    font-size: 0.85em;
+  }
+  .questReward {
+    font-size: 0.9em;
+  }
+}

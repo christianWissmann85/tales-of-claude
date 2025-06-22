@@ -16,7 +16,7 @@ export type Direction = 'up' | 'down' | 'left' | 'right';
 /**
  * Defines the types of tiles that can exist on a game map.
  */
-export type TileType = 'walkable' | 'wall' | 'door' | 'water' | 'grass' | 'tree' | 'exit' | 'shop' | 'healer';
+export type TileType = 'walkable' | 'wall' | 'door' | 'water' | 'grass' | 'tree' | 'exit' | 'shop' | 'healer' | 'path' | 'path_one' | 'path_zero' | 'floor' | 'dungeon_floor' | 'locked_door';
 
 /**
  * Represents a single tile on the game map.
@@ -179,7 +179,7 @@ export interface Enemy extends BaseCharacter {
 /**
  * Defines the roles of Non-Player Characters.
  */
-export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial';
+export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver';
 
 /**
  * Represents a Non-Player Character.
@@ -235,9 +235,52 @@ export interface DialogueState {
 export interface BattleState {
   player: CombatEntity; // Player's combat representation in the current battle
   enemies: CombatEntity[]; // Enemies' combat representation in the current battle
-  currentTurn: 'player' | 'enemy'; // Indicates whose team's turn it is
+  currentTurn: string; // Indicates whose entity ID's turn it is
   turnOrder: string[]; // Array of CombatEntity IDs in the order of turns
   log: string[]; // Messages for the battle log
+}
+
+/**
+ * Quest related types
+ */
+export type QuestStatus = 'not_started' | 'in_progress' | 'completed' | 'failed';
+
+export type ObjectiveType = 'defeat_enemy' | 'collect_item' | 'talk_to_npc' | 'reach_location';
+
+export interface QuestObjective {
+  id: string; // Unique ID for this objective within the quest (e.g., "bug_hunt_obj_0")
+  description: string;
+  type: ObjectiveType;
+  target: string; // ID of enemy type, item ID, NPC ID/role, or location identifier string
+  quantity: number; // Required amount for defeat/collect, usually 1 for talk/reach
+  currentProgress: number; // Current count for defeat/collect, 0 or 1 for talk/reach
+  isCompleted: boolean; // True if this specific objective is met
+}
+
+export interface QuestRewards {
+  exp: number;
+  items: { itemId: string; quantity: number; }[]; // itemId should correspond to ItemVariant
+}
+
+export interface Quest {
+  id: string;
+  name: string;
+  description: string;
+  objectives: QuestObjective[];
+  currentObjectiveIndex: number; // Index of the next objective to be completed (for sequential quests, or first uncompleted)
+  status: QuestStatus;
+  rewards: QuestRewards;
+  prerequisites: string[]; // Array of quest IDs that must be completed before this one can start
+}
+
+/**
+ * Combat log entry for displaying battle messages
+ */
+export interface CombatLogEntry {
+  id: string; // Unique ID for React keys
+  type: 'damage' | 'healing' | 'ability' | 'info'; // Action type for color coding
+  message: string; // The message to display
+  timestamp: number; // For ordering
 }
 
 /**
@@ -253,5 +296,7 @@ export interface GameState {
   battle: BattleState | null; // Current battle state, null if no battle is active
   gameFlags: Record<string, boolean | number | string>; // Generic flags for tracking story progress, puzzles, etc.
   showInventory: boolean; // Whether the inventory UI is currently displayed
+  showQuestLog: boolean; // Whether the quest log UI is currently displayed
   notification: string | null; // Current notification message to display
+  questManagerState?: any; // Quest manager state for saving/loading
 }

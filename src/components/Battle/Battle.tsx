@@ -1,35 +1,168 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { BattleState, CombatEntity, Ability, Item, StatusEffect } from '../../types/global.types';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { BattleState, CombatEntity, Ability, Item, StatusEffect, StatusEffectType } from '../../types/global.types';
 import { useGameContext } from '../../context/GameContext';
-import BattleSystem from '../../engine/BattleSystem'; // Fix: default export and correct path
+import BattleSystem from '../../engine/BattleSystem';
 import styles from './Battle.module.css';
+
+// ASCII Art Backgrounds
+const ASCII_BACKGROUNDS: Record<string, string> = {
+  terminalTown: `
+  +-----------------------------------------------------------------+
+  |  _.-._                                _.-._                    |
+  | ( ___ )------------------------------( ___ )                   |
+  |  '-.-'                                 '-.-'                    |
+  |   _|_                                   _|_                     |
+  |  /   \\                                 /   \\                    |
+  | |  _  |  [ ] [ ] [ ] [ ] [ ] [ ] [ ]  |  _  |                   |
+  | | (_) |  [ ] [ ] [ ] [ ] [ ] [ ] [ ]  | (_) |                   |
+  |  \\___/                                 \\___/                    |
+  |                                                                 |
+  |  [C:\\>_]  [C:\\>_]  [C:\\>_]  [C:\\>_]  [C:\\>_]  [C:\\>_]  [C:\\>_]  |
+  |                                                                 |
+  |  .-----------------------------------------------------------.  |
+  |  |                                                           |  |
+  |  |                                                           |  |
+  |  '-----------------------------------------------------------'  |
+  +-----------------------------------------------------------------+
+  `,
+  binaryForest: `
+  +-----------------------------------------------------------------+
+  |     101010101010101010101010101010101010101010101010101010101   |
+  |   01  /\\  01  /\\  01  /\\  01  /\\  01  /\\  01  /\\  01  /\\  01  |
+  |  10  /  \\  10  /  \\  10  /  \\  10  /  \\  10  /  \\  10  /  \\  10 |
+  | 01  ||||  01  ||||  01  ||||  01  ||||  01  ||||  01  ||||  01  |
+  | 10  ||||  10  ||||  10  ||||  10  ||||  10  ||||  10  ||||  10  |
+  |  01 \\  /  01 \\  /  01 \\  /  01 \\  /  01 \\  /  01 \\  /  01 \\  / |
+  |   10 \\/   10 \\/   10 \\/   10 \\/   10 \\/   10 \\/   10 \\/   10  |
+  |     010101010101010101010101010101010101010101010101010101010   |
+  |                                                                 |
+  |  1010101010101010101010101010101010101010101010101010101010101  |
+  |                                                                 |
+  |   010101010101010101010101010101010101010101010101010101010101  |
+  +-----------------------------------------------------------------+
+  `,
+  debugDungeon: `
+  +-----------------------------------------------------------------+
+  | ############################################################### |
+  | #   _   _   _   _   _   _   _   _   _   _   _   _   _   _   # |
+  | #  | | | | | | | | | | | | | | | | | | | | | | | | | | | |  # |
+  | #  |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_|  # |
+  | #                                                             # |
+  | #  _   _   _   _   _   _   _   _   _   _   _   _   _   _   _  # |
+  | # | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | # |
+  | # |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| # |
+  | #                                                             # |
+  | ############################################################### |
+  | #   _   _   _   _   _   _   _   _   _   _   _   _   _   _   # |
+  | #  | | | | | | | | | | | | | | | | | | | | | | | | | | | |  # |
+  | #  |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_| |_|  # |
+  | ############################################################### |
+  +-----------------------------------------------------------------+
+  `,
+  default: `
+  +-----------------------------------------------------------------+
+  |  .-----------------------------------------------------------.  |
+  |  |  [SYSTEM ONLINE]                                          |  |
+  |  |  > Initializing combat sequence...                         |  |
+  |  |  > Detecting anomalies...                                  |  |
+  |  |                                                           |  |
+  |  |  ---------------------------------------------------------  |
+  |  |  |                                                       |  |
+  |  |  |                                                       |  |
+  |  |  |                                                       |  |
+  |  |  ---------------------------------------------------------  |
+  |  |                                                           |  |
+  |  |  > Processing...                                          |  |
+  |  |  > Awaiting input...                                      |  |
+  |  '-----------------------------------------------------------'  |
+  +-----------------------------------------------------------------+
+  `,
+};
+
+const VICTORY_ART = `
+  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _
+ | |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /
+ | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' /
+ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\
+ |_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\
+                                                                   
+  V I C T O R Y ! ! !
+                                                                   
+  *   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  *
+  .   *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  .
+   *   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  *
+    .   *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
+      *   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .
+        .   *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
+          *   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .
+            .   *  *  *  *  *  *  *  *  *  *  *  *  *  *  *
+              *   .  .  .  .  .  .  .  .  .  .  .  .  .  .
+                .   *  *  *  *  *  *  *  *  *  *  *  *  *
+                  *   .  .  .  .  .  .  .  .  .  .  .  .
+                    .   *  *  *  *  *  *  *  *  *  *  *
+                      *   .  .  .  .  .  .  .  .  .  .
+                        .   *  *  *  *  *  *  *  *  *
+                          *   .  .  .  .  .  .  .  .
+                            .   *  *  *  *  *  *  *
+                              *   .  .  .  .  .  .
+                                .   *  *  *  *  *
+                                  *   .  .  .  .
+                                    .   *  *  *
+                                      *   .  .
+                                        .   *
+                                          *
+`;
+
+const DEFEAT_ART = `
+  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _
+ | |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /| |/ /
+ | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' / | ' /
+ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\ | . \\
+ |_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\|_|\\_\\
+                                                                   
+  G A M E   O V E R
+                                                                   
+  .-----------------------------------------------------------.
+  |                                                           |
+  |  SYSTEM FAILURE DETECTED.                                 |
+  |  REBOOT REQUIRED.                                         |
+  |                                                           |
+  |  > PRESS ANY KEY TO RESTART...                            |
+  |                                                           |
+  |                                                           |
+  |                                                           |
+  '-----------------------------------------------------------'
+`;
 
 const Battle: React.FC = () => {
   const { state, dispatch } = useGameContext();
-  // Use local state for battle updates, initialized from global context
   const [localBattleState, setLocalBattleState] = useState<BattleState | null>(state.battle);
 
-  // Use useRef to hold the BattleSystem instance. This ensures it's stable across renders
-  // and maintains its internal state, while still having access to the latest dispatch function.
   const battleSystemRef = useRef<BattleSystem | null>(null);
   if (!battleSystemRef.current) {
-    // Pass the global dispatch to BattleSystem for END_BATTLE action
     battleSystemRef.current = new BattleSystem(dispatch);
   }
   const battleSystem = battleSystemRef.current;
 
-  // State for player action selection
   const [selectedAbilityId, setSelectedAbilityId] = useState<string | null>(null);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
   const [actionType, setActionType] = useState<'attack' | 'ability' | null>(null);
 
+  // Refs for previous state to detect changes for animations
+  const prevPlayerHpRef = useRef(localBattleState?.player.hp || 0);
+  const prevPlayerEnergyRef = useRef(localBattleState?.player.energy || 0);
+  const prevEnemiesRef = useRef<CombatEntity[]>(localBattleState?.enemies || []);
+
+  // State for visual effects
+  const [damageNumbers, setDamageNumbers] = useState<Array<{ id: string, value: number, type: 'damage' | 'heal', key: number }>>([]);
+  const [currentAttackAnimation, setCurrentAttackAnimation] = useState<{ attackerId: string, targetId: string, key: number } | null>(null);
+  const [showBattleResult, setShowBattleResult] = useState<'victory' | 'defeat' | 'flee' | null>(null);
+
   // Ref for auto-scrolling the battle log
   const battleLogRef = useRef<HTMLDivElement>(null);
 
   // Sync local battle state with global context state.battle
-  // This is important for when a battle starts (state.battle changes from null to BattleState)
-  // or when it ends (state.battle changes from BattleState to null).
   useEffect(() => {
     setLocalBattleState(state.battle);
   }, [state.battle]);
@@ -39,61 +172,202 @@ const Battle: React.FC = () => {
     if (battleLogRef.current) {
       battleLogRef.current.scrollTop = battleLogRef.current.scrollHeight;
     }
-  }, [localBattleState?.log]); // Use localBattleState
+  }, [localBattleState?.log]);
+
+  // Effect to detect HP/Energy changes and trigger damage numbers
+  useEffect(() => {
+    if (!localBattleState) return;
+
+    const newDamageNumbers: { id: string; value: number; type: 'damage' | 'heal'; key: number; }[] = [];
+
+    // Check player HP changes
+    if (localBattleState.player.hp !== prevPlayerHpRef.current) {
+      const diff = prevPlayerHpRef.current - localBattleState.player.hp;
+      if (diff > 0) { // Damage
+        newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'damage', key: Date.now() + Math.random() });
+      } else if (diff < 0) { // Heal
+        newDamageNumbers.push({ id: localBattleState.player.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
+      }
+    }
+    // Check player Energy changes (for abilities/items)
+    if (localBattleState.player.energy !== prevPlayerEnergyRef.current) {
+      const diff = prevPlayerEnergyRef.current - localBattleState.player.energy;
+      if (diff < 0) { // Energy spent (negative diff means current is less than prev)
+        // Optionally show energy cost, but usually not as a floating number
+      } else if (diff > 0) { // Energy restored
+        newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'heal', key: Date.now() + Math.random() + 0.1 }); // Use heal type for energy restore
+      }
+    }
+
+    // Check enemy HP changes
+    localBattleState.enemies.forEach(currentEnemy => {
+      const prevEnemy = prevEnemiesRef.current.find(e => e.id === currentEnemy.id);
+      if (prevEnemy && currentEnemy.hp !== prevEnemy.hp) {
+        const diff = prevEnemy.hp - currentEnemy.hp;
+        if (diff > 0) { // Damage
+          newDamageNumbers.push({ id: currentEnemy.id, value: diff, type: 'damage', key: Date.now() + Math.random() });
+        } else if (diff < 0) { // Heal
+          newDamageNumbers.push({ id: currentEnemy.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
+        }
+      }
+    });
+
+    setDamageNumbers(prev => [...prev, ...newDamageNumbers]);
+
+    // Update refs for next render
+    prevPlayerHpRef.current = localBattleState.player.hp;
+    prevPlayerEnergyRef.current = localBattleState.player.energy;
+    prevEnemiesRef.current = localBattleState.enemies;
+
+  }, [localBattleState]);
+
+  // Effect to clear damage numbers after animation
+  useEffect(() => {
+    if (damageNumbers.length > 0) {
+      const timer = setTimeout(() => {
+        setDamageNumbers([]);
+      }, 1500); // Matches CSS animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [damageNumbers]);
+
+  // Effect to clear attack animation
+  useEffect(() => {
+    if (currentAttackAnimation) {
+      const timer = setTimeout(() => {
+        setCurrentAttackAnimation(null);
+      }, 500); // Short duration for slash animation
+      return () => clearTimeout(timer);
+    }
+  }, [currentAttackAnimation]);
+
+  // Effect to trigger battle result display (Victory/Defeat)
+  useEffect(() => {
+    if (!localBattleState) return;
+    
+    // Check victory condition
+    if (localBattleState.enemies.every(e => e.hp <= 0)) {
+      setShowBattleResult('victory');
+    }
+    
+    // Check defeat condition
+    if (localBattleState.player.hp <= 0) {
+      setShowBattleResult('defeat');
+    }
+  }, [localBattleState?.enemies, localBattleState?.player.hp]);
 
   // Handle enemy turns
   useEffect(() => {
-    // Use localBattleState
-    if (!localBattleState || localBattleState.currentTurn === 'player') {
+    if (!localBattleState || localBattleState.currentTurn === localBattleState.player.id) {
       return;
     }
 
-    // Find the current enemy whose turn it is
-    const currentEnemyId = localBattleState.turnOrder.find(id =>
-      id !== localBattleState.player.id && localBattleState.enemies.some(e => e.id === id),
-    );
+    const currentTurnIndex = localBattleState.turnOrder.findIndex(id => {
+      const entity = localBattleState.enemies.find(e => e.id === id && e.hp > 0);
+      return entity !== undefined;
+    });
 
-    if (!currentEnemyId) {
+    if (currentTurnIndex === -1) {
       return;
     }
 
-    const enemyTurnDelay = 1500; // 1.5 seconds delay for enemy actions for better UX
+    const currentEnemyId = localBattleState.turnOrder[currentTurnIndex];
+    const currentEnemy = localBattleState.enemies.find(e => e.id === currentEnemyId);
+
+    if (!currentEnemy || currentEnemy.hp <= 0) {
+      return;
+    }
+
+    const enemyTurnDelay = 1500;
 
     const timer = setTimeout(() => {
-      // Re-check localBattleState as it might have changed during the delay (e.g., player won)
-      if (localBattleState) {
+      if (localBattleState && localBattleState.currentTurn === currentEnemyId) {
+        // Simulate enemy targeting player for attack animation
+        setCurrentAttackAnimation({ attackerId: currentEnemyId, targetId: localBattleState.player.id, key: Date.now() });
         const updatedBattleState = battleSystem.handleEnemyTurn(localBattleState, currentEnemyId);
-        // Update the local battle state
         setLocalBattleState(updatedBattleState);
       }
     }, enemyTurnDelay);
 
-    return () => clearTimeout(timer); // Cleanup timer on unmount or dependency change
-  }, [localBattleState?.currentTurn, localBattleState?.turnOrder, localBattleState, battleSystem]); // Removed dispatch from dependencies
+    return () => clearTimeout(timer);
+  }, [localBattleState?.currentTurn, localBattleState, battleSystem]);
 
-  // If localBattleState is null, it means no battle is active or it has ended.
-  if (!localBattleState) {
+  // If battle has ended and result is being shown
+  if (showBattleResult === 'victory') {
+    return (
+      <div className={`${styles.battleContainer} ${styles.victoryScreen}`}>
+        <pre className={styles.victoryArt}>{VICTORY_ART}</pre>
+        <button onClick={() => {
+          setShowBattleResult(null);
+          // Dispatch END_BATTLE action with victory
+          dispatch({ 
+            type: 'END_BATTLE',
+            payload: {
+              playerWon: true,
+              playerExpGained: 100, // Example EXP
+              itemsDropped: [],
+              playerCombatState: localBattleState?.player
+            }
+          });
+        }} className={styles.continueButton}>Continue</button>
+      </div>
+    );
+  } else if (showBattleResult === 'defeat') {
+    return (
+      <div className={`${styles.battleContainer} ${styles.defeatScreen}`}>
+        <pre className={styles.defeatArt}>{DEFEAT_ART}</pre>
+        <button onClick={() => {
+          setShowBattleResult(null);
+          // Dispatch END_BATTLE action with defeat
+          dispatch({ 
+            type: 'END_BATTLE',
+            payload: {
+              playerWon: false,
+              playerExpGained: 0,
+              itemsDropped: [],
+              playerCombatState: localBattleState?.player
+            }
+          });
+        }} className={styles.continueButton}>Restart</button>
+      </div>
+    );
+  } else if (!localBattleState) {
     return <div className={styles.battleContainer}>Battle has ended or not started.</div>;
   }
 
   const player = localBattleState.player;
-  // Filter out defeated enemies for display
   const enemies = localBattleState.enemies.filter(e => e.hp > 0);
 
-  // Helper function to get emoji based on entity name
+  const getBattleBackground = () => {
+    const mapId = state.currentMap?.id || '';
+    if (mapId.includes('town') || mapId.includes('Town')) return ASCII_BACKGROUNDS.terminalTown;
+    if (mapId.includes('forest') || mapId.includes('Forest')) return ASCII_BACKGROUNDS.binaryForest;
+    if (mapId.includes('dungeon') || mapId.includes('Dungeon')) return ASCII_BACKGROUNDS.debugDungeon;
+    return ASCII_BACKGROUNDS.default;
+  };
+
   const getEmojiForEntity = (entity: CombatEntity) => {
     if (entity.id === player.id){ return '🤖'; }
     if (entity.name.includes('Bug')){ return '👾'; }
     if (entity.name.includes('Virus')){ return '🦠'; }
     if (entity.name.includes('Corrupted Data')){ return '🗑️'; }
     if (entity.name.includes('Logic Error')){ return '🐛'; }
-    return '❓'; // Default emoji for unknown enemies
+    return '❓';
   };
 
-  // Helper function to render HP bar
+  const getStatusEffectIcon = (type: StatusEffectType) => {
+    switch (type) {
+      case 'frozen': return '❄️';
+      case 'corrupted': return '☠️';
+      case 'optimized': return '⚡';
+      case 'encrypted': return '🔒';
+      default: return '❓';
+    }
+  };
+
   const renderHpBar = (currentHp: number, maxHp: number) => {
     const percentage = (currentHp / maxHp) * 100;
-    const barColor = percentage > 50 ? 'green' : percentage > 20 ? 'orange' : 'red';
+    const barColor = percentage > 50 ? '#00ff00' : percentage > 20 ? '#ffcc00' : '#ff0000';
     return (
       <div className={styles.hpBarContainer}>
         <div className={styles.hpBarFill} style={{ width: `${percentage}%`, backgroundColor: barColor }}></div>
@@ -102,7 +376,6 @@ const Battle: React.FC = () => {
     );
   };
 
-  // Helper function to render Energy bar
   const renderEnergyBar = (currentEnergy: number, maxEnergy: number) => {
     const percentage = (currentEnergy / maxEnergy) * 100;
     return (
@@ -113,41 +386,58 @@ const Battle: React.FC = () => {
     );
   };
 
-  // --- Player Action Handlers ---
+  const renderStatusEffects = (effects: StatusEffect[]) => (
+    <div className={styles.statusEffects}>
+      {effects.map(effect => (
+        <span key={effect.type} className={styles.statusEffect}>
+          {getStatusEffectIcon(effect.type)} {effect.type} ({effect.duration} turns)
+        </span>
+      ))}
+    </div>
+  );
 
-  const handlePlayerAttack = (targetId: string) => {
+  const handlePlayerAttack = useCallback((targetId: string) => {
     if (!localBattleState){ return; }
+    setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, key: Date.now() });
     const updatedBattleState = battleSystem.performAttack(localBattleState, player.id, targetId);
-    setLocalBattleState(updatedBattleState); // Update local state
+    setLocalBattleState(updatedBattleState);
     setIsSelectingTarget(false);
     setActionType(null);
-  };
+  }, [localBattleState, battleSystem, player.id]);
 
-  const handlePlayerAbility = (abilityId: string, targetId?: string) => {
+  const handlePlayerAbility = useCallback((abilityId: string, targetId?: string) => {
     if (!localBattleState){ return; }
+    // For abilities that target enemies, trigger attack animation
+    const ability = player.abilities.find(a => a.id === abilityId);
+    if (ability && ability.effect.target === 'singleEnemy' && targetId) {
+      setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, key: Date.now() });
+    } else if (ability && ability.effect.target === 'allEnemies') {
+      // For all enemies, animate on a generic target or first enemy
+      setCurrentAttackAnimation({ attackerId: player.id, targetId: enemies[0]?.id || '', key: Date.now() });
+    }
+
     const updatedBattleState = battleSystem.useAbility(localBattleState, player.id, abilityId, targetId);
-    setLocalBattleState(updatedBattleState); // Update local state
+    setLocalBattleState(updatedBattleState);
     setSelectedAbilityId(null);
     setIsSelectingTarget(false);
     setActionType(null);
-  };
+  }, [localBattleState, battleSystem, player.id, player.abilities, enemies]);
 
-  const handlePlayerItem = (item: Item) => {
+  const handlePlayerItem = useCallback((item: Item) => {
     if (!localBattleState){ return; }
     const updatedBattleState = battleSystem.useItem(localBattleState, player.id, item);
-    setLocalBattleState(updatedBattleState); // Update local state
+    setLocalBattleState(updatedBattleState);
     setSelectedItemId(null);
-  };
+  }, [localBattleState, battleSystem, player.id]);
 
-  const handleFlee = () => {
+  const handleFlee = useCallback(() => {
     if (!localBattleState){ return; }
     const enemySpeeds = enemies.map(e => e.speed);
     const updatedBattleState = battleSystem.flee(localBattleState, player.id, player.speed, enemySpeeds);
-    setLocalBattleState(updatedBattleState); // Update local state (will be null if successful flee)
-  };
+    setLocalBattleState(updatedBattleState);
+  }, [localBattleState, battleSystem, player.id, player.speed, enemies]);
 
-  // Handler for clicking on an enemy when target selection is active
-  const handleTargetClick = (targetId: string) => {
+  const handleTargetClick = useCallback((targetId: string) => {
     if (!isSelectingTarget){ return; }
 
     if (actionType === 'attack') {
@@ -158,17 +448,15 @@ const Battle: React.FC = () => {
         handlePlayerAbility(selectedAbilityId, targetId);
       }
     }
-  };
+  }, [isSelectingTarget, actionType, selectedAbilityId, player.abilities, handlePlayerAttack, handlePlayerAbility]);
 
-  // Centralized handler for initiating player actions
-  const handleActionSelect = (type: 'attack' | 'ability' | 'item' | 'flee', value?: string | Item) => {
+  const handleActionSelect = useCallback((type: 'attack' | 'ability' | 'item' | 'flee', value?: string | Item) => {
     if (type === 'attack') {
       setIsSelectingTarget(true);
       setActionType('attack');
       setSelectedAbilityId(null);
       setSelectedItemId(null);
     } else if (type === 'ability') {
-      // Fix: Check if value exists and is a string for ability ID
       if (typeof value === 'string') {
         const ability = player.abilities.find(a => a.id === value);
         if (ability) {
@@ -178,13 +466,11 @@ const Battle: React.FC = () => {
             setIsSelectingTarget(true);
             setActionType('ability');
           } else {
-            // For self-target or all-enemies abilities, use immediately
-            handlePlayerAbility(ability.id, player.id); // player.id is passed, but BattleSystem will determine actual targets
+            handlePlayerAbility(ability.id, player.id);
           }
         }
       }
     } else if (type === 'item') {
-      // Fix: Check if value exists and is an Item (not a string)
       if (value && typeof value !== 'string') {
         setSelectedItemId(value.id);
         setSelectedAbilityId(null);
@@ -193,17 +479,21 @@ const Battle: React.FC = () => {
     } else if (type === 'flee') {
       handleFlee();
     }
-  };
+  }, [player.abilities, handlePlayerAbility, handlePlayerItem, handleFlee, player.id]);
 
-  // Get player's full inventory from the global game state for item display
   const playerInventory = state.player.inventory;
+  const currentTurnDisplay = localBattleState.currentTurn === player.id
+    ? "Claude's Turn!"
+    : "Enemy Turn!";
 
   return (
     <div className={styles.battleContainer}>
+      <pre className={styles.battleBackground}>{getBattleBackground()}</pre>
+
       <h2 className={styles.battleTitle}>Battle!</h2>
 
       <div className={styles.turnIndicator}>
-        {localBattleState.currentTurn === 'player' ? 'Your Turn!' : 'Enemy\'s Turn!'}
+        {currentTurnDisplay}
       </div>
 
       <div className={styles.combatants}>
@@ -212,13 +502,20 @@ const Battle: React.FC = () => {
           {renderHpBar(player.hp, player.maxHp)}
           {renderEnergyBar(player.energy, player.maxEnergy)}
           <p>ATK: {player.attack} | DEF: {player.defense} | SPD: {player.speed}</p>
-          <div className={styles.statusEffects}>
-            {player.statusEffects.map(effect => (
-              <span key={effect.type} className={styles.statusEffect}>
-                {effect.type} ({effect.duration} turns)
-              </span>
-            ))}
-          </div>
+          {renderStatusEffects(player.statusEffects)}
+          {damageNumbers.filter(d => d.id === player.id).map(d => (
+            <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]}`}>
+              {d.type === 'heal' ? '+' : '-'}{d.value}
+            </span>
+          ))}
+          {currentAttackAnimation && currentAttackAnimation.targetId === player.id && (
+            <div className={styles.attackSlash}>
+              <span className={styles.slash1}>/</span>
+              <span className={styles.slash2}>\</span>
+              <span className={styles.slash3}>-</span>
+              <span className={styles.slash4}>|</span>
+            </div>
+          )}
         </div>
 
         <div className={styles.enemiesSection}>
@@ -226,20 +523,27 @@ const Battle: React.FC = () => {
             enemies.map((enemy) => (
               <div
                 key={enemy.id}
-                className={`${styles.enemyCard} ${isSelectingTarget ? styles.targetable : ''} ${localBattleState.currentTurn === 'enemy' && localBattleState.turnOrder[0] === enemy.id ? styles.currentEnemyTurn : ''}`}
+                className={`${styles.enemyCard} ${isSelectingTarget ? styles.targetable : ''} ${localBattleState.currentTurn === enemy.id ? styles.currentEnemyTurn : ''}`}
                 onClick={() => handleTargetClick(enemy.id)}
               >
                 <h4>{getEmojiForEntity(enemy)} {enemy.name}</h4>
                 {renderHpBar(enemy.hp, enemy.maxHp)}
                 {renderEnergyBar(enemy.energy, enemy.maxEnergy)}
                 <p>ATK: {enemy.attack} | DEF: {enemy.defense} | SPD: {enemy.speed}</p>
-                <div className={styles.statusEffects}>
-                  {enemy.statusEffects.map(effect => (
-                    <span key={effect.type} className={styles.statusEffect}>
-                      {effect.type} ({effect.duration} turns)
-                    </span>
-                  ))}
-                </div>
+                {renderStatusEffects(enemy.statusEffects)}
+                {damageNumbers.filter(d => d.id === enemy.id).map(d => (
+                  <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]}`}>
+                    {d.type === 'heal' ? '+' : '-'}{d.value}
+                  </span>
+                ))}
+                {currentAttackAnimation && currentAttackAnimation.targetId === enemy.id && (
+                  <div className={styles.attackSlash}>
+                    <span className={styles.slash1}>/</span>
+                    <span className={styles.slash2}>\</span>
+                    <span className={styles.slash3}>-</span>
+                    <span className={styles.slash4}>|</span>
+                  </div>
+                )}
               </div>
             ))
           ) : (
@@ -248,7 +552,7 @@ const Battle: React.FC = () => {
         </div>
       </div>
 
-      {localBattleState.currentTurn === 'player' && (
+      {localBattleState.currentTurn === player.id && (
         <div className={styles.playerActions}>
           {isSelectingTarget ? (
             <div className={styles.targetSelection}>

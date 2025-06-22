@@ -26,6 +26,10 @@ import { GameMap } from '../models/Map'; // Assuming GameMap class exists and is
 
 // 1. Import dialogue data from '../assets/dialogues.json'
 import dialoguesData from '../assets/dialogues.json';
+import { QuestManager } from '../models/QuestManager'; // Import QuestManager
+
+// Import map data index
+import { mapDataIndex } from '../assets/maps';
 
 // Define interfaces for the imported dialogue data structure to match dialogues.json
 interface DialogueEntryData {
@@ -85,7 +89,6 @@ export class GameEngine {
    */
   private _gameLoop = (timestamp: DOMHighResTimeStamp): void => {
     // 4. The start of _gameLoop to confirm it's running
-    console.log('GameEngine: _gameLoop running.');
 
     if (!this._isRunning) {
       return;
@@ -117,14 +120,12 @@ export class GameEngine {
    */
   public start(): void {
     if (this._isRunning) {
-      console.warn('GameEngine is already running.');
       return;
     }
     this._isRunning = true;
     this._lastTimestamp = performance.now();
     this._lastFpsUpdateTime = performance.now();
     this._animationFrameId = requestAnimationFrame(this._gameLoop);
-    console.log('GameEngine started.');
   }
 
   /**
@@ -133,7 +134,6 @@ export class GameEngine {
    */
   public stop(): void {
     if (!this._isRunning) {
-      console.warn('GameEngine is not running.');
       return;
     }
     this._isRunning = false;
@@ -149,7 +149,6 @@ export class GameEngine {
     this._lastProcessedMovementDirection = null;
     this._lastMovementTime = 0;
     this._lastInteractionTime = 0;
-    console.log('GameEngine stopped.');
   }
 
   /**
@@ -201,6 +200,22 @@ export class GameEngine {
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI'])) {
       if (now - this._lastInteractionTime > this._interactionCooldown) {
         this._dispatch({ type: 'TOGGLE_INVENTORY' });
+        this._lastInteractionTime = now;
+      }
+    }
+    
+    // Check for quest log toggle (q key)
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyQ'])) {
+      if (now - this._lastInteractionTime > this._interactionCooldown) {
+        this._dispatch({ type: 'TOGGLE_QUEST_LOG' });
+        this._lastInteractionTime = now;
+      }
+    }
+    
+    // Check for character screen toggle (c key)
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyC'])) {
+      if (now - this._lastInteractionTime > this._interactionCooldown) {
+        this._dispatch({ type: 'TOGGLE_CHARACTER_SCREEN' });
         this._lastInteractionTime = now;
       }
     }
@@ -288,13 +303,11 @@ export class GameEngine {
    */
   public processMovement(direction: Direction): void {
     // 3. processMovement - log when movement is attempted
-    console.log('GameEngine: Attempting to process movement for direction:', direction);
 
     const { player, currentMap, battle, dialogue } = this._currentGameState;
 
     // Prevent movement if in battle or dialogue
     if (battle || dialogue) {
-      console.log('GameEngine: Movement blocked: In battle or dialogue.');
       return;
     }
 
@@ -313,41 +326,57 @@ export class GameEngine {
 
     // Check map boundaries
     if (newX < 0 || newX >= currentMap.width || newY < 0 || newY >= currentMap.height) {
-      console.log('GameEngine: Movement blocked: Map boundary.');
       return;
     }
 
     // Check for collisions with non-walkable tiles
     if (this.checkCollisions(newPosition, currentMap)) {
-      console.log('GameEngine: Movement blocked: Collision with tile.');
       return;
     }
 
     // Check for collisions with NPCs (NPCs still block movement)
     if (this.checkNPCCollision(newPosition)) {
-      console.log('GameEngine: Movement blocked: Collision with NPC.');
       return;
     }
 
     // Check for map exits
     const exit = currentMap.exits.find(e => e.position.x === newX && e.position.y === newY);
     if (exit) {
-      console.log(`GameEngine: Player moved to exit at ${newX},${newY}. Transitioning to map: ${exit.targetMapId}`);
-      // In a full game, this would trigger a map loading sequence
-      // and then dispatch an `UPDATE_MAP` action with the new map and player position.
-      // For this exercise, we allow movement onto the exit tile, assuming a separate
-      // system would detect this and handle the map transition.
-      // Example:
-      // const newMapData = loadMapData(exit.targetMapId); // Hypothetical function
-      // if (newMapData) {
-      //   const newMapInstance = new GameMap(newMapData.id, newMapData.name, newMapData.width, newMapData.height, newMapData.tiles, newMapData.entities, newMapData.exits);
-      //   this._dispatch({ type: 'UPDATE_MAP', payload: { newMap: newMapInstance, playerNewPosition: exit.targetPosition } });
-      //   return; // Prevent further movement processing in this frame
-      // }
+      
+      // Load the target map
+      const newMap = this.loadMap(exit.targetMapId);
+      if (newMap) {
+        // Dispatch the UPDATE_MAP action with the new map and player position
+        this._dispatch({ 
+          type: 'UPDATE_MAP', 
+          payload: { 
+            newMap: newMap, 
+            playerNewPosition: exit.targetPosition 
+          } 
+        });
+        
+        // Show a notification about the map transition
+        this._dispatch({ 
+          type: 'SHOW_NOTIFICATION', 
+          payload: { 
+            message: `Entering ${newMap.name}...` 
+          } 
+        });
+        
+        return; // Prevent further movement processing in this frame
+      } else {
+        // Map failed to load, show error notification
+        this._dispatch({ 
+          type: 'SHOW_NOTIFICATION', 
+          payload: { 
+            message: `Error: Could not load ${exit.targetMapId}` 
+          } 
+        });
+        return; // Don't allow movement onto broken exit
+      }
     }
 
     // If all checks pass, dispatch the movement action
-    console.log('GameEngine: Dispatching MOVE_PLAYER action.');
     this._dispatch({ type: 'MOVE_PLAYER', payload: { direction } });
 
     // After player moves, check for item pickup at the new position
@@ -361,15 +390,41 @@ export class GameEngine {
    * Checks for collisions at a given position with map tiles.
    * @param position The position to check for collision.
    * @param map The current game map object.
-   * @returns True if a collision (non-walkable tile) occurs, false otherwise.
+   * @returns True if a collision (non-walkable tile or locked door without key) occurs, false otherwise.
    */
   public checkCollisions(position: Position, map: GameMap): boolean {
     const tile = map.tiles[position.y]?.[position.x];
     if (!tile) {
       // This should ideally be caught by boundary checks, but as a safeguard
-      console.error(`GameEngine: Attempted to access out-of-bounds tile at ${position.x},${position.y}`);
       return true; // Treat as collision
     }
+
+    // 1. Specifically detect if the tile type is 'locked_door'
+    if (tile.type === 'locked_door') {
+      // Access the player from the current game state
+      const player = this._currentGameState.player;
+
+      // 2. Check if the player has the Boss Key (item id: 'boss_key') in their inventory
+      if (player.hasItem('boss_key')) {
+        // 3. If player has the key, allow movement (return false for no collision)
+        // Optional: Show a success notification
+        this._dispatch({ 
+          type: 'SHOW_NOTIFICATION', 
+          payload: { message: "You used the Boss Key to open the door!" } 
+        });
+        return false; // No collision, player can pass
+      } else {
+        // 4. If player doesn't have the key, dispatch a SHOW_NOTIFICATION action
+        this._dispatch({ 
+          type: 'SHOW_NOTIFICATION', 
+          payload: { message: "The door is locked. You need the Boss Key to open it." } 
+        });
+        // 5. Return true (collision) if no key
+        return true; // Collision, player cannot pass
+      }
+    }
+
+    // Original logic: For any other tile type, check if it's walkable
     return !tile.walkable;
   }
 
@@ -383,7 +438,6 @@ export class GameEngine {
     const { npcs } = this._currentGameState;
     for (const npc of npcs) {
       if (npc.position.x === position.x && npc.position.y === position.y) {
-        console.log(`GameEngine: Collision with NPC: ${npc.name}`);
         return true; // Collision with an NPC
       }
     }
@@ -400,7 +454,6 @@ export class GameEngine {
     const { enemies } = this._currentGameState;
     for (const enemy of enemies) {
       if (enemy.position.x === position.x && enemy.position.y === position.y) {
-        console.log(`GameEngine: Enemy found at ${position.x},${position.y}: ${enemy.name}`);
         return enemy as Enemy; // Cast to Enemy class type
       }
     }
@@ -416,7 +469,6 @@ export class GameEngine {
   private checkForEnemyEncounter(position: Position): boolean {
     const enemy = this.getEnemyAtPosition(position);
     if (enemy) {
-      console.log(`GameEngine: Encountered enemy: ${enemy.name} at ${position.x},${position.y}. Starting battle.`);
       this._dispatch({ type: 'START_BATTLE', payload: { enemies: [enemy] } });
       this._dispatch({ type: 'REMOVE_ENEMY', payload: { enemyId: enemy.id } });
       return true;
@@ -434,7 +486,6 @@ export class GameEngine {
     // 5. Only allow interaction when not already in dialogue
     // Prevent interaction if in battle or dialogue
     if (battle || dialogue) {
-      console.log('GameEngine: Interaction blocked: In battle or dialogue.');
       return;
     }
 
@@ -458,7 +509,6 @@ export class GameEngine {
     for (const item of items) {
       // Ensure item has a position on the map to be interactable
       if (item.position && interactionRange.some(pos => pos.x === item.position!.x && pos.y === item.position!.y)) {
-        console.log(`GameEngine: Picking up item: ${item.name}`);
         // Dispatch actions to add item to player's inventory and remove it from the map
         this._dispatch({ type: 'ADD_ITEM', payload: { item: item, toPlayerInventory: true } });
         this._dispatch({ type: 'REMOVE_ITEM', payload: { itemId: item.id, fromPlayerInventory: false } });
@@ -466,7 +516,6 @@ export class GameEngine {
       }
     }
 
-    console.log('GameEngine: No interaction found.');
   }
 
   /**
@@ -493,7 +542,6 @@ export class GameEngine {
     for (const npc of npcs) {
       // Check if the NPC is on any of the adjacent tiles
       if (adjacentTiles.some(pos => pos.x === npc.position.x && pos.y === npc.position.y)) {
-        console.log(`GameEngine: Attempting to interact with NPC: ${npc.name}`);
 
         // Load their dialogue from dialogues.json
         // Cast dialoguesData to the expected array type for proper type checking
@@ -501,7 +549,6 @@ export class GameEngine {
 
         // 4. Handle the case where dialogue data doesn't exist
         if (!dialogueEntry) {
-          console.warn(`GameEngine: Dialogue data not found for NPC: ${npc.name} with dialogueId: ${npc.dialogueId}`);
           return false; // No dialogue to start
         }
 
@@ -513,11 +560,15 @@ export class GameEngine {
         };
 
         // Dispatch START_DIALOGUE with the dialogue data
-        console.log(`GameEngine: Dispatching START_DIALOGUE for NPC: ${npc.name}`);
         this._dispatch({
           type: 'START_DIALOGUE',
           payload: { dialogueState },
         });
+        
+        // Update quest progress for talking to this NPC
+        const questManager = QuestManager.getInstance();
+        questManager.updateQuestProgress('talk_to_npc', npc.role, 1);
+        
         return true; // Interaction initiated
       }
     }
@@ -558,6 +609,23 @@ export class GameEngine {
   }
 
   /**
+   * Loads a map by its ID and creates a GameMap instance.
+   * @param mapId The ID of the map to load.
+   * @returns A new GameMap instance or null if the map is not found.
+   */
+  private loadMap(mapId: string): GameMap | null {
+    const mapData = mapDataIndex[mapId];
+    if (!mapData) {
+      return null;
+    }
+
+    // Create a new GameMap instance from the map data
+    const newMap = new GameMap(mapData);
+
+    return newMap;
+  }
+
+  /**
    * Returns the current Frames Per Second (FPS) being achieved by the game loop.
    * @returns The current FPS value.
    */
@@ -576,11 +644,14 @@ export class GameEngine {
     const item = items.find(i => i.position && i.position.x === position.x && i.position.y === position.y);
     
     if (item) {
-      console.log(`GameEngine: Auto-picking up item: ${item.name}`);
       // Add item to player's inventory and remove from map
       this._dispatch({ type: 'ADD_ITEM', payload: { item: item, toPlayerInventory: true } });
       this._dispatch({ type: 'REMOVE_ITEM', payload: { itemId: item.id, fromPlayerInventory: false } });
       this._dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: `Picked up ${item.name}!` } });
+      
+      // Update quest progress for collecting this item
+      const questManager = QuestManager.getInstance();
+      questManager.updateQuestProgress('collect_item', item.id, 1);
     }
   }
 
