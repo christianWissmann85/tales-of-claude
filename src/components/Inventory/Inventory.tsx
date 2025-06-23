@@ -200,11 +200,8 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
     if (action === 'equip' && item.type === 'equipment') {
       onEquipItem(item.id);
     } else if (action === 'unequip' && item.type === 'equipment') {
-      // To unequip, we need the slot type. Player model handles finding the equipped item.
-      const equippedInstance = player.getEquippedItems().find(eqItem => eqItem.id === item.id);
-      if (equippedInstance && equippedInstance.equipmentSlotType) {
-        player.unequip(equippedInstance.equipmentSlotType); // Player model handles unequip logic
-      }
+      // For unequipping, just call equip again - it will swap the item back to inventory
+      onEquipItem(item.id);
     } else if (action === 'use') {
       if (item.type === 'consumable' || item.type === 'key' || item.type === 'quest') {
         if (count > 1) {
@@ -268,7 +265,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
   const maxCapacity = (inventory as any).getMaxCapacity ? (inventory as any).getMaxCapacity() : MAX_INVENTORY_SLOTS;
 
   return (
-    <div className={styles.inventoryOverlay}>
+    <div className={`${styles.inventoryOverlay} ${styles.visible}`}>
       <div className={styles.inventoryContainer} ref={inventoryRef}>
         <div className={styles.inventoryHeader}>
           <h2 className={styles.inventoryTitle}>Inventory</h2>

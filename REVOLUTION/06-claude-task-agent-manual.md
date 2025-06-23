@@ -8,25 +8,46 @@
 
 *Third Note from Chris: Always expect code fences => ```typescript  and ``` even if you use "code only", Gemini can be sometimes very adamant about those. I would in general advise just to peek into a generated file (e.g. first 4 lines, last 4 lines) just to see if she did add some extra text or code fences. She does write awesome code, but she has the knack to be a bit of an explainer 😅* 
 
-*fourth note from Chris: Be a bit more precise with Gemini. Give her constraints in your prompts, or she might take too long. be mindful of the timeout, and say she needs to create about x lines of code over all etc. give her guidance in your prompt, so that it works in 180seconds - for creative tasks, give her even 300secs. if you dont specify the timeout, it is default of 60s, rather short, so always use at least 180seconds and say so explicetly in the invoke tool via the argument* 
+*fourth note from Chris: Be a bit more precise with Gemini. Give her constraints in your prompts, or she might take too long. be mindful of the timeout, and say she needs to create about x lines of code over all etc. give her guidance in your prompt, so that it works in 180seconds - for creative tasks, give her even 300secs. if you dont specify the timeout, it is default of 60s, rather short, so always use at least 180seconds and say so explicetly in the invoke tool via the argument. Always attach the necessary context files, Gemini doesnt know our code base like you do! Add them liberally, she has 1 mio tokens to work with, and those are not your tokens, so you can splurge!* 
 
-*5.th Note from Chris: Please write 3 quick tipps in your field report for future Claude Code Task Agents for using and working with Delegate that you have learned and wish you knew when you started*
+*5.th Note from Chris: Please write 3 quick tipps in your field report for future Claude Code Task Agents for using and working with Delegate that you have learned and wish you knew when you started. And also, please write them yourselves, not via invoke. I need your real unfiltered input and feedback, and also, future claude code's will love you for your shared tips&tricks 👍😊*
+
+*6.th Note from Chris: One thing I have seen Claude Code Task Agents do is to use `Delegate` to clean up the file that `Delegate` created previously. Using `Delegate` to clean up its own output, true meta-optimization to save tokens. They attached the newly created file, and a very precise prompt that the LLM should only reply with the code, no code fences, no explanatons, etc. It seems to work very vell (codefences might still be there though, give it a peek like we already said)* 
 
 ## Delegate Usage Tips from earlier Task Agents
 
-### 1. **Always Check for Code Fences**
+### Tip 1. **Always Check for Code Fences**
 Even with `code_only: true`, Gemini often includes markdown documentation and code fences. Always check the first and last few lines of generated files:
 ```bash
 # Quick check pattern:
 Read file_path limit=5  # Check start
 tail -n 5 file_path     # Check end
 ```
+**Always Clean Generated Output**: Even with `code_only: true`, Gemini adds markdown backticks. Use sed/grep to extract clean code. Check first/last lines before moving files.
 
-### 2. **Use Specific Line Counts in Prompts**
+### Tip 2. **Use Specific Line Counts in Prompts**
 Gemini responds well to concrete constraints. Instead of "create a component", say "create a component (about 200 lines)". This helps prevent timeout issues and keeps output focused.
 
-### 3. **Break Complex UI into Smaller Files**
+### Tip 3. **Break Complex UI into Smaller Files**
 Rather than one massive component, I created separate files for Inventory, Hotbar, and ItemTooltip. This made delegate generation more reliable and the code more maintainable.
+
+### Tip 4: Bundle Related Files for Context
+When analyzing multiple interconnected issues, create a bundle file first (like I did with `cat file1 file2 > bundle.tmp`). This gives delegate the full context in one go, leading to better root cause analysis. The 1M context window of Gemini models can handle massive bundles!
+
+### Tip 5: Use Structured Prompts for Analysis
+When asking delegate to analyze complex issues, provide a clear structure in your prompt with numbered sections and specific output requirements. This helps the model organize its thoughts and produce actionable output. Specify approximate line counts to prevent timeout issues.
+
+### Tip 6: Chain Delegate Calls for Comprehensive Work
+Use delegate outputs as inputs for subsequent calls. First generate analysis, then use that analysis to create action plans. This divide-and-conquer approach produces better results than trying to do everything in one massive prompt.
+
+### Tip 7. **Layer Your Generations**
+Don't try to generate perfect code in one shot. Generate first, then use delegate again to clean up its own output. I found this meta-approach surprisingly effective - attach the generated file and ask for cleanup with very specific instructions about removing markdown, fixing imports, etc.
+
+### Tip 8. **Be Explicit About Structure** 
+When asking for large files, give Gemini concrete targets: "Create a 1200-line TypeScript file with these 9 test suites, each having 3-5 tests." This prevents timeout issues and helps Gemini plan the output better than vague requests.
+
+### Tip 9. **Use Write-To Religiously**
+Never, ever read large generated content back into context. Always use write_to to save directly to disk. The token savings are massive - I saved over 80,000 tokens on this task alone by never reading the test framework back.
 
 
 ## Your Mission as a Task Agent

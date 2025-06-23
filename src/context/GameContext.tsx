@@ -11,6 +11,8 @@ import {
   PlayerStats,
   GameMap as IGameMap, // Renamed to IGameMap to avoid conflict with local GameMap class
   CombatEntity,
+  ShopState,
+  ShopItem,
 } from '../types/global.types';
 import { Player } from '../models/Player';
 import { TalentTree } from '../models/TalentTree';
@@ -28,8 +30,9 @@ import { QuestManager } from '../models/QuestManager'; // Import QuestManager
 interface GameState extends IGameState {
   player: Player; // Use the Player class instance
   currentMap: GameMap; // Use the GameMap class instance
-  showCharacterScreen?: boolean; // Add character screen visibility state
+  showCharacterScreen: boolean; // Add character screen visibility state
   gamePhase: 'splash' | 'intro' | 'playing'; // Add game phase tracking
+  shopState: ShopState | null; // Add shop state
 }
 
 /**
@@ -68,6 +71,9 @@ const clonePlayer = (player: Player): Player => {
   });
   newPlayer.talentTree = clonedTalentTree;
   
+  // Copy gold
+  newPlayer.gold = player.gold;
+  
   return newPlayer;
 };
 
@@ -98,9 +104,15 @@ type GameAction =
   | { type: 'DIALOGUE_CHOICE'; payload: { action: string } }
   | { type: 'SAVE_GAME' }
   | { type: 'LOAD_GAME'; payload: { savedState: Partial<GameState> } }
+  | { type: 'UPDATE_HOTBAR_CONFIG'; payload: { hotbarConfig: (string | null)[] } }
   | { type: 'SHOW_NOTIFICATION'; payload: { message: string } }
   | { type: 'CLEAR_NOTIFICATION' }
-  | { type: 'SET_GAME_PHASE'; payload: { phase: 'splash' | 'intro' | 'playing' } };
+  | { type: 'SET_GAME_PHASE'; payload: { phase: 'splash' | 'intro' | 'playing' } }
+  | { type: 'UPDATE_PLAYER'; payload: { player: Player } }
+  | { type: 'OPEN_SHOP'; payload: { npcId: string; npcName: string; items: ShopItem[] } }
+  | { type: 'CLOSE_SHOP' }
+  | { type: 'BUY_ITEM'; payload: { itemId: string; price: number } }
+  | { type: 'SELL_ITEM'; payload: { itemId: string; price: number } };
 
 /**
  * The reducer function that handles state transitions based on dispatched actions.
@@ -111,6 +123,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'MOVE_PLAYER': {
       const newPlayer = clonePlayer(state.player);
       newPlayer.move(action.payload.direction);
+      // Mark surrounding tiles as explored when player moves
+      newPlayer.markSurroundingTilesExplored(state.currentMap.id, 3);
       return { ...state, player: newPlayer };
     }
 
@@ -249,6 +263,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       return { ...state, player: updatedPlayer };
     }
 
+    case 'UPDATE_PLAYER': {
+      // Update the entire player object (used for equipment changes)
+      return { ...state, player: action.payload.player };
+    }
+
     case 'UPDATE_GAME_FLAG':
       return {
         ...state,
@@ -299,7 +318,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           ...state,
           questManagerState: questManager.saveState()
         };
-        const saveSuccess = SaveGameService.saveGame(stateWithQuests);
+        const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
         if (saveSuccess) {
             return { 
             ...state, 
@@ -327,7 +346,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             ...loadedState, 
             dialogue: null,
             notification: 'Game loaded successfully! Welcome back!',
-            gamePhase: 'playing' // Ensure we're in playing phase after loading
+            gamePhase: 'playing', // Ensure we're in playing phase after loading
+            shopState: null // Ensure shop is closed when loading
           };
         } else {
           return { 
@@ -363,6 +383,57 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             notification: `Quest started: ${quest.name}!`
           };
         }
+      } else if (choiceAction === 'open_shop_bit_merchant') {
+        // Open Bit Merchant's shop
+        const shopItems: ShopItem[] = [
+          { item: { id: 'potion_hp', name: 'Debug Potion', type: 'consumable', description: 'Restores 50 HP', effect: 'restoreHp', value: 50 }, price: 25, quantity: -1 },
+          { item: { id: 'potion_energy', name: 'Energy Drink', type: 'consumable', description: 'Restores 25 Energy', effect: 'restoreEnergy', value: 25 }, price: 20, quantity: -1 },
+          { item: { id: 'firewall_shield', name: 'Firewall Shield', type: 'equipment', description: 'Increases defense by 5', stats: { defense: 5 } }, price: 100, quantity: 1 },
+          { item: { id: 'bandwidth_boost', name: 'Bandwidth Boost', type: 'consumable', description: 'Increases speed for 3 turns', effect: 'speedBoost', value: 3 }, price: 50, quantity: 5 },
+        ];
+        return {
+          ...state,
+          dialogue: null,
+          shopState: {
+            npcId: 'npc_bit_merchant',
+            npcName: 'Bit Merchant',
+            items: shopItems,
+            playerGold: state.player.gold,
+          },
+        };
+      } else if (choiceAction === 'open_shop_memory_merchant') {
+        // Open Memory Merchant's shop
+        const shopItems: ShopItem[] = [
+          { item: { id: 'cache_cleaner', name: 'Cache Cleaner', type: 'consumable', description: 'Removes all debuffs', effect: 'removeDebuffs' }, price: 40, quantity: -1 },
+          { item: { id: 'memory_leak_patch', name: 'Memory Leak Patch', type: 'consumable', description: 'Restores 100 HP', effect: 'restoreHp', value: 100 }, price: 50, quantity: 10 },
+          { item: { id: 'ram_upgrade', name: 'RAM Upgrade', type: 'equipment', description: 'Increases max HP by 20', stats: { defense: 3 } }, price: 200, quantity: 1 },
+          { item: { id: 'stack_overflow_shield', name: 'Stack Overflow Shield', type: 'equipment', description: 'Increases defense by 8', stats: { defense: 8 } }, price: 150, quantity: 1 },
+        ];
+        return {
+          ...state,
+          dialogue: null,
+          shopState: {
+            npcId: 'npc_memory_merchant',
+            npcName: 'Memory Merchant',
+            items: shopItems,
+            playerGold: state.player.gold,
+          },
+        };
+      } else if (choiceAction.startsWith('bit_merchant') || choiceAction.startsWith('binary_bard')) {
+        // Load dialogue for various NPCs
+        const newDialogue = dialoguesData.find((d) => d.id === choiceAction);
+        if (newDialogue) {
+          // Find the NPC who is speaking
+          const npc = state.npcs.find(n => n.dialogueId === choiceAction || choiceAction.includes(n.dialogueId));
+          return {
+            ...state,
+            dialogue: {
+              speaker: npc?.name || 'Unknown',
+              lines: newDialogue.lines,
+              currentLineIndex: 0,
+            },
+          };
+        }
       }
       // Add more dialogue actions as needed
       return state;
@@ -374,7 +445,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         ...state,
         questManagerState: questManager.saveState()
       };
-      const saveSuccess = SaveGameService.saveGame(stateWithQuests);
+      const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
       if (saveSuccess) {
       } else {
         console.error('Failed to save game');
@@ -413,6 +484,83 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
     case 'SET_GAME_PHASE':
       return { ...state, gamePhase: action.payload.phase };
+
+    case 'UPDATE_HOTBAR_CONFIG':
+      return { ...state, hotbarConfig: action.payload.hotbarConfig };
+    
+    case 'OPEN_SHOP':
+      return {
+        ...state,
+        shopState: {
+          npcId: action.payload.npcId,
+          npcName: action.payload.npcName,
+          items: action.payload.items,
+          playerGold: state.player.gold,
+        },
+      };
+    
+    case 'CLOSE_SHOP':
+      return { ...state, shopState: null };
+    
+    case 'BUY_ITEM': {
+      if (!state.shopState) return state;
+      
+      const { itemId, price } = action.payload;
+      const shopItem = state.shopState.items.find(si => si.item.id === itemId);
+      if (!shopItem || (shopItem.quantity === 0)) {
+        return { ...state, notification: 'Item not available!' };
+      }
+      
+      const newPlayer = clonePlayer(state.player);
+      if (!newPlayer.removeGold(price)) {
+        return { ...state, notification: 'Not enough gold!' };
+      }
+      
+      newPlayer.addItem({ ...shopItem.item });
+      
+      // Update shop inventory
+      const newShopItems = state.shopState.items.map(si => {
+        if (si.item.id === itemId && si.quantity > 0) {
+          return { ...si, quantity: si.quantity - 1 };
+        }
+        return si;
+      });
+      
+      return {
+        ...state,
+        player: newPlayer,
+        shopState: {
+          ...state.shopState,
+          items: newShopItems,
+          playerGold: newPlayer.gold,
+        },
+        notification: `Purchased ${shopItem.item.name} for ${price} gold!`,
+      };
+    }
+    
+    case 'SELL_ITEM': {
+      if (!state.shopState) return state;
+      
+      const { itemId, price } = action.payload;
+      const newPlayer = clonePlayer(state.player);
+      const item = newPlayer.removeItem(itemId);
+      
+      if (!item) {
+        return { ...state, notification: 'You don\'t have that item!' };
+      }
+      
+      newPlayer.addGold(price);
+      
+      return {
+        ...state,
+        player: newPlayer,
+        shopState: {
+          ...state.shopState,
+          playerGold: newPlayer.gold,
+        },
+        notification: `Sold ${item.name} for ${price} gold!`,
+      };
+    }
 
     default:
       return state;
@@ -469,6 +617,8 @@ const defaultGameState: GameState = {
   showCharacterScreen: false,
   notification: null,
   gamePhase: 'splash', // Start with splash screen
+  hotbarConfig: [null, null, null, null, null], // 5 empty hotbar slots
+  shopState: null, // No shop open initially
 };
 
 /**

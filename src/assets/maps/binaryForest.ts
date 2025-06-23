@@ -123,8 +123,8 @@ const npcs: NPC[] = [
     id: 'npc_bit_merchant',
     name: 'Bit Merchant',
     position: { x: 20, y: 15 },
-    role: 'debugger' as NPCRole,
-    dialogueId: 'merchant_intro',
+    role: 'merchant' as NPCRole,
+    dialogueId: 'bit_merchant_intro',
     statusEffects: [],
   },
 ];
@@ -171,6 +171,98 @@ exits.forEach(exit => {
     tiles[exit.position.y][exit.position.x] = { ...exitTile };
   }
 });
+
+// --- SECRET AREAS ---
+
+// Secret 1: Hidden Grove with Legendary Equipment (20,5)
+// Create a false tree wall that can be walked through
+tiles[5][20] = { 
+  walkable: true,
+  type: 'tree' as TileType
+};
+
+// Hidden grove area (21-23, 4-6)
+for (let y = 4; y <= 6; y++) {
+  for (let x = 21; x <= 23; x++) {
+    if (x < MAP_WIDTH && y < MAP_HEIGHT) {
+      tiles[y][x] = { ...forestFloorTile };
+    }
+  }
+}
+
+// Peaceful fountain in the center
+tiles[5][22] = { 
+  walkable: true, 
+  type: 'water' as TileType
+};
+
+// Secret 2: Tree Push Puzzle (12,10)
+// Three pushable trees with visual hints
+const pushableTrees: Position[] = [
+  { x: 11, y: 9 },
+  { x: 13, y: 9 },
+  { x: 12, y: 11 }
+];
+
+pushableTrees.forEach((pos, index) => {
+  tiles[pos.y][pos.x] = {
+    walkable: false,
+    type: 'tree' as TileType
+  };
+});
+
+// Secret trainer location (initially blocked)
+tiles[10][12] = { 
+  ...forestFloorTile
+};
+
+// Secret 3: Waterfall Cache (22,11)
+// The water tile is walkable and leads to treasure
+tiles[11][22] = {
+  walkable: true,
+  type: 'water' as TileType
+};
+
+// Add secret NPCs
+const secretNpcs: NPC[] = [
+  {
+    id: 'elder_willow',
+    name: 'Elder Willow',
+    role: 'trainer' as NPCRole,
+    dialogueId: 'dialogue_elder_willow',
+    position: { x: 12, y: 10 }
+  },
+  {
+    id: 'forest_spirit',
+    name: 'Forest Spirit',
+    role: 'quest_giver' as NPCRole,
+    dialogueId: 'dialogue_forest_spirit',
+    position: { x: 22, y: 5 }
+  }
+];
+
+// Add legendary items
+const legendaryItems: Item[] = [
+  { 
+    ...ItemClass.createItem(ItemVariant.SteelSword),
+    id: 'natures_wrath',
+    position: { x: 22, y: 4 }
+  },
+  {
+    ...ItemClass.createItem(ItemVariant.HealthPotion),
+    id: 'forest_gem',
+    position: { x: 22, y: 11 }
+  },
+  {
+    ...ItemClass.createItem(ItemVariant.SteelArmor),
+    id: 'bark_armor',
+    position: { x: 23, y: 5 }
+  }
+];
+
+// Add all secret entities to the main arrays
+npcs.push(...secretNpcs);
+items.push(...legendaryItems);
 
 export const binaryForestData: IGameMap = {
   id: 'binaryForest',

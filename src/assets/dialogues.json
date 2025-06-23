@@ -590,5 +590,362 @@
         ]
       }
     ]
+  },
+  {
+    "id": "memory_merchant_intro",
+    "lines": [
+      {
+        "text": "Welcome, traveler! I am the Memory Merchant, dealer in *cached goods* and *stored treasures*."
+      },
+      {
+        "text": "My inventory is carefully *allocated* for adventurers like yourself. Each item is *garbage-collected* to ensure only the finest quality!"
+      },
+      {
+        "text": "Would you like to browse my *heap* of wares? I promise competitive prices and no *memory leaks*!",
+        "choices": [
+          {
+            "text": "Show me your goods!",
+            "action": "open_shop_memory_merchant"
+          },
+          {
+            "text": "Just looking around.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_unit_734",
+    "lines": [
+      {
+        "text": "INITIALIZATION COMPLETE. Greetings, organic. You've found my humble data hub."
+      },
+      {
+        "text": "My designation is Unit 734. I deal in... experimental hardware. Not for the faint of circuit."
+      },
+      {
+        "text": "Looking for an upgrade? My 'Quantum Blade' slices through firewalls like butter. The 'Neural Net Armor' predicts enemy movements."
+      },
+      {
+        "text": "My inventory fluctuates with the market's data streams. Check back often, if your processing power allows.",
+        "choices": [
+          {
+            "text": "Show me your experimental gear.",
+            "action": "open_shop_tech_vendor"
+          },
+          {
+            "text": "Tell me more about these items.",
+            "action": "tech_vendor_info"
+          },
+          {
+            "text": "I'll browse another time.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_code_sage_hex",
+    "lines": [
+      {
+        "text": "Ah, another seeker of forbidden knowledge. Welcome to my sanctuary, hidden from the prying eyes of the main() function."
+      },
+      {
+        "text": "I am Code Sage Hex, master of the shadow protocols. I can teach you the ancient art of Hacking Mastery..."
+      },
+      {
+        "text": "But first, you must prove your worth. Have you solved the terminal puzzle? Only those who understand the root of all access may learn from me."
+      },
+      {
+        "text": "The skill I teach will allow you to bypass certain security systems and unlock hidden functions throughout the realm.",
+        "choices": [
+          {
+            "text": "I've solved the puzzle. Teach me!",
+            "action": "learn_hacking_mastery"
+          },
+          {
+            "text": "What's this about a terminal puzzle?",
+            "action": "hex_puzzle_hint"
+          },
+          {
+            "text": "I'll return when I'm ready.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_easter_egg_guardian",
+    "lines": [
+      {
+        "text": "01001000 01100101 01101100 01101100 01101111! You've discovered the Binary Chamber!"
+      },
+      {
+        "text": "This room contains treasures from the ancient 16-bit era. But only those who speak in binary may claim them."
+      },
+      {
+        "text": "The switches before you must form the pattern: 1010. This was the sacred code of the SNES masters."
+      },
+      {
+        "text": "Succeed, and the Nostalgic Chest shall open, revealing artifacts of power from a simpler time...",
+        "choices": [
+          {
+            "text": "I understand. Time to flip some bits!",
+            "action": "end_dialogue"
+          },
+          {
+            "text": "Can you give me another hint?",
+            "action": "binary_extra_hint"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_gemsmith_sparkle",
+    "lines": [
+      {
+        "text": "*clink* *clink* Oh! A visitor! How rare, how precious!"
+      },
+      {
+        "text": "I am Gemsmith Sparkle, jeweler of the depths. I've been mining these caverns for decades, finding the most exquisite crystals."
+      },
+      {
+        "text": "My Crystal Pickaxe can help you harvest raw gems from the veins here. Or perhaps you'd like to see my refined collection?",
+        "choices": [
+          {
+            "text": "Show me your gems!",
+            "action": "open_shop_gem"
+          },
+          {
+            "text": "Tell me about crystal mining.",
+            "action": "mining_tutorial"
+          },
+          {
+            "text": "Just browsing.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_crystal_sage",
+    "lines": [
+      {
+        "text": "Welcome, seeker. I have been expecting you. The crystals sing of your arrival."
+      },
+      {
+        "text": "I am the Crystal Sage, keeper of ancient knowledge. These caverns hold secrets older than the Digital Realm itself."
+      },
+      {
+        "text": "The Sacred Algorithms you seek... they are but fragments of a greater whole. The crystals remember when they were one."
+      },
+      {
+        "text": "I can grant you the Scholar's Blessing, which will reveal hidden lore throughout your journey. But first, tell me - do you seek knowledge for power, or for understanding?",
+        "choices": [
+          {
+            "text": "I seek understanding.",
+            "action": "grant_scholars_blessing"
+          },
+          {
+            "text": "Knowledge IS power.",
+            "action": "sage_philosophy"
+          },
+          {
+            "text": "Tell me about the Sacred Algorithms.",
+            "action": "algorithm_lore"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_bog_witch",
+    "lines": [
+      {
+        "text": "*cackle* Well, well... another lost soul wanders into my swamp. How delightful!"
+      },
+      {
+        "text": "I am Morrigan, mistress of the murky arts. My potions can grant you powers beyond your digital dreams... for a price."
+      },
+      {
+        "text": "The Syntax Swamp tests all who enter. My brews can help you navigate its treacherous waters. Interested?",
+        "choices": [
+          {
+            "text": "Show me your potions.",
+            "action": "open_shop_witch"
+          },
+          {
+            "text": "What's that cauldron for?",
+            "action": "cauldron_puzzle_hint"
+          },
+          {
+            "text": "I'll manage without your help.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_amphibian_ancient",
+    "lines": [
+      {
+        "text": "*glub glub* A surface dweller... in the depths... How unusual..."
+      },
+      {
+        "text": "I am the last of the Amphibian Ancients. Long have we guarded the underwater temple and its treasures."
+      },
+      {
+        "text": "The water valves must be turned in the correct sequence to drain the temple chamber. The pattern is written in the flow itself."
+      },
+      {
+        "text": "Prove yourself worthy, and the Amphibian Amulet shall be yours. It grants the ability to breathe in any liquid - even corrupted code.",
+        "choices": [
+          {
+            "text": "I'll solve your puzzle.",
+            "action": "start_water_puzzle"
+          },
+          {
+            "text": "What happened to your people?",
+            "action": "amphibian_history"
+          },
+          {
+            "text": "I need to prepare first.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_syntax_oracle",
+    "lines": [
+      {
+        "text": "ERROR: ORACLE.GREETING NOT FOUND... *bzzt* ...Ah, forgive me. The corruption affects even my speech patterns."
+      },
+      {
+        "text": "I am the Syntax Oracle, debugger of the swamp's corrupted code. You stand before a syntax error made manifest."
+      },
+      {
+        "text": "The tiles must form valid code to compile the path forward. Remember: every statement needs proper syntax to execute.",
+        "choices": [
+          {
+            "text": "Give me a hint about the puzzle.",
+            "action": "syntax_puzzle_hint"
+          },
+          {
+            "text": "Why is the swamp corrupted?",
+            "action": "corruption_lore"
+          },
+          {
+            "text": "I'll figure it out myself.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_elder_willow",
+    "lines": [
+      {
+        "text": "Ah, you have solved the ancient puzzle of the shifting trees. I am impressed, young traveler."
+      },
+      {
+        "text": "I am Elder Willow, guardian of the forest's deepest secrets. For centuries, I have waited for one worthy of learning our magic."
+      },
+      {
+        "text": "The Forest Magic I can teach you allows communion with nature itself - healing from trees, guidance from animals, and the strength of ancient roots.",
+        "choices": [
+          {
+            "text": "Teach me Forest Magic!",
+            "action": "learn_forest_magic"
+          },
+          {
+            "text": "What was that puzzle about?",
+            "action": "tree_puzzle_lore"
+          },
+          {
+            "text": "I'll come back later.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_forest_spirit",
+    "lines": [
+      {
+        "text": "Welcome to the Hidden Grove, blessed one. Few find this sacred place."
+      },
+      {
+        "text": "I am the guardian spirit of this grove. Here, Nature's Wrath awaits one who proves worthy."
+      },
+      {
+        "text": "The legendary staff behind me channels the raw power of the forest. But beware - such power demands respect for nature.",
+        "choices": [
+          {
+            "text": "May I take the staff?",
+            "action": "nature_wrath_test"
+          },
+          {
+            "text": "Tell me about this grove.",
+            "action": "grove_history"
+          },
+          {
+            "text": "Just admiring the scenery.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_bug_tracker",
+    "lines": [
+      {
+        "text": "Version 0.7.3 reporting for duty! I'm Bug Tracker Beta, dungeon shortcut specialist."
+      },
+      {
+        "text": "That false wall behind me? It's a one-way express route back to the entrance. Handy for quick escapes!"
+      },
+      {
+        "text": "I've been tracking anomalies in this dungeon. The Corrupted Subroutine in the hidden boss room is particularly nasty.",
+        "choices": [
+          {
+            "text": "Tell me about the shortcuts.",
+            "action": "shortcut_info"
+          },
+          {
+            "text": "What's a Corrupted Subroutine?",
+            "action": "boss_warning"
+          },
+          {
+            "text": "Any other secrets here?",
+            "action": "dungeon_hints"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dialogue_corrupted_subroutine",
+    "lines": [
+      {
+        "text": "ERROR ERROR ERROR... INTRUDER DETECTED IN PROTECTED MEMORY SPACE!"
+      },
+      {
+        "text": "I AM THE CORRUPTED SUBROUTINE... GUARDIAN OF FORBIDDEN FUNCTIONS..."
+      },
+      {
+        "text": "YOUR STACK... WILL OVERFLOW... YOUR HEAP... WILL CORRUPT... PREPARE FOR SEGMENTATION FAULT!"
+      }
+    ]
   }
 ]

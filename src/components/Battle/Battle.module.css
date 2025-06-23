@@ -40,7 +40,7 @@
     overflow: hidden; /* Hide any overflow */
     text-align: center;
     line-height: 1; /* Tight line spacing */
-    opacity: 0.3; /* Make it subtle */
+    opacity: 0.6; /* Changed from 0.3 to 0.6 for better visibility */
     pointer-events: none; /* Don't block clicks */
     display: flex;
     align-items: center;
@@ -89,7 +89,7 @@
     transform: translateY(-50%);
     font-size: 1.2em;
     color: #39ff14;
-    animation: slideArrows 1.5s infinite ease-in-out;
+    animation: slideArrows 1.5s infinite alternate ease-in-out;
     text-shadow: 0 0 5px #39ff14;
 }
 .turnIndicator::before {
@@ -119,6 +119,7 @@
     padding: 20px; /* More padding */
     border-radius: 8px; /* More rounded */
     box-shadow: inset 0 0 8px #00ff00; /* Stronger inner glow */
+    position: relative; /* ADDED: For damage numbers and particles to position correctly */
 }
 
 .playerSection h2,
@@ -153,7 +154,7 @@
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 0 8px rgba(0, 255, 0, 0.6); /* Stronger initial glow */
-    position: relative; /* For damage numbers */
+    position: relative; /* Already present: For damage numbers */
 }
 
 .enemyCard:hover {
@@ -338,16 +339,21 @@
     margin-top: 8px; /* Small gap */
 }
 
-.dropdownContent a {
+.dropdownContent button { /* Changed from 'a' to 'button' as per TSX */
     color: #00ff00;
     padding: 14px 18px; /* More padding */
     text-decoration: none;
     display: block;
     font-size: 1.2em; /* Larger font */
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    background: none; /* Reset button default styles */
+    border: none; /* Reset button default styles */
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
 }
 
-.dropdownContent a:hover {
+.dropdownContent button:hover { /* Changed from 'a' to 'button' */
     background-color: #004400; /* Darker green on hover */
     color: #39ff14; /* Brighter green text */
     text-shadow: 0 0 5px #39ff14;
@@ -427,6 +433,7 @@
     text-align: center; /* Center text */
     left: 50%;
     transform: translateX(-50%);
+    top: 20%; /* Adjusted: Start higher above the entity */
 }
 
 .damageNumber.damage {
@@ -439,57 +446,103 @@
     text-shadow: 0 0 12px #00ff00, 0 0 25px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5);
 }
 
+.damageNumber.criticalDamage {
+    color: #ffcc00; /* Gold/Orange for critical damage */
+    font-size: 4em; /* Even larger for critical */
+    text-shadow: 0 0 15px #ffcc00, 0 0 30px rgba(255, 204, 0, 0.9), 0 0 50px rgba(255, 204, 0, 0.7);
+    animation: floatUpFade 1.8s ease-out forwards, criticalPulse 0.3s infinite alternate; /* Add a pulse for critical */
+}
+
+@keyframes criticalPulse {
+    0% { transform: translate(-50%, 0) scale(1.1); }
+    100% { transform: translate(-50%, 0) scale(1.2); }
+}
+
+
 /* --- NEW: Attack Slash Animations --- */
-.attackSlash {
+.attackAnimationContainer {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200px; /* Base width */
-    height: 15px; /* Base height */
-    background: linear-gradient(90deg, transparent, #ffffff, transparent);
-    transform-origin: center center;
+    width: 100%; /* Cover the whole parent */
+    height: 100%;
+    transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 90; /* Below damage numbers */
+    overflow: hidden; /* Contain slashes */
+}
+
+.slashLine {
+    position: absolute;
+    top: 50%;
+    left: 0%; /* Start from left edge of container */
+    width: 100%; /* Full width of container */
+    height: 15px; /* Base height */
+    background: var(--slash-color, #ffffff); /* Use CSS variable for color */
+    transform-origin: center center;
     opacity: 0; /* Start hidden */
     animation: slashMove 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Custom easing */
     will-change: transform, opacity;
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); /* Glow for slashes */
+    filter: drop-shadow(0 0 8px var(--slash-color, rgba(255,255,255,0.8))); /* Glow for slashes */
+    transform: translate(-100%, -50%) rotate(var(--slash-rotate, 0deg)); /* Initial position */
 }
 
-.attackSlash.slash1 {
-    width: 220px;
-    height: 18px;
-    background: linear-gradient(90deg, transparent, #ffcc00, transparent);
-    transform: translate(-50%, -50%) rotate(15deg);
-    animation-delay: 0s;
-    filter: drop-shadow(0 0 10px rgba(255,204,0,0.9));
+
+/* --- NEW: Particle Effects --- */
+.particleContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px; /* Area where particles burst */
+    height: 100px;
+    pointer-events: none;
+    z-index: 95; /* Above slashes, below damage numbers */
+    overflow: hidden; /* Keep particles within bounds */
 }
 
-.attackSlash.slash2 {
-    width: 200px;
-    height: 15px;
-    background: linear-gradient(90deg, transparent, #ffffff, transparent);
-    transform: translate(-50%, -50%) rotate(-25deg);
-    animation-delay: 0.05s;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.9));
+.particle {
+    position: absolute;
+    background-color: #ffffff; /* Default particle color */
+    border-radius: 50%; /* Make them round */
+    opacity: 0; /* Start hidden */
+    animation: burstFadeOut 1s ease-out forwards;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.7));
 }
 
-.attackSlash.slash3 {
-    width: 210px;
-    height: 16px;
-    background: linear-gradient(90deg, transparent, #ff0000, transparent);
-    transform: translate(-50%, -50%) rotate(35deg);
-    animation-delay: 0.1s;
-    filter: drop-shadow(0 0 10px rgba(255,0,0,0.9));
+@keyframes burstFadeOut {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x, 0), var(--y, -50px)) scale(0); /* Use CSS variables for random direction */
+        opacity: 0;
+    }
 }
 
-.attackSlash.slash4 {
-    width: 230px;
-    height: 19px;
-    background: linear-gradient(90deg, transparent, #00ffff, transparent);
-    transform: translate(-50%, -50%) rotate(-10deg);
-    animation-delay: 0.15s;
-    filter: drop-shadow(0 0 10px rgba(0,255,255,0.9));
+/* --- NEW: Screen Shake Effect --- */
+.shake {
+    animation: shakeScreen 0.3s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+@keyframes shakeScreen {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
 }
 
 
@@ -592,18 +645,18 @@
 
 @keyframes slashMove {
     0% {
-        transform: translate(-150%, -50%) rotate(var(--slash-rotate, 0deg));
+        transform: translate(-100%, -50%) rotate(var(--slash-rotate, 0deg));
         opacity: 0;
     }
     20% {
         opacity: 1; /* Appear quickly */
     }
     80% {
-        transform: translate(50%, -50%) rotate(var(--slash-rotate, 0deg));
+        transform: translate(0%, -50%) rotate(var(--slash-rotate, 0deg)); /* Move across */
         opacity: 1;
     }
     100% {
-        transform: translate(150%, -50%) rotate(var(--slash-rotate, 0deg));
+        transform: translate(100%, -50%) rotate(var(--slash-rotate, 0deg));
         opacity: 0;
     }
 }
@@ -667,8 +720,11 @@
     .damageNumber {
         font-size: 2.5em;
     }
-    .attackSlash {
-        width: 180px;
+    .attackAnimationContainer { /* Adjusted for smaller screens */
+        width: 150px;
+        height: 100px;
+    }
+    .slashLine {
         height: 12px;
     }
     .victoryArt, .defeatArt {
@@ -721,7 +777,7 @@
     .dropdownContent {
         min-width: 140px;
     }
-    .dropdownContent a {
+    .dropdownContent button { /* Changed from 'a' to 'button' */
         font-size: 1em;
         padding: 10px 14px;
     }
@@ -737,8 +793,11 @@
     .damageNumber {
         font-size: 2em;
     }
-    .attackSlash {
-        width: 150px;
+    .attackAnimationContainer { /* Adjusted for smaller screens */
+        width: 120px;
+        height: 80px;
+    }
+    .slashLine {
         height: 10px;
     }
     .victoryArt, .defeatArt {
@@ -810,8 +869,11 @@
     .damageNumber {
         font-size: 1.8em;
     }
-    .attackSlash {
-        width: 120px;
+    .attackAnimationContainer { /* Adjusted for smaller screens */
+        width: 100px;
+        height: 60px;
+    }
+    .slashLine {
         height: 8px;
     }
     .victoryArt, .defeatArt {

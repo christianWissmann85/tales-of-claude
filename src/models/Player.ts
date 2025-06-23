@@ -46,6 +46,12 @@ export class Player implements IPlayer {
   // Talent System Properties
   talentTree: TalentTree; // 2. Add property: talentTree
   talentPoints: number; // 3. Add property: talentPoints
+  
+  // Economy
+  gold: number;
+  
+  // Exploration tracking
+  exploredMaps: Map<string, Set<string>>; // Track explored tiles per map
 
   constructor(id: string, name: string, startPosition: Position) {
     this.id = id;
@@ -84,6 +90,12 @@ export class Player implements IPlayer {
     // 4. Initialize talentTree and talentPoints
     this.talentTree = new TalentTree();
     this.talentPoints = 0; // Starts at 0
+    
+    // Initialize gold
+    this.gold = 100; // Starting gold
+    
+    // Initialize exploration tracking
+    this.exploredMaps = new Map();
 
     // Add initial abilities for Claude
     this.abilities.push(
@@ -282,6 +294,27 @@ export class Player implements IPlayer {
   hasItem(itemId: string): boolean {
     return this.inventory.some(item => item.id === itemId);
   }
+  
+  /**
+   * Adds gold to the player's purse.
+   * @param amount The amount of gold to add.
+   */
+  addGold(amount: number): void {
+    this.gold += amount;
+  }
+  
+  /**
+   * Removes gold from the player's purse.
+   * @param amount The amount of gold to remove.
+   * @returns True if successful, false if not enough gold.
+   */
+  removeGold(amount: number): boolean {
+    if (this.gold >= amount) {
+      this.gold -= amount;
+      return true;
+    }
+    return false;
+  }
 
   /**
    * Teaches the player a new ability.
@@ -456,5 +489,54 @@ export class Player implements IPlayer {
     // as talentTree.resetTalents() also adds these points back to its internal pool.
     this.talentPoints += spentPoints;
     console.log(`All talents reset. ${spentPoints} points refunded. Player talent points total: ${this.talentPoints}`);
+  }
+
+  /**
+   * Marks a tile as explored on the current map.
+   * @param mapId The ID of the map.
+   * @param x The x coordinate of the tile.
+   * @param y The y coordinate of the tile.
+   */
+  markTileExplored(mapId: string, x: number, y: number): void {
+    if (!this.exploredMaps.has(mapId)) {
+      this.exploredMaps.set(mapId, new Set());
+    }
+    const exploredTiles = this.exploredMaps.get(mapId)!;
+    exploredTiles.add(`${x},${y}`);
+  }
+
+  /**
+   * Checks if a tile has been explored on a specific map.
+   * @param mapId The ID of the map.
+   * @param x The x coordinate of the tile.
+   * @param y The y coordinate of the tile.
+   * @returns True if the tile has been explored, false otherwise.
+   */
+  isTileExplored(mapId: string, x: number, y: number): boolean {
+    const exploredTiles = this.exploredMaps.get(mapId);
+    if (!exploredTiles) return false;
+    return exploredTiles.has(`${x},${y}`);
+  }
+
+  /**
+   * Marks tiles around the player as explored (simulating vision radius).
+   * @param mapId The ID of the current map.
+   * @param visionRadius The radius of tiles to mark as explored.
+   */
+  markSurroundingTilesExplored(mapId: string, visionRadius: number = 3): void {
+    const minX = Math.max(0, this.position.x - visionRadius);
+    const maxX = this.position.x + visionRadius;
+    const minY = Math.max(0, this.position.y - visionRadius);
+    const maxY = this.position.y + visionRadius;
+
+    for (let y = minY; y <= maxY; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        // Calculate distance from player position
+        const distance = Math.sqrt(Math.pow(x - this.position.x, 2) + Math.pow(y - this.position.y, 2));
+        if (distance <= visionRadius) {
+          this.markTileExplored(mapId, x, y);
+        }
+      }
+    }
   }
 }

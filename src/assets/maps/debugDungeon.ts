@@ -107,6 +107,9 @@ tiles[14][10] = { ...floorTile }; // Path to Boss Room
 // Locked door - make it actually block the path at {x: 9, y: 6}
 tiles[6][9] = { ...lockedDoorTile }; // Already correctly set to walkable: false
 
+// Add an opening next to the locked door to allow passage
+tiles[6][10] = { ...floorTile }; // Opening to allow player to pass
+
 // Ensure central horizontal path is clear
 for (let x = 1; x < MAP_WIDTH - 1; x++) {
     if (x < 8 || x > 11) { // Clear path, but keep central vertical walls
@@ -225,7 +228,7 @@ WFWWWWWWWWWWWWWWWWFW  (y=2)
 WFWF r X d F  h p X F W  (y=3, r=RuntimeError, d=DebugBlade, h=BinaryShield, p=NullPointer)
 WFWF X X X F  X X X F W  (y=4)
 WFWF X X X F  X X X F W  (y=5)
-WFWWWWWWWWDWWWWWWWFW  (y=6, D at 9,6)
+WFWWWWWWWDFWWWWWWWFW  (y=6, D at 9,6, F at 10,6 for passage)
 WFs r r r F s b b b F W  (y=7, s=SyntaxError, r=RuntimeError, b=BasicBug)
 EFFFFFFFFF  FFFFFFF W  (y=8, E at 0,8)
 WFWWWWWWWF  FWWWWWFW  (y=9)
@@ -241,6 +244,183 @@ WFFFFFFFFFFFFFFFFFFW  (y=18)
 WWWWWWWWWWWWWWWWWWWW  (y=19)
 */
 
+// --- SECRET AREAS ---
+
+// Secret 1: Push-Block Puzzle Room (15,15)
+// Hidden room entrance - cracked wall
+tiles[15][15] = {
+  walkable: false,
+  type: 'wall' as TileType
+};
+
+// Create puzzle room (16-18, 14-16)
+for (let y = 14; y <= 16; y++) {
+  for (let x = 16; x <= 18; x++) {
+    if (x < MAP_WIDTH && y < MAP_HEIGHT) {
+      tiles[y][x] = { walkable: true, type: 'floor' as TileType };
+    }
+  }
+}
+
+// Puzzle room walls
+for (let x = 16; x <= 18; x++) {
+  tiles[13][x] = { ...wallTile };
+  tiles[17][x] = { ...wallTile };
+}
+tiles[14][19] = { ...wallTile };
+tiles[15][19] = { ...wallTile };
+tiles[16][19] = { ...wallTile };
+
+// Secret 2: Sequential Switch Chamber (5,5)
+// Secret entrance
+tiles[5][5] = {
+  walkable: false,
+  type: 'wall' as TileType
+};
+
+// Secret chamber (2-4, 3-5)
+for (let y = 3; y <= 5; y++) {
+  for (let x = 2; x <= 4; x++) {
+    tiles[y][x] = { walkable: true, type: 'floor' as TileType };
+  }
+}
+
+// Secret 3: Hidden Boss Room (10,18)
+tiles[18][10] = {
+  walkable: false,
+  type: 'wall' as TileType
+};
+
+// Boss room already exists, just noting it visually
+// Could add special floor tiles here if needed
+
+// Secret 4: Shortcut back to entrance (18,10)
+tiles[10][18] = {
+  walkable: false,
+  type: 'wall' as TileType
+};
+
+// Add puzzle entities
+const puzzleEntities: any[] = [
+  // Push blocks for puzzle 1
+  {
+    id: 'push_block_1',
+    type: 'pushable_block',
+    position: { x: 16, y: 14 },
+    puzzleId: 'block_puzzle'
+  },
+  {
+    id: 'push_block_2',
+    type: 'pushable_block',
+    position: { x: 17, y: 15 },
+    puzzleId: 'block_puzzle'
+  },
+  {
+    id: 'push_block_3',
+    type: 'pushable_block',
+    position: { x: 18, y: 14 },
+    puzzleId: 'block_puzzle'
+  },
+  // Pressure plates
+  {
+    id: 'pressure_plate_1',
+    type: 'pressure_plate',
+    position: { x: 17, y: 14 },
+    puzzleId: 'block_puzzle'
+  },
+  {
+    id: 'pressure_plate_2',
+    type: 'pressure_plate',
+    position: { x: 16, y: 15 },
+    puzzleId: 'block_puzzle'
+  },
+  {
+    id: 'pressure_plate_3',
+    type: 'pressure_plate',
+    position: { x: 18, y: 16 },
+    puzzleId: 'block_puzzle'
+  },
+  // Sequential switches
+  {
+    id: 'seq_switch_1',
+    type: 'switch',
+    position: { x: 2, y: 3 },
+    sequenceOrder: 1,
+    puzzleId: 'switch_puzzle'
+  },
+  {
+    id: 'seq_switch_2',
+    type: 'switch',
+    position: { x: 4, y: 3 },
+    sequenceOrder: 2,
+    puzzleId: 'switch_puzzle'
+  },
+  {
+    id: 'seq_switch_3',
+    type: 'switch',
+    position: { x: 2, y: 5 },
+    sequenceOrder: 3,
+    puzzleId: 'switch_puzzle'
+  },
+  {
+    id: 'seq_switch_4',
+    type: 'switch',
+    position: { x: 4, y: 5 },
+    sequenceOrder: 4,
+    puzzleId: 'switch_puzzle'
+  },
+  {
+    id: 'seq_switch_5',
+    type: 'switch',
+    position: { x: 3, y: 4 },
+    sequenceOrder: 5,
+    puzzleId: 'switch_puzzle'
+  }
+];
+
+// Secret items
+const secretItems: Item[] = [
+  {
+    ...ItemClass.createItem(ItemVariant.DebugBlade),
+    id: 'debuggers_blade',
+    position: { x: 17, y: 16 }
+  },
+  {
+    ...ItemClass.createItem(ItemVariant.BinaryShield),
+    id: 'exception_handler',
+    position: { x: 10, y: 16 }
+  },
+  {
+    ...ItemClass.createItem(ItemVariant.UltraPotion),
+    id: 'secret_potion_1',
+    position: { x: 3, y: 4 }
+  }
+];
+
+// Secret NPCs
+const secretNpcs: NPC[] = [
+  {
+    id: 'bug_tracker_beta',
+    name: 'Bug Tracker Beta',
+    role: 'quest_giver' as NPCRole,
+    dialogueId: 'dialogue_bug_tracker',
+    position: { x: 18, y: 9 }
+  }
+];
+
+// Secret boss
+const secretBoss: Enemy = new EnemyClass(
+  'corrupted_subroutine',
+  EnemyVariant.RuntimeError, // Using existing type
+  { x: 10, y: 16 }
+);
+// Would need custom boss variant in reality
+
+// Add all secret entities
+items.push(...secretItems);
+npcs.push(...secretNpcs);
+enemies.push(secretBoss);
+
 // Export the map data conforming to the IGameMap interface
 export const debugDungeonData: IGameMap = {
   id: 'debugDungeon',
@@ -248,6 +428,6 @@ export const debugDungeonData: IGameMap = {
   width: MAP_WIDTH,
   height: MAP_HEIGHT,
   tiles: tiles,
-  entities: [...npcs, ...enemies, ...items], // Initial entities on the map (NPCs, Enemies, and Items)
+  entities: [...npcs, ...enemies, ...items, ...puzzleEntities], // Initial entities on the map (NPCs, Enemies, and Items)
   exits: exits,
 };

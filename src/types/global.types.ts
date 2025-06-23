@@ -16,7 +16,7 @@ export type Direction = 'up' | 'down' | 'left' | 'right';
 /**
  * Defines the types of tiles that can exist on a game map.
  */
-export type TileType = 'walkable' | 'wall' | 'door' | 'water' | 'grass' | 'tree' | 'exit' | 'shop' | 'healer' | 'path' | 'path_one' | 'path_zero' | 'floor' | 'dungeon_floor' | 'locked_door';
+export type TileType = 'walkable' | 'wall' | 'door' | 'water' | 'grass' | 'tree' | 'exit' | 'shop' | 'healer' | 'path' | 'path_one' | 'path_zero' | 'floor' | 'dungeon_floor' | 'locked_door' | 'hidden_area' | 'tech_floor' | 'metal_floor';
 
 /**
  * Represents a single tile on the game map.
@@ -63,6 +63,19 @@ export interface Item {
   value?: number;
   /** For key items, the ID of what it unlocks (e.g., 'door_id'). */
   targetId?: string;
+}
+
+/**
+ * Defines the types of equipment slots available to a player.
+ */
+export type EquipmentSlotType = 'weapon' | 'armor' | 'accessory';
+
+/**
+ * Represents an item that can be equipped by the player.
+ */
+export interface EquippableItem extends Item {
+  type: 'equipment';
+  equipmentSlotType?: EquipmentSlotType; // Optional: Explicitly defines the slot type
 }
 
 /**
@@ -141,6 +154,14 @@ export interface Player extends BaseCharacter {
   stats: PlayerStats;
   inventory: Item[];
   abilities: Ability[]; // All abilities learned by the player
+  weaponSlot?: EquippableItem;
+  armorSlot?: EquippableItem;
+  accessorySlot?: EquippableItem;
+  activeQuestIds: string[];
+  completedQuestIds: string[];
+  talentTree: any; // Using 'any' to avoid circular dependency with TalentTree class
+  talentPoints: number;
+  exploredMaps?: Map<string, Set<string>>; // Map of mapId to Set of explored tile coordinates as "x,y" strings
 }
 
 /**
@@ -179,7 +200,7 @@ export interface Enemy extends BaseCharacter {
 /**
  * Defines the roles of Non-Player Characters.
  */
-export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver';
+export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver' | 'merchant';
 
 /**
  * Represents a Non-Player Character.
@@ -241,6 +262,22 @@ export interface BattleState {
 }
 
 /**
+ * Shop related types
+ */
+export interface ShopItem {
+  item: Item;
+  price: number;
+  quantity: number; // -1 for unlimited
+}
+
+export interface ShopState {
+  npcId: string;
+  npcName: string;
+  items: ShopItem[];
+  playerGold: number;
+}
+
+/**
  * Quest related types
  */
 export type QuestStatus = 'not_started' | 'in_progress' | 'completed' | 'failed';
@@ -297,6 +334,8 @@ export interface GameState {
   gameFlags: Record<string, boolean | number | string>; // Generic flags for tracking story progress, puzzles, etc.
   showInventory: boolean; // Whether the inventory UI is currently displayed
   showQuestLog: boolean; // Whether the quest log UI is currently displayed
+  showCharacterScreen: boolean; // Whether the character screen UI is currently displayed
   notification: string | null; // Current notification message to display
   questManagerState?: any; // Quest manager state for saving/loading
+  hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
 }

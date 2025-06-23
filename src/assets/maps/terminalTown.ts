@@ -1,6 +1,6 @@
 // src/assets/maps/terminalTown.ts
 
-import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../../types/global.types';
+import { Position, Tile, TileType, Exit, Enemy, NPC, NPCRole, Item, GameMap as IGameMap } from '../../types/global.types';
 import { GameMap } from '../../models/Map'; // Import GameMap class as requested
 import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy'; // Import Enemy class and EnemyVariant
 import { Item as ItemClass, ItemVariant } from '../../models/Item'; // Import Item class and ItemVariant for creating items
@@ -73,6 +73,14 @@ const npcs: NPC[] = [
     role: 'compiler_cat', // Aligns with GDD for saving game
     dialogueId: 'compiler_cat_save', // Dialogue key for this NPC
     statusEffects: [], // Initialize empty array for statusEffects as per NPC interface
+  },
+  {
+    id: 'npc_memory_merchant',
+    name: 'Memory Merchant',
+    position: { x: 15, y: 3 }, // Position in the upper right area
+    role: 'merchant' as NPCRole,
+    dialogueId: 'memory_merchant_intro',
+    statusEffects: [],
   },
 ];
 

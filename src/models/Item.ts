@@ -89,10 +89,10 @@ export class Item implements IItem {
     },
     [ItemVariant.EnergyDrink]: {
       name: 'Energy Drink',
-      description: 'Restores 20 energy. Get that code compiled faster!',
+      description: 'Restores 60 energy. Get that code compiled faster!',
       type: 'consumable',
       effect: 'restoreEnergy',
-      value: 20,
+      value: 60,
     },
     [ItemVariant.DebugTool]: {
       name: 'Debug Tool',

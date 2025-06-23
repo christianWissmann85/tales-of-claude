@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-06-23T08:58:29.369Z",
+  "url": "http://localhost:5174",
+  "browserInfo": "N/A",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "overallStatus": "PARTIAL_PASS",
+  "totalTests": 0,
+  "passedTests": 0,
+  "failedTests": 0,
+  "skippedTests": 0,
+  "durationMs": 1750669109369,
+  "consoleMessages": [],
+  "pageErrors": [],
+  "performanceMetrics": null,
+  "testResults": [],
+  "screenshots": []
+}

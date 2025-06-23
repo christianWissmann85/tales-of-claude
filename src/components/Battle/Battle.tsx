@@ -134,6 +134,53 @@ const DEFEAT_ART = `
   '-----------------------------------------------------------'
 `;
 
+// New component for particle effects
+interface ParticleProps {
+  targetId: string;
+  key: number; // Unique key for React list rendering
+}
+
+const HitParticles: React.FC<ParticleProps> = ({ targetId }) => {
+  const [particles, setParticles] = useState<Array<{ id: number, style: React.CSSProperties }>>([]);
+
+  useEffect(() => {
+    const newParticles = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      style: {
+        // Random initial position offset within a small area
+        left: `${Math.random() * 40 - 20}px`,
+        top: `${Math.random() * 40 - 20}px`,
+        // Random size
+        width: `${Math.random() * 5 + 3}px`,
+        height: `${Math.random() * 5 + 3}px`,
+        // Random color (e.g., white, light green, light red)
+        backgroundColor: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        // Random animation delay for staggered effect
+        animationDelay: `${Math.random() * 0.2}s`,
+        // Random direction for burst using CSS variables
+        '--x': `${(Math.random() - 0.5) * 200}px`, // Move up to 100px left/right
+        '--y': `${(Math.random() - 1) * 150}px`, // Move up to 150px upwards
+      }
+    }));
+    setParticles(newParticles);
+
+    const timer = setTimeout(() => {
+      setParticles([]); // Clear particles after animation
+    }, 1000); // Matches particle animation duration in CSS
+
+    return () => clearTimeout(timer);
+  }, [targetId]); // Re-trigger when target changes (new hit)
+
+  return (
+    <div className={styles.particleContainer}>
+      {particles.map(p => (
+        <div key={p.id} className={styles.particle} style={p.style}></div>
+      ))}
+    </div>
+  );
+};
+
+
 const Battle: React.FC = () => {
   const { state, dispatch } = useGameContext();
   const [localBattleState, setLocalBattleState] = useState<BattleState | null>(state.battle);
@@ -155,9 +202,11 @@ const Battle: React.FC = () => {
   const prevEnemiesRef = useRef<CombatEntity[]>(localBattleState?.enemies || []);
 
   // State for visual effects
-  const [damageNumbers, setDamageNumbers] = useState<Array<{ id: string, value: number, type: 'damage' | 'heal', key: number }>>([]);
-  const [currentAttackAnimation, setCurrentAttackAnimation] = useState<{ attackerId: string, targetId: string, key: number } | null>(null);
+  const [damageNumbers, setDamageNumbers] = useState<Array<{ id: string, value: number, type: 'damage' | 'heal', isCritical?: boolean, key: number }>>([]);
+  const [currentAttackAnimation, setCurrentAttackAnimation] = useState<{ attackerId: string, targetId: string, isCritical: boolean, key: number } | null>(null);
   const [showBattleResult, setShowBattleResult] = useState<'victory' | 'defeat' | 'flee' | null>(null);
+  const [screenShake, setScreenShake] = useState(false); // New state for screen shake
+  const [hitParticles, setHitParticles] = useState<Array<{ targetId: string, key: number }>>([]); // New state for particles
 
   // Ref for auto-scrolling the battle log
   const battleLogRef = useRef<HTMLDivElement>(null);
@@ -174,17 +223,21 @@ const Battle: React.FC = () => {
     }
   }, [localBattleState?.log]);
 
-  // Effect to detect HP/Energy changes and trigger damage numbers
+  // Effect to detect HP/Energy changes and trigger damage numbers, and critical hit for shake
   useEffect(() => {
     if (!localBattleState) return;
 
-    const newDamageNumbers: { id: string; value: number; type: 'damage' | 'heal'; key: number; }[] = [];
+    const newDamageNumbers: { id: string; value: number; type: 'damage' | 'heal'; isCritical?: boolean; key: number; }[] = [];
+    let criticalHitOccurred = false;
 
     // Check player HP changes
     if (localBattleState.player.hp !== prevPlayerHpRef.current) {
       const diff = prevPlayerHpRef.current - localBattleState.player.hp;
       if (diff > 0) { // Damage
-        newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'damage', key: Date.now() + Math.random() });
+        // Simulate critical hit for player damage (e.g., if damage is very high relative to max HP)
+        const isCrit = diff > (localBattleState.player.maxHp * 0.25); // Example: 25% of max HP
+        if (isCrit) criticalHitOccurred = true;
+        newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'damage', isCritical: isCrit, key: Date.now() + Math.random() });
       } else if (diff < 0) { // Heal
         newDamageNumbers.push({ id: localBattleState.player.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
       }
@@ -192,9 +245,7 @@ const Battle: React.FC = () => {
     // Check player Energy changes (for abilities/items)
     if (localBattleState.player.energy !== prevPlayerEnergyRef.current) {
       const diff = prevPlayerEnergyRef.current - localBattleState.player.energy;
-      if (diff < 0) { // Energy spent (negative diff means current is less than prev)
-        // Optionally show energy cost, but usually not as a floating number
-      } else if (diff > 0) { // Energy restored
+      if (diff > 0) { // Energy restored
         newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'heal', key: Date.now() + Math.random() + 0.1 }); // Use heal type for energy restore
       }
     }
@@ -205,7 +256,10 @@ const Battle: React.FC = () => {
       if (prevEnemy && currentEnemy.hp !== prevEnemy.hp) {
         const diff = prevEnemy.hp - currentEnemy.hp;
         if (diff > 0) { // Damage
-          newDamageNumbers.push({ id: currentEnemy.id, value: diff, type: 'damage', key: Date.now() + Math.random() });
+          // Simulate critical hit for enemy damage
+          const isCrit = diff > (currentEnemy.maxHp * 0.25); // Example: 25% of max HP
+          if (isCrit) criticalHitOccurred = true;
+          newDamageNumbers.push({ id: currentEnemy.id, value: diff, type: 'damage', isCritical: isCrit, key: Date.now() + Math.random() });
         } else if (diff < 0) { // Heal
           newDamageNumbers.push({ id: currentEnemy.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
         }
@@ -213,6 +267,9 @@ const Battle: React.FC = () => {
     });
 
     setDamageNumbers(prev => [...prev, ...newDamageNumbers]);
+    if (criticalHitOccurred) {
+      setScreenShake(true);
+    }
 
     // Update refs for next render
     prevPlayerHpRef.current = localBattleState.player.hp;
@@ -226,27 +283,50 @@ const Battle: React.FC = () => {
     if (damageNumbers.length > 0) {
       const timer = setTimeout(() => {
         setDamageNumbers([]);
-      }, 1500); // Matches CSS animation duration
+      }, 1800); // Matches CSS animation duration for floatUpFade
       return () => clearTimeout(timer);
     }
   }, [damageNumbers]);
 
-  // Effect to clear attack animation
+  // Effect to clear attack animation and trigger particles
   useEffect(() => {
     if (currentAttackAnimation) {
+      // Trigger particles on attack land
+      setHitParticles(prev => [...prev, { targetId: currentAttackAnimation.targetId, key: Date.now() }]);
+
       const timer = setTimeout(() => {
         setCurrentAttackAnimation(null);
-      }, 500); // Short duration for slash animation
+      }, 600); // Short duration for slash animation (0.6s)
       return () => clearTimeout(timer);
     }
   }, [currentAttackAnimation]);
+
+  // Effect to clear screen shake
+  useEffect(() => {
+    if (screenShake) {
+      const timer = setTimeout(() => {
+        setScreenShake(false);
+      }, 500); // Matches shake animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [screenShake]);
+
+  // Effect to clear particles
+  useEffect(() => {
+    if (hitParticles.length > 0) {
+      const timer = setTimeout(() => {
+        setHitParticles([]);
+      }, 1000); // Matches particle animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [hitParticles]);
 
   // Effect to trigger battle result display (Victory/Defeat)
   useEffect(() => {
     if (!localBattleState) return;
     
     // Check victory condition
-    if (localBattleState.enemies.every(e => e.hp <= 0)) {
+    if (localBattleState.enemies.every(e => e.hp <= 0) && localBattleState.enemies.length > 0) { // Ensure there were enemies to begin with
       setShowBattleResult('victory');
     }
     
@@ -268,6 +348,7 @@ const Battle: React.FC = () => {
     });
 
     if (currentTurnIndex === -1) {
+      // All enemies defeated, or no valid enemy for current turn. Turn will advance automatically.
       return;
     }
 
@@ -275,6 +356,7 @@ const Battle: React.FC = () => {
     const currentEnemy = localBattleState.enemies.find(e => e.id === currentEnemyId);
 
     if (!currentEnemy || currentEnemy.hp <= 0) {
+      // If current enemy is defeated, turn will advance automatically
       return;
     }
 
@@ -283,7 +365,9 @@ const Battle: React.FC = () => {
     const timer = setTimeout(() => {
       if (localBattleState && localBattleState.currentTurn === currentEnemyId) {
         // Simulate enemy targeting player for attack animation
-        setCurrentAttackAnimation({ attackerId: currentEnemyId, targetId: localBattleState.player.id, key: Date.now() });
+        // Enemy attacks are not explicitly marked as critical for the animation state,
+        // but the damage number effect will still trigger shake if damage is high.
+        setCurrentAttackAnimation({ attackerId: currentEnemyId, targetId: localBattleState.player.id, isCritical: false, key: Date.now() });
         const updatedBattleState = battleSystem.handleEnemyTurn(localBattleState, currentEnemyId);
         setLocalBattleState(updatedBattleState);
       }
@@ -398,8 +482,12 @@ const Battle: React.FC = () => {
 
   const handlePlayerAttack = useCallback((targetId: string) => {
     if (!localBattleState){ return; }
-    setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, key: Date.now() });
-    const updatedBattleState = battleSystem.performAttack(localBattleState, player.id, targetId);
+    // Simulate critical hit for player attacks (e.g., 20% chance)
+    const isCritical = Math.random() < 0.2; 
+    setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, isCritical: isCritical, key: Date.now() });
+    // Note: In a real scenario, BattleSystem.ts would determine if it's critical.
+    // For this exercise, we pass the simulated critical flag.
+    const updatedBattleState = battleSystem.performAttack(localBattleState, player.id, targetId); 
     setLocalBattleState(updatedBattleState);
     setIsSelectingTarget(false);
     setActionType(null);
@@ -407,13 +495,15 @@ const Battle: React.FC = () => {
 
   const handlePlayerAbility = useCallback((abilityId: string, targetId?: string) => {
     if (!localBattleState){ return; }
-    // For abilities that target enemies, trigger attack animation
     const ability = player.abilities.find(a => a.id === abilityId);
+    // Simulate critical hit for abilities (e.g., 10% chance)
+    const isCritical = Math.random() < 0.1; 
+    
     if (ability && ability.effect.target === 'singleEnemy' && targetId) {
-      setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, key: Date.now() });
+      setCurrentAttackAnimation({ attackerId: player.id, targetId: targetId, isCritical: isCritical, key: Date.now() });
     } else if (ability && ability.effect.target === 'allEnemies') {
       // For all enemies, animate on a generic target or first enemy
-      setCurrentAttackAnimation({ attackerId: player.id, targetId: enemies[0]?.id || '', key: Date.now() });
+      setCurrentAttackAnimation({ attackerId: player.id, targetId: enemies[0]?.id || '', isCritical: isCritical, key: Date.now() });
     }
 
     const updatedBattleState = battleSystem.useAbility(localBattleState, player.id, abilityId, targetId);
@@ -487,7 +577,7 @@ const Battle: React.FC = () => {
     : "Enemy Turn!";
 
   return (
-    <div className={styles.battleContainer}>
+    <div className={`${styles.battleContainer} ${screenShake ? styles.shake : ''}`}>
       <pre className={styles.battleBackground}>{getBattleBackground()}</pre>
 
       <h2 className={styles.battleTitle}>Battle!</h2>
@@ -504,18 +594,22 @@ const Battle: React.FC = () => {
           <p>ATK: {player.attack} | DEF: {player.defense} | SPD: {player.speed}</p>
           {renderStatusEffects(player.statusEffects)}
           {damageNumbers.filter(d => d.id === player.id).map(d => (
-            <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]}`}>
+            <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]} ${d.isCritical ? styles.criticalDamage : ''}`}>
               {d.type === 'heal' ? '+' : '-'}{d.value}
             </span>
           ))}
           {currentAttackAnimation && currentAttackAnimation.targetId === player.id && (
-            <div className={styles.attackSlash}>
-              <span className={styles.slash1}>/</span>
-              <span className={styles.slash2}>\</span>
-              <span className={styles.slash3}>-</span>
-              <span className={styles.slash4}>|</span>
+            <div className={styles.attackAnimationContainer}>
+              {/* Using CSS variables for dynamic styling of each slash line */}
+              <div className={styles.slashLine} style={{ '--slash-rotate': '15deg', '--slash-color': '#ffcc00' } as React.CSSProperties}></div>
+              <div className={styles.slashLine} style={{ '--slash-rotate': '-25deg', '--slash-color': '#ffffff', animationDelay: '0.05s' } as React.CSSProperties}></div>
+              <div className={styles.slashLine} style={{ '--slash-rotate': '35deg', '--slash-color': '#ff0000', animationDelay: '0.1s' } as React.CSSProperties}></div>
+              <div className={styles.slashLine} style={{ '--slash-rotate': '-10deg', '--slash-color': '#00ffff', animationDelay: '0.15s' } as React.CSSProperties}></div>
             </div>
           )}
+          {hitParticles.filter(p => p.targetId === player.id).map(p => (
+            <HitParticles key={p.key} targetId={p.targetId} />
+          ))}
         </div>
 
         <div className={styles.enemiesSection}>
@@ -532,18 +626,21 @@ const Battle: React.FC = () => {
                 <p>ATK: {enemy.attack} | DEF: {enemy.defense} | SPD: {enemy.speed}</p>
                 {renderStatusEffects(enemy.statusEffects)}
                 {damageNumbers.filter(d => d.id === enemy.id).map(d => (
-                  <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]}`}>
+                  <span key={d.key} className={`${styles.damageNumber} ${styles[d.type]} ${d.isCritical ? styles.criticalDamage : ''}`}>
                     {d.type === 'heal' ? '+' : '-'}{d.value}
                   </span>
                 ))}
                 {currentAttackAnimation && currentAttackAnimation.targetId === enemy.id && (
-                  <div className={styles.attackSlash}>
-                    <span className={styles.slash1}>/</span>
-                    <span className={styles.slash2}>\</span>
-                    <span className={styles.slash3}>-</span>
-                    <span className={styles.slash4}>|</span>
+                  <div className={styles.attackAnimationContainer}>
+                    <div className={styles.slashLine} style={{ '--slash-rotate': '15deg', '--slash-color': '#ffcc00' } as React.CSSProperties}></div>
+                    <div className={styles.slashLine} style={{ '--slash-rotate': '-25deg', '--slash-color': '#ffffff', animationDelay: '0.05s' } as React.CSSProperties}></div>
+                    <div className={styles.slashLine} style={{ '--slash-rotate': '35deg', '--slash-color': '#ff0000', animationDelay: '0.1s' } as React.CSSProperties}></div>
+                    <div className={styles.slashLine} style={{ '--slash-rotate': '-10deg', '--slash-color': '#00ffff', animationDelay: '0.15s' } as React.CSSProperties}></div>
                   </div>
                 )}
+                {hitParticles.filter(p => p.targetId === enemy.id).map(p => (
+                  <HitParticles key={p.key} targetId={p.targetId} />
+                ))}
               </div>
             ))
           ) : (

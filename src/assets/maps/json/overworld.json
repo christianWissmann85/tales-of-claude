@@ -1,0 +1,215 @@
+{
+  "version": "1.0",
+  "id": "overworld",
+  "name": "Code Realm Overworld",
+  "width": 25,
+  "height": 25,
+  "properties": {
+    "music": "overworld_theme",
+    "ambience": "digital_wind",
+    "spawnPoint": {
+      "x": 12,
+      "y": 12
+    }
+  },
+  "layers": [
+    {
+      "name": "base",
+      "type": "tilelayer",
+      "width": 25,
+      "height": 25,
+      "data": [
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 5, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 4, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 4, 6, 6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 5, 4, 4, 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 2, 2, 2, 2, 2, 2, 2, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 6,
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
+      ],
+      "tileTypes": [
+        { "id": 0, "name": "empty", "properties": { "walkable": true } },
+        { "id": 1, "name": "grass_field", "properties": { "walkable": true } },
+        { "id": 2, "name": "binary_forest_ground", "properties": { "walkable": true } },
+        { "id": 3, "name": "syntax_swamp_ground", "properties": { "walkable": true } },
+        { "id": 4, "name": "overworld_path", "properties": { "walkable": true } },
+        { "id": 5, "name": "path_junction", "properties": { "walkable": true } },
+        { "id": 6, "name": "void_border", "properties": { "walkable": false } }
+      ]
+    },
+    {
+      "name": "collision",
+      "type": "tilelayer",
+      "width": 25,
+      "height": 25,
+      "data": [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+      ],
+      "tileTypes": [
+        { "id": 0, "name": "walkable", "properties": { "collidable": false } },
+        { "id": 1, "name": "collidable", "properties": { "collidable": true } }
+      ]
+    },
+    {
+      "name": "objects",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": "world_guide",
+          "name": "World Guide",
+          "type": "npc",
+          "x": 12,
+          "y": 13,
+          "dialogue": [
+            "Welcome to the Code Realm Overworld! From here, you can explore all the connected regions.",
+            "Terminal Town is just behind me. Follow the paths to discover new adventures!"
+          ]
+        },
+        {
+          "id": "north_signpost",
+          "name": "Signpost",
+          "type": "sign",
+          "x": 12,
+          "y": 6,
+          "dialogue": [
+            "To Debug Dungeon - Boss awaits!"
+          ]
+        },
+        {
+          "id": "east_signpost",
+          "name": "Signpost",
+          "type": "sign",
+          "x": 19,
+          "y": 12,
+          "dialogue": [
+            "To Binary Forest - Where ones and zeros grow"
+          ]
+        },
+        {
+          "id": "south_signpost",
+          "name": "Signpost",
+          "type": "sign",
+          "x": 12,
+          "y": 19,
+          "dialogue": [
+            "To Syntax Swamp - Mind the tangled code!"
+          ]
+        },
+        {
+          "id": "west_signpost",
+          "name": "Signpost",
+          "type": "sign",
+          "x": 6,
+          "y": 12,
+          "dialogue": [
+            "To Crystal Caverns - Treasures below!"
+          ]
+        },
+        {
+          "id": "wandering_merchant",
+          "name": "Wandering Merchant",
+          "type": "npc",
+          "x": 10,
+          "y": 12,
+          "dialogue": [
+            "Got rare components for sale!",
+            "Traveling the paths is good for business."
+          ]
+        },
+        {
+          "id": "map_scholar",
+          "name": "Map Scholar",
+          "type": "npc",
+          "x": 13,
+          "y": 12,
+          "dialogue": [
+            "This map holds the secrets of the Code Realm.",
+            "Each region has its own unique challenges and lore."
+          ]
+        },
+        {
+          "id": "terminalTown_entrance",
+          "x": 12,
+          "y": 12,
+          "targetMap": "terminal_town",
+          "targetSpawn": "overworld_exit",
+          "type": "exit"
+        },
+        {
+          "id": "debugDungeon_entrance",
+          "x": 12,
+          "y": 5,
+          "targetMap": "debug_dungeon",
+          "targetSpawn": "overworld_exit",
+          "type": "exit"
+        },
+        {
+          "id": "binaryForest_entrance",
+          "x": 20,
+          "y": 12,
+          "targetMap": "binary_forest",
+          "targetSpawn": "overworld_exit",
+          "type": "exit"
+        },
+        {
+          "id": "syntaxSwamp_entrance",
+          "x": 12,
+          "y": 20,
+          "targetMap": "syntax_swamp",
+          "targetSpawn": "overworld_exit",
+          "type": "exit"
+        },
+        {
+          "id": "crystalCaverns_entrance",
+          "x": 5,
+          "y": 12,
+          "targetMap": "crystal_caverns",
+          "targetSpawn": "overworld_exit",
+          "type": "exit"
+        }
+      ]
+    }
+  ]
+}

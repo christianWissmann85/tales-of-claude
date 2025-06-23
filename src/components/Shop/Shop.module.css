@@ -1,0 +1,307 @@
+/* src/components/Shop/Shop.module.css */
+
+/* --- Global Retro Terminal Styling Variables --- */
+:root {
+  --terminal-bg: #0d0d0d; /* Very dark grey/black */
+  --terminal-green: #00ff00; /* Bright green for main text and borders */
+  --terminal-light-green: #39ff14; /* Slightly lighter green for emphasis/glow */
+  --terminal-dark-green: #004400; /* Darker green for backgrounds/selected states */
+  --terminal-gold: #ccff00; /* Greenish-yellow for gold display */
+  --terminal-disabled: rgba(0, 255, 0, 0.3); /* Faded green for disabled items */
+  --terminal-font: 'VT323', 'Press Start 2P', 'Courier New', Courier, monospace;
+  --border-shadow-color-1: #555;
+  --border-shadow-color-2: #333;
+  --border-shadow-color-3: #777;
+  --border-shadow-color-4: #222;
+}
+
+/* --- Main Shop Container --- */
+.shopContainer {
+  /* Position and size - adjust as needed for your layout */
+  position: absolute; /* Or fixed, depending on overall game layout */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; /* Max width for responsiveness */
+  max-width: 900px; /* Limit max width */
+  height: 80%;
+  max-height: 600px; /* Limit max height */
+  box-sizing: border-box;
+
+  /* Background and base border, similar to DialogueBox */
+  background-color: var(--terminal-bg);
+  border: 2px solid var(--border-shadow-color-1);
+  box-shadow:
+    0 0 0 4px var(--border-shadow-color-2),
+    0 0 0 6px var(--border-shadow-color-3),
+    0 0 0 8px var(--border-shadow-color-4);
+
+  /* Monospace font throughout */
+  font-family: var(--terminal-font);
+  color: var(--terminal-green);
+  font-size: 1.1em;
+  line-height: 1.5;
+  text-shadow: 0 0 5px var(--terminal-green); /* Subtle green glow */
+
+  z-index: 900; /* Below dialogue box, above game board */
+
+  /* Smooth fade-in animation */
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* --- ASCII Borders (reused from DialogueBox concept) --- */
+.borderTop,
+.borderBottom {
+  color: var(--terminal-green);
+  font-family: var(--terminal-font);
+  white-space: pre; /* Preserve spaces for ASCII art characters */
+  line-height: 1; /* Tighter line height for borders */
+  text-shadow: 0 0 5px var(--terminal-green);
+  background-color: var(--terminal-bg);
+  padding: 0 5px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: stretch; /* Make vertical borders stretch to content height */
+  background-color: var(--terminal-bg);
+  width: 100%;
+  flex-grow: 1; /* Allow content to fill available vertical space */
+  overflow: hidden; /* Hide overflow from internal content */
+}
+
+.borderLeft,
+.borderRight {
+  color: var(--terminal-green);
+  font-family: var(--terminal-font);
+  white-space: pre;
+  line-height: 1.5; /* Match content line height */
+  text-shadow: 0 0 5px var(--terminal-green);
+  background-color: var(--terminal-bg);
+  padding: 0 5px;
+  flex-shrink: 0;
+}
+
+/* --- Main Shop Content Area (Two Panels) --- */
+.shopContent {
+  flex-grow: 1; /* Take up all available space between vertical borders */
+  padding: 15px; /* Padding inside the content area */
+  background-color: var(--terminal-bg);
+  color: var(--terminal-green);
+  font-family: var(--terminal-font);
+  line-height: 1.5;
+  box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2); /* Subtle inner glow */
+  display: flex; /* Enable flexbox for two panels */
+  gap: 15px; /* Space between buy and sell panels */
+}
+
+/* --- Individual Shop Panels (Buy/Sell) --- */
+.shopPanel {
+  flex: 1; /* Each panel takes equal width */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--terminal-green); /* Inner panel border */
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.3); /* Panel glow */
+  padding: 10px;
+  background-color: rgba(0, 10, 0, 0.5); /* Slightly darker background for panels */
+}
+
+.panelTitle {
+  color: var(--terminal-light-green);
+  font-size: 1.3em;
+  text-align: center;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px var(--terminal-light-green); /* Stronger glow for titles */
+}
+
+/* --- Gold Display --- */
+.goldDisplay {
+  background-color: var(--terminal-dark-green);
+  border: 2px solid var(--terminal-gold);
+  color: var(--terminal-gold);
+  padding: 8px 15px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: bold;
+  text-shadow: 0 0 12px var(--terminal-gold), 0 0 5px var(--terminal-gold); /* Prominent glow */
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.5); /* Outer glow for prominence */
+  animation: goldPulse 2s infinite alternate; /* Subtle pulse animation */
+}
+
+@keyframes goldPulse {
+  from { box-shadow: 0 0 10px rgba(204, 255, 0, 0.5); }
+  to { box-shadow: 0 0 20px rgba(204, 255, 0, 0.8); }
+}
+
+/* --- Item List (Scrollable) --- */
+.itemList {
+  flex-grow: 1; /* Fill remaining space in the panel */
+  overflow-y: auto; /* Make scrollable */
+  padding-right: 5px; /* Space for scrollbar */
+  margin-right: -5px; /* Compensate for padding to keep content aligned */
+}
+
+/* Custom Scrollbar for Webkit browsers */
+.itemList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.itemList::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-dark-green);
+}
+
+.itemList::-webkit-scrollbar-thumb {
+  background-color: var(--terminal-green);
+  border: 1px solid var(--terminal-light-green);
+  border-radius: 4px;
+}
+
+.itemList::-webkit-scrollbar-thumb:hover {
+  background-color: var(--terminal-light-green);
+}
+
+/* --- Individual Shop Item --- */
+.shopItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  background-color: rgba(0, 20, 0, 0.7); /* Darker green background */
+  border: 1px solid var(--terminal-green);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 0 5px rgba(0, 255, 0, 0.2); /* Subtle initial glow */
+}
+
+.shopItem:last-child {
+  margin-bottom: 0;
+}
+
+.itemName {
+  flex-grow: 1;
+  color: var(--terminal-green);
+  font-size: 1em;
+  text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+}
+
+.itemPrice {
+  color: var(--terminal-light-green);
+  font-size: 0.95em;
+  text-shadow: 0 0 5px var(--terminal-light-green);
+  white-space: nowrap; /* Prevent price from wrapping */
+}
+
+/* --- Hover/Selected States for Items --- */
+.shopItem:not(.disabled):hover {
+  background-color: var(--terminal-dark-green);
+  border-color: var(--terminal-light-green);
+  box-shadow: 0 0 15px var(--terminal-light-green);
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+.shopItem.selected {
+  background-color: var(--terminal-dark-green);
+  border: 2px solid var(--terminal-gold); /* Gold border for selected */
+  box-shadow: 0 0 20px var(--terminal-gold); /* Strong gold glow */
+  transform: scale(1.02); /* Slightly larger when selected */
+}
+
+/* --- Disabled State for Unaffordable Items --- */
+.shopItem.disabled {
+  background-color: rgba(0, 10, 0, 0.5); /* Even darker background */
+  border-color: var(--terminal-disabled);
+  color: var(--terminal-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+  text-shadow: none;
+  box-shadow: none;
+  pointer-events: none; /* Disable click events */
+}
+
+.shopItem.disabled .itemName,
+.shopItem.disabled .itemPrice {
+  color: var(--terminal-disabled);
+  text-shadow: none;
+}
+
+/* --- Animations for Buying/Selling --- */
+@keyframes transactionFlash {
+  0% { background-color: var(--terminal-light-green); opacity: 1; transform: scale(1); }
+  50% { background-color: var(--terminal-green); opacity: 0.8; transform: scale(1.05); }
+  100% { background-color: transparent; opacity: 0; transform: scale(0.9); }
+}
+
+.shopItem.buying,
+.shopItem.selling {
+  animation: transactionFlash 0.6s ease-out forwards;
+  pointer-events: none; /* Prevent re-clicking during animation */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .shopContainer {
+    width: 95%;
+    height: 90%;
+    font-size: 1em;
+  }
+  .shopContent {
+    flex-direction: column; /* Stack panels vertically */
+    gap: 10px;
+    padding: 10px;
+  }
+  .shopPanel {
+    padding: 8px;
+  }
+  .panelTitle {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+  .goldDisplay {
+    font-size: 1.2em;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+  }
+  .shopItem {
+    padding: 6px 8px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .shopContainer {
+    font-size: 0.9em;
+  }
+  .shopContent {
+    padding: 8px;
+  }
+  .shopPanel {
+    padding: 5px;
+  }
+  .panelTitle {
+    font-size: 1.1em;
+  }
+  .goldDisplay {
+    font-size: 1.1em;
+  }
+  .shopItem {
+    font-size: 0.85em;
+  }
+}

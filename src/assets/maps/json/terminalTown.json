@@ -1,0 +1,235 @@
+```json
+{
+  "version": "1.0",
+  "id": "terminalTown",
+  "name": "Terminal Town",
+  "width": 20,
+  "height": 15,
+  "properties": {
+    "spawnPoint": {
+      "x": 1,
+      "y": 2
+    }
+  },
+  "layers": [
+    {
+      "name": "base",
+      "type": "tilelayer",
+      "width": 20,
+      "height": 15,
+      "data": [
+        2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,3,1,3,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,3,4,3,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,1,1,5,
+        2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,3,4,3,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,3,3,3,1,1,1,1,2,
+        2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+        2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+      ],
+      "tileTypes": [
+        "empty",
+        "grass",
+        "tree",
+        "wall",
+        "door",
+        "exit"
+      ]
+    },
+    {
+      "name": "collision",
+      "type": "tilelayer",
+      "width": 20,
+      "height": 15,
+      "data": [
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+      ],
+      "tileTypes": [
+        "walkable",
+        "blocked"
+      ]
+    },
+    {
+      "name": "objects",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": "npc_debugger_great",
+          "type": "npc",
+          "position": {
+            "x": 10,
+            "y": 5
+          },
+          "properties": {
+            "name": "The Great Debugger",
+            "role": "debugger",
+            "dialogueId": "debugger_intro"
+          }
+        },
+        {
+          "id": "npc_compiler_cat",
+          "type": "npc",
+          "position": {
+            "x": 3,
+            "y": 10
+          },
+          "properties": {
+            "name": "Compiler Cat",
+            "role": "compiler_cat",
+            "dialogueId": "compiler_cat_save"
+          }
+        },
+        {
+          "id": "npc_memory_merchant",
+          "type": "npc",
+          "position": {
+            "x": 15,
+            "y": 3
+          },
+          "properties": {
+            "name": "Memory Merchant",
+            "role": "merchant",
+            "dialogueId": "memory_merchant_intro"
+          }
+        },
+        {
+          "id": "enemy_basic_bug_01",
+          "type": "enemy",
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "properties": {
+            "variant": "BasicBug"
+          }
+        },
+        {
+          "id": "enemy_syntax_error_01",
+          "type": "enemy",
+          "position": {
+            "x": 10,
+            "y": 8
+          },
+          "properties": {
+            "variant": "SyntaxError"
+          }
+        },
+        {
+          "id": "enemy_runtime_error_01",
+          "type": "enemy",
+          "position": {
+            "x": 17,
+            "y": 12
+          },
+          "properties": {
+            "variant": "RuntimeError"
+          }
+        },
+        {
+          "id": "health_potion_1",
+          "type": "item",
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "properties": {
+            "variant": "HealthPotion"
+          }
+        },
+        {
+          "id": "energy_drink_1",
+          "type": "item",
+          "position": {
+            "x": 15,
+            "y": 10
+          },
+          "properties": {
+            "variant": "EnergyDrink"
+          }
+        },
+        {
+          "id": "health_potion_2",
+          "type": "item",
+          "position": {
+            "x": 8,
+            "y": 12
+          },
+          "properties": {
+            "variant": "HealthPotion"
+          }
+        },
+        {
+          "id": "code_fragment_1",
+          "type": "item",
+          "position": {
+            "x": 13,
+            "y": 7
+          },
+          "properties": {
+            "variant": "CodeFragment"
+          }
+        },
+        {
+          "id": "rusty_sword_1",
+          "type": "item",
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "properties": {
+            "variant": "RustySword"
+          }
+        },
+        {
+          "id": "basic_shield_1",
+          "type": "item",
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "properties": {
+            "variant": "BasicShield"
+          }
+        },
+        {
+          "id": "exit_to_binaryForest_1",
+          "type": "exit",
+          "position": {
+            "x": 19,
+            "y": 7
+          },
+          "properties": {
+            "targetMapId": "binaryForest",
+            "targetPosition": {
+              "x": 0,
+              "y": 7
+            },
+            "displayName": "To Binary Forest"
+          }
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,1058 @@
+{
+  "version": "1.0",
+  "id": "terminal_town_expanded",
+  "name": "Terminal Town Expanded",
+  "width": 40,
+  "height": 40,
+  "properties": {
+    "music": "terminal_town_theme",
+    "spawnPoint": {
+      "x": 19,
+      "y": 20
+    }
+  },
+  "layers": [
+    {
+      "name": "base",
+      "type": "tilelayer",
+      "width": 40,
+      "height": 40,
+      "data": [
+        "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor",
+        "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor",
+        "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "wall", "wall", "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "wall", "wall", "wall", "wall", "wall", "floor", "floor", "wall", "wall", "wall", "wall", "wall",
+        "tech_floor", "tech_floor", "wall", "shop", "shop", "shop", "shop", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "shop", "shop", "shop", "shop", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "shop", "shop", "shop", "shop", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "shop", "shop", "shop", "shop", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "wall", "door", "tech_floor", "tech_floor", "wall", "wall", "wall", "door", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "wall", "wall", "wall", "wall", "door", "floor", "floor", "wall", "wall", "wall", "door", "wall",
+        "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "tech_floor", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor",
+        "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "wall", "wall", "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "wall", "wall", "wall", "wall", "wall", "floor", "floor", "wall", "wall", "wall", "wall", "wall",
+        "tech_floor", "tech_floor", "wall", "floor", "floor", "floor", "floor", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "floor", "floor", "floor", "floor", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "floor", "floor", "floor", "floor", "wall", "tech_floor", "tech_floor", "wall", "shop", "shop", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "shop", "shop", "shop", "shop", "wall", "floor", "floor", "wall", "shop", "shop", "shop", "wall",
+        "tech_floor", "tech_floor", "wall", "wall", "wall", "wall", "wall", "door", "tech_floor", "tech_floor", "wall", "wall", "wall", "door", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "floor", "floor", "wall", "wall", "wall", "wall", "wall", "door", "floor", "floor", "wall", "wall", "wall", "wall", "wall",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "exit",
+        "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "path", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "grass", "wall", "wall", "wall", "wall", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall", "wall", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "shop", "shop", "shop", "shop", "wall", "metal_floor", "metal_floor", "wall", "floor", "floor", "floor", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "shop", "shop", "shop", "shop", "wall", "metal_floor", "metal_floor", "wall", "floor", "floor", "floor", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "shop", "shop", "shop", "shop", "wall", "metal_floor", "metal_floor", "wall", "floor", "floor", "floor", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "shop", "shop", "shop", "shop", "wall", "metal_floor", "metal_floor", "wall", "floor", "floor", "floor", "wall",
+        "grass", "wall", "wall", "wall", "wall", "wall", "wall", "door", "grass", "wall", "wall", "wall", "wall", "door", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall", "door", "metal_floor", "metal_floor", "wall", "wall", "wall", "door", "wall",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "wall", "wall", "wall", "wall", "wall", "wall", "grass", "wall", "wall", "wall", "wall", "wall", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall", "wall", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "wall",
+        "grass", "wall", "floor", "floor", "floor", "floor", "wall", "grass", "wall", "floor", "floor", "floor", "wall", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "wall", "metal_floor", "metal_floor", "metal_floor", "wall",
+        "grass", "wall", "wall", "wall", "wall", "wall", "door", "grass", "wall", "wall", "wall", "wall", "door", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "wall", "wall", "wall", "wall", "wall", "door", "metal_floor", "metal_floor", "wall", "wall", "wall", "door", "wall",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor",
+        "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "path", "path", "grass", "grass", "grass", "grass", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor", "metal_floor"
+      ]
+    },
+    {
+      "name": "collision",
+      "type": "tilelayer",
+      "width": 40,
+      "height": 40,
+      "data": [
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "blocked",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "blocked",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "blocked", "walkable", "blocked", "blocked", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "blocked",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "blocked", "walkable", "walkable", "blocked", "walkable", "walkable", "walkable", "blocked",
+        "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "blocked", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "blocked", "blocked", "walkable", "walkable", "walkable", "blocked", "blocked", "blocked", "walkable", "blocked",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable",
+        "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable", "walkable"
+      ]
+    },
+    {
+      "name": "objects",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": "door_4_7",
+          "name": "Door",
+          "type": "door",
+          "x": 4,
+          "y": 7,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_10_7",
+          "name": "Door",
+          "type": "door",
+          "x": 10,
+          "y": 7,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_4_13",
+          "name": "Door",
+          "type": "door",
+          "x": 4,
+          "y": 13,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_30_7",
+          "name": "Door",
+          "type": "door",
+          "x": 30,
+          "y": 7,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_36_7",
+          "name": "Door",
+          "type": "door",
+          "x": 36,
+          "y": 7,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_30_13",
+          "name": "Door",
+          "type": "door",
+          "x": 30,
+          "y": 13,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_4_34",
+          "name": "Door",
+          "type": "door",
+          "x": 4,
+          "y": 34,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_10_34",
+          "name": "Door",
+          "type": "door",
+          "x": 10,
+          "y": 34,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_4_39",
+          "name": "Door",
+          "type": "door",
+          "x": 4,
+          "y": 39,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_10_39",
+          "name": "Door",
+          "type": "door",
+          "x": 10,
+          "y": 39,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_30_34",
+          "name": "Door",
+          "type": "door",
+          "x": 30,
+          "y": 34,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_36_34",
+          "name": "Door",
+          "type": "door",
+          "x": 36,
+          "y": 34,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "door_30_39",
+          "name": "Door",
+          "type": "door",
+          "x": 30,
+          "y": 39,
+          "properties": {
+            "targetMap": null,
+            "targetDoorId": null
+          }
+        },
+        {
+          "id": "fountain_main",
+          "name": "Main Fountain",
+          "type": "fountain",
+          "x": 19,
+          "y": 19,
+          "properties": {}
+        },
+        {
+          "id": "statue_hero",
+          "name": "Hero Statue",
+          "type": "statue",
+          "x": 18,
+          "y": 19,
+          "properties": {}
+        },
+        {
+          "id": "quest_board_plaza",
+          "name": "Quest Board",
+          "type": "quest_board",
+          "x": 20,
+          "y": 19,
+          "properties": {}
+        },
+        {
+          "id": "bench_plaza_1",
+          "name": "Bench",
+          "type": "object",
+          "x": 16,
+          "y": 16,
+          "properties": {}
+        },
+        {
+          "id": "bench_plaza_2",
+          "name": "Bench",
+          "type": "object",
+          "x": 23,
+          "y": 16,
+          "properties": {}
+        },
+        {
+          "id": "compiler_cat_lab_sign",
+          "name": "Compiler Cat's Lab Sign",
+          "type": "object",
+          "x": 4,
+          "y": 1,
+          "properties": {}
+        },
+        {
+          "id": "server_rack_1",
+          "name": "Server Rack",
+          "type": "object",
+          "x": 3,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "server_rack_2",
+          "name": "Server Rack",
+          "type": "object",
+          "x": 6,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "computer_lab_1",
+          "name": "Computer",
+          "type": "object",
+          "x": 4,
+          "y": 4,
+          "properties": {}
+        },
+        {
+          "id": "computer_lab_2",
+          "name": "Computer",
+          "type": "object",
+          "x": 5,
+          "y": 4,
+          "properties": {}
+        },
+        {
+          "id": "debug_station_1",
+          "name": "Debug Station",
+          "type": "debug_tile",
+          "x": 9,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "debug_station_2",
+          "name": "Debug Station",
+          "type": "debug_tile",
+          "x": 11,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "bookshelf_tech",
+          "name": "Bookshelf",
+          "type": "object",
+          "x": 3,
+          "y": 10,
+          "properties": {}
+        },
+        {
+          "id": "bookshelf_tech_2",
+          "name": "Bookshelf",
+          "type": "object",
+          "x": 6,
+          "y": 10,
+          "properties": {}
+        },
+        {
+          "id": "trading_post_sign",
+          "name": "Trading Post Sign",
+          "type": "object",
+          "x": 30,
+          "y": 1,
+          "properties": {}
+        },
+        {
+          "id": "crate_mq_1",
+          "name": "Crate",
+          "type": "object",
+          "x": 29,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "barrel_mq_1",
+          "name": "Barrel",
+          "type": "object",
+          "x": 31,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "crate_mq_2",
+          "name": "Crate",
+          "type": "object",
+          "x": 35,
+          "y": 3,
+          "properties": {}
+        },
+        {
+          "id": "armor_display",
+          "name": "Armor Display",
+          "type": "object",
+          "x": 36,
+          "y": 4,
+          "properties": {}
+        },
+        {
+          "id": "potion_shelf",
+          "name": "Potion Shelf",
+          "type": "object",
+          "x": 29,
+          "y": 10,
+          "properties": {}
+        },
+        {
+          "id": "food_stall_counter_1",
+          "name": "Food Stall Counter",
+          "type": "object",
+          "x": 36,
+          "y": 10,
+          "properties": {}
+        },
+        {
+          "id": "food_stall_counter_2",
+          "name": "Food Stall Counter",
+          "type": "object",
+          "x": 37,
+          "y": 10,
+          "properties": {}
+        },
+        {
+          "id": "inn_sign",
+          "name": "The Cozy Compiler Inn Sign",
+          "type": "object",
+          "x": 4,
+          "y": 27,
+          "properties": {}
+        },
+        {
+          "id": "tavern_sign",
+          "name": "The Buggy Brew Tavern Sign",
+          "type": "object",
+          "x": 10,
+          "y": 27,
+          "properties": {}
+        },
+        {
+          "id": "bed_inn_1",
+          "name": "Bed",
+          "type": "object",
+          "x": 3,
+          "y": 29,
+          "properties": {}
+        },
+        {
+          "id": "table_inn_1",
+          "name": "Table",
+          "type": "object",
+          "x": 5,
+          "y": 30,
+          "properties": {}
+        },
+        {
+          "id": "bed_home_1",
+          "name": "Bed",
+          "type": "object",
+          "x": 3,
+          "y": 36,
+          "properties": {}
+        },
+        {
+          "id": "table_home_1",
+          "name": "Table",
+          "type": "object",
+          "x": 4,
+          "y": 37,
+          "properties": {}
+        },
+        {
+          "id": "tree_res_1",
+          "name": "Tree",
+          "type": "tree",
+          "x": 1,
+          "y": 27,
+          "properties": {}
+        },
+        {
+          "id": "tree_res_2",
+          "name": "Tree",
+          "type": "tree",
+          "x": 12,
+          "y": 38,
+          "properties": {}
+        },
+        {
+          "id": "fence_res_1",
+          "name": "Fence",
+          "type": "fence",
+          "x": 1,
+          "y": 34,
+          "properties": {}
+        },
+        {
+          "id": "fence_res_2",
+          "name": "Fence",
+          "type": "fence",
+          "x": 12,
+          "y": 34,
+          "properties": {}
+        },
+        {
+          "id": "workshop_sign",
+          "name": "Master Crafter Workshop Sign",
+          "type": "object",
+          "x": 30,
+          "y": 27,
+          "properties": {}
+        },
+        {
+          "id": "furnace_iz_1",
+          "name": "Furnace",
+          "type": "object",
+          "x": 29,
+          "y": 29,
+          "properties": {}
+        },
+        {
+          "id": "anvil_iz_1",
+          "name": "Anvil",
+          "type": "object",
+          "x": 31,
+          "y": 29,
+          "properties": {}
+        },
+        {
+          "id": "gear_pile_1",
+          "name": "Gear Pile",
+          "type": "object",
+          "x": 32,
+          "y": 30,
+          "properties": {}
+        },
+        {
+          "id": "warehouse_shelf_1",
+          "name": "Warehouse Shelf",
+          "type": "object",
+          "x": 35,
+          "y": 29,
+          "properties": {}
+        },
+        {
+          "id": "warehouse_shelf_2",
+          "name": "Warehouse Shelf",
+          "type": "object",
+          "x": 37,
+          "y": 29,
+          "properties": {}
+        },
+        {
+          "id": "smeltery_furnace",
+          "name": "Smeltery Furnace",
+          "type": "object",
+          "x": 29,
+          "y": 36,
+          "properties": {}
+        },
+        {
+          "id": "scrap_pile_1",
+          "name": "Scrap Pile",
+          "type": "object",
+          "x": 31,
+          "y": 37,
+          "properties": {}
+        },
+        {
+          "id": "npc_compiler_cat",
+          "name": "Compiler Cat",
+          "type": "npc",
+          "x": 4,
+          "y": 5,
+          "properties": {
+            "role": "compiler_cat",
+            "dialogueId": "dialogue_compiler_cat_01"
+          }
+        },
+        {
+          "id": "npc_byte_bender",
+          "name": "Byte Bender",
+          "type": "npc",
+          "x": 9,
+          "y": 4,
+          "properties": {
+            "role": "debugger",
+            "dialogueId": "dialogue_byte_bender_01"
+          }
+        },
+        {
+          "id": "npc_data_diva",
+          "name": "Data Diva",
+          "type": "npc",
+          "x": 10,
+          "y": 3,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_data_diva_01"
+          }
+        },
+        {
+          "id": "npc_circuit_sage",
+          "name": "Circuit Sage",
+          "type": "npc",
+          "x": 5,
+          "y": 10,
+          "properties": {
+            "role": "scholar",
+            "dialogueId": "dialogue_circuit_sage_01"
+          }
+        },
+        {
+          "id": "npc_robo_guard_th",
+          "name": "Robo-Guard",
+          "type": "npc",
+          "x": 13,
+          "y": 1,
+          "properties": {
+            "role": "guard",
+            "dialogueId": "dialogue_robo_guard_01"
+          }
+        },
+        {
+          "id": "npc_code_kid",
+          "name": "Code Kid",
+          "type": "npc",
+          "x": 7,
+          "y": 12,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_code_kid_01"
+          }
+        },
+        {
+          "id": "npc_gold_golem",
+          "name": "Gold Golem",
+          "type": "npc",
+          "x": 30,
+          "y": 4,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_gold_golem_01"
+          }
+        },
+        {
+          "id": "npc_spice_seller",
+          "name": "Spice Seller",
+          "type": "npc",
+          "x": 36,
+          "y": 11,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_spice_seller_01"
+          }
+        },
+        {
+          "id": "npc_armor_artisan",
+          "name": "Armor Artisan",
+          "type": "npc",
+          "x": 36,
+          "y": 4,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_armor_artisan_01"
+          }
+        },
+        {
+          "id": "npc_potion_peddler",
+          "name": "Potion Peddler",
+          "type": "npc",
+          "x": 30,
+          "y": 10,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_potion_peddler_01"
+          }
+        },
+        {
+          "id": "npc_market_watch",
+          "name": "Market Watch",
+          "type": "npc",
+          "x": 27,
+          "y": 5,
+          "properties": {
+            "role": "guard",
+            "dialogueId": "dialogue_market_watch_01"
+          }
+        },
+        {
+          "id": "npc_bargain_hunter",
+          "name": "Bargain Hunter",
+          "type": "npc",
+          "x": 33,
+          "y": 5,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_bargain_hunter_01"
+          }
+        },
+        {
+          "id": "npc_innkeeper_elara",
+          "name": "Innkeeper Elara",
+          "type": "npc",
+          "x": 4,
+          "y": 29,
+          "properties": {
+            "role": "innkeeper",
+            "dialogueId": "dialogue_innkeeper_elara_01"
+          }
+        },
+        {
+          "id": "npc_tavern_keeper",
+          "name": "Tavern Keeper",
+          "type": "npc",
+          "x": 10,
+          "y": 29,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_tavern_keeper_01"
+          }
+        },
+        {
+          "id": "npc_old_storyteller",
+          "name": "Old Storyteller",
+          "type": "npc",
+          "x": 3,
+          "y": 36,
+          "properties": {
+            "role": "quest_giver",
+            "dialogueId": "dialogue_old_storyteller_01"
+          }
+        },
+        {
+          "id": "npc_village_elder",
+          "name": "Village Elder",
+          "type": "npc",
+          "x": 9,
+          "y": 36,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_village_elder_01"
+          }
+        },
+        {
+          "id": "npc_young_apprentice",
+          "name": "Young Apprentice",
+          "type": "npc",
+          "x": 7,
+          "y": 30,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_young_apprentice_01"
+          }
+        },
+        {
+          "id": "npc_town_guard_res",
+          "name": "Town Guard",
+          "type": "npc",
+          "x": 1,
+          "y": 30,
+          "properties": {
+            "role": "guard",
+            "dialogueId": "dialogue_town_guard_01"
+          }
+        },
+        {
+          "id": "npc_master_crafter",
+          "name": "Master Crafter",
+          "type": "npc",
+          "x": 30,
+          "y": 29,
+          "properties": {
+            "role": "craftsman",
+            "dialogueId": "dialogue_master_crafter_01"
+          }
+        },
+        {
+          "id": "npc_gear_grinder",
+          "name": "Gear Grinder",
+          "type": "npc",
+          "x": 30,
+          "y": 36,
+          "properties": {
+            "role": "craftsman",
+            "dialogueId": "dialogue_gear_grinder_01"
+          }
+        },
+        {
+          "id": "npc_warehouse_manager",
+          "name": "Warehouse Manager",
+          "type": "npc",
+          "x": 36,
+          "y": 29,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_warehouse_manager_01"
+          }
+        },
+        {
+          "id": "npc_scrap_scavenger",
+          "name": "Scrap Scavenger",
+          "type": "npc",
+          "x": 32,
+          "y": 37,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_scrap_scavenger_01"
+          }
+        },
+        {
+          "id": "npc_security_bot_iz",
+          "name": "Security Bot",
+          "type": "npc",
+          "x": 27,
+          "y": 30,
+          "properties": {
+            "role": "guard",
+            "dialogueId": "dialogue_security_bot_01"
+          }
+        },
+        {
+          "id": "npc_quest_master",
+          "name": "Quest Master",
+          "type": "npc",
+          "x": 20,
+          "y": 20,
+          "properties": {
+            "role": "quest_giver",
+            "dialogueId": "dialogue_quest_master_01"
+          }
+        },
+        {
+          "id": "npc_town_crier",
+          "name": "Town Crier",
+          "type": "npc",
+          "x": 17,
+          "y": 18,
+          "properties": {
+            "role": "citizen",
+            "dialogueId": "dialogue_town_crier_01"
+          }
+        },
+        {
+          "id": "npc_statue_guardian",
+          "name": "Statue Guardian",
+          "type": "npc",
+          "x": 18,
+          "y": 20,
+          "properties": {
+            "role": "guard",
+            "dialogueId": "dialogue_statue_guardian_01"
+          }
+        },
+        {
+          "id": "exit_north",
+          "name": "North Exit",
+          "type": "exit",
+          "x": 19,
+          "y": 0,
+          "properties": {
+            "targetMap": "forest_path",
+            "targetX": 19,
+            "targetY": 39
+          }
+        },
+        {
+          "id": "exit_east",
+          "name": "East Exit",
+          "type": "exit",
+          "x": 39,
+          "y": 19,
+          "properties": {
+            "targetMap": "desert_outskirts",
+            "targetX": 0,
+            "targetY": 19
+          }
+        },
+        {
+          "id": "exit_south",
+          "name": "South Exit",
+          "type": "exit",
+          "x": 19,
+          "y": 39,
+          "properties": {
+            "targetMap": "swamp_mire",
+            "targetX": 19,
+            "targetY": 0
+          }
+        },
+        {
+          "id": "exit_west",
+          "name": "West Exit",
+          "type": "exit",
+          "x": 0,
+          "y": 19,
+          "properties": {
+            "targetMap": "mountain_pass",
+            "targetX": 39,
+            "targetY": 19
+          }
+        },
+        {
+          "id": "secret_wall_tech_basement",
+          "name": "Glitchy Wall",
+          "type": "secret_wall",
+          "x": 15,
+          "y": 11,
+          "properties": {
+            "hint": "The wall flickers with digital artifacts...",
+            "revealedType": "door",
+            "targetMap": "terminal_town_expanded",
+            "targetX": 37,
+            "targetY": 2
+          }
+        },
+        {
+          "id": "npc_unit_734",
+          "name": "Unit 734",
+          "type": "npc",
+          "x": 37,
+          "y": 2,
+          "properties": {
+            "role": "merchant",
+            "dialogueId": "dialogue_unit_734",
+            "shopId": "tech_vendor_shop",
+            "hidden": true
+          }
+        },
+        {
+          "id": "secret_wall_binary_puzzle",
+          "name": "Binary Wall",
+          "type": "secret_wall",
+          "x": 30,
+          "y": 25,
+          "properties": {
+            "hint": "01001000 01000101 01001100 01010000",
+            "requiresPuzzle": true,
+            "puzzleType": "binary_switches"
+          }
+        },
+        {
+          "id": "binary_switch_1",
+          "name": "Binary Switch 0",
+          "type": "switch",
+          "x": 32,
+          "y": 28,
+          "properties": {
+            "switchGroup": "binary_puzzle",
+            "position": 0,
+            "initialState": false
+          }
+        },
+        {
+          "id": "binary_switch_2",
+          "name": "Binary Switch 1",
+          "type": "switch",
+          "x": 33,
+          "y": 28,
+          "properties": {
+            "switchGroup": "binary_puzzle",
+            "position": 1,
+            "initialState": false
+          }
+        },
+        {
+          "id": "binary_switch_3",
+          "name": "Binary Switch 2",
+          "type": "switch",
+          "x": 34,
+          "y": 28,
+          "properties": {
+            "switchGroup": "binary_puzzle",
+            "position": 2,
+            "initialState": false
+          }
+        },
+        {
+          "id": "binary_switch_4",
+          "name": "Binary Switch 3",
+          "type": "switch",
+          "x": 35,
+          "y": 28,
+          "properties": {
+            "switchGroup": "binary_puzzle",
+            "position": 3,
+            "initialState": false
+          }
+        },
+        {
+          "id": "chest_snes_treasure",
+          "name": "Nostalgic Chest",
+          "type": "chest",
+          "x": 34,
+          "y": 30,
+          "properties": {
+            "items": ["snes_cartridge", "pixel_heart", "retro_goggles"],
+            "locked": true,
+            "unlockCondition": "binary_puzzle_complete"
+          }
+        },
+        {
+          "id": "secret_wall_hacker_den",
+          "name": "Suspicious Wall",
+          "type": "secret_wall",
+          "x": 8,
+          "y": 35,
+          "properties": {
+            "hint": "The wall has faint scratch marks...",
+            "revealedType": "door"
+          }
+        },
+        {
+          "id": "npc_code_sage_hex",
+          "name": "Code Sage Hex",
+          "type": "npc",
+          "x": 6,
+          "y": 36,
+          "properties": {
+            "role": "skill_trainer",
+            "dialogueId": "dialogue_code_sage_hex",
+            "teachesSkill": "hacking_mastery",
+            "hidden": true
+          }
+        },
+        {
+          "id": "terminal_hacker_puzzle",
+          "name": "Ancient Terminal",
+          "type": "terminal",
+          "x": 7,
+          "y": 36,
+          "properties": {
+            "puzzleType": "password",
+            "solution": "root",
+            "hint": "The beginning of all access...",
+            "reward": "hacker_toolkit"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -207,4 +207,110 @@
     height: 24px;
   }
 }
-```
+
+/* --- 9. Additional Missing Classes --- */
+
+/* Context Menu Styling */
+.contextMenu {
+  position: fixed;
+  background-color: var(--hotbar-bg);
+  border: 1px solid var(--hotbar-border);
+  border-radius: 4px;
+  padding: 4px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+  min-width: 100px;
+}
+
+.contextMenu button {
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.contextMenu button:hover {
+  background-color: var(--slot-hover-bg);
+}
+
+/* Cooldown Timer Text */
+.cooldownTimer {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: var(--cooldown-text-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Empty Slot Content */
+.emptySlotContent {
+  width: 30px;
+  height: 30px;
+  border: 1px dashed var(--placeholder-color);
+  border-radius: 4px;
+  opacity: 0.3;
+}
+
+/* Equipped Indicator */
+.equippedIndicator {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 0.65em;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Item Name (shows on hover) */
+.itemName {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: var(--text-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.hotbarSlot:hover .itemName {
+  opacity: 1;
+}
+
+/* Keybind Number */
+.keybind {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: var(--placeholder-color);
+  font-size: 0.75em;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* On Cooldown State */
+.hotbarSlot.onCooldown {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.hotbarSlot.onCooldown:hover {
+  transform: none;
+  box-shadow: none;
+}

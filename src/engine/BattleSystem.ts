@@ -800,8 +800,8 @@ class BattleSystem {
       return null;
     }
 
-    // Set currentTurn based on entity type
-    newBattle.currentTurn = nextEntity.id === newBattle.player.id ? 'player' : 'enemy';
+    // Set currentTurn to the actual entity ID
+    newBattle.currentTurn = nextEntity.id;
 
     newBattle.log.push(`--- ${nextEntity.name}'s Turn ---`);
 

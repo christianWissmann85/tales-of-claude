@@ -1,0 +1,218 @@
+/* src/components/Minimap/Minimap.module.css */
+
+/* Container styling for the minimap */
+.minimap {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(10, 10, 20, 0.9);
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  padding: 12px;
+  z-index: 1000;
+  min-width: 200px;
+  font-family: monospace;
+  color: #eee;
+  user-select: none;
+}
+
+/* Header with map name and scale button */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #444;
+}
+
+.mapName {
+  margin: 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.scaleButton {
+  padding: 4px 8px;
+  background-color: #2a2a4a;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.2s ease;
+}
+
+.scaleButton:hover {
+  background-color: #3a3a5a;
+  transform: translateY(-1px);
+}
+
+/* Grid container */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: #1a1a1a;
+  padding: 1px;
+  border-radius: 4px;
+}
+
+.row {
+  display: flex;
+  gap: 1px;
+}
+
+/* Individual tile styling */
+.tile {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+/* Unexplored tiles (fog of war) */
+.tile.unexplored {
+  opacity: 0.3;
+  filter: brightness(0.3);
+}
+
+/* Fast travel points */
+.tile.fastTravelPoint {
+  cursor: pointer;
+}
+
+.tile.fastTravelPoint:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+  z-index: 1;
+}
+
+/* Player dot */
+.playerDot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff00;
+  animation: playerBlink 1s infinite;
+  z-index: 2;
+}
+
+@keyframes playerBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* POI markers */
+.marker {
+  position: absolute;
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #444;
+  font-size: 10px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legendSymbol {
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+/* Fast Travel Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modalContent {
+  background-color: #1a1a2a;
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+}
+
+.modalContent h3 {
+  margin: 0 0 15px 0;
+  color: #ffcc00;
+  text-align: center;
+}
+
+.destinationList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.destinationItem {
+  margin-bottom: 8px;
+}
+
+.destinationButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #2a2a4a;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.destinationButton:hover {
+  background-color: #3a3a5a;
+  transform: translateX(5px);
+}
+
+.closeButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #555;
+  color: #eee;
+  border: 1px solid #666;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #666;
+}

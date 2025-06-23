@@ -17,6 +17,9 @@ import { TalentTree } from '../../models/TalentTree';
 import PlayerProgressBar from '../PlayerProgressBar/PlayerProgressBar';
 import MiniCombatLog from '../MiniCombatLog/MiniCombatLog';
 import { useNotification } from '../NotificationSystem/NotificationSystem';
+import Hotbar from '../Hotbar/Hotbar';
+import Shop from '../Shop/Shop';
+import Minimap from '../Minimap/Minimap';
 
 import styles from './GameBoard.module.css';
 
@@ -50,6 +53,12 @@ const clonePlayer = (player: Player): Player => {
   });
   newPlayer.talentTree = clonedTalentTree;
   
+  // Copy exploration data
+  newPlayer.exploredMaps = new Map();
+  player.exploredMaps.forEach((tiles, mapId) => {
+    newPlayer.exploredMaps.set(mapId, new Set(tiles));
+  });
+  
   return newPlayer;
 };
 
@@ -70,6 +79,9 @@ const tileMap: Record<TileType, string> = {
   floor: '.', // Regular floor
   dungeon_floor: '⬛', // Dark dungeon floor
   locked_door: '🔒', // Locked door for future features
+  hidden_area: '✨', // Hidden area tile
+  tech_floor: '⚡', // Tech-themed floor
+  metal_floor: '▓', // Metal floor
 };
 
 // Map entity types to their visual representation
@@ -236,7 +248,24 @@ const GameBoard: React.FC = () => {
     return inventory;
   }, [state.player.inventory]);
 
-  const handleUseItem = useCallback((itemId: string) => {
+  const handleHotbarConfigChange = useCallback((newConfig: (string | null)[]) => {
+    dispatch({ type: 'UPDATE_HOTBAR_CONFIG', payload: { hotbarConfig: newConfig } });
+  }, [dispatch]);
+
+  // Handle fast travel from minimap
+  const handleFastTravel = useCallback((mapId: string, position: Position) => {
+    // If traveling to a different map, we'd need to handle map transition
+    // For now, just teleport within current map
+    if (mapId === state.currentMap.id) {
+      dispatch({ type: 'TELEPORT_PLAYER', payload: position });
+      notify(`Traveled to ${position.x}, ${position.y}`);
+    } else {
+      // This would require map transition logic
+      notify(`Travel to ${mapId} not yet implemented`);
+    }
+  }, [dispatch, notify, state.currentMap.id]);
+
+  const handleUseItem = useCallback((itemId: string, quantity?: number) => {
     const item = playerInventory.getItem(itemId);
     if (item && item instanceof ItemClass) {
       // Use the item's validation method
@@ -278,10 +307,18 @@ const GameBoard: React.FC = () => {
     if (item && item.type === 'equipment') {
       // Equip the item - the Player.equip method handles swapping if needed
       const newPlayer = clonePlayer(state.player);
-      newPlayer.equip(item);
-      // Update the player in state (this is a simplified approach)
-      // In a real implementation, you'd have an EQUIP_ITEM action
-      dispatch({ type: 'UPDATE_PLAYER_STATS', payload: { stats: newPlayer.getBaseStats() } });
+      const previousItem = newPlayer.equip(item);
+      
+      // Update the entire player object to persist equipment changes
+      dispatch({ type: 'UPDATE_PLAYER', payload: { player: newPlayer } });
+      
+      // Show success notification
+      notify({
+        type: 'success',
+        message: previousItem 
+          ? `Equipped ${item.name} (replaced ${previousItem.name})`
+          : `Equipped ${item.name}`
+      });
     }
   }, [playerInventory, state.player, dispatch]);
 
@@ -291,8 +328,18 @@ const GameBoard: React.FC = () => {
 
   const handleUnequipItem = useCallback((slotType: EquipmentSlotType) => {
     const newPlayer = clonePlayer(state.player);
-    newPlayer.unequip(slotType);
-    dispatch({ type: 'UPDATE_PLAYER_STATS', payload: { stats: newPlayer.getBaseStats() } });
+    const unequippedItem = newPlayer.unequip(slotType);
+    
+    // Update the entire player object to persist equipment changes
+    dispatch({ type: 'UPDATE_PLAYER', payload: { player: newPlayer } });
+    
+    // Show success notification
+    if (unequippedItem) {
+      notify({
+        type: 'success',
+        message: `Unequipped ${unequippedItem.name}`
+      });
+    }
   }, [state.player, dispatch]);
 
   const handleSpendTalentPoint = useCallback((talentId: string) => {
@@ -370,6 +417,14 @@ const GameBoard: React.FC = () => {
       {state.battle && (
         <MiniCombatLog logEntries={combatLog} />
       )}
+      {/* Hotbar - always visible at bottom of screen */}
+      <Hotbar
+        inventory={playerInventory}
+        player={state.player}
+        onUseItem={handleUseItem}
+        initialHotbarConfig={state.hotbarConfig}
+        onHotbarConfigChange={handleHotbarConfigChange}
+      />
       {/* Render inventory UI when visible */}
       {state.showInventory && (
         <Inventory
@@ -395,6 +450,17 @@ const GameBoard: React.FC = () => {
           onResetTalents={handleResetTalents}
         />
       )}
+      {/* Render shop UI when visible */}
+      {state.shopState && (
+        <Shop />
+      )}
+      {/* Minimap - always visible in top-right */}
+      <Minimap
+        player={state.player}
+        currentMap={state.currentMap}
+        npcs={state.npcs}
+        onFastTravel={handleFastTravel}
+      />
     </>
   );
 };
