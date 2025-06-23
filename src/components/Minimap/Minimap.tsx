@@ -34,6 +34,8 @@ const TILE_COLORS: Record<TileType, string> = {
   healer: '#FF0000', // Red
   locked_door: '#FFA500', // Orange
   hidden_area: '#D3D3D3', // Light Gray (will be marked with star)
+  tech_floor: '#4A5568', // Tech-themed floor (grayish blue)
+  metal_floor: '#718096', // Metal floor (darker gray)
 };
 
 // POI marker symbols

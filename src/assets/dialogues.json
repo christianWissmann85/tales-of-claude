@@ -947,5 +947,37 @@
         "text": "YOUR STACK... WILL OVERFLOW... YOUR HEAP... WILL CORRUPT... PREPARE FOR SEGMENTATION FAULT!"
       }
     ]
+  },
+  {
+    "id": "compiler_cat_weather",
+    "lines": [
+      {
+        "text": "Meow! *sniffs the air* The weather today is quite interesting...",
+        "weather_variations": {
+          "clear": "What a beautiful day in the Code Realm! Not a single syntax error in the sky.",
+          "rain": "This digital rain... it reminds me of cascading bits. Better keep your circuits dry!",
+          "storm": "The storm is fierce! Lightning strikes could cause unexpected segfaults. Be careful out there!",
+          "fog": "This fog is thicker than obfuscated code. Visibility is as limited as a private method!",
+          "codeSnow": "Binary snow! Each flake is a perfect 0 or 1. Quite beautiful in its logical simplicity."
+        }
+      },
+      {
+        "text": "Now then, what can I help you with today?",
+        "choices": [
+          {
+            "text": "Save my game!",
+            "action": "save_game"
+          },
+          {
+            "text": "Load saved game",
+            "action": "load_game"
+          },
+          {
+            "text": "Just enjoying the weather chat.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
   }
 ]

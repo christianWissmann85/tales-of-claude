@@ -24,6 +24,40 @@
   position: relative; /* Needed for absolute positioning of FPS counter */
   box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Subtle green glow effect */
   image-rendering: pixelated; /* For crisp pixel art if used */
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Time of day atmospheric styling */
+.gameBoard.dawn {
+  background-color: #2a1a1a;
+  box-shadow: 0 0 20px rgba(255, 140, 90, 0.4);
+}
+
+.gameBoard.dawn .gridCell {
+  color: #ffd4b3;
+}
+
+.gameBoard.day {
+  background-color: #1f1f1f;
+  box-shadow: 0 0 15px rgba(135, 206, 235, 0.3);
+}
+
+.gameBoard.dusk {
+  background-color: #251818;
+  box-shadow: 0 0 20px rgba(255, 99, 71, 0.4);
+}
+
+.gameBoard.dusk .gridCell {
+  color: #ffccbb;
+}
+
+.gameBoard.night {
+  background-color: #0a0a15;
+  box-shadow: 0 0 25px rgba(25, 25, 112, 0.6);
+}
+
+.gameBoard.night .gridCell {
+  color: #c4c4ff;
 }
 
 .gridCell {

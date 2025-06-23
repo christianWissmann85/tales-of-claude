@@ -8,16 +8,24 @@ import {
   JsonMapEnemy, 
   JsonMapItem, 
   JsonMapExit,
+  JsonMapDoor,
+  JsonMapObjectType,
   JsonMapTileLayer,
   JsonMapObjectLayer
 } from '../types/map-schema.types';
 import { Enemy, EnemyVariant } from '../models/Enemy';
 import { Item as ItemClass, ItemVariant } from '../models/Item';
-import { validateJsonMap } from '../utils/mapMigration';
-// Removed Node.js specific imports: fs, path, promisify
+import { validateJsonMap } from '../utils/mapValidation';
+
+// Import all JSON map files statically for browser/Vite environment
+import terminalTownJson from '../assets/maps/json/terminalTown.json';
+import terminalTownExpandedJson from '../assets/maps/json/terminalTownExpanded.json';
+import crystalCavernsJson from '../assets/maps/json/crystalCaverns.json';
+import syntaxSwampJson from '../assets/maps/json/syntaxSwamp.json';
+import overworldJson from '../assets/maps/json/overworld.json';
 
 // Define base directories for map files as relative URLs for browser
-const JSON_MAPS_DIR = '/src/assets/maps/json';
+// These are primarily for the TS map fallback, as JSON maps are now statically imported.
 const TS_MAPS_DIR = '/src/assets/maps';
 
 // Type definitions for JSON object types with proper properties
@@ -70,13 +78,19 @@ interface JsonDoorObject extends JsonMapObject {
 export class MapLoader {
   private static instance: MapLoader;
   private cache: Map<string, IGameMap> = new Map();
-  private isDevMode: boolean = (typeof import.meta !== 'undefined' && import.meta.env?.DEV) || false; // Use Vite's import.meta.env.DEV for development mode
-  // Removed: private watchers: Map<string, fs.FSWatcher> = new Map(); // No longer needed for browser hot-reloading
+  private isDevMode: boolean = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) || false;
+
+  // Registry for statically imported JSON maps
+  private static readonly jsonMapRegistry: Record<string, JsonMap> = {
+    terminalTown: terminalTownJson as any as JsonMap,
+    terminalTownExpanded: terminalTownExpandedJson as any as JsonMap,
+    crystalCaverns: crystalCavernsJson as any as JsonMap,
+    syntaxSwamp: syntaxSwampJson as any as JsonMap,
+    overworld: overworldJson as any as JsonMap,
+  };
 
   private constructor() {
     if (this.isDevMode) {
-      // Custom hot-reloading via file watchers is removed for browser environment.
-      // Vite's HMR handles module updates and will re-initialize MapLoader if needed.
       console.log('MapLoader running in development mode. Hot-reloading handled by bundler (Vite).');
     }
   }
@@ -92,7 +106,7 @@ export class MapLoader {
   }
 
   /**
-   * Loads a game map by its ID. Prioritizes JSON, then falls back to TS for backward compatibility.
+   * Loads a game map by its ID. Prioritizes JSON (statically imported), then falls back to TS.
    * Caches loaded maps for efficient retrieval.
    * @param mapId The ID of the map to load (e.g., "terminalTown").
    * @returns A Promise that resolves with the loaded IGameMap.
@@ -106,7 +120,7 @@ export class MapLoader {
     let gameMap: IGameMap | null = null;
     let jsonError: Error | null = null;
 
-    // 1. Try loading from JSON
+    // 1. Try loading from JSON (statically imported)
     try {
       const jsonMap = await this.loadJsonMap(mapId);
       gameMap = this.processJsonMap(jsonMap);
@@ -140,23 +154,26 @@ export class MapLoader {
   }
 
   /**
-   * Loads a JSON map file, parses it, and validates its structure against JsonMap schema.
+   * Loads a JSON map from the static import registry, parses it, and validates its structure.
+   * This method no longer uses fetch() for local assets.
    * @param mapId The ID of the map.
    * @returns A Promise that resolves with the validated JsonMap.
-   * @throws Error if the file cannot be read, parsed, or fails validation.
+   * @throws Error if the map is not found in the registry or fails validation.
    */
   private async loadJsonMap(mapId: string): Promise<JsonMap> {
-    const url = `${JSON_MAPS_DIR}/${mapId}.json`; // Construct URL for browser fetch
+    const importedJson = MapLoader.jsonMapRegistry[mapId];
+    if (!importedJson) {
+      // If the mapId is not in our static registry, it means it's not a statically imported JSON map.
+      // In a browser/Vite environment, we cannot fetch local src/assets paths directly for these.
+      // So, we throw an error, letting the loadMap method fall back to TS.
+      throw new Error(`JSON map "${mapId}" not found in static import registry.`);
+    }
+
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} for ${url}`);
-      }
-      const json = await response.json();
-      validateJsonMap(json); // Throws if invalid, using the utility function
-      return json;
+      validateJsonMap(importedJson); // Validate the structure of the imported JSON
+      return importedJson;
     } catch (error: any) {
-      throw new Error(`Error loading or parsing JSON map "${mapId}" from ${url}: ${error.message}`);
+      throw new Error(`Error validating statically imported JSON map "${mapId}": ${error.message}`);
     }
   }
 
@@ -191,6 +208,29 @@ export class MapLoader {
    * @returns The converted IGameMap.
    */
   private processJsonMap(jsonMap: JsonMap): IGameMap {
+    // Mapping from numeric tile IDs to TileType strings
+    const tileIdToType: Record<number, TileType> = {
+      0: 'wall', // Default/empty tile - use wall as safe fallback
+      1: 'grass',
+      2: 'floor', // Most common tile type in maps
+      3: 'water',
+      4: 'wall',
+      5: 'door',
+      6: 'locked_door',
+      7: 'exit',
+      8: 'healer',
+      9: 'walkable', // Often used in collision layers
+      10: 'path',
+      11: 'tree',
+      12: 'shop',
+      13: 'dungeon_floor',
+      14: 'hidden_area',
+      15: 'tech_floor',
+      16: 'metal_floor',
+      17: 'path_one',
+      18: 'path_zero',
+    };
+
     const gameMap: IGameMap = {
       id: jsonMap.id,
       name: jsonMap.name,
@@ -207,7 +247,7 @@ export class MapLoader {
 
     // Store tile layer data by name for combined processing
     const tileLayerData: { [key: string]: (TileType | number)[] } = {};
-    const objectLayers: JsonMapObject[][] = [];
+    const objectLayers: JsonMapObjectType[][] = [];
 
     for (const layer of jsonMap.layers) {
       if (layer.type === 'tilelayer' && layer.data) {
@@ -228,28 +268,45 @@ export class MapLoader {
         const tile: Tile = { walkable: false, type: 'wall' }; // Start with a default non-walkable wall
 
         // 1. Apply base layer (e.g., grass, floor)
-        if (tileLayerData['base'] && tileLayerData['base'][index]) {
+        if (tileLayerData['base'] && tileLayerData['base'][index] !== undefined) {
           const baseValue = tileLayerData['base'][index];
-          if (typeof baseValue === 'string') {
+          if (typeof baseValue === 'number') {
+            // Convert numeric ID to string TileType
+            tile.type = tileIdToType[baseValue] || 'wall';
+          } else if (typeof baseValue === 'string') {
             tile.type = baseValue as TileType;
           }
         }
 
         // 2. Apply decoration layer (e.g., trees, rocks that overlay base)
-        // 'walkable' is used as a placeholder in decoration layer for empty spots.
-        if (tileLayerData['decoration'] && tileLayerData['decoration'][index] && tileLayerData['decoration'][index] !== 'walkable') {
+        if (tileLayerData['decoration'] && tileLayerData['decoration'][index] !== undefined) {
           const decorValue = tileLayerData['decoration'][index];
-          if (typeof decorValue === 'string') {
-            tile.type = decorValue as TileType;
+          let mappedDecorType: TileType | undefined;
+
+          if (typeof decorValue === 'number') {
+            mappedDecorType = tileIdToType[decorValue];
+          } else if (typeof decorValue === 'string') {
+            mappedDecorType = decorValue as TileType;
+          }
+
+          // Only apply decoration if it's a valid, non-empty type
+          if (mappedDecorType && mappedDecorType !== 'walkable' && decorValue !== 0) {
+            tile.type = mappedDecorType;
           }
         }
 
         // 3. Determine walkability and final tile type from collision layer
-        if (tileLayerData['collision'] && tileLayerData['collision'][index]) {
+        if (tileLayerData['collision'] && tileLayerData['collision'][index] !== undefined) {
           const collisionValue = tileLayerData['collision'][index];
-          if (typeof collisionValue === 'string') {
-            const collisionType = collisionValue as TileType;
-            switch (collisionType) {
+          let collisionType: TileType = 'wall'; // Default collision type
+
+          if (typeof collisionValue === 'number') {
+            // Convert numeric ID to string TileType
+            collisionType = tileIdToType[collisionValue] || 'wall';
+          } else if (typeof collisionValue === 'string') {
+            collisionType = collisionValue as TileType;
+          }
+          switch (collisionType) {
             case 'walkable':
             case 'grass':
             case 'floor':
@@ -258,6 +315,8 @@ export class MapLoader {
             case 'path_zero':
             case 'dungeon_floor':
             case 'exit': // Exits are walkable
+            case 'tech_floor':
+            case 'metal_floor':
               tile.walkable = true;
               break;
             case 'door':
@@ -269,6 +328,7 @@ export class MapLoader {
             case 'water':
             case 'shop': // Shop/healer tiles might be non-walkable depending on design
             case 'healer':
+            case 'hidden_area':
               tile.walkable = false;
               break;
             default:
@@ -276,10 +336,9 @@ export class MapLoader {
               tile.walkable = false;
               break;
           }
-            // If the collision layer specifies a distinct visual type (like door, exit, shop), use it.
-            if (['door', 'locked_door', 'exit', 'shop', 'healer'].includes(collisionType)) {
-              tile.type = collisionType;
-            }
+          // If the collision layer specifies a distinct visual type (like door, exit, shop), use it.
+          if (['door', 'locked_door', 'exit', 'shop', 'healer', 'hidden_area', 'tech_floor', 'metal_floor'].includes(collisionType)) {
+            tile.type = collisionType;
           }
         } else {
           // Fallback if no collision layer or data missing: assume walkable if not a known obstacle from base/decoration
@@ -358,7 +417,7 @@ export class MapLoader {
             console.log(`Map "${jsonMap.id}": Found trigger object: ${obj.id} (Type: ${obj.type}) at (${x},${y}) with properties:`, obj.properties);
             break;
           default:
-            console.warn(`Map "${jsonMap.id}": Unknown object type encountered: "${obj.type}" for object "${obj.id}". Object not loaded.`);
+            console.warn(`Map "${jsonMap.id}": Unknown object type encountered: "${(obj as any).type}" for object "${(obj as any).id}". Object not loaded.`);
             break;
         }
       }

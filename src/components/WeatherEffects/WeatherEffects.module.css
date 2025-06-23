@@ -1,0 +1,119 @@
+/* Base container for all weather effects */
+.weatherEffectsContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 100; /* Above game board, below UI */
+    overflow: hidden; /* Hide particles outside the view */
+    opacity: 0; /* Default, controlled by transitionProgress */
+    transition: opacity 0.5s ease-in-out; /* Smooth fade for the container itself */
+}
+
+/* --- Particle Animations --- */
+
+/* Keyframes for falling particles */
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh); /* Start above the screen */
+        opacity: 0;
+    }
+    5% {
+        opacity: 1; /* Fade in quickly as it appears */
+    }
+    95% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh); /* End below the screen */
+        opacity: 0; /* Fade out as it leaves */
+    }
+}
+
+/* Keyframes for snow rotation */
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Base particle style */
+.particle {
+    position: absolute;
+    color: #fff; /* Default color, overridden by specific types */
+    font-family: 'Courier New', Courier, monospace; /* Monospace for ASCII art */
+    white-space: pre; /* Preserve whitespace for ASCII chars */
+    user-select: none; /* Prevent selection */
+    pointer-events: none; /* Ensure particles don't block events */
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* Specific particle styles */
+.rainParticle {
+    color: #add8e6; /* Light blue for rain */
+    font-size: 1.2em;
+}
+
+.snowParticle {
+    color: #e0ffff; /* Light cyan for snow */
+    font-size: 1.1em; /* Slightly larger for snow */
+    animation-name: fall, rotate; /* Combine fall and rotate */
+    animation-timing-function: linear, linear; /* Both linear */
+    animation-iteration-count: infinite, infinite; /* Both infinite */
+}
+
+/* --- Lightning Effect --- */
+.lightningFlash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Bright white flash */
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1; /* Above particles, below fog */
+}
+
+@keyframes lightning-flash-animation {
+    0% { opacity: 0; }
+    5% { opacity: 1; } /* Quick flash to full brightness */
+    10% { opacity: 0; } /* Fade out quickly */
+    100% { opacity: 0; } /* Remain off */
+}
+
+.lightningFlash.active {
+    animation: lightning-flash-animation 0.2s ease-out forwards; /* Very short animation */
+}
+
+/* --- Fog Effect --- */
+.fogOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Radial gradient for depth, denser towards edges */
+    background: radial-gradient(circle at center,
+        rgba(128, 128, 128, 0) 0%,
+        rgba(128, 128, 128, 0.1) 30%,
+        rgba(128, 128, 128, 0.2) 60%,
+        rgba(128, 128, 128, 0.3) 100%
+    );
+    pointer-events: none;
+    z-index: 2; /* Above lightning */
+    opacity: 0; /* Controlled by prop */
+    transition: opacity 1s ease-in-out; /* Smooth transition for fog density */
+}
+
+/* Clear state - ensures nothing is visible */
+.clearEffects {
+    opacity: 0 !important; /* Force hide everything when clear */
+}

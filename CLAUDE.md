@@ -121,6 +121,10 @@ npm run lint         # ESLint
 npx tsx src/tests/node-test-runner.ts        # Logic tests
 npx tsx src/tests/puppeteer-test-runner.ts   # Browser tests
 window.runAutomatedTests()                    # Console tests
+
+# Quick Sharing with ngrok
+ngrok http 5173                               # Share local dev server
+# See docs/NGROK_GUIDE.md for full instructions
 ```
 
 ### Project Structure
@@ -170,9 +174,11 @@ This isn't just a game. It's proof that:
 - **The future of development is orchestration, not coding**
 - **Documentation that writes itself is possible**
 
-## Test Server is up and running!
+## 📡 Test Server Setup
 
-Chris has deployed an ngrok Solution: https://b34b-176-199-208-49.ngrok-free.app/ This is exposing a locally running Vite Server and forwarding to this address. It will be up and running during development. (npm run dev -> ngrok http 5174 -> that adress) Note: Chris is barely understanding this stuff, so have some patience with him 😅
+Need to share your local development server with the team? Check out our [Ngrok Guide](docs/NGROK_GUIDE.md) for step-by-step instructions on setting up test tunnels.
+
+*Note: Chris is still learning this infrastructure stuff, so the guide is written to be super friendly and approachable! 😅*
 
 ## 🙏 Credits
 

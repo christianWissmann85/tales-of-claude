@@ -8,6 +8,7 @@ import Notification from './components/Notification/Notification'; // Import Not
 import SplashScreen from './components/SplashScreen/SplashScreen'; // Import SplashScreen
 import OpeningScene from './components/OpeningScene/OpeningScene'; // Import OpeningScene
 import { NotificationSystem } from './components/NotificationSystem/NotificationSystem'; // Import NotificationSystem
+import TimeDisplay from './components/TimeDisplay/TimeDisplay'; // Import TimeDisplay
 
 // Separate component to access game context
 const GameContent: React.FC = () => {
@@ -24,6 +25,7 @@ const GameContent: React.FC = () => {
     gap: '15px', // Space between StatusBar and GameBoard
     maxWidth: 'fit-content', // Adjust width to content
     margin: 'auto', // Center the game frame horizontally on the page
+    position: 'relative', // For absolute positioning of TimeDisplay
   };
 
   // Handle splash screen completion
@@ -55,6 +57,8 @@ const GameContent: React.FC = () => {
       <DialogueBox />
       {/* Notification component for game messages */}
       <Notification />
+      {/* Time display in top-right corner */}
+      <TimeDisplay />
     </div>
   );
 };

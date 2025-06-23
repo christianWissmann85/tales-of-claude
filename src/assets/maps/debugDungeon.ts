@@ -1,6 +1,6 @@
 // src/assets/maps/debugDungeon.ts
 
-import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../../types/global.types';
+import { Position, Tile, TileType, Exit, Enemy, NPC, NPCRole, Item, GameMap as IGameMap } from '../../types/global.types';
 import { GameMap } from '../../models/Map';
 import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy';
 import { Item as ItemClass, ItemVariant } from '../../models/Item';
@@ -404,7 +404,8 @@ const secretNpcs: NPC[] = [
     name: 'Bug Tracker Beta',
     role: 'quest_giver' as NPCRole,
     dialogueId: 'dialogue_bug_tracker',
-    position: { x: 18, y: 9 }
+    position: { x: 18, y: 9 },
+    statusEffects: []
   }
 ];
 

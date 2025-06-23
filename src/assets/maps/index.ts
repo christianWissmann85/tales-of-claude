@@ -1,23 +1,18 @@
 // src/assets/maps/index.ts
 
-import { terminalTownData } from './terminalTown';
-import { terminalTownExpandedData } from './terminalTownExpanded';
 import { binaryForestData } from './binaryForest';
 import { debugDungeonData } from './debugDungeon';
 import { GameMap as IGameMap } from '../../types/global.types';
 import { MapLoader } from '../../engine/MapLoader';
 
 // A central index for all map data
-// This now supports both legacy TS maps and new JSON maps
+// Only legacy TS maps are here - all others loaded from JSON
 export const mapDataIndex: { [key: string]: IGameMap | Promise<IGameMap> } = {
   // Legacy TypeScript maps (for backward compatibility)
-  terminalTown: terminalTownData,
-  terminal_town_expanded: terminalTownExpandedData,
-  terminalTownExpanded: terminalTownExpandedData, // Both naming conventions
   binaryForest: binaryForestData,
   debugDungeon: debugDungeonData,
-  // New JSON-based maps are loaded dynamically by MapLoader
-  // crystalCaverns and syntaxSwamp will be loaded from JSON
+  // All other maps (terminalTown, terminalTownExpanded, crystalCaverns, syntaxSwamp, overworld)
+  // are now loaded from JSON files by MapLoader
 };
 
 // Export a function to get maps that handles both sync and async loading
@@ -29,5 +24,6 @@ export async function getMap(mapId: string): Promise<IGameMap> {
   }
   
   // Otherwise use MapLoader which will try JSON first, then TS
+  // This handles terminalTown and all other JSON maps
   return MapLoader.getInstance().loadMap(mapId);
 }

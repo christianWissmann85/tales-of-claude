@@ -203,12 +203,25 @@ export interface Enemy extends BaseCharacter {
 export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver' | 'merchant';
 
 /**
+ * NPC Schedule entry - where they should be at what time
+ */
+export interface NPCScheduleEntry {
+  startHour: number; // 0-23
+  endHour: number; // 0-23
+  position: Position;
+  activity?: string; // Optional description like "sleeping", "working", etc.
+}
+
+/**
  * Represents a Non-Player Character.
  */
 export interface NPC extends BaseCharacter {
   role: NPCRole;
   dialogueId: string; // Key to retrieve dialogue lines from a dialogue data source
   questStatus?: 'not_started' | 'in_progress' | 'completed'; // Optional: for quest tracking
+  schedule?: NPCScheduleEntry[]; // Optional daily schedule
+  isShopkeeper?: boolean; // Whether this NPC runs a shop
+  shopHours?: { open: number; close: number }; // Shop operating hours
 }
 
 /**
@@ -321,6 +334,45 @@ export interface CombatLogEntry {
 }
 
 /**
+ * Represents the time of day in the game
+ */
+export type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
+
+/**
+ * Time data for save/load
+ */
+export interface TimeData {
+  hours: number;
+  minutes: number;
+  isPaused: boolean;
+  gameTimeElapsedMs?: number; // Optional for backward compatibility
+}
+
+/**
+ * Represents the different weather types in the game
+ */
+export type WeatherType = 'clear' | 'rain' | 'storm' | 'fog' | 'codeSnow';
+
+/**
+ * Weather data for save/load and state management
+ */
+export interface WeatherData {
+  currentWeather: WeatherType;
+  transitionProgress: number; // 0-1 for smooth transitions
+  previousWeather: WeatherType | null;
+  timeUntilChange: number; // milliseconds
+}
+
+/**
+ * Weather effects that impact gameplay
+ */
+export interface WeatherEffects {
+  movementSpeedModifier: number;
+  visibilityRadius: number;
+  combatAccuracyModifier: number;
+}
+
+/**
  * The main interface representing the entire game state.
  */
 export interface GameState {
@@ -338,4 +390,6 @@ export interface GameState {
   notification: string | null; // Current notification message to display
   questManagerState?: any; // Quest manager state for saving/loading
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
+  timeData?: TimeData; // Current time state for day/night cycle
+  weatherData?: WeatherData; // Current weather state
 }

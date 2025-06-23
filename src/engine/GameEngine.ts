@@ -12,10 +12,11 @@ import {
   DialogueState, // Import DialogueState
   DialogueOption, // Import DialogueOption
   DialogueLine, // Import DialogueLine
+  TimeData, // Import TimeData
 } from '../types/global.types';
 
 // 1. Add import for Enemy model from '../models/Enemy'
-import { Enemy } from '../models/Enemy';
+import { Enemy as EnemyClass } from '../models/Enemy';
 
 // Import GameState and action types from context/GameContext.tsx
 import { GameState, GameAction } from '../context/GameContext';
@@ -28,8 +29,16 @@ import { GameMap } from '../models/Map'; // Assuming GameMap class exists and is
 import dialoguesData from '../assets/dialogues.json';
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
 
-// Import map data index
-import { mapDataIndex } from '../assets/maps';
+// Import map data index and getMap function
+import { mapDataIndex, getMap } from '../assets/maps';
+
+// Import TimeSystem
+import { TimeSystem } from './TimeSystem';
+// Import WeatherSystem
+import { WeatherSystem } from './WeatherSystem';
+// Import PatrolSystem
+import { PatrolSystem } from './PatrolSystem';
+import { EnemyVariant } from '../models/Enemy';
 
 // Define interfaces for the imported dialogue data structure to match dialogues.json
 interface DialogueEntryData {
@@ -65,10 +74,70 @@ export class GameEngine {
   private _interactionCooldown: number = 300; // milliseconds between interaction attempts
   private _lastInteractionTime: DOMHighResTimeStamp = 0;
 
+  // Time system
+  private _timeSystem: TimeSystem;
+  
+  // Weather system
+  private _weatherSystem: WeatherSystem;
+  
+  // Patrol system for enemy AI
+  private _patrolSystem: PatrolSystem | null = null;
+
 
   constructor(dispatch: React.Dispatch<GameAction>, initialState: GameState) {
     this._dispatch = dispatch;
     this._currentGameState = initialState; // Initialize with the initial state
+    
+    // Initialize time system
+    this._timeSystem = new TimeSystem();
+    if (initialState.timeData) {
+      // Ensure gameTimeElapsedMs has a default value
+      const timeDataWithDefaults = {
+        ...initialState.timeData,
+        gameTimeElapsedMs: initialState.timeData.gameTimeElapsedMs ?? 0
+      };
+      this._timeSystem.deserialize(timeDataWithDefaults);
+    }
+    
+    // Listen to time system events
+    this._timeSystem.on('timeChanged', (timeData: any) => {
+      // Convert TimeSystem's TimeData to our GameState's TimeData format
+      const gameTimeData: TimeData = {
+        hours: timeData.hours,
+        minutes: timeData.minutes,
+        isPaused: timeData.isPaused,
+        gameTimeElapsedMs: timeData.gameTimeElapsedMs,
+      };
+      this._dispatch({
+        type: 'UPDATE_TIME',
+        payload: { timeData: gameTimeData },
+      });
+    });
+    
+    // Initialize weather system
+    this._weatherSystem = new WeatherSystem();
+    
+    // Start weather system with time system and map type
+    const isOutdoor = !this._isIndoorMap(initialState.currentMap?.id || 'terminal_town');
+    this._weatherSystem.start(this._timeSystem, isOutdoor);
+    
+    if (initialState.weatherData) {
+      this._weatherSystem.deserialize(initialState.weatherData, this._timeSystem, isOutdoor);
+    }
+    
+    // Listen to weather system events
+    this._weatherSystem.on('weatherTransitionComplete', (weatherData: any) => {
+      this._dispatch({
+        type: 'UPDATE_WEATHER',
+        payload: { weatherData },
+      });
+    });
+    
+    // Initialize patrol system if we have a map
+    if (initialState.currentMap) {
+      this._patrolSystem = new PatrolSystem(this._timeSystem, this._weatherSystem, initialState.currentMap);
+      this._initializeMapEnemies(initialState.currentMap);
+    }
   }
 
   /**
@@ -79,6 +148,18 @@ export class GameEngine {
    * @param newState The latest game state from the context.
    */
   public setGameState(newState: GameState): void {
+    // Check if map changed
+    if (this._currentGameState.currentMap?.id !== newState.currentMap?.id) {
+      // Update weather system with new map type
+      this._weatherSystem.setMapType(this._isIndoorMap(newState.currentMap.id));
+      
+      // Reinitialize patrol system with new map
+      if (newState.currentMap) {
+        this._patrolSystem = new PatrolSystem(this._timeSystem, this._weatherSystem, newState.currentMap);
+        this._initializeMapEnemies(newState.currentMap);
+      }
+    }
+    
     this._currentGameState = newState;
   }
 
@@ -149,6 +230,12 @@ export class GameEngine {
     this._lastProcessedMovementDirection = null;
     this._lastMovementTime = 0;
     this._lastInteractionTime = 0;
+    
+    // Stop time system
+    this._timeSystem.pause();
+    
+    // Stop weather system
+    this._weatherSystem.stop();
   }
 
   /**
@@ -179,7 +266,13 @@ export class GameEngine {
     if (currentDirection && now - this._lastMovementTime > this._movementCooldown) {
       // Only process movement if a new direction is pressed or if the same direction is held after cooldown
       if (currentDirection !== this._lastProcessedMovementDirection || this._lastMovementTime === 0) {
-        this.processMovement(currentDirection);
+        this.processMovement(currentDirection).catch(error => {
+          console.error('Error processing movement:', error);
+          this._dispatch({
+            type: 'SHOW_NOTIFICATION',
+            payload: { message: 'Error: Failed to process movement.' }
+          });
+        });
         this._lastMovementTime = now;
         this._lastProcessedMovementDirection = currentDirection;
       }
@@ -273,6 +366,14 @@ export class GameEngine {
     // While typically input is processed once before the main update, this fulfills the specific request.
     this._processInput();
 
+    // Time system updates itself via its own animation frame loop
+    // Pause/resume based on game state
+    if (this._currentGameState.battle || this._currentGameState.dialogue) {
+      this._timeSystem.pause();
+    } else {
+      this._timeSystem.resume();
+    }
+
     // Update dynamic entities (enemies, NPCs, etc.)
     this.updateEntities(deltaTime);
 
@@ -301,7 +402,7 @@ export class GameEngine {
    * If movement is valid, it dispatches a `MOVE_PLAYER` action.
    * @param direction The direction to move the player.
    */
-  public processMovement(direction: Direction): void {
+  public async processMovement(direction: Direction): Promise<void> {
     // 3. processMovement - log when movement is attempted
 
     const { player, currentMap, battle, dialogue } = this._currentGameState;
@@ -344,7 +445,7 @@ export class GameEngine {
     if (exit) {
       
       // Load the target map
-      const newMap = this.loadMap(exit.targetMapId);
+      const newMap = await this.loadMap(exit.targetMapId);
       if (newMap) {
         // Dispatch the UPDATE_MAP action with the new map and player position
         this._dispatch({ 
@@ -583,14 +684,38 @@ export class GameEngine {
    * @param deltaTime The time elapsed since the last frame in milliseconds.
    */
   public updateEntities(deltaTime: number): void {
-    // Example: Simple enemy movement or AI updates
-    // For a real game, this would involve more complex AI logic, pathfinding, etc.
-    // Since GameState is immutable, any entity changes would require dispatching actions.
-
-    // Example: Enemies might move every few seconds or based on player proximity.
-    // This would require tracking internal timers for each enemy or a global enemy update timer.
-    // For now, this is a placeholder.
-    // console.log(`Updating ${this._currentGameState.enemies.length} enemies and ${this._currentGameState.npcs.length} NPCs.`);
+    // Update enemy patrols and AI
+    if (this._patrolSystem && !this._currentGameState.battle) {
+      // Update all enemy positions based on patrol routes
+      this._patrolSystem.update(deltaTime, this._currentGameState.player.position);
+      
+      // Check for enemies that need to respawn
+      const enemiesToRespawn = this._patrolSystem.getEnemiesToRespawn();
+      
+      // Sync enemy positions back to game state
+      const updatedEnemies: Enemy[] = [];
+      this._currentGameState.enemies.forEach(enemy => {
+        const patrolData = this._patrolSystem!.getEnemyData(enemy.id);
+        if (patrolData && patrolData.state !== 'RESPAWNING') {
+          // Update enemy position from patrol system
+          enemy.position = { ...patrolData.currentPosition };
+        }
+        updatedEnemies.push(enemy);
+      });
+      
+      // Add respawned enemies
+      enemiesToRespawn.forEach(respawnedEnemy => {
+        updatedEnemies.push(respawnedEnemy);
+      });
+      
+      // Dispatch update if any positions changed or enemies respawned
+      if (updatedEnemies.length > 0 || enemiesToRespawn.length > 0) {
+        this._dispatch({
+          type: 'UPDATE_ENEMIES',
+          payload: { enemies: updatedEnemies }
+        });
+      }
+    }
   }
 
   /**
@@ -613,16 +738,24 @@ export class GameEngine {
    * @param mapId The ID of the map to load.
    * @returns A new GameMap instance or null if the map is not found.
    */
-  private loadMap(mapId: string): GameMap | null {
-    const mapData = mapDataIndex[mapId];
-    if (!mapData) {
+  private async loadMap(mapId: string): Promise<GameMap | null> {
+    try {
+      // Use the async getMap function to retrieve map data
+      const mapData = await getMap(mapId);
+
+      // Create a new GameMap instance from the map data
+      const newMap = new GameMap(mapData);
+
+      return newMap;
+    } catch (error) {
+      // Proper error handling if map loading fails
+      console.error(`Failed to load map '${mapId}':`, error);
+      this._dispatch({
+        type: 'SHOW_NOTIFICATION',
+        payload: { message: `Error: Could not load map '${mapId}'.` }
+      });
       return null;
     }
-
-    // Create a new GameMap instance from the map data
-    const newMap = new GameMap(mapData);
-
-    return newMap;
   }
 
   /**
@@ -652,6 +785,63 @@ export class GameEngine {
       // Update quest progress for collecting this item
       const questManager = QuestManager.getInstance();
       questManager.updateQuestProgress('collect_item', item.id, 1);
+    }
+  }
+  
+  /**
+   * Helper method to determine if a map is indoors
+   * @param mapId The ID of the map to check
+   * @returns true if the map is indoors, false otherwise
+   */
+  private _isIndoorMap(mapId: string): boolean {
+    // Indoor maps can only have 'clear' or 'fog' weather
+    const indoorMaps = ['debug_dungeon', 'dungeon', 'shop', 'house'];
+    return indoorMaps.some(indoor => mapId.toLowerCase().includes(indoor));
+  }
+  
+  /**
+   * Get current weather effects for display
+   * @returns The current weather effects
+   */
+  public getWeatherEffects(): any {
+    return this._weatherSystem?.getWeatherEffects() || {
+      movementSpeedModifier: 1,
+      visibilityRadius: 3,
+      combatAccuracyModifier: 0
+    };
+  }
+  
+  /**
+   * Initialize enemies on the current map with patrol routes
+   * @param map The game map containing enemies
+   */
+  private _initializeMapEnemies(map: GameMap): void {
+    if (!this._patrolSystem) return;
+    
+    // Initialize each enemy in the patrol system
+    this._currentGameState.enemies.forEach(enemy => {
+      // Determine enemy variant from its name
+      let variant: EnemyVariant | null = null;
+      
+      if (enemy.name === 'Basic Bug') variant = EnemyVariant.BasicBug;
+      else if (enemy.name === 'Syntax Error') variant = EnemyVariant.SyntaxError;
+      else if (enemy.name === 'Runtime Error') variant = EnemyVariant.RuntimeError;
+      else if (enemy.name === 'Null Pointer') variant = EnemyVariant.NullPointer;
+      else if (enemy.name === 'The Segfault Sovereign') variant = EnemyVariant.SegfaultSovereign;
+      
+      if (variant) {
+        this._patrolSystem!.initializeEnemy(enemy as any, variant);
+      }
+    });
+  }
+  
+  /**
+   * Handle enemy defeat - mark them for respawning
+   * @param enemyId The ID of the defeated enemy
+   */
+  public markEnemyDefeated(enemyId: string): void {
+    if (this._patrolSystem) {
+      this._patrolSystem.markEnemyDefeated(enemyId);
     }
   }
 

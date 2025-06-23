@@ -91,7 +91,8 @@ class PuppeteerTestRunner {
      */
     private loadPlaytesterCode(): void {
         try {
-            const playtesterFilePath = path.join(path.dirname(new URL(import.meta.url).pathname), 'automated-playtester.ts');
+            // Adjust path to reflect the new import structure for loading the file
+            const playtesterFilePath = path.join(__dirname, './automated-playtester.ts');
             this.playtesterCode = fs.readFileSync(playtesterFilePath, 'utf8');
 
             // Remove TypeScript-specific syntax that would cause errors in plain JS eval

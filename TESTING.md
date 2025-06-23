@@ -1,6 +1,6 @@
 # TESTING.md - Comprehensive Testing Guide for Tales of Claude
 
-*Note for Chris: run `npx tsx src/tests/node-test-runner.ts`in your bash to see the tests.*
+*Note for Chris: run `npx tsx tests/unit/node-test-runner.ts` in your bash to see the tests. Stop being so nose - y 😉*
 
 ## Overview
 
@@ -10,16 +10,38 @@ We employ **THREE powerful and complementary testing approaches**, each designed
 
 1.  **Node.js Tests**
     *   **Purpose:** These are our foundational "unit" and "integration" tests for pure game logic. They run in a Node.js environment, completely detached from the browser, making them incredibly fast and efficient. Ideal for verifying algorithms, data structures, and core game mechanics in isolation.
+    *   **Location:** These tests are located in `tests/unit/node-test-runner.ts`.
     *   **Strengths:** Speed, isolation, precise logic validation, low resource consumption, and easy integration into CI pipelines.
     *   **Current Pass Rate:** An impressive 95.7% pass rate, indicating a strong core logic foundation!
 
 2.  **Browser Console Tests**
     *   **Purpose:** These tests interact directly with the running game instance within a web browser's developer console. They are perfect for simulating user interactions, verifying UI responses, and debugging specific gameplay scenarios where visual feedback or direct DOM manipulation is required.
-    *   **Strengths:** Real-time visual feedback, direct access to the game's runtime environment (`window.game`), easy to debug interactively, and excellent for reproducing user-reported bugs.
+    *   **Location:** These tests are defined in `tests/browser/automated-playtester.ts`.
+    *   **Strengths:** Real-time visual feedback, direct access to the game's runtime environment (`window.game`), easy to debug interactively, and excellent for reproducing user-reported bugs. These are the preferred method for browser-based testing due to their direct interaction and ease of debugging.
 
 3.  **Puppeteer Tests**
     *   **Purpose:** Our most comprehensive "end-to-end" and "visual regression" tests. Puppeteer is a Node.js library that provides a high-level API to control Chrome or Chromium over the DevTools Protocol. It allows us to automate full browser interactions, capture screenshots, and simulate complex user journeys, providing robust regression coverage and visual proof of functionality.
+    *   **Location:** These tests are located in `tests/browser/puppeteer-test-runner.ts`.
     *   **Strengths:** Full browser automation, visual regression testing, cross-browser (Chromium-based) compatibility, detailed reporting, and seamless CI/CD integration.
+    *   **Note:** Puppeteer tests are currently experimental and browser console tests are generally preferred for their directness and ease of debugging.
+
+## Test Infrastructure Organization
+
+To streamline our testing efforts and provide a clear separation of concerns, our test files are now organized under the `tests/` directory with the following structure:
+
+*   **`tests/unit/`**:
+    *   Contains all Node.js-based unit and integration tests for core game logic.
+    *   **`node-test-runner.ts`**: The main entry point for running these tests.
+
+*   **`tests/browser/`**:
+    *   Houses all browser-dependent tests.
+    *   **`automated-playtester.ts`**: Contains the definitions for our browser console tests, designed for direct interaction with the `window.game` object. These are ideal for functional UI testing and interactive debugging.
+    *   **`puppeteer-test-runner.ts`**: The entry point for our Puppeteer-driven end-to-end and visual regression tests. These automate a browser instance for broader coverage.
+
+*   **`tests/concept/`**:
+    *   This directory is reserved for experimental test implementations, such as exploring new testing frameworks (e.g., Playwright) or novel testing methodologies. Tests in this directory are not part of the standard CI pipeline unless explicitly configured.
+
+This organization ensures that each type of test lives in its appropriate environment, making it easier to locate, run, and maintain specific test suites.
 
 ## Quick Start - Get Testing Immediately!
 
@@ -39,7 +61,7 @@ These tests are the fastest to run and ideal for quick iterations on game logic.
 
 ```bash
 npm run test:node
-# Command: `tsx src/tests/node-test-runner.ts`
+# Command: `tsx tests/unit/node-test-runner.ts`
 # This directly executes our Node.js test runner using `tsx` (TypeScript execution).
 # It tests core game logic, calculations, and state management in isolation.
 # No browser is required, making it extremely fast.
@@ -111,7 +133,7 @@ These tests provide end-to-end coverage and visual regression capabilities.
 2.  **In a Separate Terminal:**
     ```bash
     npm run test:puppeteer
-    # Command: `tsx src/tests/puppeteer-test-runner.ts`
+    # Command: `tsx tests/browser/puppeteer-test-runner.ts`
     # This will launch a headless (by default) Chromium browser, navigate to the game,
     # and execute the defined Puppeteer test scenarios.
     ```
@@ -180,16 +202,16 @@ Choosing the right tool for the job saves time and provides the most relevant fe
 *   **Creating detailed test reports for review:**
     *   Puppeteer tests can be configured to generate comprehensive reports (e.g., JUnit XML, HTML reports) that summarize test results, including links to screenshots and error logs.
 
-### Creating New Tests - Examples for Agents
+## Creating New Tests - Examples for Agents
 
 These examples illustrate how to add new tests to each of our testing frameworks. Pay close attention to the structure, assertions, and use of helper functions.
 
 #### Example 1: Adding a Node.js Test
 
-Node.js tests are typically added to `src/tests/node-test-runner.ts`. They focus on isolated logic.
+Node.js tests are typically added to `tests/unit/node-test-runner.ts`. They focus on isolated logic.
 
 ```typescript
-// src/tests/node-test-runner.ts
+// tests/unit/node-test-runner.ts
 
 // ... (existing imports and runTest/assert functions) ...
 
@@ -266,10 +288,10 @@ await runTest('New Item - Elixir of Vitality', async () => {
 
 #### Example 2: Adding a Browser Console Test
 
-Browser console tests are defined within `src/tests/automated-playtester.ts`. They simulate user interaction and observe UI/game state changes.
+Browser console tests are defined within `tests/browser/automated-playtester.ts`. They simulate user interaction and observe UI/game state changes.
 
 ```typescript
-// src/tests/automated-playtester.ts
+// tests/browser/automated-playtester.ts
 
 // ... (existing imports and class definition) ...
 
@@ -413,7 +435,7 @@ npm run test:puppeteer -- --suite "Combat" --screenshot-on-pass
 
 Our test suites are designed to cover critical areas of the game. This section details the scope of each major suite.
 
-### Node.js Test Suites (src/tests/node-test-runner.ts)
+### Node.js Test Suites (`tests/unit/node-test-runner.ts`)
 
 *   **Player Stats & Progression Testing**
     *   Initial player HP, MP, and base stats.
@@ -452,7 +474,7 @@ Our test suites are designed to cover critical areas of the game. This section d
     *   Verification that all critical data points (player, inventory, map, quests) are correctly saved and loaded.
     *   Handling of corrupted or incomplete save files.
 
-### Browser Console Test Suites (src/tests/automated-playtester.ts)
+### Browser Console Test Suites (`tests/browser/automated-playtester.ts`)
 
 *   **Movement Testing**
     *   Player position updates correctly based on keyboard input (WASD).
@@ -544,7 +566,7 @@ Before writing any code, clearly define the scope and objective of your test.
     *   Does it move the player a specific distance?
     *   Does it have a cooldown?
     *   Can it be used through obstacles? (Should not)
-*   **What to test (UI/interaction):**
+*   **What to test (UI/interaction):
     *   Does the Dash button activate?
     *   Does the player visually dash?
     *   Does the stamina bar update?
@@ -557,17 +579,17 @@ The type of test you're writing dictates where it should reside.
 
 ```typescript
 // For pure logic tests (calculations, data manipulation, algorithms):
-// -> src/tests/node-test-runner.ts
+// -> tests/unit/node-test-runner.ts
 //    - These tests are fast and don't require a browser.
 //    - They directly interact with game service functions or class methods.
 
 // For UI interaction tests (button clicks, screen navigation, visual updates):
-// -> src/tests/automated-playtester.ts
+// -> tests/browser/automated-playtester.ts
 //    - These tests run in the browser console and simulate user input.
 //    - They use `window.game` and `this.pressKey`, `this.waitForState`, etc.
 
 // For end-to-end user journeys, visual regression, or cross-browser checks:
-// -> src/tests/puppeteer-test-runner.ts
+// -> tests/browser/puppeteer-test-runner.ts
 //    - These tests launch a browser instance and automate high-level interactions.
 //    - They capture screenshots and are ideal for CI/CD.
 ```
@@ -663,7 +685,7 @@ private async testPlayerDashAbility(): Promise<void> {
 }
 
 // Remember to add `this.testPlayerDashAbility()` to the `start` method's suite execution list
-// in `automated-playtester.ts` so it runs when `tester.start()` is called.
+// in `tests/browser/automated-playtester.ts` so it runs when `tester.start()` is called.
 // Example:
 // public async start(suitesToRun?: string[]): Promise<void> {
 //     if (!suitesToRun || suitesToRun.includes('Player Abilities - Dash')) {
@@ -708,7 +730,7 @@ Even with the best practices, tests can sometimes fail or behave unexpectedly. H
 **Solution:** Implement a robust wait mechanism that polls for the `window.game` object to become available.
 ```javascript
 // In automated-playtester.ts or Puppeteer tests:
-import { waitFor } from './utils/test-utils'; // Assuming a utility function
+import { waitFor } => './utils/test-utils'; // Assuming a utility function
 
 // Before any test interaction:
 await waitFor(
@@ -812,7 +834,7 @@ await this.runTest('Isolated Test - Player Starts with Full HP', async () => {
 // Test B: Player attacks with sword (relies on Test A having picked up the sword)
 // If Test A fails or is skipped, Test B will also fail, masking the true issue.
 ```
-**Key Takeaway:** Use `this.resetGame()` at the beginning of each test (or at least each suite) in `automated-playtester.ts` and `puppeteer-test-runner.ts`. Node.js tests are inherently more isolated as they often work with new instances of objects.
+**Key Takeaway:** Use `this.resetGame()` at the beginning of each test (or at least each suite) in `tests/browser/automated-playtester.ts` and `tests/browser/puppeteer-test-runner.ts`. Node.js tests are inherently more isolated as they often work with new instances of objects.
 
 ### 2. Meaningful Assertions
 Assertions are the core of your tests. Make them descriptive so that when a test fails, you immediately understand the problem.
@@ -943,7 +965,7 @@ Add comments or JSDoc to your test functions and suites explaining their purpose
  * including battle initiation, turn-based mechanics, damage application,
  * and victory/defeat conditions.
  */
-// In automated-playtester.ts:
+// In tests/browser/automated-playtester.ts:
 private async testCombatSystem(): Promise<void> {
     await this.runSuite('Combat Testing', async () => {
         /**
@@ -1032,7 +1054,7 @@ console.log('Speed boost removed.');
 
 ### State Reading Helpers (`this.readGameState()`)
 
-In `automated-playtester.ts`, `this.readGameState()` provides a snapshot of the current game state, allowing you to make assertions.
+In `tests/browser/automated-playtester.ts`, `this.readGameState()` provides a snapshot of the current game state, allowing you to make assertions.
 
 ```javascript
 // Read current game state
@@ -1112,7 +1134,7 @@ Consistent and controlled test data is essential for reliable and repeatable tes
 For Node.js tests, you often create mock data directly within the test file or import it from a dedicated `test-data` directory. For browser tests, you might use debug commands to inject specific data.
 
 ```javascript
-// src/tests/test-data/mock-items.ts
+// tests/test-data/mock-items.ts
 export const testItems = [
     {
         id: 'test_sword',
@@ -1139,7 +1161,7 @@ export const testItems = [
     }
 ];
 
-// src/tests/test-data/mock-enemies.ts
+// tests/test-data/mock-enemies.ts
 export const testEnemies = [
     {
         id: 'weak_enemy',
@@ -1159,7 +1181,7 @@ export const testEnemies = [
     }
 ];
 
-// src/tests/test-data/mock-maps.ts
+// tests/test-data/mock-maps.ts
 export const testMap = {
     id: 'test_arena',
     name: 'Test Arena',
@@ -1271,7 +1293,7 @@ if (performance.memory) {
 Puppeteer can give you insights into CPU usage during a test run.
 
 ```javascript
-// In puppeteer-test-runner.ts
+// In tests/browser/puppeteer-test-runner.ts
 const client = await page.target().createCDPSession();
 await client.send('Tracing.start', {
     categories: 'devtools.timeline',
@@ -1421,10 +1443,10 @@ Suite: Combat Testing (1/2 Passed, 1 Failed, 0 Skipped)
   ❌ Enter Combat and Lose: Player did not lose combat as expected. HP remaining: 50. Expected HP <= 0.
     Error Details:
       AssertionError: Player did not lose combat as expected. HP remaining: 50. Expected HP <= 0.
-          at AutomatedPlaytester.testCombatSystem (src/tests/automated-playtester.ts:123:17)
-          at AutomatedPlaytester.runTest (src/tests/automated-playtester.ts:50:25)
-          at AutomatedPlaytester.runSuite (src/tests/automated-playtester.ts:30:13)
-          at AutomatedPlaytester.start (src/tests/automated-playtester.ts:80:9)
+          at AutomatedPlaytester.testCombatSystem (tests/browser/automated-playtester.ts:123:17)
+          at AutomatedPlaytester.runTest (tests/browser/automated-playtester.ts:50:25)
+          at AutomatedPlaytester.runSuite (tests/browser/automated-playtester.ts:30:13)
+          at AutomatedPlaytester.start (tests/browser/automated-playtester.ts:80:9)
     Captured Errors (from game console):
       - [ERROR] 2023-10-27 14:35:01: CombatService: Invalid damage value calculated: -10.
       - [WARN] 2023-10-27 14:35:05: PlayerState: HP cannot go below 1. Clamping value.
@@ -1432,8 +1454,8 @@ Suite: Map Transition Testing (0/1 Passed, 1 Failed, 0 Skipped)
   ❌ Portal Functionality: Player did not transition to target map 'dungeon_level_1'. Current map: 'forest_entrance'.
     Error Details:
       TimeoutError: waitForState timed out after 5000ms waiting for map transition.
-          at AutomatedPlaytester.waitForState (src/tests/automated-playtester.ts:200:19)
-          at AutomatedPlaytester.testMapTransition (src/tests/automated-playtester.ts:345:13)
+          at AutomatedPlaytester.waitForState (tests/browser/automated-playtester.ts:200:19)
+          at AutomatedPlaytester.testMapTransition (tests/browser/automated-playtester.ts:345:13)
     Captured Errors (from game console):
       - [ERROR] 2023-10-27 14:36:10: MapService: Portal target 'dungeon_level_1' not found in map data.
 All Browser Console Tests Completed.
@@ -1514,7 +1536,7 @@ await runTest('Player Initial State Snapshot', async () => {
 
 // Puppeteer for Visual Snapshot Testing:
 // This involves comparing screenshots pixel-by-pixel. Libraries like 'jest-image-snapshot' are ideal.
-// In puppeteer-test-runner.ts:
+// In tests/browser/puppeteer-test-runner.ts:
 // await page.screenshot({ path: 'test-screenshots/homepage.png' });
 // expect(homepageScreenshot).toMatchImageSnapshot(); // Using a library
 ```

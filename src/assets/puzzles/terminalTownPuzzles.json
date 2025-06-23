@@ -1,0 +1,114 @@
+[
+  {
+    "id": "push_block_nw_1",
+    "type": "push_block",
+    "position": { "x": 15, "y": 20 },
+    "properties": {
+      "puzzleId": "push_puzzle_nw",
+      "isMovable": true
+    }
+  },
+  {
+    "id": "push_block_nw_2",
+    "type": "push_block",
+    "position": { "x": 20, "y": 20 },
+    "properties": {
+      "puzzleId": "push_puzzle_nw",
+      "isMovable": true
+    }
+  },
+  {
+    "id": "pressure_plate_nw_1",
+    "type": "pressure_plate",
+    "position": { "x": 15, "y": 25 },
+    "properties": {
+      "puzzleId": "push_puzzle_nw",
+      "isActive": false,
+      "targetObjectId": "puzzle_door_nw"
+    }
+  },
+  {
+    "id": "pressure_plate_nw_2",
+    "type": "pressure_plate",
+    "position": { "x": 20, "y": 25 },
+    "properties": {
+      "puzzleId": "push_puzzle_nw",
+      "isActive": false,
+      "targetObjectId": "puzzle_door_nw"
+    }
+  },
+  {
+    "id": "puzzle_door_nw",
+    "type": "puzzle_door",
+    "position": { "x": 17, "y": 15 },
+    "properties": {
+      "puzzleId": "push_puzzle_nw",
+      "isOpen": false,
+      "description": "A heavy door that seems to be controlled by mechanisms"
+    }
+  },
+  {
+    "id": "switch_seq_1",
+    "type": "switch",
+    "position": { "x": 75, "y": 50 },
+    "properties": {
+      "puzzleId": "switch_sequence_east",
+      "switchId": "switch_1",
+      "isOn": false,
+      "targetObjectId": "sequence_reward"
+    }
+  },
+  {
+    "id": "switch_seq_2",
+    "type": "switch",
+    "position": { "x": 80, "y": 50 },
+    "properties": {
+      "puzzleId": "switch_sequence_east",
+      "switchId": "switch_2",
+      "isOn": false,
+      "targetObjectId": "sequence_reward"
+    }
+  },
+  {
+    "id": "switch_seq_3",
+    "type": "switch",
+    "position": { "x": 85, "y": 50 },
+    "properties": {
+      "puzzleId": "switch_sequence_east",
+      "switchId": "switch_3",
+      "isOn": false,
+      "targetObjectId": "sequence_reward"
+    }
+  },
+  {
+    "id": "code_terminal_south",
+    "type": "code_terminal",
+    "position": { "x": 50, "y": 80 },
+    "properties": {
+      "puzzleId": "code_puzzle_south",
+      "puzzleType": "codeArrangement",
+      "availableSnippets": ["var x = 0;", "function init() {", "}", "return x;", "x++;"],
+      "correctArrangement": ["function init() {", "var x = 0;", "x++;", "return x;", "}"],
+      "targetObjectId": "south_locked_door"
+    }
+  },
+  {
+    "id": "south_locked_door",
+    "type": "puzzle_door",
+    "position": { "x": 50, "y": 75 },
+    "properties": {
+      "puzzleId": "code_puzzle_south",
+      "isOpen": false,
+      "description": "A door sealed with a digital lock requiring code authentication"
+    }
+  },
+  {
+    "id": "reset_lever_nw",
+    "type": "reset_lever",
+    "position": { "x": 10, "y": 20 },
+    "properties": {
+      "targetPuzzleId": "push_puzzle_nw",
+      "isActive": false
+    }
+  }
+]

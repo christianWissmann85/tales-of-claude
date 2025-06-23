@@ -21,7 +21,9 @@ import {
   Exit,
   Tile,
   TileType,
-  Item as IItem // Alias Item from global.types to avoid conflict with models/Item
+  Item as IItem, // Alias Item from global.types to avoid conflict with models/Item
+  WeatherType,
+  WeatherData
 } from '../types/global.types';
 import { GameMap } from '../models/Map';
 
@@ -87,6 +89,7 @@ interface SerializablePlayer {
     _availablePoints: number; // Store available points in the talent tree
   };
   talentPoints: number; // Player's master talent points
+  exploredMaps?: { [mapId: string]: string[] }; // Serialized exploration data
 }
 
 /**
@@ -122,6 +125,12 @@ interface SerializableGameState {
   notification: string | null;
   questManagerState?: any; // Quest manager state for saving/loading
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
+  timeData?: {
+    hours: number;
+    minutes: number;
+    isPaused: boolean;
+  };
+  weatherData?: WeatherData;
 }
 
 /**
@@ -160,6 +169,13 @@ class SaveGameService {
             _availablePoints: gameState.player.talentTree.availablePoints,
           },
           talentPoints: gameState.player.talentPoints,
+          exploredMaps: gameState.player.exploredMaps ? 
+            Object.fromEntries(
+              Array.from(gameState.player.exploredMaps.entries()).map(([mapId, tiles]) => [
+                mapId,
+                Array.from(tiles)
+              ])
+            ) : undefined,
         },
         currentMap: {
           ...gameState.currentMap,
@@ -185,6 +201,8 @@ class SaveGameService {
         notification: gameState.notification,
         questManagerState: gameState.questManagerState,
         hotbarConfig: gameState.hotbarConfig,
+        timeData: gameState.timeData,
+        weatherData: gameState.weatherData,
       };
 
       localStorage.setItem(SAVE_GAME_KEY, JSON.stringify(serializableGameState));
@@ -358,6 +376,14 @@ class SaveGameService {
       player.statusEffects = playerSaveData.statusEffects;
       player.activeQuestIds = playerSaveData.activeQuestIds;
       player.completedQuestIds = playerSaveData.completedQuestIds;
+      
+      // Restore exploration data
+      if (playerSaveData.exploredMaps) {
+        player.exploredMaps = new Map();
+        Object.entries(playerSaveData.exploredMaps).forEach(([mapId, tiles]) => {
+          player.exploredMaps.set(mapId, new Set(tiles));
+        });
+      }
 
 
       // 2. Reconstruct currentMap entities
@@ -414,6 +440,8 @@ class SaveGameService {
         notification: serializableGameState.notification,
         questManagerState: serializableGameState.questManagerState,
         hotbarConfig: serializableGameState.hotbarConfig || [null, null, null, null, null],
+        timeData: serializableGameState.timeData,
+        weatherData: serializableGameState.weatherData,
       };
 
       console.log('Game loaded successfully!');

@@ -13,11 +13,16 @@ import {
   CombatEntity,
   ShopState,
   ShopItem,
+  TileType,
+  TimeData,
+  TimeOfDay,
+  WeatherData,
+  WeatherType,
 } from '../types/global.types';
 import { Player } from '../models/Player';
 import { TalentTree } from '../models/TalentTree';
 import { GameMap } from '../models/Map'; // Import the GameMap class
-import { terminalTownData } from '../assets/maps/terminalTown'; // Import terminalTownData
+import { getMap } from '../assets/maps'; // Import getMap function for async map loading
 import SaveGameService from '../services/SaveGame'; // Import SaveGameService
 import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
@@ -74,6 +79,12 @@ const clonePlayer = (player: Player): Player => {
   // Copy gold
   newPlayer.gold = player.gold;
   
+  // Copy exploration data
+  newPlayer.exploredMaps = new Map();
+  player.exploredMaps.forEach((tiles, mapId) => {
+    newPlayer.exploredMaps.set(mapId, new Set(tiles));
+  });
+  
   return newPlayer;
 };
 
@@ -83,7 +94,7 @@ const clonePlayer = (player: Player): Player => {
 type GameAction =
   | { type: 'MOVE_PLAYER'; payload: { direction: Direction } }
   | { type: 'START_BATTLE'; payload: { enemies: Enemy[] } }
-  | { type: 'END_BATTLE'; payload: { playerWon: boolean; playerExpGained?: number; itemsDropped?: Item[]; playerCombatState?: CombatEntity } }
+  | { type: 'END_BATTLE'; payload: { playerWon: boolean; playerExpGained?: number; itemsDropped?: Item[]; playerCombatState?: CombatEntity; defeatedEnemyIds?: string[] } }
   | { type: 'START_DIALOGUE'; payload: { dialogueState: DialogueState } }
   | { type: 'END_DIALOGUE' }
   | { type: 'UPDATE_MAP'; payload: { newMap: GameMap; playerNewPosition: Position } }
@@ -93,6 +104,7 @@ type GameAction =
   | { type: 'UPDATE_GAME_FLAG'; payload: { key: string; value: boolean | number | string } }
   | { type: 'ADD_ENEMY'; payload: { enemy: Enemy } }
   | { type: 'REMOVE_ENEMY'; payload: { enemyId: string } }
+  | { type: 'UPDATE_ENEMIES'; payload: { enemies: Enemy[] } }
   | { type: 'ADD_NPC'; payload: { npc: NPC } }
   | { type: 'REMOVE_NPC'; payload: { npcId: string } }
   | { type: 'TOGGLE_INVENTORY' }
@@ -112,7 +124,11 @@ type GameAction =
   | { type: 'OPEN_SHOP'; payload: { npcId: string; npcName: string; items: ShopItem[] } }
   | { type: 'CLOSE_SHOP' }
   | { type: 'BUY_ITEM'; payload: { itemId: string; price: number } }
-  | { type: 'SELL_ITEM'; payload: { itemId: string; price: number } };
+  | { type: 'SELL_ITEM'; payload: { itemId: string; price: number } }
+  | { type: 'TELEPORT_PLAYER'; payload: Position }
+  | { type: 'UPDATE_TIME'; payload: { timeData: TimeData } }
+  | { type: 'SET_TIME_PAUSED'; payload: { isPaused: boolean } }
+  | { type: 'UPDATE_WEATHER'; payload: { weatherData: WeatherData } };
 
 /**
  * The reducer function that handles state transitions based on dispatched actions.
@@ -167,7 +183,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       };
 
     case 'END_BATTLE': {
-      const { playerWon, playerExpGained, itemsDropped, playerCombatState } = action.payload;
+      const { playerWon, playerExpGained, itemsDropped, playerCombatState, defeatedEnemyIds } = action.payload;
       const newState = { ...state, battle: null }; // Clear battle state
 
       if (playerWon) {
@@ -187,6 +203,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           itemsDropped.forEach(item => updatedPlayer.addItem(item));
         }
         newState.player = updatedPlayer;
+        
+        // Remove defeated enemies from the map (they will respawn later via PatrolSystem)
+        if (defeatedEnemyIds && defeatedEnemyIds.length > 0) {
+          newState.enemies = state.enemies.filter(e => !defeatedEnemyIds.includes(e.id));
+        }
       }
       return newState;
     }
@@ -282,6 +303,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
     case 'REMOVE_ENEMY':
       return { ...state, enemies: state.enemies.filter(e => e.id !== action.payload.enemyId) };
+
+    case 'UPDATE_ENEMIES':
+      return { ...state, enemies: action.payload.enemies };
 
     case 'ADD_NPC':
       return { ...state, npcs: [...state.npcs, action.payload.npc] };
@@ -562,6 +586,35 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       };
     }
 
+    case 'TELEPORT_PLAYER': {
+      const newPlayer = clonePlayer(state.player);
+      newPlayer.position = { ...action.payload };
+      // Mark surrounding tiles as explored at the new location
+      newPlayer.markSurroundingTilesExplored(state.currentMap.id, 3);
+      return { ...state, player: newPlayer };
+    }
+
+    case 'UPDATE_TIME':
+      return {
+        ...state,
+        timeData: action.payload.timeData,
+      };
+
+    case 'SET_TIME_PAUSED':
+      return {
+        ...state,
+        timeData: state.timeData ? {
+          ...state.timeData,
+          isPaused: action.payload.isPaused,
+        } : undefined,
+      };
+
+    case 'UPDATE_WEATHER':
+      return {
+        ...state,
+        weatherData: action.payload.weatherData,
+      };
+
     default:
       return state;
   }
@@ -571,35 +624,23 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
  * Initializes the default game state.
  */
 const initialPlayer = new Player('claude', 'Claude', { x: 10, y: 7 });
-// Use GameMap constructor to load the Terminal Town map
-const initialMap = new GameMap(terminalTownData);
 
-// Extract NPCs from the initial map's entities
-// NPCs are identified by the presence of a 'role' property, unique to them in the GameMap's entities union.
-const initialNpcs: NPC[] = initialMap.entities.filter(
-  (entity): entity is NPC => 'role' in entity,
-);
+// Create a temporary empty map for initial state
+const emptyMapData: IGameMap = {
+  id: 'loading',
+  name: 'Loading...',
+  width: 1,
+  height: 1,
+  tiles: [[{ type: 'floor' as TileType, walkable: true }]],
+  entities: [],
+  exits: [],
+};
+const initialMap = new GameMap(emptyMapData);
 
-// Extract Enemies from the initial map's entities
-// Enemies are identified by having 'abilities' array and stats with hp
-const initialEnemies: Enemy[] = initialMap.entities.filter(
-  (entity): entity is Enemy => 
-    'abilities' in entity && 
-    Array.isArray(entity.abilities) &&
-    'stats' in entity &&
-    'hp' in (entity as any).stats,
-);
-
-// Extract Items from the initial map's entities
-// Items are identified by having a 'type' property that is ItemType (string) not EnemyType
-// and not having 'role' (which NPCs have) or 'abilities' (which Enemies have)
-const initialItems: Item[] = initialMap.entities.filter(
-  (entity): entity is Item => 
-    'type' in entity && 
-    typeof entity.type === 'string' && 
-    !('role' in entity) && 
-    !('abilities' in entity),
-);
+// Empty arrays for initial state - will be populated when map loads
+const initialNpcs: NPC[] = [];
+const initialEnemies: Enemy[] = [];
+const initialItems: Item[] = [];
 
 
 
@@ -619,6 +660,11 @@ const defaultGameState: GameState = {
   gamePhase: 'splash', // Start with splash screen
   hotbarConfig: [null, null, null, null, null], // 5 empty hotbar slots
   shopState: null, // No shop open initially
+  timeData: {
+    hours: 12, // Start at noon
+    minutes: 0,
+    isPaused: false,
+  },
 };
 
 /**
@@ -647,22 +693,60 @@ interface GameProviderProps {
  */
 const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, defaultGameState);
+  const [isMapLoaded, setIsMapLoaded] = React.useState(false);
 
   // Initialize QuestManager and check for saved game when the game starts
   React.useEffect(() => {
     const questManager = QuestManager.getInstance();
     questManager.initializeQuests();
     
-    // Check if there's a saved game and offer to load it
-    if (SaveGameService.hasSaveGame()) {
-      // Show a notification about available save
-      dispatch({ 
-        type: 'SHOW_NOTIFICATION', 
-        payload: { 
-          message: 'Save game found! Talk to Compiler Cat to load it.' 
-        } 
-      });
-    }
+    // Load the initial map asynchronously
+    const loadInitialMap = async () => {
+      try {
+        const mapData = await getMap('terminalTown');
+        const newMap = new GameMap(mapData);
+        
+        // Initialize exploration for the starting area
+        state.player.markSurroundingTilesExplored(newMap.id, 3);
+        
+        // Extract entities from the loaded map
+        const npcs = newMap.entities.filter((entity): entity is NPC => 'role' in entity);
+        const enemies = newMap.entities.filter((entity): entity is Enemy => 
+          'abilities' in entity && Array.isArray(entity.abilities));
+        const items = newMap.entities.filter((entity): entity is Item => 
+          'type' in entity && typeof entity.type === 'string' && 
+          !('role' in entity) && !('abilities' in entity));
+        
+        // Update the game state with the loaded map
+        dispatch({
+          type: 'UPDATE_MAP',
+          payload: {
+            newMap,
+            playerNewPosition: { x: 10, y: 7 },
+          },
+        });
+        
+        setIsMapLoaded(true);
+        
+        // Check if there's a saved game after map loads
+        if (SaveGameService.hasSaveGame()) {
+          dispatch({ 
+            type: 'SHOW_NOTIFICATION', 
+            payload: { 
+              message: 'Save game found! Talk to Compiler Cat to load it.' 
+            } 
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load initial map:', error);
+        dispatch({
+          type: 'SHOW_NOTIFICATION',
+          payload: { message: 'Failed to load game map' },
+        });
+      }
+    };
+    
+    loadInitialMap();
   }, []);
 
   return (

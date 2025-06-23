@@ -1,0 +1,49 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+MapLoader.ts:94 MapLoader running in development mode. Hot-reloading handled by bundler (Vite).
+2MapLoader.ts:127 Successfully loaded map "terminalTown" from JSON.
+WeatherSystem.ts:236 Next weather change scheduled in 544 seconds.
+WeatherSystem.ts:190 WeatherSystem started. Initial weather: clear, Map Type: Outdoor
+WeatherSystem.ts:216 WeatherSystem stopped.
+WeatherSystem.ts:236 Next weather change scheduled in 574 seconds.
+WeatherSystem.ts:190 WeatherSystem started. Initial weather: clear, Map Type: Outdoor
+WeatherSystem.ts:426 Time period changed to: night. Weather probabilities for future changes will adjust.
+WeatherSystem.ts:254 Initiating weather change from clear to rain
+WeatherSystem.ts:236 Next weather change scheduled in 458 seconds.
+WeatherSystem.ts:314 Weather transition to rain complete.
+2WeatherDisplay.tsx:20 Uncaught TypeError: Cannot destructure property 'name' of 'weatherInfoMap[weatherType]' as it is undefined.
+    at WeatherDisplay (WeatherDisplay.tsx:20:11)
+    at renderWithHooks (chunk-373CG7ZK.js?v=2f8e8453:11546:26)
+    at mountIndeterminateComponent (chunk-373CG7ZK.js?v=2f8e8453:14924:21)
+    at beginWork (chunk-373CG7ZK.js?v=2f8e8453:15912:22)
+    at HTMLUnknownElement.callCallback2 (chunk-373CG7ZK.js?v=2f8e8453:3672:22)
+    at Object.invokeGuardedCallbackDev (chunk-373CG7ZK.js?v=2f8e8453:3697:24)
+    at invokeGuardedCallback (chunk-373CG7ZK.js?v=2f8e8453:3731:39)
+    at beginWork$1 (chunk-373CG7ZK.js?v=2f8e8453:19763:15)
+    at performUnitOfWork (chunk-373CG7ZK.js?v=2f8e8453:19196:20)
+    at workLoopSync (chunk-373CG7ZK.js?v=2f8e8453:19135:13)Understand this error
+chunk-373CG7ZK.js?v=2f8e8453:14030 The above error occurred in the <WeatherDisplay> component:
+
+    at WeatherDisplay (http://127.0.0.1:5177/src/components/WeatherDisplay/WeatherDisplay.tsx:25:27)
+    at GameBoard (http://127.0.0.1:5177/src/components/GameBoard/GameBoard.tsx:107:31)
+    at div
+    at GameContent (http://127.0.0.1:5177/src/App.tsx:30:31)
+    at NotificationSystem (http://127.0.0.1:5177/src/components/NotificationSystem/NotificationSystem.tsx:125:38)
+    at GameProvider (http://127.0.0.1:5177/src/context/GameContext.tsx:508:25)
+    at div
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-373CG7ZK.js?v=2f8e8453:14030Understand this error
+chunk-373CG7ZK.js?v=2f8e8453:19411 Uncaught TypeError: Cannot destructure property 'name' of 'weatherInfoMap[weatherType]' as it is undefined.
+    at WeatherDisplay (WeatherDisplay.tsx:20:11)
+    at renderWithHooks (chunk-373CG7ZK.js?v=2f8e8453:11546:26)
+    at mountIndeterminateComponent (chunk-373CG7ZK.js?v=2f8e8453:14924:21)
+    at beginWork (chunk-373CG7ZK.js?v=2f8e8453:15912:22)
+    at beginWork$1 (chunk-373CG7ZK.js?v=2f8e8453:19751:22)
+    at performUnitOfWork (chunk-373CG7ZK.js?v=2f8e8453:19196:20)
+    at workLoopSync (chunk-373CG7ZK.js?v=2f8e8453:19135:13)
+    at renderRootSync (chunk-373CG7ZK.js?v=2f8e8453:19114:15)
+    at recoverFromConcurrentError (chunk-373CG7ZK.js?v=2f8e8453:18734:28)
+    at performConcurrentWorkOnRoot (chunk-373CG7ZK.js?v=2f8e8453:18682:30)Understand this error
+WeatherSystem.ts:216 WeatherSystem stopped.

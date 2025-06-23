@@ -383,14 +383,21 @@ const Battle: React.FC = () => {
         <pre className={styles.victoryArt}>{VICTORY_ART}</pre>
         <button onClick={() => {
           setShowBattleResult(null);
+          // Collect defeated enemy IDs from the original battle state
+          const defeatedEnemyIds = state.battle?.enemies.map(e => e.id) || [];
+          
+          // Calculate total exp from defeated enemies
+          const totalExp = localBattleState?.enemies.reduce((sum, enemy) => sum + (enemy.expReward || 0), 0) || 100;
+          
           // Dispatch END_BATTLE action with victory
           dispatch({ 
             type: 'END_BATTLE',
             payload: {
               playerWon: true,
-              playerExpGained: 100, // Example EXP
+              playerExpGained: totalExp,
               itemsDropped: [],
-              playerCombatState: localBattleState?.player
+              playerCombatState: localBattleState?.player,
+              defeatedEnemyIds
             }
           });
         }} className={styles.continueButton}>Continue</button>

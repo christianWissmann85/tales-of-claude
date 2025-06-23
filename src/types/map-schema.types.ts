@@ -15,7 +15,7 @@ export type JsonProperties = Record<string, JsonProperty>;
  */
 export interface JsonMapObject {
   id: string; // Unique ID for this specific instance (e.g., "npc_debugger_great_01")
-  type: 'npc' | 'enemy' | 'item' | 'exit' | 'door' | 'locked_door' | 'trigger'; // Categorization for the game engine
+  type: 'npc' | 'enemy' | 'item' | 'exit' | 'door' | 'locked_door' | 'trigger' | 'push_block' | 'pressure_plate' | 'switch' | 'code_terminal' | 'puzzle_door' | 'reset_lever'; // Categorization for the game engine
   position: Position; // Grid coordinates (x, y)
   properties?: JsonProperties; // Game-specific properties for this object
 }
@@ -64,15 +64,27 @@ export interface JsonMapExit extends JsonMapObject {
   type: 'exit';
   properties: {
     targetMapId: string;
-    targetPosition: { x: number; y: number };
+    targetPositionX: number;
+    targetPositionY: number;
     displayName?: string; // Optional display name for the exit
+  };
+}
+
+/**
+ * Represents a door or locked door on the map.
+ */
+export interface JsonMapDoor extends JsonMapObject {
+  type: 'door' | 'locked_door';
+  properties?: {
+    doorId?: string;
+    keyItemId?: string;
   };
 }
 
 /**
  * Union type for all possible object types.
  */
-export type JsonMapObjectType = JsonMapNPC | JsonMapEnemy | JsonMapItem | JsonMapExit | JsonMapObject;
+export type JsonMapObjectType = JsonMapNPC | JsonMapEnemy | JsonMapItem | JsonMapExit | JsonMapDoor | JsonMapObject;
 
 /**
  * Represents a single layer in the map.

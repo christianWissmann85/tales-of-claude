@@ -230,21 +230,23 @@ const secretNpcs: NPC[] = [
     name: 'Elder Willow',
     role: 'trainer' as NPCRole,
     dialogueId: 'dialogue_elder_willow',
-    position: { x: 12, y: 10 }
+    position: { x: 12, y: 10 },
+    statusEffects: []
   },
   {
     id: 'forest_spirit',
     name: 'Forest Spirit',
     role: 'quest_giver' as NPCRole,
     dialogueId: 'dialogue_forest_spirit',
-    position: { x: 22, y: 5 }
+    position: { x: 22, y: 5 },
+    statusEffects: []
   }
 ];
 
 // Add legendary items
 const legendaryItems: Item[] = [
   { 
-    ...ItemClass.createItem(ItemVariant.SteelSword),
+    ...ItemClass.createItem(ItemVariant.DebuggerBlade),
     id: 'natures_wrath',
     position: { x: 22, y: 4 }
   },
@@ -254,7 +256,7 @@ const legendaryItems: Item[] = [
     position: { x: 22, y: 11 }
   },
   {
-    ...ItemClass.createItem(ItemVariant.SteelArmor),
+    ...ItemClass.createItem(ItemVariant.FirewallArmor),
     id: 'bark_armor',
     position: { x: 23, y: 5 }
   }

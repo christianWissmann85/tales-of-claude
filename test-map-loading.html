@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Map Loading Test</title>
+</head>
+<body>
+  <h1>Testing Map Loading</h1>
+  <div id="status">Loading...</div>
+  <div id="results"></div>
+  
+  <script type="module">
+    // Test map loading directly
+    async function testMapLoading() {
+      const statusEl = document.getElementById('status');
+      const resultsEl = document.getElementById('results');
+      
+      try {
+        // Try to fetch the terminalTown.json directly
+        const response = await fetch('/src/assets/maps/json/terminalTown.json');
+        if (response.ok) {
+          const data = await response.json();
+          statusEl.textContent = 'Success! Map loaded.';
+          resultsEl.innerHTML = `
+            <p>Map ID: ${data.id}</p>
+            <p>Map Name: ${data.name}</p>
+            <p>Map Size: ${data.width}x${data.height}</p>
+          `;
+        } else {
+          statusEl.textContent = `Failed: HTTP ${response.status}`;
+        }
+      } catch (error) {
+        statusEl.textContent = `Error: ${error.message}`;
+      }
+    }
+    
+    testMapLoading();
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import { JsonMap } from '../types/map-schema.types';
 import { GameMap as IGameMap } from '../types/global.types';
 import { MapLoader } from '../engine/MapLoader';
 import { createMap, createCityMap } from './mapCreator';
-import { convertTsMapToJson } from './mapMigration';
+import { convertTsMapToJson } from './mapValidation';
 
 export interface PerformanceMetrics {
   mapId: string;
@@ -22,13 +22,13 @@ export interface PerformanceMetrics {
  */
 export async function measureMapLoadPerformance(mapId: string): Promise<PerformanceMetrics> {
   const startTime = performance.now();
-  const startMemory = performance.memory?.usedJSHeapSize || 0;
+  const startMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
   try {
     const map = await MapLoader.getInstance().loadMap(mapId);
     
     const endTime = performance.now();
-    const endMemory = performance.memory?.usedJSHeapSize || 0;
+    const endMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
     return {
       mapId,
@@ -66,14 +66,14 @@ export async function compareMapFormats(mapId: string): Promise<{
   // Try loading TypeScript version
   try {
     const startTime = performance.now();
-    const startMemory = performance.memory?.usedJSHeapSize || 0;
+    const startMemory = (performance as any).memory?.usedJSHeapSize || 0;
     
     // Direct import for TS maps
     const module = await import(`../assets/maps/${mapId}.ts`);
     const mapData = module[`${mapId}Data`];
     
     const endTime = performance.now();
-    const endMemory = performance.memory?.usedJSHeapSize || 0;
+    const endMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
     tsMetrics = {
       mapId,
@@ -112,7 +112,7 @@ export async function testMapSizePerformance(): Promise<PerformanceMetrics[]> {
 
   for (const size of sizes) {
     const startTime = performance.now();
-    const startMemory = performance.memory?.usedJSHeapSize || 0;
+    const startMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
     // Create a test map
     const map = createMap({
@@ -123,7 +123,7 @@ export async function testMapSizePerformance(): Promise<PerformanceMetrics[]> {
     });
 
     const endTime = performance.now();
-    const endMemory = performance.memory?.usedJSHeapSize || 0;
+    const endMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
     metrics.push({
       mapId: map.id,

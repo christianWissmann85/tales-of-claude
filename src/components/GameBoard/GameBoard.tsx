@@ -5,7 +5,7 @@ import { useGameContext } from '../../context/GameContext';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { GameEngine } from '../../engine/GameEngine';
 import { MovementSystem } from '../../engine/MovementSystem'; // Imported as requested, though GameEngine handles movement dispatch directly
-import { Position, TileType, Enemy, NPC, Item as IItem, CombatLogEntry } from '../../types/global.types';
+import { Position, TileType, Enemy, NPC, Item as IItem, CombatLogEntry, TimeOfDay } from '../../types/global.types';
 import Inventory from '../Inventory/Inventory';
 import { Inventory as InventoryModel } from '../../models/Inventory';
 import { Player } from '../../models/Player';
@@ -20,6 +20,8 @@ import { useNotification } from '../NotificationSystem/NotificationSystem';
 import Hotbar from '../Hotbar/Hotbar';
 import Shop from '../Shop/Shop';
 import Minimap from '../Minimap/Minimap';
+import WeatherEffects from '../WeatherEffects/WeatherEffects';
+import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 
 import styles from './GameBoard.module.css';
 
@@ -99,6 +101,16 @@ const GameBoard: React.FC = () => {
   const { notify } = useNotification();
   const [combatLog, setCombatLog] = React.useState<CombatLogEntry[]>([]);
 
+  // Get current time period for atmospheric styling
+  const getTimeOfDay = (): TimeOfDay => {
+    if (!state.timeData) return 'day';
+    const hour = state.timeData.hours;
+    if (hour >= 6 && hour < 8) return 'dawn';
+    if (hour >= 8 && hour < 18) return 'day';
+    if (hour >= 18 && hour < 20) return 'dusk';
+    return 'night';
+  };
+
   // FIX: Initialize GameEngine instance only once on component mount.
   // The empty dependency array ensures this useEffect runs only on initial mount.
   // `dispatch` is stable, and the initial `state` is passed; subsequent state
@@ -134,6 +146,38 @@ const GameBoard: React.FC = () => {
       gameEngineRef.current.handleKeyboardInput(pressedKeys);
     }
   }, [pressedKeys]); // Only re-run if the Set of pressed keys changes
+  
+  // Track defeated enemies from battle results
+  const prevBattleRef = useRef(state.battle);
+  useEffect(() => {
+    // Check if battle just ended (was active, now null)
+    if (prevBattleRef.current && !state.battle && gameEngineRef.current) {
+      // Get defeated enemy IDs from the previous battle state
+      const defeatedEnemyIds = prevBattleRef.current.enemies
+        .filter(enemy => enemy.hp <= 0)
+        .map(enemy => enemy.id);
+      
+      // Mark each defeated enemy in the patrol system
+      defeatedEnemyIds.forEach(enemyId => {
+        gameEngineRef.current!.markEnemyDefeated(enemyId);
+      });
+    }
+    prevBattleRef.current = state.battle;
+  }, [state.battle]);
+
+  // Add loading check before rendering
+  if (state.currentMap.id === 'loading' || !state.currentMap.tiles || state.currentMap.tiles.length === 0) {
+    return (
+      <div className={styles.gameBoard} style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '600px'
+      }}>
+        <div>Loading map...</div>
+      </div>
+    );
+  }
 
   /**
    * Determines the character (emoji/ASCII) to render at a specific grid position.
@@ -258,10 +302,10 @@ const GameBoard: React.FC = () => {
     // For now, just teleport within current map
     if (mapId === state.currentMap.id) {
       dispatch({ type: 'TELEPORT_PLAYER', payload: position });
-      notify(`Traveled to ${position.x}, ${position.y}`);
+      notify({ type: 'success', message: `Traveled to ${position.x}, ${position.y}` });
     } else {
       // This would require map transition logic
-      notify(`Travel to ${mapId} not yet implemented`);
+      notify({ type: 'warning', message: `Travel to ${mapId} not yet implemented` });
     }
   }, [dispatch, notify, state.currentMap.id]);
 
@@ -385,10 +429,12 @@ const GameBoard: React.FC = () => {
     }
   }, [state.battle?.log]);
 
+  const timeOfDay = getTimeOfDay();
+
   return (
     <>
       <div
-        className={styles.gameBoard}
+        className={`${styles.gameBoard} ${styles[timeOfDay]}`}
         // Dynamically set CSS Grid template columns/rows based on display dimensions
         style={{
           gridTemplateColumns: `repeat(${DISPLAY_WIDTH}, 1fr)`,
@@ -401,6 +447,13 @@ const GameBoard: React.FC = () => {
           <div className={styles.fpsCounter}>
             FPS: {gameEngineRef.current.fps}
           </div>
+        )}
+        {/* Weather Effects Overlay */}
+        {state.weatherData && (
+          <WeatherEffects
+            weatherType={state.weatherData.currentWeather}
+            transitionProgress={state.weatherData.transitionProgress}
+          />
         )}
       </div>
       {/* Player Progress Bar */}
@@ -461,6 +514,13 @@ const GameBoard: React.FC = () => {
         npcs={state.npcs}
         onFastTravel={handleFastTravel}
       />
+      {/* Weather Display - shows current weather and effects */}
+      {state.weatherData && gameEngineRef.current && (
+        <WeatherDisplay
+          weatherType={state.weatherData.currentWeather}
+          effects={gameEngineRef.current.getWeatherEffects()}
+        />
+      )}
     </>
   );
 };

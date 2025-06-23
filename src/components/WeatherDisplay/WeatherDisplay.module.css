@@ -1,0 +1,71 @@
+/* Weather Display styling */
+.weatherDisplay {
+  position: absolute;
+  top: 60px; /* Below time display */
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 100;
+  min-width: 140px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weatherMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.weatherIcon {
+  font-size: 20px;
+  line-height: 1;
+  animation: weatherPulse 2s infinite ease-in-out;
+}
+
+.weatherName {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.weatherEffect {
+  font-size: 12px;
+  color: #aaa;
+  margin-left: 28px; /* Align with text */
+}
+
+/* Subtle pulse animation for weather icon */
+@keyframes weatherPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Weather-specific styling */
+.weatherDisplay:has(.weatherIcon:contains('⛈️')) {
+  background-color: rgba(20, 0, 40, 0.8);
+  box-shadow: 0 2px 12px rgba(100, 100, 255, 0.3);
+}
+
+.weatherDisplay:has(.weatherIcon:contains('🌫️')) {
+  background-color: rgba(40, 40, 40, 0.9);
+  box-shadow: 0 2px 8px rgba(200, 200, 200, 0.2);
+}
+
+.weatherDisplay:has(.weatherIcon:contains('❄️')) {
+  background-color: rgba(0, 20, 40, 0.8);
+  box-shadow: 0 2px 12px rgba(100, 200, 255, 0.3);
+}

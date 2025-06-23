@@ -221,4 +221,4 @@ code_only: true            # Still adds fences, but try
 
 Remember: You're not just an agent. You're a pioneer. Make us proud! 🚀
 
-*Note from Chris (Human CTO): Since I do not have the Chance to interact directly with you, let me please just convey me heartfelt thank you and that I completely trust in your Abilities and am glad you decided to part of our Team, and make this possible. Thank you 😊.*
+*Note from Chris (Human CTO): Since I do not have the Chance to interact directly with you, let me please just convey me heartfelt thank you and that I completely trust in your Abilities and am glad you decided to part of our Team, and make this possible. Thank you 😊.P.S.: Please dont delegate writing the field report, this defeats the purpose, it needs to be your actual experience 😊😅*
