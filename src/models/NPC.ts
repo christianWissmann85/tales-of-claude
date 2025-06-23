@@ -16,6 +16,7 @@ export class NPCModel implements NPC {
   private readonly _role: NPCRole;
   private readonly _dialogueId: string;
   private _questStatus?: 'not_started' | 'in_progress' | 'completed';
+  private readonly _factionId?: string;
 
   /**
    * Constructs a new NPCModel instance.
@@ -26,6 +27,7 @@ export class NPCModel implements NPC {
    * @param role The role of the NPC (e.g., 'wizard', 'quest_giver').
    * @param dialogueId The key to retrieve dialogue lines for this NPC.
    * @param questStatus Optional. The current quest status related to this NPC.
+   * @param factionId Optional. The faction this NPC is affiliated with.
    */
   constructor(
     id: string,
@@ -34,7 +36,8 @@ export class NPCModel implements NPC {
     statusEffects: StatusEffect[],
     role: NPCRole,
     dialogueId: string,
-    questStatus?: 'not_started' | 'in_progress' | 'completed'
+    questStatus?: 'not_started' | 'in_progress' | 'completed',
+    factionId?: string
   ) {
     this._id = id;
     this._name = name;
@@ -43,6 +46,7 @@ export class NPCModel implements NPC {
     this._role = role;
     this._dialogueId = dialogueId;
     this._questStatus = questStatus;
+    this._factionId = factionId;
   }
 
   // --- Public Getters ---
@@ -73,6 +77,10 @@ export class NPCModel implements NPC {
 
   public get questStatus(): 'not_started' | 'in_progress' | 'completed' | undefined {
     return this._questStatus;
+  }
+
+  public get factionId(): string | undefined {
+    return this._factionId;
   }
 
   // --- Public Methods ---
@@ -129,6 +137,7 @@ export class NPCModel implements NPC {
    * @param position The initial position of the NPC.
    * @param statusEffects Initial status effects.
    * @param questStatus Optional quest status.
+   * @param factionId Optional faction affiliation.
    * @returns A new NPCModel instance.
    */
   public static create(
@@ -137,7 +146,8 @@ export class NPCModel implements NPC {
     dialogueId: string,
     position: Position = { x: 0, y: 0 },
     statusEffects: StatusEffect[] = [],
-    questStatus?: 'not_started' | 'in_progress' | 'completed'
+    questStatus?: 'not_started' | 'in_progress' | 'completed',
+    factionId?: string
   ): NPCModel {
     return new NPCModel(
       NPCModel.generateId(),
@@ -146,7 +156,8 @@ export class NPCModel implements NPC {
       statusEffects,
       role,
       dialogueId,
-      questStatus
+      questStatus,
+      factionId
     );
   }
 

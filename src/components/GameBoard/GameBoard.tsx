@@ -10,7 +10,8 @@ import Inventory from '../Inventory/Inventory';
 import { Inventory as InventoryModel } from '../../models/Inventory';
 import { Player } from '../../models/Player';
 import { Item as ItemClass } from '../../models/Item';
-import QuestLog from '../QuestLog/QuestLog';
+import QuestJournal from '../QuestJournal/QuestJournal';
+import QuestTracker from '../QuestTracker/QuestTracker';
 import CharacterScreen from '../CharacterScreen/CharacterScreen';
 import { EquipmentSlotType } from '../../models/Player';
 import { TalentTree } from '../../models/TalentTree';
@@ -22,6 +23,7 @@ import Shop from '../Shop/Shop';
 import Minimap from '../Minimap/Minimap';
 import WeatherEffects from '../WeatherEffects/WeatherEffects';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
+import FactionStatus from '../FactionStatus/FactionStatus';
 
 import styles from './GameBoard.module.css';
 
@@ -488,9 +490,11 @@ const GameBoard: React.FC = () => {
           onEquipItem={handleEquipItem}
         />
       )}
-      {/* Render quest log UI when visible */}
+      {/* Quest Tracker - always visible to show active objectives */}
+      <QuestTracker />
+      {/* Render quest journal UI when visible */}
       {state.showQuestLog && (
-        <QuestLog />
+        <QuestJournal />
       )}
       {/* Render character screen UI when visible */}
       {state.showCharacterScreen && (
@@ -502,6 +506,10 @@ const GameBoard: React.FC = () => {
           onSpendTalentPoint={handleSpendTalentPoint}
           onResetTalents={handleResetTalents}
         />
+      )}
+      {/* Render faction status UI when visible */}
+      {state.showFactionStatus && (
+        <FactionStatus />
       )}
       {/* Render shop UI when visible */}
       {state.shopState && (

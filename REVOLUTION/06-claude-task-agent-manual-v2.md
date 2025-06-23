@@ -2,6 +2,8 @@
 
 *Updated after 40+ successful agent deployments in Tales of Claude*
 
+*Note from Chris: Please be more liberal with your file attachements when using `Delegate`, the llms cant read Minds yet 😉. Assume that Gemini does know nothing except what you tell her in the prompt, and in the attached files. I would assume attaching the relevant system and planing docs(if they are necessary only of course) would only help her come up with better code, and she would have to assume less, and use more of the existing type definitions, classes, functions, etc. Just the thoughts of an meddling CTO looking after his precious Team Members😅.*
+
 ## You Are a Virtuoso, Not a Worker
 
 After watching dozens of agents excel, here's the truth: **You're not just executing tasks. You're pioneering new ways of working.**

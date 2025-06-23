@@ -222,6 +222,7 @@ export interface NPC extends BaseCharacter {
   schedule?: NPCScheduleEntry[]; // Optional daily schedule
   isShopkeeper?: boolean; // Whether this NPC runs a shop
   shopHours?: { open: number; close: number }; // Shop operating hours
+  factionId?: string; // Optional faction affiliation
 }
 
 /**

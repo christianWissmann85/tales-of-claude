@@ -124,6 +124,7 @@ interface SerializableGameState {
   showCharacterScreen: boolean;
   notification: string | null;
   questManagerState?: any; // Quest manager state for saving/loading
+  factionReputations?: any[]; // Faction reputation data for saving/loading
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
   timeData?: {
     hours: number;
@@ -200,6 +201,7 @@ class SaveGameService {
         showCharacterScreen: gameState.showCharacterScreen,
         notification: gameState.notification,
         questManagerState: gameState.questManagerState,
+        factionReputations: gameState.factionManager ? gameState.factionManager.serialize().factions : undefined,
         hotbarConfig: gameState.hotbarConfig,
         timeData: gameState.timeData,
         weatherData: gameState.weatherData,
@@ -439,6 +441,7 @@ class SaveGameService {
         showCharacterScreen: serializableGameState.showCharacterScreen || false,
         notification: serializableGameState.notification,
         questManagerState: serializableGameState.questManagerState,
+        factionReputations: serializableGameState.factionReputations,
         hotbarConfig: serializableGameState.hotbarConfig || [null, null, null, null, null],
         timeData: serializableGameState.timeData,
         weatherData: serializableGameState.weatherData,

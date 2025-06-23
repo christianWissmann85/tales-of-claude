@@ -26,6 +26,8 @@ import { getMap } from '../assets/maps'; // Import getMap function for async map
 import SaveGameService from '../services/SaveGame'; // Import SaveGameService
 import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
+import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
+import { applyFactionPricing } from '../utils/shopPricing'; // Import shop pricing utility
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -38,6 +40,8 @@ interface GameState extends IGameState {
   showCharacterScreen: boolean; // Add character screen visibility state
   gamePhase: 'splash' | 'intro' | 'playing'; // Add game phase tracking
   shopState: ShopState | null; // Add shop state
+  factionManager: FactionManager; // Add faction manager
+  showFactionStatus: boolean; // Add faction status visibility
 }
 
 /**
@@ -113,6 +117,8 @@ type GameAction =
   | { type: 'SHOW_QUEST_LOG'; payload: { show: boolean } }
   | { type: 'TOGGLE_CHARACTER_SCREEN' }
   | { type: 'SHOW_CHARACTER_SCREEN'; payload: { show: boolean } }
+  | { type: 'TOGGLE_FACTION_STATUS' }
+  | { type: 'SHOW_FACTION_STATUS'; payload: { show: boolean } }
   | { type: 'DIALOGUE_CHOICE'; payload: { action: string } }
   | { type: 'SAVE_GAME' }
   | { type: 'LOAD_GAME'; payload: { savedState: Partial<GameState> } }
@@ -331,6 +337,12 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'SHOW_CHARACTER_SCREEN':
       return { ...state, showCharacterScreen: action.payload.show };
 
+    case 'TOGGLE_FACTION_STATUS':
+      return { ...state, showFactionStatus: !state.showFactionStatus };
+
+    case 'SHOW_FACTION_STATUS':
+      return { ...state, showFactionStatus: action.payload.show };
+
     case 'DIALOGUE_CHOICE': {
       const { action: choiceAction } = action.payload;
       
@@ -366,12 +378,19 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           if (loadedState.questManagerState) {
             questManager.loadState(loadedState.questManagerState);
           }
+          // Deserialize faction manager if data exists
+          const factionManager = FactionManager.getInstance();
+          if (loadedState.factionReputations) {
+            factionManager.deserialize({ factions: loadedState.factionReputations });
+          }
+          
           return { 
             ...loadedState, 
             dialogue: null,
             notification: 'Game loaded successfully! Welcome back!',
             gamePhase: 'playing', // Ensure we're in playing phase after loading
-            shopState: null // Ensure shop is closed when loading
+            shopState: null, // Ensure shop is closed when loading
+            factionManager // Include faction manager in state
           };
         } else {
           return { 
@@ -409,12 +428,19 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         }
       } else if (choiceAction === 'open_shop_bit_merchant') {
         // Open Bit Merchant's shop
-        const shopItems: ShopItem[] = [
+        const baseShopItems: ShopItem[] = [
           { item: { id: 'potion_hp', name: 'Debug Potion', type: 'consumable', description: 'Restores 50 HP', effect: 'restoreHp', value: 50 }, price: 25, quantity: -1 },
           { item: { id: 'potion_energy', name: 'Energy Drink', type: 'consumable', description: 'Restores 25 Energy', effect: 'restoreEnergy', value: 25 }, price: 20, quantity: -1 },
           { item: { id: 'firewall_shield', name: 'Firewall Shield', type: 'equipment', description: 'Increases defense by 5', stats: { defense: 5 } }, price: 100, quantity: 1 },
           { item: { id: 'bandwidth_boost', name: 'Bandwidth Boost', type: 'consumable', description: 'Increases speed for 3 turns', effect: 'speedBoost', value: 3 }, price: 50, quantity: 5 },
         ];
+        
+        // Find the Bit Merchant NPC
+        const bitMerchant = state.npcs.find(npc => npc.name === 'Bit Merchant');
+        const shopItems = bitMerchant && bitMerchant.factionId 
+          ? applyFactionPricing(baseShopItems, bitMerchant, state.factionManager)
+          : baseShopItems;
+        
         return {
           ...state,
           dialogue: null,
@@ -427,12 +453,19 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         };
       } else if (choiceAction === 'open_shop_memory_merchant') {
         // Open Memory Merchant's shop
-        const shopItems: ShopItem[] = [
+        const baseShopItems: ShopItem[] = [
           { item: { id: 'cache_cleaner', name: 'Cache Cleaner', type: 'consumable', description: 'Removes all debuffs', effect: 'removeDebuffs' }, price: 40, quantity: -1 },
           { item: { id: 'memory_leak_patch', name: 'Memory Leak Patch', type: 'consumable', description: 'Restores 100 HP', effect: 'restoreHp', value: 100 }, price: 50, quantity: 10 },
           { item: { id: 'ram_upgrade', name: 'RAM Upgrade', type: 'equipment', description: 'Increases max HP by 20', stats: { defense: 3 } }, price: 200, quantity: 1 },
           { item: { id: 'stack_overflow_shield', name: 'Stack Overflow Shield', type: 'equipment', description: 'Increases defense by 8', stats: { defense: 8 } }, price: 150, quantity: 1 },
         ];
+        
+        // Find the Memory Merchant NPC
+        const memoryMerchant = state.npcs.find(npc => npc.name === 'Memory Merchant');
+        const shopItems = memoryMerchant && memoryMerchant.factionId 
+          ? applyFactionPricing(baseShopItems, memoryMerchant, state.factionManager)
+          : baseShopItems;
+        
         return {
           ...state,
           dialogue: null,
@@ -665,6 +698,8 @@ const defaultGameState: GameState = {
     minutes: 0,
     isPaused: false,
   },
+  factionManager: FactionManager.getInstance(), // Initialize faction manager
+  showFactionStatus: false, // Faction status hidden initially
 };
 
 /**

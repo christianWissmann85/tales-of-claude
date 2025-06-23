@@ -126,6 +126,7 @@ const npcs: NPC[] = [
     role: 'merchant' as NPCRole,
     dialogueId: 'bit_merchant_intro',
     statusEffects: [],
+    factionId: 'order', // Affiliated with Order of Clean Code
   },
 ];
 

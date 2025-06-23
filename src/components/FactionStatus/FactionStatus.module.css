@@ -1,0 +1,200 @@
+```css
+/* src/components/FactionStatus/FactionStatus.module.css */
+
+/*
+  CSS Module for the FactionStatus component.
+  Adheres to a retro terminal aesthetic with ASCII-like styling.
+*/
+
+/* --- CSS Variables (assuming these might be defined globally or in a theme file) --- */
+:root {
+  --terminal-bg-color: #1a1a1a; /* Dark grey background */
+  --terminal-text-color: #00ff00; /* Classic green terminal text */
+  --terminal-border-color: #00ff00; /* Green border for consistency */
+  --terminal-accent-color: #008000; /* Slightly darker green for accents */
+
+  /* Faction Tier Colors */
+  --faction-hostile-color: #ff0000; /* Red */
+  --faction-neutral-color: #ffff00; /* Yellow */
+  --faction-allied-color: #00ff00; /* Green */
+
+  /* Example Faction-themed Colors for Progress Bars */
+  --faction-pirates-bar-color: #8B0000; /* Dark Red */
+  --faction-merchants-bar-color: #008080; /* Teal */
+  --faction-miners-bar-color: #808000; /* Olive */
+  --faction-scientists-bar-color: #800080; /* Purple */
+  --faction-default-bar-color: var(--terminal-text-color); /* Fallback */
+}
+
+/* --- Main Container Styling --- */
+.factionStatusContainer {
+  /* Positioning and size (example - adjust as needed for layout) */
+  position: absolute; /* Or relative/static depending on parent layout */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px; /* Fixed width for consistent look */
+  max-height: 80vh; /* Max height to allow scrolling */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+
+  /* Base terminal aesthetic */
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  background-color: var(--terminal-bg-color);
+  color: var(--terminal-text-color);
+  padding: 15px; /* Inner padding for content */
+
+  /* ASCII Border Look (simulated with box-shadow for a chunky, pixelated effect) */
+  /* This creates a double-line border with a gap, mimicking retro terminal borders. */
+  border: none; /* Remove default border */
+  box-shadow:
+    0 0 0 1px var(--terminal-border-color), /* Innermost border line */
+    0 0 0 2px var(--terminal-bg-color),     /* Gap between lines */
+    0 0 0 3px var(--terminal-border-color); /* Outermost border line */
+
+  /* Smooth animations for show/hide */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Class for hiding the component */
+.factionStatusContainer.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Disable interaction when hidden */
+}
+
+/* --- Header Styling --- */
+.header {
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--terminal-text-color);
+  text-shadow: 0 0 8px var(--terminal-text-color); /* Subtle glow effect */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* --- Faction List Styling --- */
+.factionList {
+  list-style: none; /* Remove default list bullets */
+  padding: 0;
+  margin: 0;
+}
+
+/* --- Individual Faction Entry Styling --- */
+.factionEntry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribute space between name and bar */
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px dashed rgba(0, 255, 0, 0.2); /* Subtle dashed border for each entry */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.factionEntry:last-child {
+  margin-bottom: 0; /* No margin after the last entry */
+}
+
+/* Hover effects for faction entries */
+.factionEntry:hover {
+  background-color: rgba(0, 255, 0, 0.15); /* Light green tint on hover */
+  border-color: var(--terminal-text-color); /* Solid green border on hover */
+  cursor: pointer;
+}
+
+/* --- Faction Name Styling --- */
+.factionName {
+  flex: 1; /* Allows name to take available space */
+  font-weight: bold;
+  margin-right: 15px; /* Space between name and progress bar */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+  text-transform: uppercase; /* All caps for names */
+}
+
+/* Tier-specific colors for faction names */
+.factionName.hostile {
+  color: var(--faction-hostile-color);
+}
+
+.factionName.neutral {
+  color: var(--faction-neutral-color);
+}
+
+.factionName.allied {
+  color: var(--faction-allied-color);
+}
+
+/* --- Progress Bar Styling --- */
+.progressBarContainer {
+  width: 160px; /* Fixed width for consistency */
+  height: 14px; /* Height of the progress bar */
+  background-color: rgba(255, 255, 255, 0.1); /* Light grey background for empty part */
+  border: 1px solid var(--terminal-text-color); /* Border around the bar */
+  overflow: hidden; /* Ensures the fill stays within the container */
+  position: relative; /* For absolute positioning of text inside */
+}
+
+.progressBarFill {
+  height: 100%;
+  width: 0%; /* Initial width, will be set dynamically (e.g., by React props) */
+  background-color: var(--faction-default-bar-color); /* Default fill color */
+  transition: width 0.4s ease-out; /* Smooth animation for fill changes */
+}
+
+/* Faction-themed colors for progress bar fills */
+.progressBarFill.pirates {
+  background-color: var(--faction-pirates-bar-color);
+}
+.progressBarFill.merchants {
+  background-color: var(--faction-merchants-bar-color);
+}
+.progressBarFill.miners {
+  background-color: var(--faction-miners-bar-color);
+}
+.progressBarFill.scientists {
+  background-color: var(--faction-scientists-bar-color);
+}
+
+/* Text overlay for progress bar (e.g., "50%") */
+.progressBarText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff; /* White text for readability over any bar color */
+  font-size: 0.7em;
+  text-shadow: 0 0 3px #000; /* Black shadow for better contrast */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* --- Scrollbar Styling (for retro terminal look) --- */
+/* Webkit (Chrome, Safari, Edge) scrollbar styles */
+.factionStatusContainer::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+}
+
+.factionStatusContainer::-webkit-scrollbar-track {
+  background: var(--terminal-bg-color); /* Background of the scrollbar track */
+  border: 1px solid var(--terminal-border-color); /* Border around the track */
+}
+
+.factionStatusContainer::-webkit-scrollbar-thumb {
+  background: var(--terminal-border-color); /* Color of the scrollbar thumb */
+  border: 1px solid var(--terminal-bg-color); /* Border around the thumb */
+}
+
+.factionStatusContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-text-color); /* Brighter green on hover */
+}
+
+/* Firefox scrollbar styles */
+.factionStatusContainer {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: var(--terminal-border-color) var(--terminal-bg-color); /* thumb color track color */
+}
