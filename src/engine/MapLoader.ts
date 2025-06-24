@@ -209,9 +209,11 @@ export class MapLoader {
    */
   private processJsonMap(jsonMap: JsonMap): IGameMap {
     // Mapping from numeric tile IDs to TileType strings
+    // CRITICAL FIX: Collision layer interpretation was backward!
+    // In Tiled, 0 typically means 'no collision' (walkable), and 1 means 'collision' (wall)
     const tileIdToType: Record<number, TileType> = {
-      0: 'wall', // Default/empty tile - use wall as safe fallback
-      1: 'grass',
+      0: 'grass', // FIX: 0 means walkable in collision layer (was 'wall')
+      1: 'wall',  // FIX: 1 means wall in collision layer (was 'grass')
       2: 'floor', // Most common tile type in maps
       3: 'water',
       4: 'wall',

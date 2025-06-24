@@ -1,4 +1,6 @@
-import { Position, JsonMapObject } from './map-schema.types';
+
+import { Position } from './global.types'; // Changed import source for Position
+import { JsonMapObject } from './map-schema.types';
 
 /**
  * Represents a movable block that can be pushed by the player.

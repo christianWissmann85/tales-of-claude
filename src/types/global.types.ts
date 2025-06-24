@@ -1,4 +1,3 @@
-// src/types/global.types.ts
 
 /**
  * Represents 2D coordinates in the game grid.
@@ -373,6 +372,9 @@ export interface WeatherEffects {
   combatAccuracyModifier: number;
 }
 
+// Import FactionManager for GameState
+import { FactionManager } from '../engine/FactionManager';
+
 /**
  * The main interface representing the entire game state.
  */
@@ -393,4 +395,7 @@ export interface GameState {
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
   timeData?: TimeData; // Current time state for day/night cycle
   weatherData?: WeatherData; // Current weather state
+  factionManager: FactionManager; // Added: Faction manager instance
+  showFactionStatus: boolean; // Added: Whether the faction status UI is currently displayed
+  factionReputations?: any; // Added: For backward compatibility with old saves that might have this directly
 }

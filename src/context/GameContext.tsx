@@ -26,8 +26,10 @@ import { getMap } from '../assets/maps'; // Import getMap function for async map
 import SaveGameService from '../services/SaveGame'; // Import SaveGameService
 import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
+import { Quest, QuestVariant } from '../models/Quest'; // Import Quest and QuestVariant
 import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
 import { applyFactionPricing } from '../utils/shopPricing'; // Import shop pricing utility
+import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Import dialogue helper
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -213,6 +215,44 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         // Remove defeated enemies from the map (they will respawn later via PatrolSystem)
         if (defeatedEnemyIds && defeatedEnemyIds.length > 0) {
           newState.enemies = state.enemies.filter(e => !defeatedEnemyIds.includes(e.id));
+          
+          // Update quest progress for defeating enemies
+          const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
+          questManager.setPlayer(updatedPlayer);
+          
+          // Track defeated enemy types for quest progress
+          const defeatedEnemies = state.enemies.filter(e => defeatedEnemyIds.includes(e.id));
+          defeatedEnemies.forEach(enemy => {
+            // Update quest progress for defeat_enemy objectives
+            const enemyType = enemy.name.toLowerCase().replace(/\s+/g, '_');
+            questManager.updateQuestProgress('defeat_enemy', enemyType, 1);
+            // Also track by generic enemy types
+            if (enemy.name.includes('Bug')) {
+              questManager.updateQuestProgress('defeat_enemy', 'bug', 1);
+            } else if (enemy.name.includes('Virus')) {
+              questManager.updateQuestProgress('defeat_enemy', 'virus', 1);
+            } else if (enemy.name.includes('Corrupted')) {
+              questManager.updateQuestProgress('defeat_enemy', 'corrupted_data', 1);
+            } else if (enemy.name.includes('Boss') || enemy.name.includes('Sovereign')) {
+              questManager.updateQuestProgress('defeat_enemy', 'boss', 1);
+            }
+          });
+          
+          // Check if any quests completed and update player
+          const completedQuests = questManager.getActiveQuests().filter(q => q.status === 'completed');
+          completedQuests.forEach(quest => {
+            if (!updatedPlayer.completedQuestIds.includes(quest.id)) {
+              updatedPlayer.completedQuestIds.push(quest.id);
+              updatedPlayer.activeQuestIds = updatedPlayer.activeQuestIds.filter(id => id !== quest.id);
+              questManager.completeQuest(quest.id, updatedPlayer);
+            }
+          });
+          newState.player = updatedPlayer;
         }
       }
       return newState;
@@ -263,6 +303,31 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       if (toPlayerInventory) {
         const updatedPlayer = clonePlayer(state.player);
         updatedPlayer.addItem(item);
+        
+        // Update quest progress for item collection
+        const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
+        questManager.setPlayer(updatedPlayer);
+        
+        // Check if this item collection completes any collect_item objectives
+        if (item.id) {
+          questManager.updateQuestProgress('collect_item', item.id, 1);
+        }
+        
+        // Check if any quests completed and update player
+        const completedQuests = questManager.getActiveQuests().filter(q => q.status === 'completed');
+        completedQuests.forEach(quest => {
+          if (!updatedPlayer.completedQuestIds.includes(quest.id)) {
+            updatedPlayer.completedQuestIds.push(quest.id);
+            updatedPlayer.activeQuestIds = updatedPlayer.activeQuestIds.filter(id => id !== quest.id);
+            questManager.completeQuest(quest.id, updatedPlayer);
+          }
+        });
+        
         return { ...state, player: updatedPlayer };
       } else if (position) {
         // Add item to map's dynamic items list (e.g., dropped loot)
@@ -350,6 +415,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       if (choiceAction === 'save_game') {
         // Save the game with quest manager state
         const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
         const stateWithQuests = {
           ...state,
           questManagerState: questManager.saveState()
@@ -375,6 +445,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         if (loadedState) {
           // Load quest manager state
           const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
           if (loadedState.questManagerState) {
             questManager.loadState(loadedState.questManagerState);
           }
@@ -418,6 +493,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       } else if (choiceAction === 'start_quest_bug_hunt') {
         // Start the Bug Hunt quest
         const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
         const quest = questManager.getQuestById('bug_hunt');
         if (quest && questManager.startQuest('bug_hunt')) {
           return {
@@ -476,6 +556,38 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             playerGold: state.player.gold,
           },
         };
+      } else if (choiceAction.startsWith('start_quest_')) {
+        // Generic quest start handler
+        const questId = choiceAction.replace('start_quest_', '');
+        const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
+        questManager.setPlayer(state.player);
+        
+        const quest = questManager.getQuestById(questId);
+        if (quest) {
+          if (questManager.startQuest(questId)) {
+            const updatedPlayer = clonePlayer(state.player);
+            if (!updatedPlayer.activeQuestIds.includes(questId)) {
+              updatedPlayer.activeQuestIds.push(questId);
+            }
+            return {
+              ...state,
+              player: updatedPlayer,
+              dialogue: null,
+              notification: `Quest started: ${quest.name}!`
+            };
+          } else {
+            return {
+              ...state,
+              dialogue: null,
+              notification: `Cannot start quest: ${quest.name}. Check prerequisites or faction requirements.`
+            };
+          }
+        }
       } else if (choiceAction.startsWith('bit_merchant') || choiceAction.startsWith('binary_bard')) {
         // Load dialogue for various NPCs
         const newDialogue = dialoguesData.find((d) => d.id === choiceAction);
@@ -491,6 +603,21 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             },
           };
         }
+      } else if (choiceAction.startsWith('offer_quest_')) {
+        // Load quest offering dialogue
+        const questId = choiceAction.replace('offer_quest_', '');
+        const questDialogue = dialoguesData.find((d) => d.id === `offer_quest_${questId}`);
+        if (questDialogue) {
+          const npc = state.npcs.find(n => state.dialogue?.speaker === n.name);
+          return {
+            ...state,
+            dialogue: {
+              speaker: npc?.name || state.dialogue?.speaker || 'Unknown',
+              lines: questDialogue.lines,
+              currentLineIndex: 0,
+            },
+          };
+        }
       }
       // Add more dialogue actions as needed
       return state;
@@ -498,6 +625,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
     case 'SAVE_GAME': {
       const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
       const stateWithQuests = {
         ...state,
         questManagerState: questManager.saveState()
@@ -733,6 +865,11 @@ const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   // Initialize QuestManager and check for saved game when the game starts
   React.useEffect(() => {
     const questManager = QuestManager.getInstance();
+  
+  // Initialize quests if not already done
+  if (questManager.allQuests.length === 0) {
+    questManager.initializeQuests();
+  }
     questManager.initializeQuests();
     
     // Load the initial map asynchronously

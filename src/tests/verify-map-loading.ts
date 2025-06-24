@@ -1,4 +1,4 @@
-// Quick test to verify map loading works
+
 import { MapLoader } from '../engine/MapLoader';
 
 async function testMapLoading() {
@@ -20,14 +20,14 @@ async function testMapLoading() {
       try {
         const map = await loader.loadMap(mapId);
         console.log(`✅ ${mapId} loaded: ${map.name} (${map.width}x${map.height})`);
-      } catch (error) {
-        console.log(`❌ ${mapId} failed: ${error.message}`);
+      } catch (error: unknown) { // Explicitly type error as unknown
+        console.log(`❌ ${mapId} failed: ${(error as Error).message}`); // Cast to Error to access message
       }
     }
     
     console.log('\n✅ Map loading test completed successfully!');
-  } catch (error) {
-    console.error('❌ Map loading test failed:', error);
+  } catch (error: unknown) { // Explicitly type error as unknown
+    console.error('❌ Map loading test failed:', (error as Error).message); // Cast to Error to access message
   }
 }
 

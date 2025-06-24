@@ -128,6 +128,14 @@ const npcs: NPC[] = [
     statusEffects: [],
     factionId: 'order', // Affiliated with Order of Clean Code
   },
+  {
+    id: 'elder_binary_oak',
+    name: 'Elder Binary Oak',
+    position: { x: 15, y: 8 },
+    role: 'quest_giver' as NPCRole,
+    dialogueId: 'elder_oak_intro', // Default dialogue
+    statusEffects: [],
+  },
 ];
 
 // 5. Enemies

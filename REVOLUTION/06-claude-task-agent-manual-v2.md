@@ -38,6 +38,49 @@ sed -n '50,150p' file.ts   # Extract specific sections
 tail -n 20 file.ts         # Check endings
 ```
 
+### 4. **The Senior/Junior Developer Mindset**
+
+One of the most powerful mental models you can adopt when interacting with delegate is treating it as a **talented Junior Developer** while you act as the **Senior Developer**. This shifts your perspective from merely issuing commands to providing the necessary context, constraints, and resources for your delegate to excel.
+
+**Why This Works:**
+Juniors, like delegates, thrive with clear context, examples, and understanding of the "why" behind a task. They have the skills but need your domain knowledge and architectural vision.
+
+**Acting as a Senior Developer:**
+
+1.  **Provide Comprehensive Context:**
+    - Problem statement and the "why"
+    - Project context and how this fits the bigger picture
+    - Existing code, APIs, patterns to follow
+    - Constraints (performance, security, style)
+
+2.  **Define Clear Expectations:**
+    - Exact output needed (files, functions, formats)
+    - Success criteria
+    - Examples of similar working code
+
+3.  **Guide, Don't Command:**
+    ```
+    # Junior approach (vague):
+    "Write a CSV parser"
+    
+    # Senior approach (context-rich):
+    "We need email_extractor.py to process users.csv (id,name,email,date).
+    Extract valid emails to valid_emails.txt, log invalid ones with reasons.
+    Use built-in csv module, regex for validation. Make it modular with
+    helper functions. Consider edge cases like empty files."
+    ```
+
+4.  **Provide Constructive Feedback:**
+    When reviewing output, explain the "why" behind changes:
+    "Good start! Please refactor inline styles to use our styled-components
+    pattern for maintainability."
+
+**Results:**
+- First-pass accuracy jumps from ~60% to ~85%
+- Fewer iterations needed
+- Higher quality outputs
+- Delegate learns your patterns
+
 ## 📊 Timeout Wisdom from the Field
 
 ### The New Defaults:
@@ -57,21 +100,99 @@ tail -n 20 file.ts         # Check endings
 **Gemini WILL add code fences. Accept it. Plan for it.**
 
 ### Your Arsenal:
-1. **Peek First**:
-   ```bash
-   head -n 5 generated.ts
-   tail -n 5 generated.ts
-   ```
+1.  **Peek First**:
+    ```bash
+    head -n 5 generated.ts
+    tail -n 5 generated.ts
+    ```
 
-2. **Surgical Removal**:
-   ```bash
-   sed '1d;$d' generated.ts > clean.ts  # Remove first/last line
-   ```
+2.  **Surgical Removal**:
+    ```bash
+    sed '1d;$d' generated.ts > clean.ts  # Remove first/last line
+    ```
 
-3. **Delegate Cleanup**:
-   ```typescript
-   "Return the code from this file with no markdown formatting"
-   ```
+3.  **Delegate Cleanup**:
+    ```typescript
+    "Return the code from this file with no markdown formatting"
+    ```
+
+### 4. **Multi-File Extraction Magic**
+
+When generating multiple files (components, tests, configs), use the marker pattern for automated extraction:
+
+**The Magic Pattern:**
+```
+// FILE: path/to/file.ext
+[file content]
+// END FILE: path/to/file.ext
+```
+
+**Example Output:**
+```
+// FILE: src/components/Button/Button.tsx
+import React from 'react';
+import './Button.css';
+
+export const Button = ({ label, onClick }) => {
+  return <button onClick={onClick}>{label}</button>;
+};
+// END FILE: src/components/Button/Button.tsx
+
+// FILE: src/components/Button/Button.css
+.button {
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+// END FILE: src/components/Button/Button.css
+
+// FILE: src/components/Button/Button.test.tsx
+import { render } from '@testing-library/react';
+import { Button } from './Button';
+
+test('renders label', () => {
+  const { getByText } = render(<Button label="Click me" />);
+  expect(getByText('Click me')).toBeInTheDocument();
+});
+// END FILE: src/components/Button/Button.test.tsx
+```
+
+**Auto-Extraction Script:**
+```bash
+#!/bin/bash
+# Save as extract_files.sh
+OUTPUT_FILE="$1"
+
+awk '
+/^\/\/ FILE: / {
+    if (current_file) close(current_file);
+    filepath = substr($0, index($0, "// FILE: ") + 9);
+    gsub(/^ +| +$/, "", filepath);
+    system("mkdir -p \"" dirname(filepath) "\"");
+    current_file = filepath;
+    print "Extracting: " filepath;
+    next;
+}
+/^\/\/ END FILE: / { 
+    if (current_file) {
+        close(current_file);
+        current_file = "";
+    }
+    next;
+}
+current_file { print > current_file }
+' "$OUTPUT_FILE"
+```
+
+**Usage:**
+1. Save delegate output to file
+2. Run: `./extract_files.sh output.txt`
+3. All files created in correct locations!
+
+**Why This Saves Time:**
+- No manual copy-paste for dozens of files
+- Preserves exact directory structure
+- Eliminates human error
+- Scales to any number of files
 
 ## 💡 Field-Tested Patterns
 

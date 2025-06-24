@@ -1,4 +1,3 @@
-// src/services/SaveGame.ts
 
 import { Item, ItemVariant } from '../models/Item';
 import { Player } from '../models/Player';
@@ -26,6 +25,7 @@ import {
   WeatherData
 } from '../types/global.types';
 import { GameMap } from '../models/Map';
+import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
 
 /**
  * Defines the actual game state with class instances.
@@ -34,6 +34,7 @@ interface GameState extends IGameState {
   player: Player;
   currentMap: GameMap;
   items: Item[];
+  factionManager: FactionManager; // Explicitly include FactionManager here for clarity, though it's in IGameState
 }
 
 /**
@@ -124,7 +125,9 @@ interface SerializableGameState {
   showCharacterScreen: boolean;
   notification: string | null;
   questManagerState?: any; // Quest manager state for saving/loading
-  factionReputations?: any[]; // Faction reputation data for saving/loading
+  factionReputations?: any[]; // Faction reputation data for saving/loading (for backward compatibility)
+  factionManager?: { factions: { id: string; reputation: number; }[] }; // FactionManager state for saving/loading
+  showFactionStatus: boolean; // Added for saving
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
   timeData?: {
     hours: number;
@@ -201,7 +204,9 @@ class SaveGameService {
         showCharacterScreen: gameState.showCharacterScreen,
         notification: gameState.notification,
         questManagerState: gameState.questManagerState,
-        factionReputations: gameState.factionManager ? gameState.factionManager.serialize().factions : undefined,
+        factionManager: gameState.factionManager ? gameState.factionManager.serialize() : undefined, // Serialize FactionManager
+        showFactionStatus: gameState.showFactionStatus, // Added: showFactionStatus
+        // factionReputations: gameState.factionReputations, // This property is now handled by factionManager
         hotbarConfig: gameState.hotbarConfig,
         timeData: gameState.timeData,
         weatherData: gameState.weatherData,
@@ -310,44 +315,6 @@ class SaveGameService {
       (player.talentTree as any)._availablePoints = playerSaveData.talentTree._availablePoints;
 
 
-      // Now, invest points into talents based on saved ranks
-      for (const savedTalent of playerSaveData.talentTree.talents) {
-        const talentInTree = player.talentTree.getTalent(savedTalent.id);
-        if (talentInTree) {
-          // Invest points one by one until currentRank matches savedRank
-          // This ensures player.talentPoints is decremented correctly
-          for (let i = talentInTree.currentRank; i < savedTalent.currentRank; i++) {
-            // We need to temporarily bypass the player.talentPoints check in player.spendTalentPoint
-            // or directly manipulate the talent's rank and player's points.
-            // The prompt asks to "recreates by investing points".
-            // If player.spendTalentPoint is used, it will decrement player.talentPoints.
-            // So, we should ensure player.talentPoints is sufficient *before* this loop,
-            // or adjust it after.
-            // Let's adjust player.talentPoints *after* setting the talent ranks directly,
-            // then ensure the talentTree's available points are correct.
-
-            // Option 1: Directly set talent rank and adjust player.talentPoints
-            // This is simpler and avoids complex logic with spendTalentPoint during load.
-            talentInTree.currentRank = savedTalent.currentRank;
-          }
-        } else {
-          console.warn(`Talent "${savedTalent.id}" not found during load. Skipping.`);
-        }
-      }
-      // After setting all talent ranks, the player.talentPoints should be what's left.
-      // The talentTree._availablePoints should also be set from the save data.
-      // The player.talentPoints was already set above.
-      // The talentTree._availablePoints was also set above.
-      // This approach ensures the state is directly loaded, rather than re-simulating point spending.
-      // The prompt's "recreates by investing points" might imply a loop of `spendTalentPoint`,
-      // but that would require careful management of `player.talentPoints` during the loop.
-      // Directly setting `currentRank` and then `_availablePoints` is more robust for loading.
-      // Let's re-read: "recreates by investing points during load". This implies calling `spendTalentPoint`.
-      // To do this, we need to ensure `player.talentPoints` is high enough temporarily.
-      // Let's try this:
-      player.talentPoints = playerSaveData.talentPoints; // Set initial available points
-      (player.talentTree as any)._availablePoints = playerSaveData.talentTree._availablePoints; // Set initial available points in tree
-
       // Now, for each talent, invest points one by one.
       // This will decrement player.talentPoints and talentTree._availablePoints correctly.
       for (const savedTalent of playerSaveData.talentTree.talents) {
@@ -441,11 +408,29 @@ class SaveGameService {
         showCharacterScreen: serializableGameState.showCharacterScreen || false,
         notification: serializableGameState.notification,
         questManagerState: serializableGameState.questManagerState,
-        factionReputations: serializableGameState.factionReputations,
+        factionReputations: serializableGameState.factionReputations, // Keep for backward compatibility
+        factionManager: FactionManager.getInstance(), // Re-initialize FactionManager instance
+        showFactionStatus: serializableGameState.showFactionStatus || false, // Added: showFactionStatus
         hotbarConfig: serializableGameState.hotbarConfig || [null, null, null, null, null],
         timeData: serializableGameState.timeData,
         weatherData: serializableGameState.weatherData,
       };
+
+      // Load FactionManager state if available
+      if (serializableGameState.factionManager) {
+        loadedGameState.factionManager.deserialize(serializableGameState.factionManager);
+      } else if (serializableGameState.factionReputations) {
+        // Handle legacy factionReputations if factionManager is not present
+        // This is a fallback for older saves.
+        // Assuming factionReputations is an array of { id: string, reputation: number }
+        serializableGameState.factionReputations.forEach((rep: { id: string; reputation: number; }) => {
+          try {
+            loadedGameState.factionManager.adjustReputation(rep.id, rep.reputation - loadedGameState.factionManager.getReputation(rep.id));
+          } catch (e) {
+            console.warn(`Failed to load legacy faction reputation for ${rep.id}:`, e);
+          }
+        });
+      }
 
       console.log('Game loaded successfully!');
       return loadedGameState;

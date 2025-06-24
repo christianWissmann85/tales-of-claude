@@ -1,4 +1,3 @@
-// src/models/QuestManager.ts
 
 import { Quest, QuestVariant, QuestChoice, QuestConsequence, ConsequenceType } from './Quest';
 import { Player } from './Player';
@@ -166,11 +165,15 @@ export class QuestManager {
         this.applyQuestConsequences(choice.consequences);
       }
 
+      // Re-evaluate quest status after handleChoice might have changed it
+      // Use type assertion since TypeScript doesn't know handleChoice can change the status
+      const currentQuestStatus = quest.status as QuestStatus;
+
       // Check if quest status changed after the choice
-      if (quest.status === 'completed' && !this.completedQuestIds.includes(quest.id)) {
+      if (currentQuestStatus === 'completed' && !this.completedQuestIds.includes(quest.id)) {
         this.completedQuestIds.push(quest.id);
         this.activeQuests = this.activeQuests.filter(q => q.id !== questId);
-      } else if (quest.status === 'failed') {
+      } else if (currentQuestStatus === 'failed') {
         this.activeQuests = this.activeQuests.filter(q => q.id !== questId);
       }
     }

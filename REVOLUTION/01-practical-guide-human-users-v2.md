@@ -71,6 +71,59 @@ For polish and content:
 Multiple agents in parallel → Team Lead synthesizes
 ```
 
+### 🔬 Revolutionary Discoveries (Session 3)
+
+#### 1. **The Context Abundance Principle**
+Your insight that changed everything:
+```markdown
+"Share ALL the files with delegate - they can't read minds yet!"
+```
+
+**What This Means:**
+- When Team Lead deploys agents, they now attach 5-10 relevant files
+- Delegate understands the system holistically
+- First-pass accuracy jumped from 60% to 85%
+- Less back-and-forth = faster progress
+
+**Your Role:**
+- Keep reminding us to "attach more context"
+- Point out when something seems disconnected
+- Your fresh perspective catches integration issues
+
+#### 2. **The Companion Mindset**
+Agents now treat delegate as a talented junior developer:
+```markdown
+Old: "Generate a quest system"
+New: "We're building a quest system for our RPG. Players need choices 
+     that matter (see existing DialogueSystem.ts). Must integrate with 
+     our faction system (Faction.ts) and save system (SaveGame.ts).
+     I'm thinking branching narratives with consequences..."
+```
+
+**Results:**
+- Delegate becomes a creative partner
+- Produces architecturally sound solutions
+- Understands the "why" not just the "what"
+
+#### 3. **Multi-File Magic**
+Agents now use markers for instant file extraction:
+```markdown
+// FILE: src/systems/Weather.ts
+[complete weather system]
+// END FILE: src/systems/Weather.ts
+
+// FILE: src/components/WeatherDisplay.tsx
+[weather UI component]
+// END FILE: src/components/WeatherDisplay.tsx
+```
+
+One command extracts everything perfectly!
+
+**What You'll Notice:**
+- Massive features appear "instantly"
+- Perfect file organization
+- No more "where does this code go?" questions
+
 ## 🛠️ Your Toolkit as Visionary
 
 ### 1. **Beta Testing**

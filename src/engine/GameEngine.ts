@@ -17,6 +17,7 @@ import {
 
 // 1. Add import for Enemy model from '../models/Enemy'
 import { Enemy as EnemyClass } from '../models/Enemy';
+import { Enemy } from '../types/global.types';
 
 // Import GameState and action types from context/GameContext.tsx
 import { GameState, GameAction } from '../context/GameContext';
@@ -28,6 +29,7 @@ import { GameMap } from '../models/Map'; // Assuming GameMap class exists and is
 // 1. Import dialogue data from '../assets/dialogues.json'
 import dialoguesData from '../assets/dialogues.json';
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
+import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Import dialogue helper
 
 // Import map data index and getMap function
 import { mapDataIndex, getMap } from '../assets/maps';
@@ -644,9 +646,18 @@ export class GameEngine {
       // Check if the NPC is on any of the adjacent tiles
       if (adjacentTiles.some(pos => pos.x === npc.position.x && pos.y === npc.position.y)) {
 
+        // Check if NPC has a quest to offer
+        const questManager = QuestManager.getInstance();
+        if (questManager.allQuests.length === 0) {
+          questManager.initializeQuests();
+        }
+        
+        // Get the appropriate dialogue ID based on quest availability
+        const questDialogueId = getNPCDialogueId(npc.id, questManager);
+        const dialogueId = questDialogueId || npc.dialogueId;
+        
         // Load their dialogue from dialogues.json
-        // Cast dialoguesData to the expected array type for proper type checking
-        const dialogueEntry = (dialoguesData as DialogueEntryData[]).find(d => d.id === npc.dialogueId);
+        const dialogueEntry = (dialoguesData as DialogueEntryData[]).find(d => d.id === dialogueId);
 
         // 4. Handle the case where dialogue data doesn't exist
         if (!dialogueEntry) {
@@ -667,7 +678,6 @@ export class GameEngine {
         });
         
         // Update quest progress for talking to this NPC
-        const questManager = QuestManager.getInstance();
         questManager.updateQuestProgress('talk_to_npc', npc.role, 1);
         
         return true; // Interaction initiated

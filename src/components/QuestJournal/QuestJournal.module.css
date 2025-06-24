@@ -1,0 +1,950 @@
+/* src/components/QuestLog/QuestLog.module.css */
+
+/*
+ * QuestLog Component - Enhanced Retro RPG Terminal Theme
+ * Significant visual upgrade for the Quest Journal.
+ * Consistent with DialogueBox.module.css and Inventory.module.css for a unified look.
+ */
+
+/* --- 0. Global Variables & Base Styles --- */
+:root {
+  /* Core Terminal Colors */
+  --terminal-bg-dark: #0d0d0d;
+  --terminal-bg-medium: #001a00;
+  --terminal-bg-light: #002a00;
+  --terminal-text-primary: #00ff00; /* Bright green */
+  --terminal-text-secondary: #39ff14; /* Brighter green for emphasis */
+  --terminal-text-accent: #00ffff; /* Cyan for descriptions */
+  --terminal-border: #00ff00;
+  --terminal-glow: rgba(0, 255, 0, 0.7);
+  --terminal-shadow: rgba(0, 255, 0, 0.3);
+
+  /* Quest Type Colors */
+  --quest-main-color: #FFD700; /* Gold */
+  --quest-side-color: #C0C0C0; /* Silver */
+  --quest-urgent-color: #FF4500; /* Red-Orange */
+  --quest-completed-color: #888888; /* Gray */
+  --quest-active-glow: rgba(0, 255, 0, 0.8); /* Stronger green glow for active quests */
+
+  /* Faction Colors */
+  --faction-compilers: #00BFFF; /* Deep Sky Blue */
+  --faction-glitch-gang: #9932CC; /* Dark Orchid */
+  --faction-synthetics: #FF8C00; /* Dark Orange */
+  --faction-nomads: #BDB76B; /* Dark Khaki */
+
+  /* Consequence Colors */
+  --consequence-positive: #00FF00; /* Green */
+  --consequence-negative: #FF0000; /* Red */
+
+  /* Animation Speeds */
+  --transition-speed-fast: 0.2s;
+  --transition-speed-medium: 0.3s;
+  --transition-speed-slow: 0.5s;
+
+  /* Approximate header height for sticky tab calculation */
+  --quest-log-header-height: 80px;
+}
+
+/* 1. Overall Overlay and Container */
+/* The overlay covers the entire screen with a semi-transparent dark background */
+.questLogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Darker semi-transparent background */
+  backdrop-filter: blur(3px); /* Subtle blur for background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* High z-index to appear on top of other game elements */
+  opacity: 0; /* Start hidden for fade-in animation */
+  animation: fadeIn var(--transition-speed-medium) ease-out forwards; /* Smooth fade-in effect */
+}
+
+/* Keyframes for the fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* The main Quest Log container, styled like a retro terminal window */
+.questLogContainer {
+  font-family: 'VT323', monospace; /* Use the retro pixel font */
+  background-color: var(--terminal-bg-dark); /* Dark background for the main content area */
+  color: var(--terminal-text-primary); /* Bright green for text */
+  border: 2px solid var(--terminal-border); /* Green border */
+  box-shadow: 0 0 30px var(--terminal-glow), inset 0 0 15px var(--terminal-glow); /* Stronger glow for prominence */
+  padding: 20px; /* Slightly reduced padding */
+  border-radius: 8px; /* Slightly rounded corners for a softer retro look */
+  max-width: 1200px; /* Increased max-width for 3 columns */
+  width: 95%; /* Responsive width */
+  max-height: 95vh; /* Increased maximum height */
+  overflow: hidden; /* Hide overflow for the main container, inner sections will scroll */
+  display: flex;
+  flex-direction: column; /* Stack header, tabs, and content vertically */
+  gap: 15px; /* Reduced space between major sections */
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+  position: relative; /* For scanline effect */
+}
+
+/* Scanline effect for terminal aesthetic */
+.questLogContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none; /* Allows interaction with elements below */
+  z-index: 1; /* Above container background, below content */
+  opacity: 0.5;
+}
+
+/* Custom scrollbar styling for inner scrollable areas (quest list, details, branch) */
+.questList::-webkit-scrollbar,
+.questDetails::-webkit-scrollbar,
+.questBranchVisualization::-webkit-scrollbar {
+    width: 12px; /* Wider scrollbar */
+}
+
+.questList::-webkit-scrollbar-track,
+.questDetails::-webkit-scrollbar-track,
+.questBranchVisualization::-webkit-scrollbar-track {
+    background: var(--terminal-bg-medium);
+    border-radius: 10px;
+    border: 1px solid var(--terminal-border); /* Add border to track */
+}
+
+.questList::-webkit-scrollbar-thumb,
+.questDetails::-webkit-scrollbar-thumb,
+.questBranchVisualization::-webkit-scrollbar-thumb {
+    background-color: var(--terminal-text-primary);
+    border-radius: 10px;
+    border: 3px solid var(--terminal-bg-medium); /* Thicker border for thumb */
+}
+
+.questList::-webkit-scrollbar-thumb:hover,
+.questDetails::-webkit-scrollbar-thumb:hover,
+.questBranchVisualization::-webkit-scrollbar-thumb:hover {
+    background-color: var(--terminal-text-secondary);
+}
+
+/* 2. Header Section */
+.questLogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--terminal-border); /* Dashed separator line */
+  position: sticky; /* Fixed header */
+  top: 0;
+  background-color: var(--terminal-bg-dark); /* Ensure background for sticky effect */
+  z-index: 10; /* High z-index to appear above content */
+  margin-bottom: 15px; /* Space below header */
+}
+
+.questLogTitle {
+  font-size: 2.8em; /* Prominent title size */
+  color: var(--terminal-text-secondary); /* Brighter green for emphasis */
+  text-shadow: 0 0 15px var(--terminal-text-secondary); /* Stronger glowing text effect */
+  letter-spacing: 3px; /* Spaced out letters for retro feel */
+  text-transform: uppercase;
+}
+
+/* Close button - enhanced */
+.closeButton {
+    background: none;
+    border: none;
+    color: #ff0000; /* Red 'X' */
+    font-size: 2.8em; /* Larger size */
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: color var(--transition-speed-fast) ease-in-out, text-shadow var(--transition-speed-fast) ease-in-out, transform 0.1s ease-in-out;
+    text-shadow: 0 0 8px #ff0000; /* Initial subtle red glow */
+}
+
+.closeButton:hover {
+    color: #ff6666; /* Lighter red on hover */
+    text-shadow: 0 0 20px #ff6666, 0 0 30px rgba(255, 102, 102, 0.5); /* Stronger glow */
+    transform: scale(1.15); /* More pronounced enlarge on hover */
+}
+
+.closeButton:active {
+    color: #cc0000;
+    text-shadow: 0 0 8px #cc0000;
+    transform: scale(1.0);
+}
+
+/* Search Bar */
+.searchBar {
+  background-color: var(--terminal-bg-medium);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text-primary);
+  padding: 8px 12px;
+  font-family: 'VT323', monospace;
+  font-size: 1.1em;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2);
+  transition: all var(--transition-speed-fast) ease-in-out;
+  width: 250px; /* Fixed width for search bar */
+  margin-left: auto; /* Push to the right */
+}
+
+.searchBar::placeholder {
+  color: rgba(0, 255, 0, 0.5);
+}
+
+.searchBar:focus {
+  border-color: var(--terminal-text-secondary);
+  box-shadow: inset 0 0 10px var(--terminal-text-secondary), 0 0 10px var(--terminal-text-secondary);
+}
+
+/* 3. Category Tabs */
+.questLogTabs {
+  display: flex;
+  justify-content: center; /* Center the tabs horizontally */
+  gap: 20px; /* More space between tab buttons */
+  margin-bottom: 20px;
+  position: sticky; /* Sticky tab navigation */
+  top: var(--quest-log-header-height); /* Position below the header */
+  background-color: var(--terminal-bg-dark); /* Ensure background for sticky effect */
+  z-index: 9; /* Below header, above content */
+  padding-bottom: 10px; /* Padding for sticky effect */
+  border-bottom: 1px dashed var(--terminal-border); /* Separator */
+}
+
+.tabButton {
+  background-color: var(--terminal-bg-medium); /* Darker green background */
+  color: var(--terminal-text-primary); /* Bright green text */
+  border: 1px solid var(--terminal-border);
+  padding: 12px 25px; /* Larger padding */
+  font-family: inherit; /* Inherit the monospace font */
+  font-size: 1.2em; /* Larger font */
+  cursor: pointer;
+  transition: all var(--transition-speed-medium) ease-in-out; /* Smooth transitions for hover/active */
+  box-shadow: 0 0 8px var(--terminal-shadow); /* Subtle initial glow */
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden; /* For pseudo-element effects */
+}
+
+/* Animated shimmer effect on hover */
+.tabButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+  transition: left var(--transition-speed-medium) ease-in-out;
+}
+
+.tabButton:hover::before {
+  left: 100%;
+}
+
+.tabButton:hover {
+  background-color: var(--terminal-bg-light); /* Lighter green on hover */
+  box-shadow: 0 0 20px var(--terminal-glow); /* Stronger glow on hover */
+  transform: translateY(-3px) scale(1.02); /* More pronounced lift effect */
+}
+
+.tabButton.active {
+  background-color: var(--terminal-text-secondary); /* Brighter green for the active tab */
+  color: var(--terminal-bg-dark); /* Dark text on active tab for contrast */
+  border-color: var(--terminal-text-secondary);
+  box-shadow: 0 0 25px var(--terminal-text-secondary), inset 0 0 12px var(--terminal-text-secondary); /* Stronger glow for active */
+  transform: translateY(0) scale(1.0); /* Reset lift effect for active tab */
+  animation: pulseBorder var(--transition-speed-slow) infinite alternate; /* Pulsing border for active tab */
+}
+
+@keyframes pulseBorder {
+  from { border-color: var(--terminal-text-secondary); box-shadow: 0 0 25px var(--terminal-text-secondary); }
+  to { border-color: var(--terminal-text-primary); box-shadow: 0 0 35px var(--terminal-text-primary); }
+}
+
+/* 4. Three-column Content Layout */
+.questLogMainContent {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1.5fr; /* Quest List | Quest Details | Branch Visualization */
+  gap: 20px; /* Space between columns */
+  flex-grow: 1; /* Allows content to take up remaining vertical space */
+  min-height: 0; /* Important for flex/grid items with overflow, prevents content from pushing container */
+  padding-top: 10px; /* Space below sticky tabs */
+}
+
+.questList,
+.questDetails,
+.questBranchVisualization {
+  background-color: var(--terminal-bg-medium); /* Even darker green background for inner panels */
+  border: 1px solid var(--terminal-border); /* Darker green border */
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: inset 0 0 8px var(--terminal-shadow); /* Stronger inner glow */
+  overflow-y: auto; /* Enable scrolling for content within each column */
+  flex-shrink: 0; /* Prevent these columns from shrinking below their content size */
+  position: relative; /* For ASCII borders */
+}
+
+/* ASCII Borders for columns (conceptual, using simple lines) */
+.questList::before, .questList::after,
+.questDetails::before, .questDetails::after,
+.questBranchVisualization::before, .questBranchVisualization::after {
+  content: '';
+  position: absolute;
+  background-color: var(--terminal-border);
+  box-shadow: 0 0 5px var(--terminal-glow);
+}
+
+.questList::before, .questDetails::before, .questBranchVisualization::before { /* Top border */
+  top: 0; left: 0; width: 100%; height: 1px;
+}
+.questList::after, .questDetails::after, .questBranchVisualization::after { /* Bottom border */
+  bottom: 0; left: 0; width: 100%; height: 1px;
+}
+
+/* 5. Quest List Items */
+.questItem {
+  padding: 10px 12px; /* Increased padding */
+  margin-bottom: 8px; /* More space */
+  cursor: pointer;
+  transition: all var(--transition-speed-fast) ease-in-out; /* Smooth transitions for hover and selection */
+  position: relative; /* For positioning the selected indicator */
+  border-radius: 3px;
+  white-space: nowrap; /* Prevent quest names from wrapping */
+  overflow: hidden; /* Hide any overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis (...) for truncated text */
+  border: 1px solid transparent; /* For hover/active border */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.questItem:last-child {
+  margin-bottom: 0; /* No extra margin on the last item */
+}
+
+.questItem:hover {
+  background-color: var(--terminal-bg-light); /* Slightly lighter green on hover */
+  box-shadow: 0 0 12px var(--terminal-glow); /* Subtle glow on hover */
+  border-color: var(--terminal-text-secondary);
+  transform: translateX(5px); /* Slide effect on hover */
+}
+
+/* Quest item states based on theme requirements */
+.questItem.activeQuest {
+  color: var(--terminal-text-primary); /* Green for active quests */
+  font-weight: bold;
+  box-shadow: 0 0 15px var(--quest-active-glow), inset 0 0 5px var(--quest-active-glow);
+  border-color: var(--quest-active-glow);
+  animation: activeQuestGlow 1.5s infinite alternate; /* Pulsing glow for active */
+}
+
+@keyframes activeQuestGlow {
+  from { box-shadow: 0 0 15px var(--quest-active-glow), inset 0 0 5px var(--quest-active-glow); }
+  to { box-shadow: 0 0 25px var(--quest-active-glow), inset 0 0 8px var(--quest-active-glow); }
+}
+
+.questItem.availableQuest {
+  color: #ffff00; /* Yellow for available quests */
+}
+
+.questItem.completedQuest {
+  color: var(--quest-completed-color); /* Gray for completed quests */
+  text-decoration: line-through; /* Strikethrough for completed quests */
+  opacity: 0.6; /* Slightly faded for completed quests */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Completed quest "stamp" effect */
+.questItem.completedQuest::after {
+  content: 'COMPLETE';
+  position: absolute;
+  top: 50%;
+  right: -10px; /* Start off-screen */
+  transform: translateY(-50%) rotate(15deg);
+  font-size: 0.9em;
+  font-weight: bold;
+  color: rgba(0, 255, 0, 0.4); /* Faded green */
+  border: 1px solid rgba(0, 255, 0, 0.4);
+  padding: 2px 5px;
+  border-radius: 3px;
+  opacity: 0;
+  animation: stampEffect 0.5s ease-out forwards;
+  animation-delay: 0.1s; /* Delay to appear after item is visible */
+}
+
+@keyframes stampEffect {
+  from { right: -10px; opacity: 0; transform: translateY(-50%) rotate(15deg) scale(0.8); }
+  to { right: 10px; opacity: 1; transform: translateY(-50%) rotate(15deg) scale(1); }
+}
+
+/* Quest Type Color-coding */
+.questItem.mainQuest {
+  color: var(--quest-main-color);
+  border-color: var(--quest-main-color);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+.questItem.sideQuest {
+  color: var(--quest-side-color);
+  border-color: var(--quest-side-color);
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.4);
+}
+.questItem.urgentQuest {
+  color: var(--quest-urgent-color);
+  border-color: var(--quest-urgent-color);
+  box-shadow: 0 0 15px var(--quest-urgent-color);
+  animation: urgentPulse 1s infinite alternate; /* Pulsing glow for urgent */
+}
+
+@keyframes urgentPulse {
+  from { box-shadow: 0 0 15px var(--quest-urgent-color); }
+  to { box-shadow: 0 0 25px var(--quest-urgent-color); }
+}
+
+/* Selected quest highlighting with '>' indicator */
+.questItem.selected {
+  background-color: var(--terminal-bg-light); /* Darker green background for selected item */
+  border: 2px solid var(--terminal-text-secondary); /* Brighter green border for selected */
+  box-shadow: 0 0 20px var(--terminal-text-secondary); /* Stronger glow for selected */
+  padding-left: 30px; /* Increase left padding to make space for the indicator */
+  transform: translateX(0); /* Override hover slide */
+}
+
+.questItem.selected .indicator {
+  position: absolute;
+  left: 8px; /* Position the indicator to the left */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the indicator */
+  color: var(--quest-main-color); /* Gold for the indicator */
+  font-weight: bold;
+  font-size: 1.2em;
+  animation: blinkCursor 0.8s infinite steps(1); /* Blinking cursor effect */
+}
+
+@keyframes blinkCursor {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Faction Icons/Colors in list items (example - assumes a small div or span for icon) */
+.questItem .factionIcon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%; /* Circular icon */
+  border: 1px solid currentColor; /* Border matches text color */
+  display: inline-block;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.questItem .factionIcon.compilers { background-color: var(--faction-compilers); }
+.questItem .factionIcon.glitchgang { background-color: var(--faction-glitch-gang); }
+.questItem .factionIcon.synthetics { background-color: var(--faction-synthetics); }
+.questItem .factionIcon.nomads { background-color: var(--faction-nomads); }
+
+
+/* 6. Quest Details Section */
+.detailTitle {
+  font-size: 2em;
+  color: var(--terminal-text-secondary); /* Brighter green for the detail title */
+  text-shadow: 0 0 10px var(--terminal-text-secondary);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px dashed var(--terminal-border);
+  padding-bottom: 8px;
+}
+
+.detailDescription {
+  font-size: 1.05em;
+  color: var(--terminal-text-accent); /* Cyan text for description, similar to dialogue text */
+  margin-bottom: 20px;
+  white-space: pre-wrap; /* Preserve line breaks and spaces */
+  line-height: 1.6;
+  position: relative; /* For typewriter effect */
+  overflow: hidden;
+  border-right: 0.15em solid var(--terminal-text-accent); /* Blinking cursor */
+  /* These animations are for initial appearance. For dynamic text, JS would control width. */
+  animation: typing 4s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+}
+
+/* Typewriter effect (CSS only, for initial load or static text) */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--terminal-text-accent); }
+}
+
+/* Collapsible sections */
+.collapsibleSection {
+  margin-top: 15px;
+  border-top: 1px dashed var(--terminal-border);
+  padding-top: 10px;
+}
+
+.collapsibleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.3em;
+  color: var(--terminal-text-primary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  transition: color var(--transition-speed-fast) ease-in-out;
+}
+
+.collapsibleHeader:hover {
+  color: var(--terminal-text-secondary);
+}
+
+.collapsibleHeader .toggleIcon {
+  font-size: 1.2em;
+  transition: transform var(--transition-speed-fast) ease-in-out;
+}
+
+.collapsibleHeader.collapsed .toggleIcon {
+  transform: rotate(-90deg); /* Rotate for collapsed state */
+}
+
+.collapsibleContent {
+  max-height: 500px; /* Arbitrary max height for transition */
+  overflow: hidden;
+  transition: max-height var(--transition-speed-medium) ease-in-out, opacity var(--transition-speed-medium) ease-in-out;
+  opacity: 1;
+}
+
+.collapsibleContent.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.objectives h4 {
+  font-size: 1.2em;
+  color: var(--terminal-text-primary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.objective {
+  font-size: 1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the indicator and objective text */
+}
+
+/* Progress indicators for objectives */
+.objective.completed {
+  color: var(--terminal-text-primary); /* Green for completed objectives */
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.objective.active {
+  color: #ffff00; /* Yellow for active objectives */
+}
+
+.objective.pending {
+  color: #aaa; /* Gray for pending objectives */
+}
+
+/* Icons for objectives using pseudo-elements */
+.objective.completed::before {
+  content: '✓'; /* Checkmark symbol */
+  color: var(--terminal-text-primary);
+  font-weight: bold;
+}
+
+.objective.active::before {
+  content: '▶'; /* Right arrow symbol for active */
+  color: #ffff00;
+  font-weight: bold;
+}
+
+.objective.pending::before {
+  content: '□'; /* Empty square symbol */
+  color: #aaa;
+  font-weight: bold;
+}
+
+/* Animated Progress Bars */
+.progressBarContainer {
+  width: 100%;
+  height: 15px;
+  background-color: var(--terminal-bg-light);
+  border: 1px solid var(--terminal-border);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terminal-text-primary), var(--terminal-text-secondary));
+  width: 0%; /* Start at 0% for animation */
+  transition: width 1s ease-out; /* Smooth fill animation */
+  animation: fillProgressBar 1.5s ease-out forwards;
+}
+
+@keyframes fillProgressBar {
+  from { width: 0%; }
+  to { width: var(--progress-width, 100%); } /* Use CSS variable for dynamic width (set via JS) */
+}
+
+/* Choice Consequence Indicators */
+.choiceConsequence {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.choiceConsequence.positive {
+  color: var(--consequence-positive);
+}
+
+.choiceConsequence.negative {
+  color: var(--consequence-negative);
+}
+
+.choiceConsequence::before {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.choiceConsequence.positive::before {
+  content: '+';
+  color: var(--consequence-positive);
+}
+
+.choiceConsequence.negative::before {
+  content: '-';
+  color: var(--consequence-negative);
+}
+
+/* Point of No Return Warning */
+.pointOfNoReturn {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid var(--quest-urgent-color);
+  background-color: rgba(255, 69, 0, 0.1); /* Semi-transparent red background */
+  color: var(--quest-urgent-color);
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 0 5px var(--quest-urgent-color);
+  box-shadow: 0 0 15px var(--quest-urgent-color);
+  animation: urgentPulse 1s infinite alternate; /* Reuse urgent pulse */
+}
+
+.pointOfNoReturn::before {
+  content: '!!! WARNING !!!';
+  display: block;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.questReward {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--terminal-border); /* Separator for rewards section */
+  font-size: 1.1em;
+  color: var(--quest-main-color); /* Gold/yellow for rewards */
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--quest-main-color); /* Subtle glow for rewards */
+}
+
+/* 7. Branch Visualization Column */
+.questBranchVisualization {
+  /* Inherits base column styling */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 20px;
+  position: relative;
+}
+
+.questBranchVisualization h3 {
+  font-size: 1.5em;
+  color: var(--terminal-text-secondary);
+  text-shadow: 0 0 8px var(--terminal-text-secondary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Basic Node and Line styling for branching paths */
+/* Note: For a truly dynamic and complex branching tree, SVG or Canvas with JavaScript would be more robust.
+   This CSS provides a conceptual visual representation using simple nodes and vertical lines. */
+.branchNode {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background-color: var(--terminal-text-primary);
+  border: 2px solid var(--terminal-border);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--terminal-glow);
+  margin-bottom: 40px; /* Space for lines between nodes */
+  z-index: 2; /* Above lines */
+  transition: all var(--transition-speed-fast) ease-in-out;
+  cursor: pointer;
+}
+
+.branchNode:hover {
+  background-color: var(--terminal-text-secondary);
+  box-shadow: 0 0 20px var(--terminal-text-secondary);
+  transform: scale(1.1);
+}
+
+.branchNode.active {
+  background-color: var(--quest-main-color);
+  border-color: var(--quest-main-color);
+  box-shadow: 0 0 25px var(--quest-main-color);
+  animation: activeQuestGlow 1.5s infinite alternate; /* Reuse glow */
+}
+
+.branchNode.completed {
+  background-color: var(--quest-completed-color);
+  border-color: var(--quest-completed-color);
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.branchNode.future {
+  background-color: var(--terminal-bg-light);
+  border-color: var(--terminal-text-primary);
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.branchNode::after {
+  content: attr(data-label); /* Use data-label for node text (e.g., "Start", "Choice A", "End") */
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  white-space: nowrap;
+  font-size: 0.8em;
+  color: var(--terminal-text-primary);
+  text-shadow: 0 0 5px var(--terminal-glow);
+}
+
+/* Lines connecting nodes - simplified for CSS */
+/* This would typically be rendered dynamically with JS based on node positions. */
+/* Here, it's a placeholder for visual effect. */
+.branchLine {
+  position: absolute;
+  background-color: var(--terminal-border);
+  box-shadow: 0 0 5px var(--terminal-glow);
+  z-index: 1;
+}
+
+/* Vertical line connecting nodes (example) */
+/* In a real implementation, you'd position these based on actual node coordinates. */
+.branchLine.vertical {
+  width: 2px;
+  height: 40px; /* Height between nodes */
+  left: 50%;
+  transform: translateX(-50%);
+  /* top: calc(var(--node-top) + 20px); // Example: Position relative to a node */
+}
+
+/* Faction specific styling for branch nodes (example) */
+.branchNode.faction-compilers { border-color: var(--faction-compilers); box-shadow: 0 0 15px var(--faction-compilers); }
+.branchNode.faction-glitch-gang { border-color: var(--faction-glitch-gang); box-shadow: 0 0 15px var(--faction-glitch-gang); }
+
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .questLogMainContent {
+    grid-template-columns: 1fr 2fr; /* Two columns: List | Details */
+  }
+  .questBranchVisualization {
+    display: none; /* Hide branch visualization on smaller wide screens */
+  }
+  .questLogContainer {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 992px) {
+  .questLogContainer {
+    max-width: 800px;
+    padding: 20px;
+  }
+  .questLogTitle {
+    font-size: 2.2em;
+  }
+  .closeButton {
+    font-size: 2.2em;
+  }
+  .tabButton {
+    padding: 10px 20px;
+    font-size: 1.1em;
+  }
+  .questLogMainContent {
+    flex-direction: column; /* Stack columns vertically on smaller screens */
+    display: flex; /* Override grid for column stacking */
+  }
+  .questList,
+  .questDetails {
+    flex: none; /* Remove flex grow/shrink to allow full width */
+    width: 100%; /* Take full width when stacked */
+    min-width: unset; /* Remove min-width constraints */
+    max-height: 45vh; /* Limit height for scrolling when stacked */
+  }
+  .detailTitle {
+    font-size: 1.8em;
+  }
+  .detailDescription {
+    font-size: 1em;
+  }
+  .objective {
+    font-size: 0.95em;
+  }
+  .questReward {
+    font-size: 1em;
+  }
+  .searchBar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .questLogContainer {
+    width: 95%;
+    padding: 15px;
+  }
+  .questLogHeader {
+    flex-direction: column; /* Stack header elements */
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .questLogTitle {
+    font-size: 2em;
+  }
+  .closeButton {
+    font-size: 2em;
+    position: absolute; /* Position close button top right */
+    top: 10px;
+    right: 10px;
+  }
+  .searchBar {
+    width: 100%; /* Full width search bar */
+    margin-left: 0;
+  }
+  .questLogTabs {
+    flex-wrap: wrap; /* Allow tabs to wrap to the next line */
+    gap: 10px;
+    justify-content: flex-start; /* Align tabs to start */
+  }
+  .tabButton {
+    padding: 8px 15px;
+    font-size: 1em;
+    letter-spacing: 1px;
+  }
+  .questList,
+  .questDetails {
+    padding: 10px;
+    max-height: 40vh;
+  }
+  .questItem {
+    font-size: 0.95em;
+    padding: 8px 10px;
+  }
+  .questItem.selected {
+    padding-left: 25px;
+  }
+  .questItem.selected .indicator {
+    left: 5px;
+  }
+  .detailTitle {
+    font-size: 1.5em;
+  }
+  .detailDescription {
+    font-size: 0.95em;
+  }
+  .objective {
+    font-size: 0.95em;
+  }
+  .questReward {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .questLogContainer {
+    padding: 10px;
+  }
+  .questLogTitle {
+    font-size: 1.5em;
+  }
+  .closeButton {
+    font-size: 1.5em;
+  }
+  .tabButton {
+    font-size: 0.8em;
+    padding: 6px 12px;
+  }
+  .questList,
+  .questDetails {
+    padding: 8px;
+    max-height: 35vh;
+  }
+  .questItem {
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+  .questItem.selected {
+    padding-left: 20px;
+  }
+  .questItem.selected .indicator {
+    left: 3px;
+  }
+  .detailTitle {
+    font-size: 1.3em;
+  }
+  .detailDescription {
+    font-size: 0.9em;
+  }
+  .objective {
+    font-size: 0.9em;
+  }
+  .questReward {
+    font-size: 0.95em;
+  }
+  .progressBarContainer {
+    height: 12px;
+  }
+  .pointOfNoReturn {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+  .pointOfNoReturn::before {
+    font-size: 1.2em;
+  }
+}

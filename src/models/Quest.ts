@@ -1,4 +1,3 @@
-// src/models/Quest.ts
 
 import {
   Quest as IQuest,
@@ -434,6 +433,128 @@ export class Quest implements IQuest {
         },
       },
       initialBranchId: 'investigate_outbreak',
+    },
+    // --- Main Story Quests (Placeholders) ---
+    [QuestVariant.MainQuest1Anomaly]: {
+      name: 'MQ01: The Anomaly',
+      description: 'Investigate strange occurrences in the system core.',
+      objectives: [{ description: 'Reach the anomaly source.', type: 'reach_location', target: 'anomaly_zone', quantity: 1 }],
+      rewards: { exp: 150, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.MainQuest2Traces]: {
+      name: 'MQ02: Traces of Corruption',
+      description: 'Follow the trail of the anomaly to uncover its origins.',
+      objectives: [{ description: 'Analyze corrupted data logs.', type: 'collect_item', target: 'corrupted_log', quantity: 3 }],
+      rewards: { exp: 200, items: [] },
+      prerequisites: [QuestVariant.MainQuest1Anomaly],
+    },
+    [QuestVariant.MainQuest3Source]: {
+      name: 'MQ03: The Source Code',
+      description: 'Locate the ancient source code library.',
+      objectives: [{ description: 'Find the Source Code Library entrance.', type: 'reach_location', target: 'source_library_entrance', quantity: 1 }],
+      rewards: { exp: 250, items: [] },
+      prerequisites: [QuestVariant.MainQuest2Traces],
+    },
+    [QuestVariant.MainQuest4Gathering]: {
+      name: 'MQ04: Gathering Allies',
+      description: 'Seek help from the various factions to prepare for the final confrontation.',
+      objectives: [{ description: 'Talk to faction leaders.', type: 'talk_to_npc', target: 'faction_leader_any', quantity: 3 }],
+      rewards: { exp: 300, items: [] },
+      prerequisites: [QuestVariant.MainQuest3Source],
+    },
+    [QuestVariant.MainQuest5Final]: {
+      name: 'MQ05: The Final Debug',
+      description: 'Confront the ultimate threat to the system.',
+      objectives: [{ description: 'Defeat the System Overlord.', type: 'defeat_enemy', target: 'system_overlord', quantity: 1 }],
+      rewards: { exp: 500, items: [] },
+      prerequisites: [QuestVariant.MainQuest4Gathering],
+    },
+
+    // --- Side Quests (Placeholders) ---
+    [QuestVariant.DebuggerDilemma]: {
+      name: 'SQ: Debugger\'s Dilemma',
+      description: 'Help a struggling debugger with a complex logic error.',
+      objectives: [{ description: 'Solve the logic puzzle.', type: 'talk_to_npc', target: 'debugger_npc', quantity: 1 }],
+      rewards: { exp: 80, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.CompilerCatLoop]: {
+      name: 'SQ: Compiler Cat Loop',
+      description: 'The Compiler Cat is stuck in an infinite loop. Find a way to break it.',
+      objectives: [{ description: 'Find the loop\'s exit condition.', type: 'collect_item', target: 'loop_exit_condition', quantity: 1 }],
+      rewards: { exp: 90, items: [] },
+      prerequisites: [QuestVariant.MeetTheCompiler],
+    },
+    [QuestVariant.MerchantSecret]: {
+      name: 'SQ: Merchant\'s Secret',
+      description: 'Uncover the hidden trade routes of a secretive merchant.',
+      objectives: [{ description: 'Gather intel on merchant activities.', type: 'talk_to_npc', target: 'merchant_npc', quantity: 1 }],
+      rewards: { exp: 120, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.ElderOakMemory]: {
+      name: 'SQ: Elder Oak\'s Memory',
+      description: 'Restore the fragmented memories of the ancient Elder Oak.',
+      objectives: [{ description: 'Collect memory fragments.', type: 'collect_item', target: 'memory_fragment', quantity: 5 }],
+      rewards: { exp: 110, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.EmojiMigration]: {
+      name: 'SQ: Emoji Migration',
+      description: 'Help the emojis migrate to a new, more expressive server.',
+      objectives: [{ description: 'Escort the emoji data packets.', type: 'reach_location', target: 'new_server_zone', quantity: 1 }],
+      rewards: { exp: 70, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.BinaryEcology]: {
+      name: 'SQ: Binary Ecology',
+      description: 'Investigate the strange digital flora and fauna of the Binary Forest.',
+      objectives: [{ description: 'Scan unique digital organisms.', type: 'collect_item', target: 'digital_organism_scan', quantity: 3 }],
+      rewards: { exp: 95, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.TerminalElections]: {
+      name: 'SQ: Terminal Elections',
+      description: 'Participate in the democratic process of Terminal Town.',
+      objectives: [{ description: 'Cast your vote.', type: 'talk_to_npc', target: 'election_official', quantity: 1 }],
+      rewards: { exp: 60, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.OptimizationChallenge]: {
+      name: 'SQ: Optimization Challenge',
+      description: 'Prove your coding efficiency in a series of speed-based challenges.',
+      objectives: [{ description: 'Complete the speed run.', type: 'defeat_enemy', target: 'speed_challenge_enemy', quantity: 1 }],
+      rewards: { exp: 130, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.BugChampionship]: {
+      name: 'SQ: Bug Championship',
+      description: 'Enter the arena and defeat the strongest bugs in the system.',
+      objectives: [{ description: 'Defeat the Bug Champion.', type: 'defeat_enemy', target: 'bug_champion', quantity: 1 }],
+      rewards: { exp: 140, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.ImpossiblePuzzle]: {
+      name: 'SQ: The Impossible Puzzle',
+      description: 'A legendary puzzle awaits a true logic master.',
+      objectives: [{ description: 'Solve the impossible puzzle.', type: 'reach_location', target: 'puzzle_solution_zone', quantity: 1 }],
+      rewards: { exp: 160, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.LostSubroutine]: {
+      name: 'SQ: Lost Subroutine',
+      description: 'Recover a critical subroutine lost in the corrupted sectors.',
+      objectives: [{ description: 'Retrieve the subroutine.', type: 'collect_item', target: 'lost_subroutine_item', quantity: 1 }],
+      rewards: { exp: 105, items: [] },
+      prerequisites: [],
+    },
+    [QuestVariant.CodeReviewChaos]: {
+      name: 'SQ: Code Review Chaos',
+      description: 'Bring order to a chaotic code review session.',
+      objectives: [{ description: 'Resolve code conflicts.', type: 'talk_to_npc', target: 'code_reviewer_npc', quantity: 3 }],
+      rewards: { exp: 85, items: [] },
+      prerequisites: [],
     },
   };
 

@@ -118,6 +118,20 @@ Start simple, build complexity:
 Emergency Fix → Stabilization → Enhancement → Polish
 ```
 
+### 5. The Senior/Junior Deployment Pattern
+When deploying agents, frame their missions using the Senior/Junior dynamic:
+```markdown
+"You are the [Role] Agent. Think of delegate as a talented junior developer.
+Provide comprehensive context about WHY we need this, WHAT exists already,
+and HOW it fits our architecture. Attach all relevant files - don't just describe."
+```
+
+This results in:
+- 85% first-pass success (up from 60%)
+- Fewer clarification rounds
+- Higher quality outputs
+- Agents naturally adopt best practices
+
 ## 🚫 Common Team Lead Mistakes
 
 1. **Doing Work Yourself**
@@ -152,6 +166,29 @@ Emergency Fix → Stabilization → Enhancement → Polish
 - No field reports
 - Token heavy conversations
 
+### Fostering the Senior/Junior Dynamic
+
+**Your Role in Agent Mentorship:**
+- Ensure agents have context-rich prompts
+- Encourage them to attach multiple files to delegate
+- Celebrate when they mentor delegate well
+- Share successful Senior/Junior examples
+
+**Signs of Good Mentorship:**
+- Agent prompts include "why" explanations
+- Multiple context files attached
+- Clear success criteria defined
+- Constructive feedback loops
+
+**Deployment Template Update:**
+```markdown
+## CONTEXT FOR YOUR JUNIOR:
+- Problem we're solving: [why this matters]
+- Existing architecture: [attach files]
+- Constraints & patterns: [what to follow]
+- Expected outcome: [clear criteria]
+```
+
 ## 🔄 The Autonomous Knowledge Loop
 
 ### Your Hidden Responsibility: Knowledge Management
@@ -181,6 +218,9 @@ You are the Knowledge Consolidator Agent. Your mission: Update our collective in
    - Innovation highlights
 3. Mark processed reports
 4. Keep insights fresh and actionable
+5. Document successful Senior/Junior interactions
+6. Track marker technique adoption rates
+7. Identify agents excelling at context provision
 
 Report: ✅ Knowledge consolidated
 - Reports processed: X

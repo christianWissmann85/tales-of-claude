@@ -979,5 +979,122 @@
         ]
       }
     ]
+  },
+  {
+    "id": "debugger_offer_dilemma",
+    "lines": [
+      {
+        "text": "Ah, Claude, you're perceptive. Even a Debugger of my caliber faces... *unhandled exceptions* within his own core."
+      },
+      {
+        "text": "Recently, after a particularly nasty *system crash*, I seem to have lost my invaluable *Logic Analyzer*. Without it, I feel... incomplete. Like a function without its proper *return type*."
+      },
+      {
+        "text": "It's somewhere in the Debug Dungeon, I believe. Would you be willing to retrieve it for me? It would help me immensely in overcoming this... *debugger's dilemma*.",
+        "choices": [
+          {
+            "text": "I'll find your Logic Analyzer!",
+            "action": "start_quest_sq_debugger_dilemma"
+          },
+          {
+            "text": "I'm sorry, I have my own tasks.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "compiler_cat_offer_mq1",
+    "lines": [
+      {
+        "text": "Meow! Claude, you're here! I've detected something... unusual. A *purr-plexing anomaly* in the Binary Forest."
+      },
+      {
+        "text": "It's not a typical bug. It feels... *alien*. Like a piece of code from another dimension. My *compiler instincts* are screaming 'main quest'!"
+      },
+      {
+        "text": "Will you investigate this 'First Anomaly' for me? The future of the Code Realm might depend on it!",
+        "choices": [
+          {
+            "text": "I'll investigate the anomaly!",
+            "action": "start_quest_mq_01_anomaly"
+          },
+          {
+            "text": "I need to prepare first.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elder_oak_intro",
+    "lines": [
+      {
+        "text": "*Rustle...* Ah, another digital soul wanders through my grove. I am Elder Binary Oak, keeper of the forest's ancient *log files*."
+      },
+      {
+        "text": "The Binary Forest has stood since the first *compilation* of the Code Realm. Each tree here represents a *branching decision* in the great algorithm of existence."
+      },
+      {
+        "text": "Stay a while and listen to the *data streams* flowing through the leaves. They carry wisdom from times long past.",
+        "choices": [
+          {
+            "text": "Tell me about the forest.",
+            "action": "elder_oak_forest_lore"
+          },
+          {
+            "text": "Farewell, ancient one.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elder_oak_intro_offer_sq",
+    "lines": [
+      {
+        "text": "*Rustle...* Greetings, young *process*. I am Elder Binary Oak, keeper of the forest's ancient *log files*."
+      },
+      {
+        "text": "My *memory banks* are failing, Claude. The forest's stability is tied to my own. I'm losing my *roots*... my *past versions*."
+      },
+      {
+        "text": "Will you help me retrieve my 'Ancient Log Files' from the deeper parts of the Binary Forest? It's a matter of great urgency for both myself and this realm.",
+        "choices": [
+          {
+            "text": "I will help restore your memory!",
+            "action": "start_quest_sq_elder_oak_memory"
+          },
+          {
+            "text": "I'm sorry, I cannot right now.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bit_merchant_offer_secret",
+    "lines": [
+      {
+        "text": "Shhh! Not so loud! You heard rumors, eh? *Sigh*. Look, I've got a little... *data packet* problem. An old associate is trying to *blackmail* me with evidence of my past *unorthodox transactions*."
+      },
+      {
+        "text": "This 'Shady Data Packet' is hidden somewhere in the Debug Dungeon. If you could retrieve it for me, I'd be eternally grateful. And I'd make it worth your while with some *exclusive discounts*!",
+        "choices": [
+          {
+            "text": "I'll help you with your 'data packet' problem.",
+            "action": "start_quest_sq_merchant_secret"
+          },
+          {
+            "text": "I don't get involved in shady dealings.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
   }
 ]
