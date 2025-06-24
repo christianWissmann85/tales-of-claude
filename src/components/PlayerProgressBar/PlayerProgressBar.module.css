@@ -1,14 +1,14 @@
 :root {
-  --border-color: #777;
+  --border-color: #4a4a4a;
   --border-shadow-color: #000;
-  --xp-start-color: #ffeb3b; /* Yellow */
-  --xp-end-color: #ffc107;   /* Gold */
-  --hp-start-color: #b71c1c; /* Dark Red */
-  --hp-mid-color: #ffeb3b;   /* Yellow */
-  --hp-end-color: #4caf50;   /* Bright Green */
-  --energy-start-color: #2196f3; /* Dark Blue */
-  --energy-end-color: #00bcd4; /* Cyan */
-  --level-up-glow-color: #00ffff; /* Cyan for level up glow */
+  --xp-start-color: #ffaa00; /* Warning yellow */
+  --xp-end-color: #ff8800;   /* Darker gold */
+  --hp-start-color: #ff4444; /* Danger red */
+  --hp-mid-color: #ffaa00;   /* Warning yellow */
+  --hp-end-color: #00ff88;   /* Primary green */
+  --energy-start-color: #005533; /* Dark green */
+  --energy-end-color: #00ff88; /* Primary green - matches player */
+  --level-up-glow-color: #00ff88; /* Primary green for level up glow */
 }
 
 /* Main container for the progress bar module */
@@ -19,11 +19,11 @@
   z-index: 1000; /* Ensure it's above other content */
 
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace; /* Monospace font for retro feel */
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  background-color: rgba(26, 26, 46, 0.85); /* Semi-transparent UI dark */
   padding: 10px 15px; /* Internal padding for content */
-  color: #eee; /* Default text color */
+  color: #e0e0e0; /* UI light text color */
   text-shadow: 1px 1px 2px var(--border-shadow-color); /* Text shadows for readability */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* General shadow for depth */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 136, 0.1); /* General shadow with subtle glow */
 
   width: 280px; /* Fixed width for compact layout */
   font-size: 0.75em; /* Smaller font for compact layout */
@@ -128,9 +128,9 @@
 /* Level Up Animation */
 /* Glow effect keyframes */
 @keyframes levelUpGlow {
-  0% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 255, 0.3); }
-  50% { box-shadow: 0 0 20px var(--level-up-glow-color), 0 0 40px rgba(0, 255, 255, 0.6); }
-  100% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 255, 0.3); }
+  0% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 20px var(--level-up-glow-color), 0 0 40px rgba(0, 255, 136, 0.6); }
+  100% { box-shadow: 0 0 10px var(--level-up-glow-color), 0 0 20px rgba(0, 255, 136, 0.3); }
 }
 
 /* Scale effect keyframes */

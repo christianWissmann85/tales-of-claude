@@ -1,0 +1,531 @@
+.gameContainer {
+    display: grid;
+    /* Define two rows: one for the game board (takes most space), one for the UI panels */
+    /* 1fr means it takes all available space, auto means content-driven height.
+       This ensures the game board dominates while the UI takes only necessary space. */
+    grid-template-rows: 1fr auto;
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent scrollbars if content overflows */
+    background-color: var(--ui-dark); /* Fills the "massive black void" */
+    font-family: 'Segoe UI', Arial, sans-serif; /* A professional, readable font */
+    color: var(--ui-light); /* Default text color */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Main Game Board Area */
+.gameBoard {
+    grid-row: 1; /* Occupies the first row of the grid */
+    position: relative; /* For potential overlays like damage numbers, pop-ups */
+    background-color: black; /* The actual game rendering area background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures game content doesn't spill out */
+
+    /* Visual separation and connection to the UI panels below */
+    border-bottom: 2px solid var(--ui-accent); /* A subtle line connecting to the UI */
+    box-shadow: inset 0 -8px 20px rgba(0, 0, 0, 0.6); /* Creates depth and separation from UI */
+}
+
+/* Placeholder for the actual game content (e.g., canvas, WebGL view) */
+/* In a real application, this would be your <canvas> or game engine's root div. */
+.gameContent {
+    width: 100%; /* The game content should fill the allocated gameBoard space */
+    height: 100%;
+    background-image: url('https://via.placeholder.com/1920x1080/333333/FFFFFF?text=Tales+of+Claude+Game+View'); /* Placeholder image */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    color: var(--ui-light);
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Unified UI Panel System - The bottom bar containing all UI elements */
+.uiPanelSystem {
+    grid-row: 2; /* Occupies the second row of the grid */
+    display: grid;
+    /* Define columns for Status, Minimap, and Hotbar/Controls.
+       Adjust ratios (e.g., 2fr 1fr 3fr) as needed for content balance. */
+    grid-template-columns: 2fr 1fr 3fr;
+    gap: 15px; /* Spacing between the main panels */
+    padding: 15px 20px; /* Padding around the entire UI system */
+    background-color: var(--ui-dark); /* Background for the entire bottom section */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8); /* Strong shadow for depth */
+    min-height: 150px; /* Ensure a minimum height for the UI section */
+    align-items: stretch; /* Make sure panels stretch to fill the height */
+}
+
+/* Base style for all individual UI panels (Status, Minimap, Hotbar) */
+.uiPanel {
+    background-color: var(--ui-dark-transparent); /* Slightly transparent dark for depth */
+    border: 1px solid var(--ui-accent); /* Consistent border */
+    border-radius: 8px; /* Consistent rounded corners */
+    padding: 12px;
+    /* Inner and outer shadow for depth and professional look */
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute content vertically */
+    color: var(--ui-light);
+    font-size: 0.9em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.uiPanel h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--ui-accent); /* Accent color for titles */
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(var(--ui-accent), 0.3); /* Subtle separator */
+    padding-bottom: 5px;
+}
+
+/* Status Panel (Player and Party) */
+.statusPanel {
+    grid-column: 1; /* Occupies the first column */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between player and party status sections */
+}
+
+.playerStatus, .partyStatus {
+    background-color: var(--ui-dark-lighter); /* Lighter dark for nested elements */
+    border: 1px solid var(--ui-border-light); /* Subtle border for inner sections */
+    border-radius: 5px;
+    padding: 8px 10px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+    flex-grow: 1; /* Make them fill available space within the status panel */
+}
+
+.playerStatus h4, .partyStatus h4 {
+    margin: 0 0 8px 0;
+    color: var(--primary-green); /* Green for player name */
+    font-size: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playerStatus h4 span, .partyStatus h4 span {
+    color: var(--ui-light); /* Light color for level/details */
+    font-size: 0.9em;
+}
+
+.statusBars {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Space between HP, MP, XP bars */
+}
+
+.statusBar {
+    height: 18px;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark background for empty bar */
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(var(--ui-light), 0.2); /* Subtle border for the bar itself */
+}
+
+.statusBarFill {
+    height: 100%;
+    transition: width 0.3s ease-out; /* Smooth transition for bar changes */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align text to the right */
+    padding-right: 5px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+/* Specific colors for HP, MP, XP bars */
+.hpBar .statusBarFill {
+    background: linear-gradient(to right, var(--primary-green), #00cc66); /* Green gradient for HP */
+    color: var(--ui-dark); /* Dark text on green for contrast */
+}
+
+.mpBar .statusBarFill {
+    background: linear-gradient(to right, var(--ui-accent), #2a7eff); /* Accent blue gradient for MP */
+    color: var(--ui-light); /* Light text on blue */
+}
+
+.xpBar .statusBarFill {
+    background: linear-gradient(to right, var(--warning-yellow), #cc8800); /* Yellow gradient for XP */
+    color: var(--ui-dark); /* Dark text on yellow */
+}
+
+/* Minimap Panel */
+.minimapPanel {
+    grid-column: 2; /* Occupies the second column */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Darker background for map content area */
+    border: 1px solid var(--ui-accent);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Placeholder text for the minimap */
+.minimapPanel::before {
+    content: 'Minimap';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(var(--ui-light), 0.3); /* Faded text */
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    pointer-events: none; /* Ensure it doesn't interfere with clicks if map is interactive */
+}
+
+/* Hotbar / Controls Panel */
+.hotbarPanel {
+    grid-column: 3; /* Occupies the third column */
+    display: flex;
+    flex-wrap: wrap; /* Allow slots to wrap on smaller screens */
+    justify-content: space-around; /* Distribute slots evenly */
+    align-items: center;
+    gap: 10px; /* Space between hotbar slots */
+}
+
+.hotbarSlot {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(var(--ui-light), 0.05); /* Very subtle light background for empty slots */
+    border: 1px solid var(--ui-accent);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth hover effects */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0; /* Prevent shrinking on smaller screens unless necessary */
+}
+
+.hotbarSlot:hover {
+    background-color: rgba(var(--ui-light), 0.15);
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7), 0 5px 15px rgba(var(--ui-accent), 0.3);
+}
+
+.hotbarSlot.active {
+    border-color: var(--primary-green); /* Highlight active slot */
+    box-shadow: inset 0 0 10px rgba(var(--primary-green), 0.5), 0 0 15px rgba(var(--primary-green), 0.7);
+}
+
+.hotbarKey {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--ui-accent);
+    color: var(--ui-dark);
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 3px 7px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    line-height: 1; /* Ensure text fits */
+}
+
+.hotbarIcon {
+    font-size: 2em; /* Placeholder for actual icons */
+    color: var(--ui-light);
+    opacity: 0.7;
+}
+
+/* Specific Hotbar Slot for Inventory */
+.hotbarSlot.inventory {
+    /* This slot specifically represents the inventory button. */
+    /* The actual 'i' key binding needs to be handled in JavaScript/your game engine. */
+    /* This CSS just provides the visual representation and styling. */
+}
+
+/* Responsive Design Breakpoints */
+
+/* Medium-large screens (e.g., smaller desktops, large tablets in landscape) */
+@media (max-width: 1200px) {
+    .uiPanelSystem {
+        grid-template-columns: 1.5fr 1fr 2.5fr; /* Adjust ratios slightly */
+        gap: 10px;
+        padding: 10px 15px;
+    }
+    .uiPanel {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+    .hotbarSlot {
+        width: 55px;
+        height: 55px;
+    }
+    .hotbarKey {
+        font-size: 0.65em;
+        padding: 2px 6px;
+    }
+    .hotbarIcon {
+        font-size: 1.8em;
+    }
+}
+
+/* Medium screens (e.g., tablets in landscape, larger phones in landscape) */
+@media (max-width: 992px) {
+    .uiPanelSystem {
+        /* Change to two columns: Status + Minimap on top, Hotbar below */
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto; /* Two rows now */
+        padding: 10px;
+        gap: 10px;
+    }
+    .statusPanel {
+        grid-column: 1 / span 1; /* Status takes first column */
+        grid-row: 1;
+    }
+    .minimapPanel {
+        grid-column: 2 / span 1; /* Minimap takes second column */
+        grid-row: 1;
+    }
+    .hotbarPanel {
+        grid-column: 1 / span 2; /* Hotbar spans both columns on the second row */
+        grid-row: 2;
+        justify-content: center; /* Center hotbar items when they span full width */
+    }
+    .uiPanel h3 {
+        font-size: 1em;
+    }
+    .playerStatus h4, .partyStatus h4 {
+        font-size: 0.95em;
+    }
+    .hotbarSlot {
+        width: 50px;
+        height: 50px;
+    }
+    .hotbarKey {
+        font-size: 0.6em;
+        padding: 2px 5px;
+    }
+    .hotbarIcon {
+        font-size: 1.6em;
+    }
+}
+
+/* Small screens (e.g., tablets in portrait, most phones in landscape) */
+@media (max-width: 768px) {
+    .gameContainer {
+        grid-template-rows: 1fr auto; /* Still game board and then UI */
+    }
+    .uiPanelSystem {
+        grid-template-columns: 1fr; /* Stack all panels vertically */
+        grid-template-rows: auto auto auto; /* Three rows now */
+        padding: 8px;
+        gap: 8px;
+        min-height: unset; /* Allow height to shrink */
+    }
+    .statusPanel, .minimapPanel, .hotbarPanel {
+        grid-column: 1 / span 1; /* All panels take full width */
+        grid-row: unset; /* Let them flow naturally in their new single column */
+    }
+    .hotbarPanel {
+        justify-content: center; /* Center hotbar items */
+    }
+    .uiPanel {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+    .uiPanel h3 {
+        font-size: 0.95em;
+    }
+    .playerStatus h4, .partyStatus h4 {
+        font-size: 0.9em;
+    }
+    .statusBar {
+        height: 15px;
+    }
+    .statusBarFill {
+        font-size: 0.7em;
+    }
+    .hotbarSlot {
+        width: 45px;
+        height: 45px;
+        border-radius: 6px;
+    }
+    .hotbarKey {
+        font-size: 0.55em;
+        padding: 1px 4px;
+        top: -6px;
+        right: -6px;
+    }
+    .hotbarIcon {
+        font-size: 1.4em;
+    }
+    .minimapPanel::before {
+        font-size: 1.2em;
+    }
+}
+
+/* Extra small screens (e.g., most phones in portrait) */
+@media (max-width: 480px) {
+    .uiPanelSystem {
+        padding: 5px;
+        gap: 5px;
+    }
+    .uiPanel {
+        padding: 5px;
+        font-size: 0.75em;
+        border-radius: 5px;
+    }
+    .uiPanel h3 {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+    .playerStatus h4, .partyStatus h4 {
+        font-size: 0.85em;
+        margin-bottom: 5px;
+    }
+    .statusBar {
+        height: 12px;
+    }
+    .statusBarFill {
+        font-size: 0.65em;
+    }
+    .hotbarSlot {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+    }
+    .hotbarKey {
+        font-size: 0.5em;
+        padding: 1px 3px;
+        top: -5px;
+        right: -5px;
+    }
+    .hotbarIcon {
+        font-size: 1.2em;
+    }
+    .minimapPanel::before {
+        font-size: 1em;
+    }
+}
+```
+
+**How to integrate this CSS (Conceptual HTML Structure):**
+
+To make this CSS work, your main HTML structure would look something like this (assuming a React/JavaScript environment where you're rendering these elements):
+
+```html
+<!-- In your main game component (e.g., GameScreen.js or App.js) -->
+<div class={styles.gameContainer}>
+    <div class={styles.gameBoard}>
+        <!-- This is where your actual game canvas/WebGL/rendering content goes -->
+        <div class={styles.gameContent}>
+            <!-- Your game engine's output (e.g., <canvas id="gameCanvas"></canvas>) -->
+            <p>Your JRPG Adventure Awaits!</p>
+        </div>
+    </div>
+
+    <div class={styles.uiPanelSystem}>
+        <div class={`${styles.uiPanel} ${styles.statusPanel}`}>
+            <h3>Status</h3>
+            <div class={styles.playerStatus}>
+                <h4>Claude <span style="color: var(--warning-yellow);">Lv. 15</span></h4>
+                <div class={styles.statusBars}>
+                    <div class={styles.statusBar + ' ' + styles.hpBar}>
+                        <div class={styles.statusBarFill} style="width: 85%;">85/100</div>
+                    </div>
+                    <div class={styles.statusBar + ' ' + styles.mpBar}>
+                        <div class={styles.statusBarFill} style="width: 60%;">30/50</div>
+                    </div>
+                    <div class={styles.statusBar + ' ' + styles.xpBar}>
+                        <div class={styles.statusBarFill} style="width: 45%;">45%</div>
+                    </div>
+                </div>
+            </div>
+            <div class={styles.partyStatus}>
+                <h4>Party Members</h4>
+                <p>Elara (Lv. 14) - HP: 70%</p>
+                <p>Kael (Lv. 13) - HP: 90%</p>
+            </div>
+        </div>
+
+        <div class={`${styles.uiPanel} ${styles.minimapPanel}`}>
+            <!-- Minimap content would go here -->
+        </div>
+
+        <div class={`${styles.uiPanel} ${styles.hotbarPanel}`}>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>1</span>
+                <span class={styles.hotbarIcon}>⚔️</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>2</span>
+                <span class={styles.hotbarIcon}>✨</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>3</span>
+                <span class={styles.hotbarIcon}>🧪</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>4</span>
+                <span class={styles.hotbarIcon}>🛡️</span>
+            </div>
+            <div class={`${styles.hotbarSlot} ${styles.inventory}`}>
+                <span class={styles.hotbarKey}>I</span>
+                <span class={styles.hotbarIcon}>🎒</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>M</span>
+                <span class={styles.hotbarIcon}>🗺️</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>Q</span>
+                <span class={styles.hotbarIcon}>📜</span>
+            </div>
+            <div class={styles.hotbarSlot}>
+                <span class={styles.hotbarKey}>ESC</span>
+                <span class={styles.hotbarIcon}>⚙️</span>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+**Regarding the 'i' key for inventory:**
+
+The CSS provides the visual element for the inventory button (`.hotbarSlot.inventory` with key 'I'). However, **CSS cannot fix key bindings or game logic.** You will need to implement the actual 'i' key listener in your game's JavaScript/TypeScript code (or whatever language your game engine uses) to trigger the inventory screen when pressed.
+
+For example, in a simple JavaScript setup:
+
+```javascript
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'i' || event.key === 'I') {
+        // Prevent default browser behavior (e.g., opening dev tools search)
+        event.preventDefault();
+        // Call your game's inventory toggle function
+        toggleInventory();
+    }
+});
+
+function toggleInventory() {
+    console.log("Inventory toggled!");
+    // Your game logic to show/hide the inventory UI
+    // e.g., document.getElementById('inventoryScreen').classList.toggle('hidden');
+}
+```
+
+This UI framework provides a robust and visually appealing foundation for "Tales of Claude," transforming it from a "tiny box floating in darkness" into a professional JRPG experience.

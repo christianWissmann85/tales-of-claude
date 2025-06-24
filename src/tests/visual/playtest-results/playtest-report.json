@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-06-24T16:12:27.235Z",
+  "duration": 13551,
+  "steps": [
+    {
+      "name": "Game loads successfully",
+      "action": "Navigate to game",
+      "success": false,
+      "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.gameBoard') to be visible\u001b[22m\n",
+      "screenshot": "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/playtest-results/game-loads-successfully-error-2025-06-24T16-12-38-164Z.png"
+    },
+    {
+      "name": "Player can move",
+      "action": "Press arrow keys",
+      "success": true,
+      "observations": [
+        "Movement keys pressed successfully"
+      ],
+      "screenshot": "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/playtest-results/player-can-move-2025-06-24T16-12-39-055Z.png"
+    },
+    {
+      "name": "Inventory opens",
+      "action": "Press I key",
+      "success": true,
+      "observations": [
+        "Inventory panel not found"
+      ],
+      "screenshot": "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/playtest-results/inventory-opens-2025-06-24T16-12-39-624Z.png"
+    },
+    {
+      "name": "Quest journal opens",
+      "action": "Press J key",
+      "success": true,
+      "observations": [
+        "Quest journal not found"
+      ],
+      "screenshot": "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/playtest-results/quest-journal-opens-2025-06-24T16-12-40-393Z.png"
+    },
+    {
+      "name": "NPC interaction",
+      "action": "Find and click NPC",
+      "success": false,
+      "error": "No NPC found on screen",
+      "screenshot": "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/playtest-results/npc-interaction-error-2025-06-24T16-12-40-655Z.png"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 3,
+    "failed": 2
+  }
+}

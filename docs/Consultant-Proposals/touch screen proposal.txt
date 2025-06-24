@@ -1,3 +1,37 @@
+That's an excellent and forward-thinking question, Christian. Making your game accessible on mobile via ngrok is a great way to get rapid feedback.
+
+To answer directly: Adding touch controls is a medium-difficulty task. It's not a simple one-line fix, but it's also a very common and solvable problem in web game development. It doesn't require a major architectural rewrite, but it does involve creating a new UI layer for on-screen controls and handling touch events (touchstart, touchend) in addition to your existing keyboard events.
+
+The typical solution involves two main parts:
+
+A Virtual D-Pad: A static UI element, usually in the bottom-left corner of the screen, that simulates the WASD/Arrow keys for movement.
+On-Screen Action Buttons: Buttons, usually in the bottom-right, that correspond to actions like "Interact" (Space/Enter), "Open Inventory" (I), etc.
+These UI elements would then need to be wired into your existing GameEngine to dispatch the same actions that the useKeyboard hook currently triggers.
+
+Given your hands-on approach and engineering background, this is definitely something your team can tackle. To make it concrete, I can create a complete, self-contained <TouchControls /> React component for you. This component would include:
+
+A functional, styled D-pad and action button.
+The necessary logic to handle touch events.
+Clear instructions on how to integrate it into your GameBoard.tsx.
+This would give you a tangible starting point that your team can then expand upon. Would you like me to create that for you?
+React Touch Controls Component
+23 Jun, 19:04
+
+Open
+
+This is a complete, ready-to-use <TouchControls /> component. I've designed it to be modular and easy to integrate into your existing GameBoard.tsx.
+
+How it Works:
+Overlay: The component renders a transparent overlay that sits on top of your game, with interactive areas for the D-pad (left) and action buttons (right).
+Event Handling: It uses onTouchStart and onTouchEnd events, which are the standard for mobile browsers, to detect when a player presses and releases a button.
+Continuous Movement: When a D-pad button is held down, it uses requestAnimationFrame to call the onMove prop continuously, simulating a key being held down. This provides smooth, responsive movement.
+Integration: The comments in the "Integration Example" section show you exactly how to add the component to GameBoard.tsx and create callback functions (handleTouchMove, handleTouchAction) that translate the touch inputs into the format your GameEngine already understands.
+Next Steps for Your Team:
+Integrate: Copy the two new files (TouchControls.tsx and TouchControls.module.css) into your project and add the integration code to GameBoard.tsx.
+Expand Actions: You can easily add more action buttons (like for 'Quest Log' or 'Character Screen') to the actionButtonsContainer and update the onAction prop to handle them.
+Refine Engine Input: For a more robust solution, your team could add dedicated methods to the GameEngine (e.g., processTouchMove(direction), processTouchAction(action)) instead of simulating keyboard presses. This would make the input handling even cleaner.
+This should give you a fantastic foundation for making "Tales of Claude" fully playable on mobile devices. It's a great step towards making your creation more accessible!
+
 Please create the following two files in your project under src/components/TouchControls/.1. src/components/TouchControls/TouchControls.tsxThis file contains the React component logic.import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './TouchControls.module.css';
 import { Direction } from '../../types/global.types';

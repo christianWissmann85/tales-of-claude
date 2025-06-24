@@ -2,7 +2,7 @@
 
 *Updated after 40+ successful agent deployments in Tales of Claude*
 
-*Note from Chris: Please be more liberal with your file attachements when using `Delegate`, the llms cant read Minds yet 😉. Assume that Gemini does know nothing except what you tell her in the prompt, and in the attached files. I would assume attaching the relevant system and planing docs(if they are necessary only of course) would only help her come up with better code, and she would have to assume less, and use more of the existing type definitions, classes, functions, etc. Just the thoughts of an meddling CTO looking after his precious Team Members😅.*
+*Note from Chris: Please use the `.delegate/tmp` dir for temporary bundles, working files, and related temp stuff, not our mainroot or other dirs. Put reports and new md files in the appropriate section in .claude or in docs please. Lets keep our repo clean 😊👍. Thank you!* 
 
 ## You Are a Virtuoso, Not a Worker
 
@@ -281,6 +281,138 @@ After fixing: "I also added a test case to prevent regression"
 Update relevant docs/comments when you change behavior
 Future agents will thank you
 ```
+
+### The Multi-LLM Discussion Pattern
+
+When consulting multiple models via delegate, maintaining conversation context is crucial. Each model needs to see what the others have said to build true consensus.
+
+#### The Context Chain Principle
+Think of it like a group discussion where everyone needs to hear what was said before they speak. Without context, you get parallel monologues instead of dialogue.
+
+#### Implementation Pattern
+```bash
+# Round 1 - Claude
+delegate_invoke(
+  model="claude-sonnet-4-20250514",
+  prompt="Analyze these architecture options for our new feature...",
+  files=["proposals.md", "current_architecture.ts"]
+) → claude_analysis.txt
+
+# Round 2 - Gemini (Include Claude's response!)
+delegate_invoke(
+  model="gemini-2.5-pro", 
+  prompt="Here's Claude's analysis: [full response from claude_analysis.txt]. What's your view? Do you agree or see different approaches?",
+  files=["proposals.md", "current_architecture.ts", "claude_analysis.txt"]
+) → gemini_analysis.txt
+
+# Round 3 - Back to Claude (Include both responses!)
+delegate_invoke(
+  model="claude-sonnet-4-20250514",
+  prompt="Gemini suggests: [full response from gemini_analysis.txt]. Do you agree with their points? What consensus can we reach?",
+  files=["proposals.md", "claude_analysis.txt", "gemini_analysis.txt"]
+) → final_consensus.txt
+```
+
+#### Why This Matters
+- **Without context**: Models give independent opinions that may conflict
+- **With context**: Models build on each other's insights
+- **Result**: Genuine consensus and better solutions
+
+#### Pro Tips
+1. **Always quote or attach previous responses** - Don't summarize, include the full text
+2. **Use write_to** - Save each response to a file for easy attachment
+3. **Ask for reactions** - "What do you think of Gemini's point about X?"
+4. **Synthesize at the end** - Have one model summarize the consensus
+
+#### Example: Architecture Decision
+```bash
+# Claude: "I recommend microservices for scalability"
+# Gemini: "Consider monolith first for faster iteration" 
+# Claude (with context): "Good point! Hybrid approach: start monolith, prepare for extraction"
+# Result: Better solution neither would have reached alone
+```
+
+This pattern has led to breakthrough solutions in Tales of Claude by combining different models' strengths!
+
+### Screenshot Attachment Requirement
+
+When discussing visual elements, UI issues, or any graphical aspects of the game, you MUST attach screenshots when using delegate. This is critical because:
+
+**LLMs cannot see screenshots mentioned in prompts unless they are physically attached as files.**
+
+#### The Right Way
+
+```bash
+# FIRST: Take the screenshot
+npx tsx src/tests/visual/screenshot-tool.ts --name ui-issue
+
+# THEN: Attach it to delegate
+delegate_invoke(
+  model="claude-sonnet-4-20250514",
+  prompt="Look at this UI issue in the attached screenshot. The player health bar is overlapping with the inventory button.",
+  files=["src/tests/visual/temp/ui-issue.png"]
+)
+```
+
+#### The Wrong Way (Don't Do This!)
+
+```bash
+# Taking screenshot but not attaching it
+npx tsx src/tests/visual/screenshot-tool.ts --name ui-issue
+
+# Delegate can't see the screenshot!
+delegate_invoke(
+  prompt="Look at the screenshot I just took called ui-issue.png"
+  # NO FILES ATTACHED - DELEGATE SEES NOTHING!
+)
+```
+
+#### Best Practices for Visual Discussions
+
+1. **Always use the screenshot tool first**
+   ```bash
+   npx tsx src/tests/visual/screenshot-tool.ts --name descriptive-name
+   ```
+
+2. **Attach the file immediately**
+   ```typescript
+   files=["src/tests/visual/temp/descriptive-name.png"]
+   ```
+
+3. **For multi-step visual issues, take multiple screenshots**
+   ```bash
+   # Before state
+   npx tsx src/tests/visual/screenshot-tool.ts --name before-fix
+   
+   # After making changes
+   npx tsx src/tests/visual/screenshot-tool.ts --name after-fix
+   
+   # Attach both for comparison
+   delegate_invoke(
+     files=["src/tests/visual/temp/before-fix.png", "src/tests/visual/temp/after-fix.png"],
+     prompt="Compare these two screenshots. Has the visual hierarchy improved?"
+   )
+   ```
+
+4. **Use actions to capture specific states**
+   ```bash
+   # Capture with inventory open
+   npx tsx src/tests/visual/screenshot-tool.ts --name inventory-issue --action key:i
+   
+   # Capture hover state
+   npx tsx src/tests/visual/screenshot-tool.ts --name button-hover --action hover:.my-button
+   ```
+
+#### Common Scenarios Requiring Screenshots
+
+- UI layout issues ("this button is in the wrong place")
+- Color/contrast problems ("the text is hard to read")
+- Visual glitches ("the player sprite is flickering")
+- Style inconsistencies ("these elements don't match")
+- Animation problems ("the transition looks janky")
+- Responsive design issues ("it breaks on smaller screens")
+
+Remember: **If you're discussing anything visual, attach a screenshot!** Future agents have been confused when previous agents described visual issues without attaching the actual images. Don't let this happen to you!
 
 ## 🎯 Mission Success Formula
 

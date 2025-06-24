@@ -1,0 +1,36 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+FactionManager.ts:110 FactionManager: Factions initialized.
+MapLoader.ts:94 MapLoader running in development mode. Hot-reloading handled by bundler (Vite).
+2MapLoader.ts:127 Successfully loaded map "terminalTown" from JSON.
+WeatherSystem.ts:236 Next weather change scheduled in 398 seconds.
+WeatherSystem.ts:190 WeatherSystem started. Initial weather: clear, Map Type: Outdoor
+WeatherSystem.ts:216 WeatherSystem stopped.
+WeatherSystem.ts:236 Next weather change scheduled in 542 seconds.
+WeatherSystem.ts:190 WeatherSystem started. Initial weather: clear, Map Type: Outdoor
+chunk-373CG7ZK.js?v=ad0413a6:519 Warning: Received NaN for the `data-map-x` attribute. If this is expected, cast the value to a string.
+    at div
+    at div
+    at MapGrid (http://localhost:5176/src/components/GameBoard/MapGrid.tsx:157:3)
+    at div
+    at GameBoard (http://localhost:5176/src/components/GameBoard/GameBoard.tsx:71:31)
+    at div
+    at GameContent (http://localhost:5176/src/App.tsx:31:31)
+    at NotificationSystem (http://localhost:5176/src/components/NotificationSystem/NotificationSystem.tsx:125:38)
+    at GameProvider (http://localhost:5176/src/context/GameContext.tsx:626:25)
+    at div
+    at App
+printWarning @ chunk-373CG7ZK.js?v=ad0413a6:519Understand this error
+chunk-373CG7ZK.js?v=ad0413a6:519 Warning: Received NaN for the `data-map-y` attribute. If this is expected, cast the value to a string.
+    at div
+    at div
+    at MapGrid (http://localhost:5176/src/components/GameBoard/MapGrid.tsx:157:3)
+    at div
+    at GameBoard (http://localhost:5176/src/components/GameBoard/GameBoard.tsx:71:31)
+    at div
+    at GameContent (http://localhost:5176/src/App.tsx:31:31)
+    at NotificationSystem (http://localhost:5176/src/components/NotificationSystem/NotificationSystem.tsx:125:38)
+    at GameProvider (http://localhost:5176/src/context/GameContext.tsx:626:25)
+    at div
+    at App
+printWarning @ chunk-373CG7ZK.js?v=ad0413a6:519Understand this error
+WeatherSystem.ts:457 Map type changed to Indoor.

@@ -67,6 +67,12 @@ export class GameEngine {
   private _fps: number = 0;
   private _frameCounter: number = 0;
   private _lastFpsUpdateTime: DOMHighResTimeStamp = 0;
+  
+  // Performance tracking for update loop debugging
+  private _updateDispatchCount: number = 0;
+  private _lastDispatchReportTime: DOMHighResTimeStamp = 0;
+  private _lastEnemyUpdateTime: DOMHighResTimeStamp = 0;
+  private _enemyUpdateThrottle: number = 100; // Minimum ms between enemy updates
 
   // Input handling
   private _pressedKeys: Set<string> = new Set();
@@ -696,6 +702,11 @@ export class GameEngine {
   public updateEntities(deltaTime: number): void {
     // Update enemy patrols and AI
     if (this._patrolSystem && !this._currentGameState.battle) {
+      // Throttle enemy updates to prevent excessive dispatches
+      const now = performance.now();
+      if (now - this._lastEnemyUpdateTime < this._enemyUpdateThrottle) {
+        return; // Skip this update cycle
+      }
       // Update all enemy positions based on patrol routes
       this._patrolSystem.update(deltaTime, this._currentGameState.player.position);
       
@@ -704,26 +715,54 @@ export class GameEngine {
       
       // Sync enemy positions back to game state
       const updatedEnemies: Enemy[] = [];
+      let positionsChanged = false;
+      
       this._currentGameState.enemies.forEach(enemy => {
         const patrolData = this._patrolSystem!.getEnemyData(enemy.id);
         if (patrolData && patrolData.state !== 'RESPAWNING') {
-          // Update enemy position from patrol system
-          enemy.position = { ...patrolData.currentPosition };
+          // Check if position actually changed before updating
+          const newPosition = patrolData.currentPosition;
+          if (enemy.position.x !== newPosition.x || enemy.position.y !== newPosition.y) {
+            // Create a new enemy object with updated position to avoid mutating state
+            const updatedEnemy = {
+              ...enemy,
+              position: { ...newPosition }
+            };
+            updatedEnemies.push(updatedEnemy);
+            positionsChanged = true;
+          } else {
+            // No position change, add the original enemy
+            updatedEnemies.push(enemy);
+          }
+        } else {
+          // Enemy is respawning, keep it as is
+          updatedEnemies.push(enemy);
         }
-        updatedEnemies.push(enemy);
       });
       
       // Add respawned enemies
       enemiesToRespawn.forEach(respawnedEnemy => {
         updatedEnemies.push(respawnedEnemy);
+        positionsChanged = true; // Mark as changed since we're adding new enemies
       });
       
-      // Dispatch update if any positions changed or enemies respawned
-      if (updatedEnemies.length > 0 || enemiesToRespawn.length > 0) {
+      // Only dispatch if positions actually changed or new enemies spawned
+      if (positionsChanged) {
+        this._updateDispatchCount++;
+        this._lastEnemyUpdateTime = now;
         this._dispatch({
           type: 'UPDATE_ENEMIES',
           payload: { enemies: updatedEnemies }
         });
+      }
+      
+      // Report dispatch frequency every 5 seconds for debugging
+      if (now - this._lastDispatchReportTime >= 5000) {
+        if (this._updateDispatchCount > 0) {
+          console.log(`[Performance] Enemy update dispatches in last 5s: ${this._updateDispatchCount}`);
+        }
+        this._updateDispatchCount = 0;
+        this._lastDispatchReportTime = now;
       }
     }
   }
@@ -739,7 +778,10 @@ export class GameEngine {
       this._fps = this._frameCounter;
       this._frameCounter = 0;
       this._lastFpsUpdateTime = timestamp;
-      // console.log(`FPS: ${this._fps}`); // Uncomment for continuous FPS logging
+      // Only log FPS if it's below 30 (performance issue)
+      if (this._fps < 30) {
+        console.warn(`[Performance] Low FPS detected: ${this._fps}`);
+      }
     }
   }
 

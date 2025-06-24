@@ -1,0 +1,767 @@
+Here are the implementation files for the improved visual hierarchy system in Tales of Claude, as requested.
+
+---
+
+### 1. `src/constants/TileVisuals.ts` (New File)
+
+This file centralizes all visual constants, making them easier to manage and ensuring consistency across the game.
+
+```typescript
+// src/constants/TileVisuals.ts
+
+import { TileType } from '../types/global.types'; // Assuming this path is correct for your project
+
+/**
+ * BASE_EMOJI_TILE_MAP
+ * Defines the default emoji representation for each tile type in emoji mode.
+ * Adheres to the new visual hierarchy:
+ * - Floors: Subtle patterns (░, ▒, ·, ⋅, ∙)
+ * - Walls: Bold and clear barriers (🧱, 🌲, 🌊, 🔒)
+ * - Interactive/Special: Stand out but not characters (🚪, ➡️, 🏪, 🏥, ❓)
+ */
+export const BASE_EMOJI_TILE_MAP: Record<TileType, string> = {
+  // FLOORS (Should recede visually, be subtle, low-contrast)
+  floor: '░',           // Light shade block: subtle texture, not a solid block.
+  dungeon_floor: '▒',   // Medium shade block: darker texture for dungeon, still recedes.
+  grass: '🌿',          // Herb: retains natural feel, but its role is background.
+  walkable: ' ',        // Empty space: for generic, truly empty walkable areas.
+  path: '⋅',            // Dot operator: very subtle path marker.
+  path_one: '∙',        // Bullet operator: slightly more prominent path marker.
+  path_zero: '·',       // Middle dot: another subtle path marker.
+  tech_floor: '⚙️',     // Gear: indicates a tech floor, slightly more prominent but still floor.
+  metal_floor: '🔩',    // Nut and bolt: indicates a metal floor, similar prominence to tech_floor.
+
+  // WALLS (Should be clear barriers, bold, obvious)
+  wall: '🧱',           // Brick wall: Excellent, clearly a solid barrier.
+  tree: '🌲',           // Evergreen tree: Visually distinct, implies a large, impassable object.
+  water: '🌊',          // Water wave: Clearly a liquid barrier.
+  locked_door: '🔒',    // Locked: The lock symbol immediately conveys "impassable until unlocked".
+
+  // INTERACTIVE / SPECIAL TILES (Should stand out, but not characters)
+  door: '🚪',           // Door: Clear interactive element.
+  exit: '➡️',           // Right arrow: Clear directional/interactive element.
+  shop: '🏪',           // Convenience store: Clear location.
+  healer: '🏥',         // Hospital: Clear location.
+  hidden_area: '❓',    // Question mark: Suggests mystery and something to be discovered.
+};
+
+/**
+ * TILE_VARIANTS
+ * Provides alternative emojis for tile types to add visual richness without
+ * sacrificing clarity. Variants adhere to the same hierarchy principles as their primary emoji.
+ */
+export const TILE_VARIANTS: Record<TileType, string[]> = {
+  // FLOORS - Subtle variations that maintain low visual weight
+  floor: ['░', '▫️', '⋅'], // Light shade, small white square, dot
+  dungeon_floor: ['▒', '▪️', '∙'], // Medium shade, small black square, bullet dot
+  grass: ['🌿', '🌱', '🌾'], // Herb, seedling, rice scene (all ground cover)
+  walkable: [' ', ' ', ' '], // Space, thin space, hair space (for ultimate subtlety)
+  path: ['⋅', '∙', '·'], // Various subtle dots for paths
+  path_one: ['∙', '·', '⋅'], // Consistent dot variations
+  path_zero: ['·', '⋅', '∙'], // Consistent dot variations
+  tech_floor: ['⚙️', '🔌', '💡'], // Gears, plug, lightbulb (still floor-like, but tech-themed)
+  metal_floor: ['🔩', '🔗', '⛓️'], // Nut and bolt, link, chains (industrial floor textures)
+
+  // WALLS - Solid, distinct variations that clearly block movement
+  wall: ['🧱', '🪨', '🗿'], // Brick, rock, moai (all solid barriers)
+  tree: ['🌲', '🌳', '🌴'], // Evergreen, deciduous, palm (all large trees)
+  water: ['🌊', '💧', '💦'], // Wave, droplet, sweat droplets (all water forms)
+
+  // INTERACTIVE / SPECIAL TILES - Maintain clarity, subtle variations
+  door: ['🚪', '🚪', '🚪'], // Keep consistent, maybe add a slightly different door emoji if available
+  exit: ['➡️', '⬆️', '🏁'], // Right arrow, up arrow, checkered flag
+  shop: ['🏪', '🛍️', '🛒'], // Convenience store, shopping bags, shopping cart
+  healer: ['🏥', '❤️‍🩹', '➕'], // Hospital, healing heart, plus sign
+  locked_door: ['🔒', '🔑🚫', '⛓️'], // Locked, key-forbidden, chains (all convey restriction)
+  hidden_area: ['❓', '🌫️', '🤫'], // Question mark, fog, shushing face (all convey mystery)
+};
+
+/**
+ * BASE_EMOJI_ENTITY_MAP
+ * Defines the default emoji representation for entities.
+ * Adheres to the new visual hierarchy:
+ * - Player: Unique and central (🤖)
+ * - NPCs: Clearly characters (🧙, 🐱)
+ * - Enemies: Clearly characters, distinct from friendly NPCs (👾)
+ * - Items: Sparkly and special (💎)
+ */
+export const BASE_EMOJI_ENTITY_MAP = {
+  player: '🤖', // Robot: Most important, must be instantly recognizable.
+  npc: '🧙',    // Mage: Clearly a character.
+  enemy: '👾',   // Alien monster: Clearly a character, distinct from friendly NPCs.
+  item: '💎',    // Gem stone: Immediately conveys value and interactability, "glows".
+};
+
+/**
+ * ASCII_TILE_MAP
+ * Fallback ASCII representations for tiles.
+ */
+export const ASCII_TILE_MAP: Record<TileType, string> = {
+  grass: '.',
+  tree: 'T',
+  wall: '#',
+  water: '~',
+  door: 'D',
+  exit: 'E',
+  shop: 'S',
+  healer: 'H',
+  walkable: ' ',
+  path: '.',
+  path_one: '1',
+  path_zero: '0',
+  floor: '.',
+  dungeon_floor: '.',
+  locked_door: 'L',
+  hidden_area: '*',
+  tech_floor: '=',
+  metal_floor: 'M',
+};
+
+/**
+ * ASCII_ENTITY_MAP
+ * Fallback ASCII representations for entities.
+ */
+export const ASCII_ENTITY_MAP = {
+  player: '@',
+  npc: 'N',
+  enemy: 'X',
+  item: 'I',
+};
+
+/**
+ * Categorized Visuals (for documentation/conceptual clarity, not directly used in MapGrid)
+ * These constants help organize the emojis by their visual hierarchy category,
+ * useful for design discussions and ensuring consistency.
+ */
+export const FLOOR_VISUALS = {
+  subtle: ['·', '⋅', '∙'],
+  textured: ['░', '▒'],
+  natural: ['🌿', '🌱', '🌾'],
+  tech: ['⚙️', '🔌', '💡'],
+  metal: ['🔩', '🔗', '⛓️'],
+};
+
+export const WALL_VISUALS = {
+  structural: ['🧱', '🪨', '🗿'],
+  natural: ['🌲', '🌳', '🌴'],
+  liquid: ['🌊', '💧', '💦'],
+  restricted: ['🔒', '🔑🚫', '⛓️'],
+};
+
+export const NPC_VISUALS = {
+  character: ['🧙', '🐱', '👾'],
+};
+
+export const ITEM_VISUALS = {
+  sparkle: ['✨', '💎', '💰', '🔑', '📜'],
+};
+
+export const PLAYER_VISUALS = {
+  unique: '🤖',
+};
+
+export const INTERACTIVE_MARKERS = {
+  sparkle: '✨', // General sparkle effect, could be used as an overlay
+  glow: '💫',    // General glow effect
+  directional: ['➡️', '⬆️', '🏁'],
+  location: ['🏪', '🏥', '🛍️', '🛒', '❤️‍🩹', '➕'],
+  mystery: ['❓', '🌫️', '🤫'],
+};
+```
+
+---
+
+### 2. `src/components/GameBoard/MapGrid.tsx` (Updated File)
+
+This file is updated to import and use the new centralized visual constants from `TileVisuals.ts`.
+
+```typescript
+// src/components/GameBoard/MapGrid.tsx
+
+import React from 'react';
+import { Position, TileType, GameMap, Enemy, NPC, Item as IItem } from '../../types/global.types';
+import styles from './GameBoard.module.css';
+
+// Import the new centralized visual constants
+import {
+  BASE_EMOJI_TILE_MAP,
+  TILE_VARIANTS,
+  BASE_EMOJI_ENTITY_MAP,
+  ASCII_TILE_MAP,
+  ASCII_ENTITY_MAP,
+} from '../../constants/TileVisuals'; // Adjust path as necessary
+
+/**
+ * Deterministically selects a tile variant based on its coordinates.
+ * This ensures that a specific tile (x,y) always renders the same variant,
+ * preventing flickering or random changes on re-render.
+ * Now uses the imported TILE_VARIANTS and BASE_EMOJI_TILE_MAP.
+ */
+const getTileVariant = (type: TileType, x: number, y: number): string => {
+  const variants = TILE_VARIANTS[type];
+  if (variants && variants.length > 0) {
+    // Use a simple hash function for deterministic selection
+    // Prime numbers (31, 17) help distribute the hash evenly
+    const hash = (x * 31 + y * 17) % variants.length;
+    return variants[hash];
+  }
+  // Fallback to the default emoji from the base map if no variants are defined
+  return BASE_EMOJI_TILE_MAP[type] || '?';
+};
+
+interface MapGridProps {
+  currentMap: GameMap;
+  playerPos: Position;
+  enemies: Enemy[];
+  npcs: NPC[];
+  items: IItem[];
+  display_width: number;
+  display_height: number;
+  isAsciiMode: boolean;
+}
+
+const MapGrid: React.FC<MapGridProps> = ({
+  currentMap,
+  playerPos,
+  enemies,
+  npcs,
+  items,
+  display_width,
+  display_height,
+  isAsciiMode,
+}) => {
+  /**
+   * Determines the character (emoji/ASCII) to render at a specific grid position.
+   * Prioritizes entities over map tiles.
+   */
+  const getCellContent = (x: number, y: number): string => {
+    // Select the appropriate map based on display mode
+    const currentTileMap = isAsciiMode ? ASCII_TILE_MAP : BASE_EMOJI_TILE_MAP;
+    const currentEntityMap = isAsciiMode ? ASCII_ENTITY_MAP : BASE_EMOJI_ENTITY_MAP;
+
+    // 1. Check for Player at this position
+    if (playerPos.x === x && playerPos.y === y) {
+      return currentEntityMap.player;
+    }
+
+    // 2. Check for NPCs at this position
+    const npcAtPos = npcs.find(npc => npc.position.x === x && npc.position.y === y);
+    if (npcAtPos) {
+      if (isAsciiMode) {
+        // Specific ASCII characters for key NPCs (e.g., 'C' for Compiler Cat, 'W' for Debugger)
+        if (npcAtPos.role === 'compiler_cat') return 'C';
+        if (npcAtPos.role === 'debugger') return 'W';
+        return currentEntityMap.npc; // Default ASCII NPC
+      } else {
+        // Specific emoji based on NPC role (e.g., 🐱 for Compiler Cat)
+        if (npcAtPos.role === 'compiler_cat') return '🐱';
+        if (npcAtPos.role === 'debugger') return '🧙'; // Default emoji NPC is also 🧙, but explicit for role
+        return currentEntityMap.npc; // Default emoji NPC
+      }
+    }
+
+    // 3. Check for Enemies at this position
+    const enemyAtPos = enemies.find(enemy => enemy.position.x === x && enemy.position.y === y);
+    if (enemyAtPos) {
+      return currentEntityMap.enemy;
+    }
+
+    // 4. Check for Items at this position
+    const itemAtPos = items.find((item: IItem) => item.position && item.position.x === x && item.position.y === y);
+    if (itemAtPos) {
+      return currentEntityMap.item; // This will now be '💎' from BASE_EMOJI_ENTITY_MAP
+    }
+
+    // 5. If no entity is found, render the underlying map tile
+    const tile = currentMap.tiles[y]?.[x];
+    if (!tile) {
+      return ' '; // Render empty space if tile data is missing
+    }
+
+    // Use getTileVariant for emoji mode to apply visual variants, otherwise use direct ASCII mapping
+    return isAsciiMode ? currentTileMap[tile.type] : getTileVariant(tile.type, x, y);
+  };
+
+  // Calculate camera offset for centering the player within the display area
+  const mapWidth = currentMap.width;
+  const mapHeight = currentMap.height;
+
+  let startX = 0;
+  let startY = 0;
+
+  // Adjust horizontal offset to center player, clamping to map boundaries
+  if (mapWidth > display_width) {
+    startX = playerPos.x - Math.floor(display_width / 2);
+    startX = Math.max(0, startX);
+    startX = Math.min(mapWidth - display_width, startX);
+  }
+
+  // Adjust vertical offset to center player, clamping to map boundaries
+  if (mapHeight > display_height) {
+    startY = playerPos.y - Math.floor(display_height / 2);
+    startY = Math.max(0, startY);
+    startY = Math.min(mapHeight - display_height, startY);
+  }
+
+  // Generate grid cells for rendering the visible portion of the map
+  const gridCells = [];
+  for (let y = 0; y < display_height; y++) {
+    for (let x = 0; x < display_width; x++) {
+      const mapX = startX + x;
+      const mapY = startY + y;
+      const content = getCellContent(mapX, mapY);
+
+      gridCells.push(
+        <div
+          key={`${mapX}-${mapY}`}
+          className={styles.gridCell}
+          data-map-x={mapX}
+          data-map-y={mapY}
+        >
+          {content}
+        </div>,
+      );
+    }
+  }
+
+  return (
+    <div
+      className={styles.mapGridContainer}
+      style={{
+        gridTemplateColumns: `repeat(${display_width}, 1fr)`,
+        gridTemplateRows: `repeat(${display_height}, 1fr)`,
+      }}
+    >
+      {gridCells}
+    </div>
+  );
+};
+
+export default React.memo(MapGrid);
+```
+
+---
+
+### 3. `visual-test.html` (New File)
+
+This standalone HTML file allows you to preview all tile combinations and verify the visual hierarchy directly in a browser. It includes the necessary constants copied for self-containment.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tales of Claude - Visual Hierarchy Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        h1, h2, h3 {
+            color: #4CAF50; /* Green for titles */
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .grid-display {
+            display: grid;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+        }
+
+        .grid-cell {
+            width: 40px; /* Fixed size for emoji */
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px; /* Large enough to see emojis clearly */
+            line-height: 1;
+            user-select: none;
+            text-align: center;
+            position: relative;
+        }
+        .grid-cell small {
+            font-size: 9px;
+            opacity: 0.6;
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .category-group {
+            margin-bottom: 30px;
+            border: 1px solid #555;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #222;
+        }
+
+        .category-group h3 {
+            margin-top: 0;
+            color: #FFD700; /* Gold for category titles */
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-item .emoji {
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+
+        .category-item .label {
+            font-size: 14px;
+            color: #bbb;
+            text-align: center;
+        }
+
+        /* Specific styles for visual hierarchy validation */
+        .hierarchy-validation-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for comparison */
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hierarchy-cell {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            position: relative;
+            font-size: 40px;
+        }
+
+        .hierarchy-cell .base-tile {
+            position: absolute;
+            opacity: 0.4; /* Floors recede */
+            font-size: 48px;
+        }
+
+        .hierarchy-cell .entity {
+            position: relative; /* Entities stand out */
+            z-index: 1;
+        }
+
+        .hierarchy-cell .label {
+            position: absolute;
+            bottom: 5px;
+            font-size: 10px;
+            color: #bbb;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tales of Claude - Visual Hierarchy Test Page</h1>
+
+    <p>This page demonstrates the new visual hierarchy for game elements in Tales of Claude. Observe how floors recede, walls are bold, characters stand out, and items sparkle.</p>
+
+    <div class="section-container">
+        <div class="category-group">
+            <h2>1. Player Visuals</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <span class="emoji">🤖</span>
+                    <span class="label">Player</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <h2>2. NPC Visuals</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <span class="emoji">🧙</span>
+                    <span class="label">NPC (Mage)</span>
+                </div>
+                <div class="category-item">
+                    <span class="emoji">🐱</span>
+                    <span class="label">Compiler Cat</span>
+                </div>
+                <div class="category-item">
+                    <span class="emoji">👾</span>
+                    <span class="label">Enemy</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <h2>3. Item Visuals</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <span class="emoji">💎</span>
+                    <span class="label">Item (Gem)</span>
+                </div>
+                <div class="category-item">
+                    <span class="emoji">✨</span>
+                    <span class="label">Sparkle Effect</span>
+                </div>
+                <div class="category-item">
+                    <span class="emoji">💫</span>
+                    <span class="label">Glow Effect</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>4. Tile Visuals (Emoji Mode)</h2>
+    <div class="section-container" id="emoji-tile-display">
+        <!-- Tiles will be rendered here by JS -->
+    </div>
+
+    <h2>5. Tile Visuals (ASCII Mode)</h2>
+    <div class="section-container" id="ascii-tile-display">
+        <!-- ASCII Tiles will be rendered here by JS -->
+    </div>
+
+    <h2>6. Visual Hierarchy Validation: Entities on Floors</h2>
+    <p>This section shows how entities (Player, NPC, Enemy, Item) appear on various floor types. Notice how they clearly stand out.</p>
+    <div class="hierarchy-validation-grid" id="hierarchy-validation">
+        <!-- Hierarchy examples will be rendered here by JS -->
+    </div>
+
+    <script>
+        // Simplified TileType for this test page (mimics the enum from global.types)
+        const TileType = {
+            grass: 'grass',
+            tree: 'tree',
+            wall: 'wall',
+            water: 'water',
+            door: 'door',
+            exit: 'exit',
+            shop: 'shop',
+            healer: 'healer',
+            walkable: 'walkable',
+            path: 'path',
+            path_one: 'path_one',
+            path_zero: 'path_zero',
+            floor: 'floor',
+            dungeon_floor: 'dungeon_floor',
+            locked_door: 'locked_door',
+            hidden_area: 'hidden_area',
+            tech_floor: 'tech_floor',
+            metal_floor: 'metal_floor',
+        };
+
+        // --- Copied from TileVisuals.ts for self-containment in this test page ---
+        const BASE_EMOJI_TILE_MAP = {
+            floor: '░',
+            dungeon_floor: '▒',
+            grass: '🌿',
+            walkable: ' ',
+            path: '⋅',
+            path_one: '∙',
+            path_zero: '·',
+            tech_floor: '⚙️',
+            metal_floor: '🔩',
+            wall: '🧱',
+            tree: '🌲',
+            water: '🌊',
+            locked_door: '🔒',
+            door: '🚪',
+            exit: '➡️',
+            shop: '🏪',
+            healer: '🏥',
+            hidden_area: '❓',
+        };
+
+        const TILE_VARIANTS = {
+            floor: ['░', '▫️', '⋅'],
+            dungeon_floor: ['▒', '▪️', '∙'],
+            grass: ['🌿', '🌱', '🌾'],
+            walkable: [' ', ' ', ' '],
+            path: ['⋅', '∙', '·'],
+            path_one: ['∙', '·', '⋅'],
+            path_zero: ['·', '⋅', '∙'],
+            tech_floor: ['⚙️', '🔌', '💡'],
+            metal_floor: ['🔩', '🔗', '⛓️'],
+            wall: ['🧱', '🪨', '🗿'],
+            tree: ['🌲', '🌳', '🌴'],
+            water: ['🌊', '💧', '💦'],
+            door: ['🚪', '🚪', '🚪'],
+            exit: ['➡️', '⬆️', '🏁'],
+            shop: ['🏪', '🛍️', '🛒'],
+            healer: ['🏥', '❤️‍🩹', '➕'],
+            locked_door: ['🔒', '🔑🚫', '⛓️'],
+            hidden_area: ['❓', '🌫️', '🤫'],
+        };
+
+        const BASE_EMOJI_ENTITY_MAP = {
+            player: '🤖',
+            npc: '🧙',
+            enemy: '👾',
+            item: '💎',
+        };
+
+        const ASCII_TILE_MAP = {
+            grass: '.',
+            tree: 'T',
+            wall: '#',
+            water: '~',
+            door: 'D',
+            exit: 'E',
+            shop: 'S',
+            healer: 'H',
+            walkable: ' ',
+            path: '.',
+            path_one: '1',
+            path_zero: '0',
+            floor: '.',
+            dungeon_floor: '.',
+            locked_door: 'L',
+            hidden_area: '*',
+            tech_floor: '=',
+            metal_floor: 'M',
+        };
+
+        const ASCII_ENTITY_MAP = {
+            player: '@',
+            npc: 'N',
+            enemy: 'X',
+            item: 'I',
+        };
+        // --- End of copied constants ---
+
+        // Deterministic variant selection function (copied from MapGrid.tsx)
+        const getTileVariant = (type, x, y) => {
+            const variants = TILE_VARIANTS[type];
+            if (variants && variants.length > 0) {
+                const hash = (x * 31 + y * 17) % variants.length;
+                return variants[hash];
+            }
+            return BASE_EMOJI_TILE_MAP[type] || '?';
+        };
+
+        // Function to render a grid of tiles
+        const renderTileGrid = (containerId, isAsciiMode) => {
+            const container = document.getElementById(containerId);
+            const tileTypes = Object.keys(isAsciiMode ? ASCII_TILE_MAP : BASE_EMOJI_TILE_MAP);
+            const displayWidth = 5; // Columns for the grid
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'grid-display';
+            gridDiv.style.gridTemplateColumns = `repeat(${displayWidth}, 1fr)`;
+            container.appendChild(gridDiv);
+
+            tileTypes.forEach((typeKey, index) => {
+                const tileType = TileType[typeKey]; // Get enum value from string key
+                let content = '';
+                if (isAsciiMode) {
+                    content = ASCII_TILE_MAP[tileType];
+                } else {
+                    // Use getTileVariant for emoji mode to show variations
+                    content = getTileVariant(tileType, index % displayWidth, Math.floor(index / displayWidth));
+                }
+                
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.innerHTML = `${content}<small>${typeKey.replace('_', ' ')}</small>`;
+                gridDiv.appendChild(cell);
+            });
+        };
+
+        // Function to create an entity-on-floor example cell
+        const createHierarchyExample = (baseTileEmoji, entityEmoji, label) => {
+            const cell = document.createElement('div');
+            cell.className = 'hierarchy-cell';
+            cell.innerHTML = `
+                <span class="base-tile">${baseTileEmoji}</span>
+                <span class="entity">${entityEmoji}</span>
+                <span class="label">${label}</span>
+            `;
+            return cell;
+        };
+
+        // Render grids and hierarchy examples when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render Emoji Tiles
+            renderTileGrid('emoji-tile-display', false);
+
+            // Render ASCII Tiles
+            renderTileGrid('ascii-tile-display', true);
+
+            // Render Hierarchy Validation Examples
+            const hierarchyContainer = document.getElementById('hierarchy-validation');
+
+            // Player on various floors
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_ENTITY_MAP.player, 'Player on Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.dungeon_floor, BASE_EMOJI_ENTITY_MAP.player, 'Player on Dungeon'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.tech_floor, BASE_EMOJI_ENTITY_MAP.player, 'Player on Tech Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.grass, BASE_EMOJI_ENTITY_MAP.player, 'Player on Grass'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.path, BASE_EMOJI_ENTITY_MAP.player, 'Player on Path'));
+
+            // NPC on various floors
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_ENTITY_MAP.npc, 'NPC on Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.dungeon_floor, '🐱', 'Cat on Dungeon')); // Specific NPC
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.grass, BASE_EMOJI_ENTITY_MAP.npc, 'NPC on Grass'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.walkable, BASE_EMOJI_ENTITY_MAP.npc, 'NPC on Walkable'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.metal_floor, BASE_EMOJI_ENTITY_MAP.npc, 'NPC on Metal Floor'));
+
+            // Enemy on various floors
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_ENTITY_MAP.enemy, 'Enemy on Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.dungeon_floor, BASE_EMOJI_ENTITY_MAP.enemy, 'Enemy on Dungeon'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.tech_floor, BASE_EMOJI_ENTITY_MAP.enemy, 'Enemy on Tech Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.path_one, BASE_EMOJI_ENTITY_MAP.enemy, 'Enemy on Path'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.walkable, BASE_EMOJI_ENTITY_MAP.enemy, 'Enemy on Walkable'));
+
+            // Item on various floors
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_ENTITY_MAP.item, 'Item on Floor'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.dungeon_floor, BASE_EMOJI_ENTITY_MAP.item, 'Item on Dungeon'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.grass, BASE_EMOJI_ENTITY_MAP.item, 'Item on Grass'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.hidden_area, BASE_EMOJI_ENTITY_MAP.item, 'Item in Hidden Area'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.tech_floor, BASE_EMOJI_ENTITY_MAP.item, 'Item on Tech Floor'));
+
+            // Example of Wall vs Floor (for contrast)
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_TILE_MAP.wall, 'Floor vs Wall (Contrast)'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.dungeon_floor, BASE_EMOJI_TILE_MAP.tree, 'Dungeon vs Tree'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.grass, BASE_EMOJI_TILE_MAP.water, 'Grass vs Water'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_TILE_MAP.locked_door, 'Floor vs Locked Door'));
+            hierarchyContainer.appendChild(createHierarchyExample(BASE_EMOJI_TILE_MAP.floor, BASE_EMOJI_TILE_MAP.door, 'Floor vs Door'));
+        });
+    </script>
+</body>
+</html>
+```

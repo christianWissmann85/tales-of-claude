@@ -2,18 +2,21 @@
 
 /* Define CSS variables for consistent sizing */
 :root {
-  --cell-size: 32px; /* As per TECH_SPEC.md */
-  --cell-font-size: 24px; /* Adjusted for readability of emojis/ASCII */
+  --cell-size: 48px; /* Increased for better visibility on larger screens */
+  --cell-font-size: 36px; /* Adjusted for readability of emojis/ASCII */
 }
 
 .gameBoard {
   /* Container for the game board and overlays */
   position: relative;
-  width: calc(var(--cell-size) * 20); /* Fixed width for 20 columns */
-  height: calc(var(--cell-size) * 15); /* Fixed height for 15 rows */
+  width: 100%; /* Fill available width */
+  height: 100%; /* Fill available height */
   overflow: hidden; /* Ensures content stays within the board boundaries */
   background-color: #1a1a1a; /* Dark background for contrast */
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Time of day atmospheric styling */
@@ -58,14 +61,16 @@
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   user-select: none; /* Prevent text selection on game elements */
   /* Optional: Add a subtle border for visual grid lines */
-  /* border: 1px solid rgba(255, 255, 255, 0.05); */
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Uncommented for better visibility */
 }
 
 .mapGridContainer {
   display: grid;
   /* Grid dimensions are set dynamically via inline style in MapGrid.tsx */
-  width: calc(var(--cell-size) * 20); /* Fixed width for 20 columns */
-  height: calc(var(--cell-size) * 15); /* Fixed height for 15 rows */
+  width: 100%; /* Fill container width */
+  height: 100%; /* Fill container height */
+  max-width: calc(var(--cell-size) * 30); /* Larger max width for bigger maps */
+  max-height: calc(var(--cell-size) * 25); /* Larger max height for bigger maps */
   border: 2px solid #333;
   background-color: #1a1a1a; /* Dark background for contrast */
   font-family: 'monospace', 'Courier New', Courier, monospace;
@@ -104,4 +109,82 @@
 .asciiToggle:hover {
   background-color: #00ff00;
   color: #000;
+}
+
+/* Floor tile styles removed - now using background colors instead of emoji opacity */
+
+/* Define color palette for consistent theming */
+:root {
+  --primary-green: #00ff88;    /* Player/positive actions */
+  --danger-red: #ff4444;       /* Enemy/damage */
+  --warning-yellow: #ffaa00;   /* Caution/items */
+  --ui-dark: #1a1a2e;         /* Dark backgrounds */
+  --ui-light: #e0e0e0;        /* Light text */
+  --ui-accent: #4a9eff;       /* UI accent color */
+}
+
+/* Player cell highlighting - makes player always visible */
+.playerCell {
+  position: relative;
+  z-index: 10;
+  animation: player-glow 2s ease-in-out infinite;
+}
+
+.playerCell::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--primary-green);
+  border-radius: 4px;
+  box-shadow: 0 0 12px var(--primary-green), 
+              0 0 24px rgba(0, 255, 136, 0.4),
+              inset 0 0 12px rgba(0, 255, 136, 0.2);
+  pointer-events: none;
+}
+
+@keyframes player-glow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 4px var(--primary-green));
+  }
+  50% { 
+    filter: drop-shadow(0 0 8px var(--primary-green));
+  }
+}
+
+/* Enemy cell highlighting - clear threat indication */
+.enemyCell {
+  position: relative;
+  animation: enemy-pulse 1.5s ease-in-out infinite;
+}
+
+.enemyCell::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--danger-red);
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(255, 68, 68, 0.6);
+  pointer-events: none;
+}
+
+@keyframes enemy-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 2px rgba(255, 68, 68, 0.4));
+  }
+  50% { 
+    filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.8));
+  }
+}
+
+/* NPC cell highlighting - friendly indication */
+.npcCell {
+  position: relative;
+}
+
+.npcCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 40%, rgba(255, 255, 255, 0.1) 70%);
+  pointer-events: none;
 }

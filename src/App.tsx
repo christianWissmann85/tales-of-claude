@@ -1,32 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameProvider, useGameContext } from './context/GameContext';
 import StatusBar from './components/StatusBar/StatusBar';
 import GameBoard from './components/GameBoard/GameBoard';
-import DialogueBox from './components/DialogueBox/DialogueBox'; // Import DialogueBox
-import Battle from './components/Battle/Battle'; // Import Battle
-import Notification from './components/Notification/Notification'; // Import Notification
-import SplashScreen from './components/SplashScreen/SplashScreen'; // Import SplashScreen
-import OpeningScene from './components/OpeningScene/OpeningScene'; // Import OpeningScene
-import { NotificationSystem } from './components/NotificationSystem/NotificationSystem'; // Import NotificationSystem
-import TimeDisplay from './components/TimeDisplay/TimeDisplay'; // Import TimeDisplay
+import DialogueBox from './components/DialogueBox/DialogueBox';
+import Battle from './components/Battle/Battle';
+import Notification from './components/Notification/Notification';
+import SplashScreen from './components/SplashScreen/SplashScreen';
+import OpeningScene from './components/OpeningScene/OpeningScene';
+import { NotificationSystem } from './components/NotificationSystem/NotificationSystem';
+import TimeDisplay from './components/TimeDisplay/TimeDisplay';
+import FloorTileTest from './components/TestPages/FloorTileTest';
+
+// Import the new UIFramework styles
+import styles from './styles/UIFramework.module.css';
 
 // Separate component to access game context
 const GameContent: React.FC = () => {
   const { state, dispatch } = useGameContext();
-  
-  const gameFrameStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    border: '2px solid #61dafb', // A distinct border for the game frame
-    borderRadius: '10px',
-    boxShadow: '0 0 25px rgba(97, 218, 251, 0.6)', // Glowing effect
-    backgroundColor: '#1a1a1a', // Slightly darker background for the game frame itself
-    padding: '15px',
-    gap: '15px', // Space between StatusBar and GameBoard
-    maxWidth: 'fit-content', // Adjust width to content
-    margin: 'auto', // Center the game frame horizontally on the page
-    position: 'relative', // For absolute positioning of TimeDisplay
-  };
 
   // Handle splash screen completion
   const handleSplashComplete = () => {
@@ -38,6 +28,22 @@ const GameContent: React.FC = () => {
     dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'playing' } });
   };
 
+  // Inventory key handler
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'i' || event.key === 'I') {
+        event.preventDefault();
+        dispatch({ type: 'SHOW_INVENTORY', payload: { show: true } });
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [dispatch]);
+
   // Render different screens based on game phase
   if (state.gamePhase === 'splash') {
     return <SplashScreen onStart={handleSplashComplete} />;
@@ -47,38 +53,93 @@ const GameContent: React.FC = () => {
     return <OpeningScene onComplete={handleIntroComplete} />;
   }
 
-  // Render the main game
+  // Render the main game UI using the new framework styles
   return (
-    <div style={gameFrameStyle}>
-      <StatusBar />
-      {/* Conditionally render Battle or GameBoard based on battle state */}
-      {state.battle ? <Battle /> : <GameBoard />}
-      {/* DialogueBox component will automatically show/hide based on game state */}
-      <DialogueBox />
-      {/* Notification component for game messages */}
-      <Notification />
-      {/* Time display in top-right corner */}
-      <TimeDisplay />
+    <div className={styles.mainLayout}>
+      {/* Left Sidebar */}
+      <div className={styles.leftSidebar}>
+        {/* Status Panel */}
+        <div className={`${styles.uiPanel} ${styles.statusPanel}`}>
+          <StatusBar />
+        </div>
+        
+        {/* Minimap Panel - Placeholder for now */}
+        <div className={`${styles.uiPanel} ${styles.minimapPanel}`}>
+          <h3>Map</h3>
+          <div style={{ 
+            flex: 1, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: '#666'
+          }}>
+            {state.currentMap.name || 'Unknown Area'}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className={styles.mainContent}>
+        <div className={styles.gameBoard}>
+          {/* Conditionally render Battle or GameBoard based on battle state */}
+          {state.battle ? <Battle /> : <GameBoard />}
+          {/* Overlay components */}
+          <DialogueBox />
+          <Notification />
+          <TimeDisplay />
+        </div>
+      </div>
+
+      {/* Bottom Panel */}
+      <div className={styles.bottomPanel}>
+        <div className={`${styles.uiPanel} ${styles.hotbarPanel}`}>
+          {/* Simple hotbar display */}
+          <div className={styles.hotbarSlot}>
+            <span className={styles.hotbarKey}>1</span>
+            <span className={styles.hotbarIcon}>⚔️</span>
+          </div>
+          <div className={styles.hotbarSlot}>
+            <span className={styles.hotbarKey}>2</span>
+            <span className={styles.hotbarIcon}>🛡️</span>
+          </div>
+          <div className={styles.hotbarSlot}>
+            <span className={styles.hotbarKey}>3</span>
+            <span className={styles.hotbarIcon}>🧪</span>
+          </div>
+          <div className={`${styles.hotbarSlot} ${styles.inventory}`}>
+            <span className={styles.hotbarKey}>I</span>
+            <span className={styles.hotbarIcon}>🎒</span>
+          </div>
+          <div className={styles.hotbarSlot}>
+            <span className={styles.hotbarKey}>M</span>
+            <span className={styles.hotbarIcon}>🗺️</span>
+          </div>
+          <div className={styles.hotbarSlot}>
+            <span className={styles.hotbarKey}>ESC</span>
+            <span className={styles.hotbarIcon}>⚙️</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 const App: React.FC = () => {
-  const gameScreenContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center', // Center children horizontally
-    justifyContent: 'flex-start', // Align children to the top
-    minHeight: '100vh', // Take full viewport height
-    backgroundColor: '#282c34', // Dark background for the entire page
-    color: 'white',
-    fontFamily: 'monospace',
-    padding: '20px',
-    boxSizing: 'border-box',
-  };
+  // Check URL parameters for test pages
+  const urlParams = new URLSearchParams(window.location.search);
+  const testPage = urlParams.get('test');
+
+  // Render test pages if requested
+  if (testPage === 'floor-tiles') {
+    return (
+      <div className={styles.gameContainer}>
+        <FloorTileTest />
+      </div>
+    );
+  }
 
   return (
-    <div style={gameScreenContainerStyle}>
+    <div className={styles.gameContainer}>
       <GameProvider>
         <NotificationSystem>
           <GameContent />

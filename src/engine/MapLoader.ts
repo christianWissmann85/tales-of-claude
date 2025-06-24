@@ -1,6 +1,6 @@
 // src/engine/MapLoader.ts
 
-import { GameMap as IGameMap, Tile, TileType, Exit, NPC, NPCRole, Item } from '../types/global.types';
+import { GameMap as IGameMap, Tile, TileType, Exit, NPC, NPCRole, Item, Structure, StructureInteractionPoint } from '../types/global.types';
 import { 
   JsonMap, 
   JsonMapObject, 
@@ -9,6 +9,7 @@ import {
   JsonMapItem, 
   JsonMapExit,
   JsonMapDoor,
+  JsonMapStructure,
   JsonMapObjectType,
   JsonMapTileLayer,
   JsonMapObjectLayer
@@ -72,6 +73,25 @@ interface JsonDoorObject extends JsonMapObject {
   properties?: {
     doorId?: string;
     keyItemId?: string;
+  };
+}
+
+interface JsonStructureObject extends JsonMapObject {
+  type: 'structure';
+  properties: {
+    structureId: string;
+    width: number;
+    height: number;
+    visual: string;
+    collision: Array<{ x: number; y: number }>;
+    interactionPoints?: Array<{
+      x: number;
+      y: number;
+      type: 'door' | 'sign' | 'action';
+      targetMapId?: string;
+      message?: string;
+      action?: string;
+    }>;
   };
 }
 
@@ -212,25 +232,25 @@ export class MapLoader {
     // CRITICAL FIX: Collision layer interpretation was backward!
     // In Tiled, 0 typically means 'no collision' (walkable), and 1 means 'collision' (wall)
     const tileIdToType: Record<number, TileType> = {
-      0: 'grass', // FIX: 0 means walkable in collision layer (was 'wall')
-      1: 'wall',  // FIX: 1 means wall in collision layer (was 'grass')
-      2: 'floor', // Most common tile type in maps
-      3: 'water',
-      4: 'wall',
-      5: 'door',
+      0: 'walkable', // Empty/void space (often used in collision layers)
+      1: 'grass',    // Grass floor tiles (walkable)
+      2: 'tree',     // Tree obstacles (walls)
+      3: 'wall',     // Wall tiles
+      4: 'door',     // Door tiles
+      5: 'exit',     // Exit tiles
       6: 'locked_door',
-      7: 'exit',
+      7: 'floor',    // Generic floor
       8: 'healer',
-      9: 'walkable', // Often used in collision layers
+      9: 'shop',
       10: 'path',
-      11: 'tree',
-      12: 'shop',
-      13: 'dungeon_floor',
-      14: 'hidden_area',
-      15: 'tech_floor',
-      16: 'metal_floor',
-      17: 'path_one',
-      18: 'path_zero',
+      11: 'water',
+      12: 'dungeon_floor',
+      13: 'hidden_area',
+      14: 'tech_floor',
+      15: 'metal_floor',
+      16: 'path_one',
+      17: 'path_zero',
+      18: 'walkable', // Generic walkable for collision layers
     };
 
     const gameMap: IGameMap = {
@@ -243,6 +263,7 @@ export class MapLoader {
       ),
       entities: [],
       exits: [],
+      structures: [],
     };
 
     const tileCount = jsonMap.width * jsonMap.height;
@@ -411,6 +432,53 @@ export class MapLoader {
               gameMap.tiles[y][x].walkable = false; // Doors are initially not walkable
               // Note: The global.types.Tile interface doesn't directly support doorId/keyItemId.
               // Game logic would need to query the object layer for these properties if needed.
+            }
+            break;
+          case 'structure':
+            const jsonStructure = obj as JsonStructureObject;
+            const structure: Structure = {
+              id: jsonStructure.id,
+              structureId: jsonStructure.properties.structureId,
+              position: jsonStructure.position,
+              size: {
+                width: jsonStructure.properties.width,
+                height: jsonStructure.properties.height,
+              },
+              visual: jsonStructure.properties.visual,
+              collisionMap: new Set(
+                jsonStructure.properties.collision.map(pos => `${pos.x},${pos.y}`)
+              ),
+              interactionPoints: (jsonStructure.properties.interactionPoints || []).map(point => ({
+                relativePosition: { x: point.x, y: point.y },
+                type: point.type,
+                targetMapId: point.targetMapId,
+                message: point.message,
+                action: point.action,
+              } as StructureInteractionPoint)),
+            };
+            
+            // Add structure to gameMap
+            gameMap.structures = gameMap.structures || [];
+            gameMap.structures.push(structure);
+            
+            // Update tiles occupied by this structure
+            for (let sy = 0; sy < structure.size.height; sy++) {
+              for (let sx = 0; sx < structure.size.width; sx++) {
+                const tileX = structure.position.x + sx;
+                const tileY = structure.position.y + sy;
+                
+                if (tileY < gameMap.height && tileX < gameMap.width &&
+                    gameMap.tiles[tileY] && gameMap.tiles[tileY][tileX]) {
+                  const tile = gameMap.tiles[tileY][tileX];
+                  tile.structureId = structure.id;
+                  
+                  // Check if this position blocks movement
+                  const relativeKey = `${sx},${sy}`;
+                  if (structure.collisionMap.has(relativeKey)) {
+                    tile.walkable = false;
+                  }
+                }
+              }
             }
             break;
           case 'trigger':

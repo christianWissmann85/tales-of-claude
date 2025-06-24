@@ -1312,6 +1312,135 @@ const tracing = await client.send('Tracing.end');
 console.log('CPU trace captured. Analyze with Chrome DevTools Performance tab.');
 ```
 
+## Visual Testing Framework
+
+Our visual testing framework provides powerful tools for capturing screenshots, detecting visual regressions, and ensuring UI quality. These tools are essential for identifying and fixing visual issues independently.
+
+### Screenshot Tool
+
+The screenshot tool allows agents to capture the game state at any moment, with optional actions and wait conditions.
+
+```bash
+# Basic usage - capture current game state
+npx tsx src/tests/visual/screenshot-tool.ts --name test-screenshot
+
+# Capture with keyboard action
+npx tsx src/tests/visual/screenshot-tool.ts --name inventory --action key:i --wait-ms 500
+
+# Multiple actions in sequence
+npx tsx src/tests/visual/screenshot-tool.ts --action key:Enter --action key:Space --name game-start
+
+# Mouse click action
+npx tsx src/tests/visual/screenshot-tool.ts --action click:.button-class --name after-click
+```
+
+**Features:**
+- Command-line interface for easy agent usage
+- Keyboard and mouse action sequences
+- Wait conditions (selector or time-based)
+- Automatic game state detection
+- Screenshots saved to `src/tests/visual/temp/`
+
+### Visual Regression Tests
+
+The visual test runner detects UI changes by comparing screenshots against baselines.
+
+```bash
+# Run visual regression tests
+npx tsx src/tests/visual/visual-test-runner.ts
+
+# Update baseline screenshots (when changes are intentional)
+npx tsx src/tests/visual/visual-test-runner.ts --update-baselines
+
+# Run specific test scenarios
+npx tsx src/tests/visual/visual-test-runner.ts --scenario "Map Navigation"
+```
+
+**Features:**
+- Pixel-by-pixel comparison with configurable threshold
+- HTML reports with side-by-side comparisons
+- One-click approve/reject interface
+- Baseline management for different scenarios
+- Reports saved to `src/tests/visual/reports/`
+
+### Automated Playtests
+
+Simple playtests execute predefined gameplay sequences while capturing screenshots at each step.
+
+```bash
+# Run automated playtest
+npx tsx src/tests/visual/simple-playtest.ts
+
+# Run with custom wait times
+npx tsx src/tests/visual/simple-playtest.ts --wait-between-steps 2000
+
+# Generate detailed report
+npx tsx src/tests/visual/simple-playtest.ts --detailed-report
+```
+
+**Features:**
+- Step-by-step gameplay automation
+- Screenshot capture at each action
+- State validation between steps
+- JSON report generation
+- Perfect for regression testing
+
+### Using Visual Tests to Fix UI Issues
+
+When addressing visual problems:
+
+1. **Capture Current State**
+   ```bash
+   npx tsx src/tests/visual/screenshot-tool.ts --name before-fix
+   ```
+
+2. **Apply Your Fix**
+   Make the necessary CSS/component changes
+
+3. **Capture After State**
+   ```bash
+   npx tsx src/tests/visual/screenshot-tool.ts --name after-fix
+   ```
+
+4. **Run Visual Tests**
+   ```bash
+   npx tsx src/tests/visual/visual-test-runner.ts
+   ```
+
+5. **Update Baselines if Satisfied**
+   ```bash
+   npx tsx src/tests/visual/visual-test-runner.ts --update-baselines
+   ```
+
+### Adding New Visual Test Scenarios
+
+To add a new visual test scenario:
+
+```javascript
+// In visual-test-runner.ts, add to TEST_SCENARIOS:
+{
+  name: 'My New Scenario',
+  actions: [
+    { type: 'screenshot', name: 'initial-state' },
+    { type: 'keyboard', key: 'i' },
+    { type: 'wait', ms: 500 },
+    { type: 'screenshot', name: 'inventory-open' }
+  ],
+  expectations: [
+    'Inventory UI should be visible',
+    'Player stats should display correctly'
+  ]
+}
+```
+
+### Visual Testing Best Practices
+
+1. **Always capture before/after screenshots** when making UI changes
+2. **Use descriptive names** for screenshots (e.g., `inventory-hover-state`, not `test1`)
+3. **Wait for animations** to complete before capturing
+4. **Document visual changes** in your field reports
+5. **Update baselines** only after confirming changes are correct
+
 ## Continuous Integration (CI) - Automating Quality
 
 Integrating our tests into a CI pipeline ensures that every code change is automatically validated, catching regressions early and maintaining a high standard of quality. We use GitHub Actions for our CI.

@@ -1,0 +1,481 @@
+Here's the `visual-transparency-test.html` file, designed to be a comprehensive and interactive tool for Chris to fine-tune the visual settings for "Tales of Claude".
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tales of Claude - Visual Transparency Test</title>
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #1a1a1a; /* Dark background like the game */
+            color: #f0f0f0; /* Light text for contrast */
+            font-family: 'monospace', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased; /* Smoother text rendering */
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3 {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        p, ul {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        /* Layout Containers */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Side-by-side comparison */
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .section {
+            background-color: #2a2a2a;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Interactive Controls */
+        .controls {
+            background-color: #3a3a3a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        input[type="range"] {
+            width: 200px;
+            -webkit-appearance: none; /* Remove default styling */
+            appearance: none;
+            height: 8px;
+            background: #555;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4CAF50; /* Green thumb */
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Game Grid Styles */
+        .game-area {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5x5 grid for demo */
+            grid-template-rows: repeat(5, 1fr);
+            gap: 2px; /* Small gap between tiles */
+            border: 2px solid #555;
+            padding: 5px;
+            background-color: #111; /* Darker background for the grid itself */
+            margin-top: 20px;
+            margin-bottom: 30px;
+            width: fit-content; /* Adjust to content */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .tile-wrapper {
+            position: relative;
+            width: 50px; /* Fixed size for tiles */
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Ensure content stays within */
+        }
+
+        /* The pseudo-element acts as the tile's background color */
+        .tile-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Background layer */
+        }
+
+        /* The actual floor emoji */
+        .tile-content {
+            position: relative;
+            z-index: 1; /* Content layer, above background */
+            font-size: 1.8em; /* Base emoji size, adjusted by --tile-font-size */
+            line-height: 1; /* Prevent extra spacing */
+        }
+
+        /* Specific Tile Type Colors */
+        .tile-stone::before { background-color: #555; } /* Dark grey */
+        .tile-wood::before { background-color: #8B4513; } /* Saddle Brown */
+        .tile-grass::before { background-color: #4CAF50; } /* Green */
+        .tile-water::before { background-color: #007bff; } /* Blue */
+        .tile-lava::before { background-color: #FF4500; } /* Orange Red */
+        .tile-magic::before { background-color: #8A2BE2; } /* Blue Violet */
+        .tile-hole::before { background-color: #333; } /* Very dark grey */
+        .tile-bridge::before { background-color: #A0522D; } /* Sienna */
+
+        /* Opacity for the current settings section (controlled by JS via CSS var) */
+        #current-settings .tile-wrapper::before {
+            opacity: var(--tile-opacity, 0.5); /* Default 50% opacity */
+        }
+        /* Font size for the current settings section (controlled by JS via CSS var) */
+        #current-settings .tile-content {
+            font-size: calc(1.8em * (var(--tile-font-size, 85) / 100)); /* Scale base size */
+        }
+
+        /* Opacity for the no-transparency reference section (always 100%) */
+        #no-transparency .tile-wrapper::before {
+            opacity: 1; /* Always 100% opacity */
+        }
+        /* Font size for the no-transparency reference section (fixed) */
+        #no-transparency .tile-content {
+            font-size: calc(1.8em * (85 / 100)); /* Fixed at default size */
+        }
+
+        /* Entities (Player, Items, NPCs) */
+        .entity {
+            position: absolute;
+            z-index: 2; /* Above tile background and tile emoji */
+            font-size: 2.2em; /* Larger than tile emoji to stand out */
+            line-height: 1; /* Prevent extra spacing */
+            /* Crucially, NO opacity applied here, so they remain fully opaque */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the entity */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1000px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack sections on smaller screens */
+            }
+        }
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            input[type="range"] {
+                width: 100%;
+            }
+            .game-area {
+                grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* More flexible grid */
+                grid-template-rows: auto;
+                width: 100%;
+            }
+            .tile-wrapper {
+                width: auto; /* Let grid determine width */
+                height: 40px; /* Slightly smaller height */
+            }
+            .tile-content {
+                font-size: 1.5em; /* Adjust base size for smaller screens */
+            }
+            .entity {
+                font-size: 1.8em; /* Adjust base size for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tales of Claude - Visual Transparency Test Page</h1>
+        <p>Welcome, Chris! This page is designed to help you find the perfect balance for floor tile transparency and size in "Tales of Claude". The goal is to make the game world feel immersive without obscuring important entities (player, items, NPCs).</p>
+    </header>
+
+    <section class="controls">
+        <h2>Adjust Settings</h2>
+        <div class="control-group">
+            <label for="opacity-slider">Floor Tile Opacity: <span id="opacity-value">50%</span></label>
+            <input type="range" id="opacity-slider" min="0" max="100" value="50">
+        </div>
+        <div class="control-group">
+            <label for="size-slider">Floor Tile Emoji Size: <span id="size-value">85%</span></label>
+            <input type="range" id="size-slider" min="50" max="100" value="85">
+        </div>
+        <button id="reset-button">Reset to Defaults</button>
+    </section>
+
+    <section class="explanation section">
+        <h2>Understanding the Transparency Solution</h2>
+        <p>In "Tales of Claude", floor tiles are represented by emojis. To achieve transparency for the floor itself while keeping entities (player, items, NPCs) fully opaque, we use a CSS technique:</p>
+        <ul>
+            <li>Each tile is a container (`.tile-wrapper`).</li>
+            <li>The <strong>background color</strong> of the tile (e.g., the grey for stone, brown for wood) is applied to a pseudo-element (`::before`) within this container.</li>
+            <li>The `opacity` CSS property is applied <strong>only</strong> to this pseudo-element.</li>
+            <li>The actual floor emoji (e.g., `🪨`, `🪵`) and any entities (e.g., `🧑‍🤝‍🧑`, `💰`) are placed as separate elements <strong>above</strong> this pseudo-element with full opacity.</li>
+        </ul>
+        <p>This ensures that only the *color* of the floor tile becomes translucent, allowing the dark game background to show through, while the visual elements on top remain crisp and clear, maintaining visual hierarchy.</p>
+    </section>
+
+    <div class="container">
+        <section id="no-transparency" class="section">
+            <h2>Reference: No Transparency (100% Opacity)</h2>
+            <p>This section shows how floor tiles look with full opacity and default emoji size. Use this as a baseline for comparison.</p>
+            <h3>Dungeon Area Demo</h3>
+            <div class="game-area">
+                <!-- Dungeon Tiles -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">🧑‍🤝‍🧑</span></div> <!-- Player -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">⚔️</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">🐉</span></div> <!-- NPC -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">💰</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+            </div>
+
+            <h3>Town & Forest Area Demo</h3>
+            <div class="game-area">
+                <!-- Town & Forest Mix -->
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span><span class="entity">🧑‍🤝‍🧑</span></div> <!-- Player -->
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span><span class="entity">🐺</span></div> <!-- NPC -->
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span><span class="entity">🍎</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-bridge"><span class="tile-content">🌉</span></div>
+                <div class="tile-wrapper tile-water"><span class="tile-content">💧</span></div>
+                <div class="tile-wrapper tile-water"><span class="tile-content">💧</span></div>
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-hole"><span class="tile-content">🕳️</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span><span class="entity">🛡️</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+            </div>
+        </section>
+
+        <section id="current-settings" class="section">
+            <h2>Current Settings (Adjustable)</h2>
+            <p>This section updates live with your chosen opacity and tile emoji size. Observe how different settings affect readability and visual hierarchy.</p>
+            <h3>Dungeon Area Demo</h3>
+            <div class="game-area">
+                <!-- Dungeon Tiles -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">🧑‍🤝‍🧑</span></div> <!-- Player -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">⚔️</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">🐉</span></div> <!-- NPC -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span><span class="entity">💰</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+                <div class="tile-wrapper tile-stone"><span class="tile-content">🪨</span></div>
+            </div>
+
+            <h3>Town & Forest Area Demo</h3>
+            <div class="game-area">
+                <!-- Town & Forest Mix -->
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span><span class="entity">🧑‍🤝‍🧑</span></div> <!-- Player -->
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span></div>
+                <div class="tile-wrapper tile-grass"><span class="tile-content">🌿</span><span class="entity">🐺</span></div> <!-- NPC -->
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span><span class="entity">🍎</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-bridge"><span class="tile-content">🌉</span></div>
+                <div class="tile-wrapper tile-water"><span class="tile-content">💧</span></div>
+                <div class="tile-wrapper tile-water"><span class="tile-content">💧</span></div>
+
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-wood"><span class="tile-content">🪵</span></div>
+                <div class="tile-wrapper tile-hole"><span class="tile-content">🕳️</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-magic"><span class="tile-content">✨</span></div>
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span><span class="entity">🛡️</span></div> <!-- Item -->
+                <div class="tile-wrapper tile-lava"><span class="tile-content">🌋</span></div>
+            </div>
+        </section>
+    </div>
+
+    <section class="tips section">
+        <h2>Tips for Finding Ideal Settings</h2>
+        <ul>
+            <li><strong>Visual Weight Comparison:</strong>
+                <p>Observe how the "heaviness" of the floor tiles changes with opacity. Lower opacity makes the floor recede into the background, emphasizing entities. Higher opacity makes the floor more prominent. The goal is for the floor to provide context without dominating the visual field.</p>
+            </li>
+            <li><strong>Readability:</strong>
+                <p>Can you clearly distinguish between different floor types (e.g., grass vs. stone, water vs. bridge) at a glance, especially when they are transparent? Ensure the distinct colors and emojis remain recognizable.</p>
+            </li>
+            <li><strong>Entity Clarity:</strong>
+                <p>Do the player, items, and NPCs stand out clearly against *all* floor types, even with varying opacity? They should never blend in or become hard to see. Their full opacity is crucial for gameplay.</p>
+            </li>
+            <li><strong>Atmosphere:</strong>
+                <p>How does the transparency affect the overall feel of the game areas? Does it make the dungeon feel darker and more mysterious, or the forest more ethereal? Consider the mood you want to convey.</p>
+            </li>
+            <li><strong>Contrast:</strong>
+                <p>Pay attention to the contrast between the floor tiles and the dark game background, as well as between the floor tiles and the entities on them. Sufficient contrast is key for visual comfort and clarity.</p>
+            </li>
+            <li><strong>Floor Emoji Size:</strong>
+                <p>The floor tile emoji size should be large enough to be recognizable and contribute to the tile's identity, but not so large that it competes with or overwhelms the entity emojis. Entities should always be the primary focus on a tile.</p>
+            </li>
+        </ul>
+        <p>Experiment with different combinations. There's no single "right" answer, but rather a balance that feels best for "Tales of Claude"'s unique aesthetic and gameplay clarity. Good luck!</p>
+    </section>
+
+    <script>
+        const opacitySlider = document.getElementById('opacity-slider');
+        const opacityValueSpan = document.getElementById('opacity-value');
+        const sizeSlider = document.getElementById('size-slider');
+        const sizeValueSpan = document.getElementById('size-value');
+        const resetButton = document.getElementById('reset-button');
+        const currentSettingsSection = document.getElementById('current-settings');
+
+        // Function to update CSS variables based on slider values
+        function updateSettings() {
+            const opacity = opacitySlider.value / 100; // Convert 0-100 to 0.0-1.0
+            const fontSize = sizeSlider.value; // Keep as 50-100 for percentage
+
+            opacityValueSpan.textContent = `${opacitySlider.value}%`;
+            sizeValueSpan.textContent = `${fontSize}%`;
+
+            // Apply CSS custom properties to the section that needs live updates
+            currentSettingsSection.style.setProperty('--tile-opacity', opacity);
+            currentSettingsSection.style.setProperty('--tile-font-size', fontSize);
+        }
+
+        // Set initial values and update the display on page load
+        updateSettings();
+
+        // Event listeners for sliders to update live
+        opacitySlider.addEventListener('input', updateSettings);
+        sizeSlider.addEventListener('input', updateSettings);
+
+        // Event listener for reset button
+        resetButton.addEventListener('click', () => {
+            opacitySlider.value = 50; // Default opacity
+            sizeSlider.value = 85;    // Default size
+            updateSettings(); // Apply the default values
+        });
+    </script>
+</body>
+</html>
+```

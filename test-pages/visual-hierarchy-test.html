@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tales of Claude - Visual Hierarchy Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3 {
+            color: #00ff00;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+        
+        .tile-grid {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #444;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(15, 30px);
+            gap: 2px;
+            font-size: 24px;
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #333;
+            border-radius: 4px;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin: 5px 15px;
+        }
+        
+        .visual-test {
+            margin: 30px 0;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+        
+        .test-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 20px;
+        }
+        
+        .test-label {
+            width: 150px;
+            color: #aaa;
+        }
+        
+        .test-items {
+            display: flex;
+            gap: 10px;
+            font-size: 28px;
+        }
+        
+        .highlight {
+            background: #ffff0033;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .problem {
+            color: #ff6666;
+        }
+        
+        .good {
+            color: #66ff66;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Tales of Claude - Visual Hierarchy Test 🎨</h1>
+        <p>Testing the new visual hierarchy where floors recede and entities stand out!</p>
+        
+        <div class="comparison">
+            <div class="tile-grid">
+                <h2 class="problem">❌ OLD SYSTEM (Confusing)</h2>
+                <div class="grid" id="old-grid"></div>
+                <div class="legend">
+                    <div class="legend-item">⬜ = Floor (Too bold!)</div>
+                    <div class="legend-item">⬛ = Dungeon (Looks like wall!)</div>
+                    <div class="legend-item">🌿 = Grass (Competes with NPCs)</div>
+                    <div class="legend-item">👣 = Path (Too prominent)</div>
+                </div>
+            </div>
+            
+            <div class="tile-grid">
+                <h2 class="good">✅ NEW SYSTEM (Clear Hierarchy)</h2>
+                <div class="grid" id="new-grid"></div>
+                <div class="legend">
+                    <div class="legend-item">░ = Floor (Subtle texture)</div>
+                    <div class="legend-item">▒ = Dungeon (Still subtle)</div>
+                    <div class="legend-item">､ = Grass (Tiny marker)</div>
+                    <div class="legend-item">⋅ = Path (Almost invisible)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="visual-test">
+            <h2>Visual Hierarchy Categories</h2>
+            
+            <div class="test-row">
+                <div class="test-label good">FLOORS (Subtle):</div>
+                <div class="test-items">
+                    <span>░</span> <span>▒</span> <span>·</span> <span>⋅</span> <span>∙</span> <span>､</span>
+                </div>
+            </div>
+            
+            <div class="test-row">
+                <div class="test-label">WALLS (Bold):</div>
+                <div class="test-items">
+                    <span>🧱</span> <span>🌲</span> <span>🌊</span> <span>🔒</span> <span>🪨</span>
+                </div>
+            </div>
+            
+            <div class="test-row">
+                <div class="test-label">NPCs (Characters):</div>
+                <div class="test-items">
+                    <span>🧙</span> <span>🐱</span> <span>👷</span> <span>💂</span> <span>🧑‍💻</span>
+                </div>
+            </div>
+            
+            <div class="test-row">
+                <div class="test-label">ITEMS (Sparkly!):</div>
+                <div class="test-items">
+                    <span>✨</span> <span>⚔️✨</span> <span>🧪✨</span> <span>🗝️✨</span> <span>💎</span>
+                </div>
+            </div>
+            
+            <div class="test-row">
+                <div class="test-label highlight">PLAYER (Unique!):</div>
+                <div class="test-items">
+                    <span style="font-size: 36px;">🤖</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="visual-test">
+            <h2>Real Game Scenarios</h2>
+            
+            <h3>Scenario 1: Player in a dungeon with items</h3>
+            <div class="grid" id="scenario1"></div>
+            <p>Notice how the player 🤖 and items ✨ immediately stand out from the subtle floor ▒</p>
+            
+            <h3>Scenario 2: NPCs in town</h3>
+            <div class="grid" id="scenario2"></div>
+            <p>NPCs 🧙🐱 are clearly visible against the light floor ░</p>
+            
+            <h3>Scenario 3: Forest exploration</h3>
+            <div class="grid" id="scenario3"></div>
+            <p>Trees 🌲 form clear barriers while grass ､ fades into background</p>
+        </div>
+        
+        <div class="visual-test">
+            <h2>Visual Weight Comparison</h2>
+            <p>From lowest (background) to highest (focus):</p>
+            <div style="font-size: 32px; line-height: 2;">
+                <span style="opacity: 0.3;">·</span> →
+                <span style="opacity: 0.4;">⋅</span> →
+                <span style="opacity: 0.5;">░</span> →
+                <span style="opacity: 0.7;">▒</span> →
+                <span style="opacity: 0.9;">🧱</span> →
+                <span>🧙</span> →
+                <span class="highlight">✨</span> →
+                <span class="highlight" style="font-size: 40px;">🤖</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Old confusing tiles
+        const oldTiles = {
+            floor: '⬜',
+            dungeon: '⬛',
+            grass: '🌿',
+            wall: '🧱',
+            path: '👣',
+            npc: '🧙',
+            player: '🤖',
+            item: '💾'
+        };
+        
+        // New clear hierarchy
+        const newTiles = {
+            floor: '░',
+            dungeon: '▒',
+            grass: '､',
+            wall: '🧱',
+            path: '⋅',
+            npc: '🧙',
+            player: '🤖',
+            item: '✨'
+        };
+        
+        // Generate comparison grids
+        function generateGrid(elementId, tiles, pattern) {
+            const grid = document.getElementById(elementId);
+            grid.innerHTML = '';
+            
+            for (let y = 0; y < 10; y++) {
+                for (let x = 0; x < 15; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    
+                    // Create a pattern
+                    if (x === 7 && y === 5) {
+                        cell.textContent = tiles.player;
+                    } else if ((x === 3 && y === 3) || (x === 11 && y === 7)) {
+                        cell.textContent = tiles.npc;
+                    } else if ((x === 5 && y === 6) || (x === 9 && y === 4)) {
+                        cell.textContent = tiles.item;
+                    } else if (x === 0 || x === 14 || y === 0 || y === 9) {
+                        cell.textContent = tiles.wall;
+                    } else if ((x + y) % 4 === 0) {
+                        cell.textContent = tiles.path;
+                    } else if (x < 7) {
+                        cell.textContent = tiles.floor;
+                    } else {
+                        cell.textContent = tiles.grass;
+                    }
+                    
+                    grid.appendChild(cell);
+                }
+            }
+        }
+        
+        // Generate scenario grids
+        function generateScenario1() {
+            const grid = document.getElementById('scenario1');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = 'repeat(10, 30px)';
+            
+            const dungeon = [
+                '🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱',
+                '🧱▒▒▒🧱▒▒▒▒🧱',
+                '🧱▒✨▒🧱▒⚔️✨▒🧱',
+                '🧱▒▒▒🔒▒▒▒▒🧱',
+                '🧱🧱🧱🧱🧱▒▒▒▒🧱',
+                '🧱▒▒▒▒▒🤖▒▒🧱',
+                '🧱▒🗝️✨▒▒▒▒▒🧱',
+                '🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱'
+            ];
+            
+            dungeon.forEach(row => {
+                [...row].forEach(char => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = char;
+                    grid.appendChild(cell);
+                });
+            });
+        }
+        
+        function generateScenario2() {
+            const grid = document.getElementById('scenario2');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = 'repeat(10, 30px)';
+            
+            const town = [
+                '░░░⋅⋅⋅⋅░░░',
+                '░🏪░⋅🤖⋅░🏥░',
+                '░░░⋅⋅⋅░░░',
+                '⋅⋅⋅⋅🐱⋅⋅⋅⋅',
+                '░░░⋅⋅⋅░░░',
+                '░🧙░⋅⋅⋅░👷░',
+                '░░░⋅⋅⋅░░░'
+            ];
+            
+            town.forEach(row => {
+                [...row].forEach(char => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = char;
+                    grid.appendChild(cell);
+                });
+            });
+        }
+        
+        function generateScenario3() {
+            const grid = document.getElementById('scenario3');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = 'repeat(10, 30px)';
+            
+            const forest = [
+                '🌲🌲🌲､､､🌲🌲🌲',
+                '🌲､､､､､､､🌲',
+                '､､🌲､🤖､🌲､､',
+                '､､､､､､､､､',
+                '🌲､､✨､､､🌲',
+                '🌲🌲､､🧙､､🌲🌲',
+                '🌲🌲🌲､､､🌲🌲🌲'
+            ];
+            
+            forest.forEach(row => {
+                [...row].forEach(char => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = char;
+                    grid.appendChild(cell);
+                });
+            });
+        }
+        
+        // Initialize
+        generateGrid('old-grid', oldTiles);
+        generateGrid('new-grid', newTiles);
+        generateScenario1();
+        generateScenario2();
+        generateScenario3();
+    </script>
+</body>
+</html>

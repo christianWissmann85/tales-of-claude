@@ -25,6 +25,8 @@ export interface Tile {
   type: TileType;
   /** Optional: The ID of an entity currently occupying this tile. Used for rendering/collision. */
   occupyingEntityId?: string;
+  /** Optional: The ID of a structure occupying this tile. Used for multi-tile structures. */
+  structureId?: string;
 }
 
 /**
@@ -34,6 +36,31 @@ export interface Exit {
   position: Position; // The position of the exit tile on the current map
   targetMapId: string; // The ID of the map to transition to
   targetPosition: Position; // The position on the target map where the player will appear
+}
+
+/**
+ * Represents an interaction point within a multi-tile structure.
+ */
+export interface StructureInteractionPoint {
+  relativePosition: Position; // Position relative to structure anchor
+  type: 'door' | 'sign' | 'action';
+  targetMapId?: string; // For doors
+  message?: string; // For signs
+  action?: string; // For custom actions
+}
+
+/**
+ * Represents a multi-tile structure (house, castle, etc).
+ */
+export interface Structure {
+  id: string; // Unique identifier for this structure instance
+  structureId: string; // Type identifier (e.g., 'small_house', 'castle')
+  position: Position; // Top-left anchor point
+  size: { width: number; height: number; };
+  visual: string; // The emoji to render
+  collisionMap: Set<string>; // Relative coords for collision as "x,y" strings
+  interactionPoints: StructureInteractionPoint[];
+  zIndex?: number; // Optional z-index override
 }
 
 /**
@@ -236,6 +263,8 @@ export interface GameMap {
   /** Initial entities placed on the map. Dynamic entities are managed by GameState. */
   entities: (Enemy | NPC | Item)[];
   exits: Exit[];
+  /** Multi-tile structures on this map */
+  structures?: Structure[];
 }
 
 /**

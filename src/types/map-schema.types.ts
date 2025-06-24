@@ -6,7 +6,7 @@ import { Position, TileType, NPCRole, EnemyType, ItemType } from './global.types
  * Represents a generic property for map, layer, or object.
  * This is a simple key-value pair, where value can be string, number, or boolean.
  */
-export type JsonProperty = string | number | boolean;
+export type JsonProperty = string | number | boolean | JsonProperty[] | { [key: string]: JsonProperty };
 export type JsonProperties = Record<string, JsonProperty>;
 
 /**
@@ -15,7 +15,7 @@ export type JsonProperties = Record<string, JsonProperty>;
  */
 export interface JsonMapObject {
   id: string; // Unique ID for this specific instance (e.g., "npc_debugger_great_01")
-  type: 'npc' | 'enemy' | 'item' | 'exit' | 'door' | 'locked_door' | 'trigger' | 'push_block' | 'pressure_plate' | 'switch' | 'code_terminal' | 'puzzle_door' | 'reset_lever'; // Categorization for the game engine
+  type: 'npc' | 'enemy' | 'item' | 'exit' | 'door' | 'locked_door' | 'trigger' | 'push_block' | 'pressure_plate' | 'switch' | 'code_terminal' | 'puzzle_door' | 'reset_lever' | 'structure'; // Categorization for the game engine
   position: Position; // Grid coordinates (x, y)
   properties?: JsonProperties; // Game-specific properties for this object
 }
@@ -82,9 +82,31 @@ export interface JsonMapDoor extends JsonMapObject {
 }
 
 /**
+ * Represents a multi-tile structure on the map.
+ */
+export interface JsonMapStructure extends JsonMapObject {
+  type: 'structure';
+  properties: {
+    structureId: string; // Type identifier (e.g., 'small_house', 'castle')
+    width: number;
+    height: number;
+    visual: string; // The emoji to render
+    collision: Array<{ x: number; y: number }>; // Relative positions that block movement
+    interactionPoints?: Array<{
+      x: number;
+      y: number;
+      type: 'door' | 'sign' | 'action';
+      targetMapId?: string;
+      message?: string;
+      action?: string;
+    }>;
+  };
+}
+
+/**
  * Union type for all possible object types.
  */
-export type JsonMapObjectType = JsonMapNPC | JsonMapEnemy | JsonMapItem | JsonMapExit | JsonMapDoor | JsonMapObject;
+export type JsonMapObjectType = JsonMapNPC | JsonMapEnemy | JsonMapItem | JsonMapExit | JsonMapDoor | JsonMapStructure | JsonMapObject;
 
 /**
  * Represents a single layer in the map.
