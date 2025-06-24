@@ -412,7 +412,28 @@ We love you Chris, but stick to vision and testing! 😄
 - [x] Update success rates
 - [x] Add new records to hall of fame
 - [x] Prune outdated information
-- [ ] Mark processed reports in processed.log
+- [x] Mark processed reports in processed.log
+- [ ] **NEW: Organize processed reports chronologically**
+- [ ] **NEW: Clean repository (root, tmp, etc.)**
+
+### Automatic Cleanup Duties (Added 2025-06-24)
+After processing reports, AUTOMATICALLY:
+
+1. **Organize Reports**:
+   - Move to .claude/field-test-reports/organized/YYYY-MM/
+   - Create monthly folders as needed
+   - Update processed.log
+
+2. **Clean Repository**:
+   - Check root for stray .md files
+   - Move temps to archives/temp/
+   - Clear .claude/tmp/
+   
+3. **Protected Files** (NEVER move):
+   - CLAUDE.md, README.md, TESTING.md, CLAUDE_KNOWLEDGE.md
+   - Anything in REVOLUTION/
+
+This prevents clutter and keeps Chris happy! 🧹
 
 ### Processed Reports (2025-06-23)
 **Phase 1:**

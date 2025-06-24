@@ -1,0 +1,293 @@
+Please create the following two files in your project under src/components/TouchControls/.1. src/components/TouchControls/TouchControls.tsxThis file contains the React component logic.import React, { useState, useEffect, useRef, useCallback } from 'react';
+import styles from './TouchControls.module.css';
+import { Direction } from '../../types/global.types';
+
+/**
+ * Props for the TouchControls component.
+ * @interface TouchControlsProps
+ */
+interface TouchControlsProps {
+  /**
+   * Callback function that is called continuously while a movement button is held.
+   * Passes the direction of movement or null if no movement button is pressed.
+   */
+  onMove: (direction: Direction | null) => void;
+  /**
+   * Callback function that is called once when an action button is pressed.
+   * Passes the identifier for the action (e.g., 'interact', 'inventory').
+   */
+  onAction: (action: 'interact' | 'inventory' | 'character' | 'quest') => void;
+}
+
+/**
+ * A component that renders on-screen touch controls (D-pad and action buttons)
+ * for playing the game on mobile devices.
+ */
+const TouchControls: React.FC<TouchControlsProps> = ({ onMove, onAction }) => {
+  // State to track which direction is currently being held down.
+  const [activeDirection, setActiveDirection] = useState<Direction | null>(null);
+  
+  // Ref to store the requestAnimationFrame ID for the movement loop.
+  const moveLoopRef = useRef<number>();
+
+  /**
+   * Handles starting a touch interaction on a control button.
+   * It prevents default browser actions like scrolling or zooming.
+   * @param e The React TouchEvent.
+   * @param direction The direction associated with the button, if it's a movement button.
+   */
+  const handleTouchStart = (
+    e: React.TouchEvent<HTMLButtonElement>,
+    direction: Direction | null
+  ) => {
+    e.preventDefault(); // Prevent scrolling/zooming
+    if (direction) {
+      setActiveDirection(direction);
+    }
+  };
+
+  /**
+   * Handles ending a touch interaction, clearing the active direction.
+   * @param e The React TouchEvent.
+   */
+  const handleTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setActiveDirection(null);
+  };
+
+  /**
+   * Handles a single tap on an action button.
+   * @param e The React TouchEvent.
+   * @param action The action identifier.
+   */
+  const handleActionTap = (
+    e: React.TouchEvent<HTMLButtonElement>,
+    action: 'interact' | 'inventory' | 'character' | 'quest'
+  ) => {
+    e.preventDefault();
+    onAction(action);
+  };
+
+  // This effect creates a continuous loop using requestAnimationFrame
+  // to call the onMove callback as long as a direction button is held down.
+  useEffect(() => {
+    const moveLoop = () => {
+      onMove(activeDirection);
+      moveLoopRef.current = requestAnimationFrame(moveLoop);
+    };
+
+    // Start the loop if a direction is active.
+    if (activeDirection) {
+      moveLoopRef.current = requestAnimationFrame(moveLoop);
+    }
+
+    // Cleanup function: cancel the animation frame when the component
+    // unmounts or the activeDirection changes.
+    return () => {
+      if (moveLoopRef.current) {
+        cancelAnimationFrame(moveLoopRef.current);
+      }
+    };
+  }, [activeDirection, onMove]);
+
+  return (
+    <div className={styles.touchControlsOverlay}>
+      {/* D-Pad for movement */}
+      <div className={styles.dPadContainer}>
+        <button
+          className={`${styles.dPadButton} ${styles.up}`}
+          onTouchStart={(e) => handleTouchStart(e, 'up')}
+          onTouchEnd={handleTouchEnd}
+        >
+          ▲
+        </button>
+        <button
+          className={`${styles.dPadButton} ${styles.left}`}
+          onTouchStart={(e) => handleTouchStart(e, 'left')}
+          onTouchEnd={handleTouchEnd}
+        >
+          ◀
+        </button>
+        <button
+          className={`${styles.dPadButton} ${styles.right}`}
+          onTouchStart={(e) => handleTouchStart(e, 'right')}
+          onTouchEnd={handleTouchEnd}
+        >
+          ▶
+        </button>
+        <button
+          className={`${styles.dPadButton} ${styles.down}`}
+          onTouchStart={(e) => handleTouchStart(e, 'down')}
+          onTouchEnd={handleTouchEnd}
+        >
+          ▼
+        </button>
+      </div>
+
+      {/* Action Buttons */}
+      <div className={styles.actionButtonsContainer}>
+        <button
+          className={styles.actionButton}
+          onTouchStart={(e) => handleActionTap(e, 'interact')}
+        >
+          A
+        </button>
+        <button
+          className={styles.actionButton}
+          onTouchStart={(e) => handleActionTap(e, 'inventory')}
+        >
+          B
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default TouchControls;
+2. src/components/TouchControls/TouchControls.module.cssThis file contains the CSS styles for the component. It must be in the same directory as the .tsx file above for the import to work..touchControlsOverlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicks to pass through the overlay itself */
+  z-index: 500; /* Above game, below modals */
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Align controls to the bottom */
+  box-sizing: border-box;
+}
+
+.dPadContainer,
+.actionButtonsContainer {
+  pointer-events: all; /* Enable pointer events for the control areas */
+  display: grid;
+  gap: 10px;
+  opacity: 0.7; /* Make controls semi-transparent */
+}
+
+.dPadContainer {
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(3, 60px);
+  width: 180px;
+  height: 180px;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dPadButton,
+.actionButton {
+  background-color: rgba(50, 50, 50, 0.8);
+  border: 2px solid #888;
+  border-radius: 50%; /* Circular buttons */
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none; /* Prevent text selection on buttons */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on iOS */
+  transition: transform 0.1s ease-out, background-color 0.1s;
+}
+
+.dPadButton:active,
+.actionButton:active {
+  background-color: rgba(80, 80, 80, 0.9);
+  transform: scale(0.95);
+}
+
+/* Specific grid placement for D-Pad buttons */
+.dPadButton.up { grid-area: 1 / 2 / 2 / 3; }
+.dPadButton.left { grid-area: 2 / 1 / 3 / 2; }
+.dPadButton.right { grid-area: 2 / 3 / 3 / 4; }
+.dPadButton.down { grid-area: 3 / 2 / 4 / 3; }
+
+.actionButton {
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .touchControlsOverlay {
+    padding: 15px;
+  }
+  .dPadContainer {
+    width: 150px;
+    height: 150px;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(3, 50px);
+  }
+  .actionButton {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+}
+3. Integration into GameBoard.tsxFinally, here is the example of how to use the new <TouchControls /> component in your GameBoard.tsx.// In GameBoard.tsx, you would add the following:
+
+import TouchControls from '../TouchControls/TouchControls'; // 1. Import the component
+import { Direction } from '../../types/global.types'; // Import Direction if not already present
+
+// Inside the GameBoard component...
+
+// 2. Create callback functions to handle input from the touch controls
+const handleTouchMove = useCallback((direction: Direction | null) => {
+  // This function continuously receives the direction from the TouchControls component.
+  // We need to translate this into the format the GameEngine expects.
+  // The GameEngine's `handleKeyboardInput` expects a Set of pressed keys.
+  // We can simulate this.
+
+  if (!gameEngineRef.current) return;
+
+  const simulatedKeys = new Set<string>();
+  if (direction === 'up') simulatedKeys.add('KeyW');
+  if (direction === 'down') simulatedKeys.add('KeyS');
+  if (direction === 'left') simulatedKeys.add('KeyA');
+  if (direction === 'right') simulatedKeys.add('KeyD');
+  
+  // Pass the simulated key set to the engine.
+  gameEngineRef.current.handleKeyboardInput(simulatedKeys);
+
+}, [gameEngineRef]); // Dependency on the engine ref
+
+const handleTouchAction = useCallback((action: 'interact' | 'inventory') => {
+  // This function is called once per tap on an action button.
+  if (!gameEngineRef.current) return;
+
+  // We can simulate the corresponding key press for the GameEngine.
+  const keyToActionMap = {
+    'interact': 'Space',
+    'inventory': 'KeyI',
+    // Add other actions here
+  };
+  
+  const simulatedKeys = new Set([keyToActionMap[action]]);
+  gameEngineRef.current.handleKeyboardInput(simulatedKeys);
+  
+  // Since keyup is not simulated here, the engine might see the key as held.
+  // A better approach would be to add dedicated methods to the GameEngine
+  // for touch input, e.g., `gameEngineRef.current.handleTouchAction('interact')`.
+  // For now, this simulation works as a proof of concept.
+
+}, [gameEngineRef]);
+
+
+// 3. Render the TouchControls component within the GameBoard's return statement
+return (
+  <>
+    {/* ... your existing GameBoard JSX ... */}
+    
+    {/* Add the TouchControls component here */}
+    <TouchControls onMove={handleTouchMove} onAction={handleTouchAction} />
+    
+    {/* ... other overlays like inventory, quest log, etc. ... */}
+  </>
+);

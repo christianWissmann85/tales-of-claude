@@ -7,7 +7,7 @@ Chris manually updates manuals with agent insights. This doesn't scale and break
 
 ### Architecture:
 ```yaml
-CLAUDE_KNOWLEDGE.md
+REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md
 ├── Delegate Best Practices (auto-updated)
 ├── Common Solutions (auto-updated)
 ├── Tool Usage Patterns (auto-updated)
@@ -22,12 +22,12 @@ CLAUDE_KNOWLEDGE.md
 
 #### 1. Daily Knowledge Consolidator
 ```markdown
-You are the Knowledge Consolidator Agent. Your mission: Update CLAUDE_KNOWLEDGE.md daily.
+You are the Knowledge Consolidator Agent. Your mission: Update REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md daily.
 
 Tasks:
 1. Read all new field reports since last run
 2. Extract patterns, tips, and solutions
-3. Update CLAUDE_KNOWLEDGE.md sections
+3. Update REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md sections
 4. Mark processed reports in processed.log
 5. No human intervention needed
 ```
@@ -35,7 +35,7 @@ Tasks:
 #### 2. Pre-Mission Briefing
 Every Task Agent prompt starts with:
 ```markdown
-IMPORTANT: First read CLAUDE_KNOWLEDGE.md for latest insights from other agents.
+IMPORTANT: First read REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md for latest insights from other agents.
 Then read REVOLUTION/06-claude-task-agent-manual.md + REVOLUTION/06-claude-task-agent-manual-v2.md for base instructions.
 ```
 
@@ -79,7 +79,7 @@ After every 10 field reports:
 ### The Knowledge File Structure:
 
 ```markdown
-# CLAUDE_KNOWLEDGE.md
+# REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md
 *Last updated: [timestamp] by Knowledge Agent v[x]*
 *Reports processed: [count]*
 

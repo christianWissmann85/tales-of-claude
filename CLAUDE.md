@@ -50,7 +50,7 @@
 Agent Works → Files Report → Knowledge Consolidates → Next Agent Learns → Better Results
 ```
 
-Now with **CLAUDE_KNOWLEDGE.md** - a self-updating collective intelligence base!
+Now with **REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md** - a self-updating collective intelligence base!
 
 ## 🎯 Current State
 
@@ -152,7 +152,7 @@ docs/dev/         # Development guides
 5. **Trust the process, even when imperfect**
 
 ### For AI Agents
-1. **Read CLAUDE_KNOWLEDGE.md first - always!**
+1. **Read REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md first - always!**
 2. **Use delegate for anything >50 lines**
 3. **The compile-fix loop is your friend**
 4. **Document your struggles and victories**

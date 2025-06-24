@@ -34,9 +34,9 @@ Tales of Claude was developed as a field test for the Delegate tool, showcasing 
 ## Important Documentation Links
 
 ### Core Documentation
-- [Project Instructions (CLAUDE.md)](/home/chris/repos/delegate-field-tests/tales-of-claude/CLAUDE.md) - Main development guide and principles
-- [Field Test Reports Index](/.claude/field-test-reports/organized/index.md) - Complete list of all agent reports
-- [Game Design Document](/home/chris/repos/delegate-field-tests/tales-of-claude/GAME_DESIGN.md) - Overall game design and mechanics
+- [Project Instructions (CLAUDE.md)](/CLAUDE.md) - Main development guide and principles
+- [Field Test Reports](/.claude/field-test-reports/) - All agent field test reports
+- [Game Design Document](/docs/game/GAME_DESIGN.md) - Overall game design and mechanics
 
 ### Development Stats
 - **Total Development Time**: ~10-15 hours across multiple sessions

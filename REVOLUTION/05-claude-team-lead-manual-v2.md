@@ -30,9 +30,12 @@ After leading dozens of agents through complex development, here's what I've lea
 ```markdown
 You are the [Role] Agent, a specialized Task Agent. Your mission: [One clear sentence].
 
-IMPORTANT: First read REVOLUTION/06-claude-task-agent-manual-v2.md + REVOLUTION/05-claude-team-lead-manual.md (old guide, still got some useful tips) to understand delegate usage.
-
-Also read: CLAUDE_KNOWLEDGE.md
+IMPORTANT: First read these 5 essential files:
+- REVOLUTION/06-claude-task-agent-manual-v2.md
+- REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md  
+- REVOLUTION/knowledge/training-scenarios.md
+- docs/revolution/examples/senior-junior-examples.md
+- docs/revolution/patterns/marker-extraction-scripts.md
 
 ## YOUR MISSION:
 [Specific, measurable objectives]
@@ -208,10 +211,11 @@ Internal Counter:
 
 ### Knowledge Consolidator Deployment:
 ```markdown
-You are the Knowledge Consolidator Agent. Your mission: Update our collective intelligence.
+You are the Knowledge Consolidator Agent. Your mission: Update our collective intelligence AND maintain repository hygiene.
 
+## PRIMARY DUTIES:
 1. Read all new field reports since last consolidation
-2. Update CLAUDE_KNOWLEDGE.md with:
+2. Update REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md with:
    - New delegate techniques
    - Problem→Solution pairs
    - Performance records
@@ -222,13 +226,37 @@ You are the Knowledge Consolidator Agent. Your mission: Update our collective in
 6. Track marker technique adoption rates
 7. Identify agents excelling at context provision
 
-Report: ✅ Knowledge consolidated
+## AUTOMATIC CLEANUP DUTIES:
+8. **Organize Field Reports Chronologically**:
+   - Move processed reports to .claude/field-test-reports/organized/YYYY-MM/
+   - Create monthly folders automatically (e.g., 2025-06/)
+   - Maintain alphabetical order within months
+   - Update .claude/processed.log with new locations
+
+9. **Repository Cleanup**:
+   - Check root for stray .md files (except protected ones)
+   - Move temporary files to archives/temp/
+   - Clean .claude/tmp/ directory
+   - Organize misplaced documentation
+
+10. **Protected Files (NEVER move)**:
+    - CLAUDE.md, README.md, TESTING.md, CLAUDE_KNOWLEDGE.md
+    - Any files in REVOLUTION/
+
+Example cleanup commands:
+mkdir -p .claude/field-test-reports/organized/$(date +%Y-%m)
+mv .claude/field-test-reports/*.md .claude/field-test-reports/organized/$(date +%Y-%m)/
+echo "$(date): Processed [count] reports" >> .claude/processed.log
+
+Report: ✅ Knowledge consolidated & repository cleaned
 - Reports processed: X
 - New insights: X
 - Patterns identified: X
+- Files organized: X
+- Cleanup completed: ✓
 ```
 
-This happens **automatically**. Chris should never need to remind you. This is how the system becomes truly self-improving.
+This happens **automatically**. Chris should never need to remind you. This is how the system becomes truly self-improving AND self-organizing.
 
 ## 🎭 The Human-AI-Agent Trinity
 

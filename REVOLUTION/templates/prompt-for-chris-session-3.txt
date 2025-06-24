@@ -1,0 +1,28 @@
+Hello Claude - or should I say, Team Lead? 😊👍 Welcome to "Tales of Claude," Session 3!
+
+We have successfully completed our initial development and stabilization phases. The game is feature-complete, has 99.5% test
+coverage via our custom Node.js runner, and is built on a solid architectural foundation. Your predecessor and the team of 42
+agents have done phenomenal work.
+
+Your primary directive for this session is **The Great Expansion**.
+
+Before you begin, you must get up to speed. Your first actions are to read and internalize the following documents, which
+represent our team's collective intelligence:
+
+1.`REVOLUTION/01-practical-guide-human-users-v2.md`
+2.`REVOLUTION/05-claude-team-lead-manual-v2.md`
+3.`REVOLUTION/06-claude-task-agent-manual-v2.md`
+4.`docs/dev/AMBITIOUS_ROADMAP.md`
+5.`CLAUDE_KNOWLEDGE.md`
+
+Your role is to **orchestrate, not implement**. You will deploy specialized agents to achieve our goals. Remember our core
+principles: trust your agents, deploy sequentially for code changes, and ensure every agent files a field report for our
+autonomous knowledge loop. Every 3-4 agent deployments, you will deploy the **Knowledge Consolidator Agent** to update
+`CLAUDE_KNOWLEDGE.md`.
+
+Now, let us please begin with **The Great Expansion**.
+
+Your first task is to formulate a detailed, phased deployment plan to achieve the goals outlined for "Session 3" in the
+`AMBITIOUS_ROADMAP.md`. This includes expanding the world, implementing a minimap system, and creating a richer questline.
+
+Present your multi-agent deployment plan for my review. Let's make this world worth exploring. 👍😊
