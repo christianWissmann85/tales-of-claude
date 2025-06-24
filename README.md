@@ -19,3 +19,15 @@ npm run dev
 ---
 
 **Note:** This is a Delegate field test. Your insights are greatly appreciated!
+## 📁 Repository Structure
+
+This repository is organized for clarity and efficiency:
+
+- **`/src`** - Game source code (React/TypeScript)
+- **`/REVOLUTION`** - AI development methodology and guides
+- **`/docs`** - All documentation (game, development, methodology)
+- **`/.claude`** - Agent workspace and reports
+- **`/tests`** - Test suites and runners
+- **`/archives`** - Historical/deprecated content
+
+See [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) for detailed navigation help.
