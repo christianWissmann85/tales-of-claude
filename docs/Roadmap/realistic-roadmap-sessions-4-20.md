@@ -29,6 +29,39 @@ The game's technical foundation is robust, with core systems 95% complete (exclu
 
 ---
 
+## Session 3.7: UI/UX Excellence & Token Efficiency
+
+**Objective:** Complete the deferred UI/UX improvements from Session 3.5 and address growing documentation concerns for agent efficiency.
+
+*   **Theme:** Visual Polish & Agent Optimization.
+*   **Time Estimate:** 3-4 hours
+*   **UI/UX Goals:**
+    *   **Sarah's Visual Consistency Audit:** Complete visual consistency review across all game screens
+    *   **Katherine's Typography Enhancement:** Implement refined font hierarchy and readability improvements
+    *   **Sonia's Color Harmony Pass:** Ensure color palette consistency and accessibility standards
+    *   **Rosa's Animation Polish:** Add subtle UI animations for better game feel
+    *   **Inventory 'i' Key Fix:** Resolve the issue where 'i' key doesn't properly toggle inventory
+*   **Agent Efficiency Goals:**
+    *   **Documentation Audit:** Review current docs size (CLAUDE.md, CLAUDE_KNOWLEDGE.md, etc.)
+    *   **Token Optimization Strategy:** Discuss chunking strategy for large docs to keep agent context windows efficient
+    *   **Knowledge Base Restructure:** Plan potential split of large docs into focused sub-documents
+    *   **Current Token Overhead Analysis:** Document current 25k+ tokens (~40% of context) overhead issue
+    *   **Role-Specific Documentation Strategy:** Create targeted docs for specific agent types (UI agents, combat agents, etc.)
+    *   **Knowledge Rotation & Archiving Plan:** Implement system to rotate old/rarely-used knowledge to archive files
+    *   **Diary Summarization Implementation:** Condense field reports and diary entries into actionable summaries
+    *   **"Need to Know" Principle:** Each agent only receives documentation relevant to their specific task
+    *   **Target Metrics:** Reduce to 10k tokens max (~15-20% overhead) for typical agent context
+*   **Success Metrics:**
+    *   ✅ All UI elements follow consistent design language
+    *   ✅ Inventory toggles correctly with 'i' key
+    *   ✅ Typography is readable and hierarchical across all screens
+    *   ✅ Color palette is harmonious and accessible
+    *   ✅ UI animations enhance rather than distract
+    *   ✅ Documentation strategy defined for Sessions 4+
+    *   ✅ Chris confirms UI polish meets expectations
+
+---
+
 ## Phase 1: Story-Driven Content Population (Sessions 4-7)
 **Objective:** Bring the world to life through Claude's awakening narrative, completing maps one by one with all necessary content and story beats.
 

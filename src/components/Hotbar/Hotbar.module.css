@@ -31,12 +31,69 @@
   display: flex; /* Arrange slots in a row */
   gap: 10px; /* Space between individual slots */
   padding: 15px 20px; /* Padding inside the hotbar container */
-  background-color: var(--hotbar-bg);
-  border: 1px solid var(--hotbar-border);
+  background: linear-gradient(135deg, 
+    rgba(10, 10, 20, 0.9) 0%, 
+    rgba(15, 15, 25, 0.95) 100%);
+  border: 2px solid #2a2a4e;
   border-radius: 12px; /* Rounded corners for the container */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(255, 107, 107, 0.15);
   z-index: 1000; /* Ensure it stays on top of other content */
   user-select: none; /* Prevent text selection within the hotbar */
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* Elegant border gradient effect */
+.hotbarContainer::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    #ff6b6b, 
+    transparent 30%,
+    transparent 70%,
+    #ff6b6b);
+  border-radius: 12px;
+  opacity: 0.2;
+  z-index: -1;
+  animation: borderGlow 6s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.3; }
+}
+
+/* Inner corner accents */
+.hotbarContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(135deg, #ff6b6b 0%, transparent 20px),
+    linear-gradient(225deg, #ff6b6b 0%, transparent 20px),
+    linear-gradient(315deg, #ff6b6b 0%, transparent 20px),
+    linear-gradient(45deg, #ff6b6b 0%, transparent 20px);
+  background-position: 
+    top left,
+    top right,
+    bottom right,
+    bottom left;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+  border-radius: 12px;
 }
 
 /* --- 2. Individual Slot Styling --- */
@@ -44,8 +101,10 @@
   position: relative; /* For positioning item icon, quantity, cooldown */
   width: 64px; /* Standard square slot size */
   height: 64px;
-  background-color: var(--slot-bg);
-  border: 2px solid var(--slot-border);
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 46, 0.8) 0%, 
+    rgba(20, 20, 35, 0.8) 100%);
+  border: 2px solid rgba(42, 42, 78, 0.7);
   border-radius: 8px; /* Slightly rounded corners for slots */
   display: flex;
   align-items: center;
@@ -53,20 +112,32 @@
   cursor: grab; /* Indicate draggable items */
   transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active states */
   overflow: hidden; /* Crucial for cooldown overlay to clip */
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.3),
+    0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 /* Hover Effect */
 .hotbarSlot:hover {
-  background-color: var(--slot-hover-bg);
-  border-color: var(--slot-active-border); /* Highlight border on hover */
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4); /* Subtle blue glow on hover */
+  background: linear-gradient(135deg, 
+    rgba(42, 42, 78, 0.9) 0%, 
+    rgba(35, 35, 60, 0.9) 100%);
+  border-color: #ff6b6b; /* Red accent for hotbar */
+  box-shadow: 
+    inset 0 0 15px rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(255, 107, 107, 0.4);
+  transform: translateY(-2px);
 }
 
 /* --- 3. Active/Pressed State Animations --- */
 .hotbarSlot.active {
-  background-color: var(--slot-active-bg); /* Accent background for active slot */
-  border-color: var(--slot-active-border);
-  box-shadow: 0 0 15px var(--slot-active-border); /* Stronger glow for active */
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 107, 0.3) 0%, 
+    rgba(255, 107, 107, 0.2) 100%);
+  border-color: #ff6b6b;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 107, 107, 0.3),
+    0 0 20px rgba(255, 107, 107, 0.5);
   transform: scale(1.05); /* Slightly enlarge the active slot */
 }
 
@@ -118,9 +189,11 @@
 /* --- 6. Empty Slot Placeholder Styling --- */
 .emptySlot {
   /* Inherits base styles from .hotbarSlot */
-  background-color: var(--slot-bg);
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 46, 0.8) 0%, 
+    rgba(20, 20, 35, 0.8) 100%);
   border-style: dashed; /* Dashed border to signify emptiness */
-  border-color: var(--placeholder-color);
+  border-color: rgba(42, 42, 78, 0.5);
 }
 
 .emptySlot::before {
@@ -128,7 +201,7 @@
   display: block;
   width: 30px;
   height: 30px;
-  border: 1px dashed var(--placeholder-color);
+  border: 1px dashed rgba(42, 42, 78, 0.5);
   border-radius: 4px;
   opacity: 0.3; /* Subtle appearance */
 }
@@ -250,7 +323,7 @@
 .emptySlotContent {
   width: 30px;
   height: 30px;
-  border: 1px dashed var(--placeholder-color);
+  border: 1px dashed rgba(42, 42, 78, 0.5);
   border-radius: 4px;
   opacity: 0.3;
 }
@@ -298,10 +371,13 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  color: var(--placeholder-color);
+  color: #ff6b6b;
   font-size: 0.75em;
   font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 
+    0 0 3px rgba(255, 107, 107, 0.5),
+    1px 1px 2px rgba(0, 0, 0, 0.8);
+  opacity: 0.8;
 }
 
 /* On Cooldown State */

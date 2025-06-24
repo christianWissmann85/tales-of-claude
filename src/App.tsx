@@ -18,6 +18,18 @@ import styles from './styles/UIFramework.module.css';
 const GameContent: React.FC = () => {
   const { state, dispatch } = useGameContext();
 
+  // Check for agent/nosplash flag on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAgentMode = urlParams.get('agent') === 'true' || urlParams.get('nosplash') === 'true';
+    
+    if (isAgentMode && state.gamePhase !== 'playing') {
+      // Skip directly to playing phase for agent testing
+      dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'playing' } });
+      console.log('[AGENT MODE] Skipping splash and intro screens');
+    }
+  }, []); // Run once on mount
+
   // Handle splash screen completion
   const handleSplashComplete = () => {
     dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'intro' } });

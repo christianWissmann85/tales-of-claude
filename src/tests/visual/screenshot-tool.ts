@@ -14,6 +14,9 @@ interface ScreenshotOptions {
   fullPage?: boolean;
   waitFor?: string | number;
   actions?: string[]; // Series of keyboard/mouse actions
+  width?: number;    // Custom viewport width
+  height?: number;   // Custom viewport height
+  url?: string;      // Override URL (for agent mode)
 }
 
 async function ensureTempDir(): Promise<void> {
@@ -39,20 +42,28 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     });
     
     const page = await browser.newPage({
-      viewport: { width: 1280, height: 720 }
+      viewport: { 
+        width: options.width || 1280, 
+        height: options.height || 720 
+      }
     });
 
-    console.log(`📍 Navigating to ${TARGET_URL}...`);
-    await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+    const targetUrl = options.url || TARGET_URL;
+    console.log(`📍 Navigating to ${targetUrl}...`);
+    await page.goto(targetUrl, { waitUntil: 'networkidle' });
 
     // Wait for game to load - wait for React app to mount
     await page.waitForFunction(() => {
       const root = document.getElementById('root');
       return root && root.children.length > 0;
-    }, { timeout: 10000 });
+    }, { timeout: 30000 });
     
-    // Give the game a moment to fully render
-    await page.waitForTimeout(2000);
+    // Extra wait for agent mode to fully initialize
+    if (targetUrl.includes('agent=true') || targetUrl.includes('nosplash=true')) {
+      await page.waitForTimeout(3000); // Give agent mode time to skip phases
+    } else {
+      await page.waitForTimeout(2000); // Normal wait
+    }
     console.log('✅ Game loaded');
 
     // Wait for additional condition if specified
@@ -126,6 +137,9 @@ Options:
   --wait <selector>  Wait for CSS selector before screenshot
   --wait-ms <ms>     Wait for milliseconds before screenshot
   --action <action>  Execute action before screenshot
+  --width <pixels>   Viewport width (default: 1280)
+  --height <pixels>  Viewport height (default: 720)
+  --url <url>        Override URL (for agent mode)
 
 Actions:
   key:<key>          Press keyboard key (e.g., key:i for inventory)
@@ -139,8 +153,11 @@ Examples:
   # Screenshot with inventory open
   npx tsx screenshot-tool.ts --name inventory --action key:i
 
-  # Screenshot after opening quest journal
-  npx tsx screenshot-tool.ts --name quests --action key:j --wait-ms 500
+  # Agent mode - skip splash screens
+  npx tsx screenshot-tool.ts --name game-view --url "http://localhost:5173/?agent=true"
+
+  # High resolution agent mode
+  npx tsx screenshot-tool.ts --name hd-game --width 1920 --height 1080 --url "http://localhost:5173/?agent=true"
 
   # Multiple actions
   npx tsx screenshot-tool.ts --action key:Escape --action key:j --name quest-journal
@@ -169,6 +186,15 @@ Examples:
         break;
       case '--action':
         options.actions!.push(args[++i]);
+        break;
+      case '--width':
+        options.width = parseInt(args[++i]);
+        break;
+      case '--height':
+        options.height = parseInt(args[++i]);
+        break;
+      case '--url':
+        options.url = args[++i];
         break;
     }
   }

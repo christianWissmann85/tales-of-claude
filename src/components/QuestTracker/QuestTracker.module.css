@@ -7,7 +7,7 @@
 /* You would typically link this in your HTML or import via @import url() */
 /* @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap'); */
 
-.quest-tracker {
+.questTracker {
     /* 1. Positioning & Layout */
     position: fixed;
     top: 250px; /* Moved down to not overlap with minimap */
@@ -15,14 +15,23 @@
     width: 260px; /* Reduced width */
     max-height: 50vh; /* Reduced max height */
     overflow-y: auto; /* Enable scrolling for long quest lists */
-    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent dark background */
-    border: 1px solid #00ff00; /* Green border */
-    box-shadow: 0 0 12px rgba(0, 255, 0, 0.7); /* Subtle green glow */
+    background: linear-gradient(135deg, 
+        rgba(10, 10, 20, 0.85) 0%, 
+        rgba(15, 15, 25, 0.9) 100%);
+    border: 2px solid #2a2a4e;
+    border-radius: 8px;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.7),
+        inset 0 0 30px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 204, 0, 0.15);
     padding: 12px;
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    position: relative;
 
     /* 2. Visual Style */
-    color: #00ff00; /* Terminal green text */
+    color: #e0e0e0; /* Light text */
     font-family: 'Share Tech Mono', monospace; /* Recommended terminal font */
     font-size: 0.9em; /* Slightly smaller */
     line-height: 1.4;
@@ -34,42 +43,115 @@
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, max-height 0.3s ease-out;
 }
 
+/* Elegant border gradient effect */
+.questTracker::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+        #ffcc00, 
+        transparent 30%,
+        transparent 70%,
+        #ffcc00);
+    border-radius: 8px;
+    opacity: 0.3;
+    z-index: -1;
+    animation: borderGlow 6s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+}
+
+/* Inner corner accents */
+.questTracker::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(135deg, #ffcc00 0%, transparent 15px),
+        linear-gradient(225deg, #ffcc00 0%, transparent 15px),
+        linear-gradient(315deg, #ffcc00 0%, transparent 15px),
+        linear-gradient(45deg, #ffcc00 0%, transparent 15px);
+    background-position: 
+        top left,
+        top right,
+        bottom right,
+        bottom left;
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    opacity: 0.4;
+    pointer-events: none;
+    border-radius: 8px;
+}
+
 /* State for when the tracker becomes visible */
-.quest-tracker.is-visible {
+.questTracker.isVisible {
     opacity: 1;
     transform: translateY(0);
 }
 
 /* Expand/Collapse Animation */
-.quest-tracker.is-collapsed {
+.questTracker.minimized {
     max-height: 45px; /* Just enough for header and minimize button */
     overflow: hidden; /* Hide content when collapsed */
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.5); /* Slightly less glow when collapsed */
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.6),
+        inset 0 0 20px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(255, 204, 0, 0.1);
 }
 
 /* Header Section */
-.quest-tracker__header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 8px;
     margin-bottom: 8px;
-    border-bottom: 1px dashed rgba(0, 255, 0, 0.4);
+    border-bottom: 1px solid rgba(42, 42, 78, 0.5);
+    position: relative;
 }
 
-.quest-tracker__title {
-    font-size: 1.2em;
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, 
+        transparent, 
+        #ffcc00, 
+        transparent);
+    opacity: 0.5;
+}
+
+.title {
+    font-size: 1.1em;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Slight text glow */
+    letter-spacing: 1.5px;
+    color: #ffcc00;
+    text-shadow: 
+        0 0 10px rgba(255, 204, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
 }
 
 /* Minimize Button */
-.quest-tracker__minimize-btn {
-    background: none;
-    border: 1px solid #00ff00;
-    color: #00ff00;
+.minimizeButton {
+    background: linear-gradient(135deg, 
+        rgba(42, 42, 78, 0.8) 0%, 
+        rgba(26, 26, 46, 0.8) 100%);
+    border: 1px solid #2a2a4e;
+    color: #e0e0e0;
     font-size: 1em;
     width: 28px;
     height: 28px;
@@ -77,13 +159,17 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.3s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    transition: all 0.2s ease;
     border-radius: 3px; /* Slightly rounded corners */
 }
 
-.quest-tracker__minimize-btn:hover {
-    background-color: rgba(0, 255, 0, 0.2);
-    box-shadow: 0 0 8px #00ff00;
+.minimizeButton:hover {
+    background: linear-gradient(135deg, 
+        rgba(58, 58, 90, 0.9) 0%, 
+        rgba(42, 42, 78, 0.9) 100%);
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    transform: translateY(-1px);
 }
 
 /* Minimize button rotation when collapsed */
@@ -92,30 +178,150 @@
 }
 
 /* Quest List */
-.quest-tracker__list {
+.questList {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
 /* Individual Quest Item */
-.quest-tracker__quest-item {
-    margin-bottom: 18px;
+.questItem {
+    margin-bottom: 15px;
     padding: 10px;
-    border: 1px dashed rgba(0, 255, 0, 0.3);
+    border: 1px solid rgba(42, 42, 78, 0.5);
+    border-radius: 4px;
+    background: rgba(26, 26, 46, 0.3);
     position: relative; /* For type indicator positioning */
-    transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+    transition: all 0.2s ease;
     cursor: pointer; /* Indicates interactivity, e.g., clicking for details */
 }
 
-.quest-tracker__quest-item:last-child {
+.questItem:last-child {
     margin-bottom: 0;
 }
 
 /* Hover effect on quest items */
-.quest-tracker__quest-item:hover {
-    background-color: rgba(0, 255, 0, 0.1);
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+.questItem:hover {
+    background: rgba(255, 204, 0, 0.1);
+    border-color: rgba(255, 204, 0, 0.5);
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+    transform: translateX(2px);
+}
+
+/* Selected quest item */
+.questItem.selected {
+    background: rgba(255, 204, 0, 0.15);
+    border-color: #ffcc00;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+}
+
+/* Quest Header */
+.questHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.questIcon {
+    font-size: 1.2em;
+    color: #ffcc00;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+}
+
+.questName {
+    font-weight: 600;
+    flex: 1;
+    color: #e0e0e0;
+}
+
+/* Objective Info */
+.objectiveInfo {
+    margin-left: 20px;
+    font-size: 0.85em;
+    color: rgba(224, 224, 224, 0.8);
+}
+
+.objectiveText {
+    margin-bottom: 4px;
+    color: rgba(224, 224, 224, 0.7);
+}
+
+/* Progress Bar */
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(42, 42, 78, 0.5);
+    border: 1px solid rgba(42, 42, 78, 0.7);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin: 4px 0;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(to right, #ffaa00, #ffcc00);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+.progressText {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 8px;
+    font-size: 0.7em;
+    color: #fff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    font-weight: bold;
+}
+
+/* Distance indicator */
+.distance {
+    font-size: 0.8em;
+    color: #4a9eff;
+    margin-top: 4px;
+    text-shadow: 0 0 3px rgba(74, 158, 255, 0.5);
+}
+
+/* Controls hint */
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(42, 42, 78, 0.5);
+    position: relative;
+}
+
+.controls::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(to right, 
+        transparent, 
+        #ffcc00, 
+        transparent);
+    opacity: 0.3;
+}
+
+.controlHint {
+    font-size: 0.75em;
+    color: rgba(224, 224, 224, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Quest count badge */
+.questCount {
+    font-size: 0.8em;
+    color: rgba(255, 204, 0, 0.7);
+    margin-left: 8px;
 }
 
 /* Quest Type Indicators (using data-attribute for flexibility) */
@@ -331,21 +537,22 @@
 }
 
 /* Custom Scrollbar Styling (for Webkit browsers like Chrome, Safari) */
-.quest-tracker::-webkit-scrollbar {
-    width: 8px;
+.questTracker::-webkit-scrollbar {
+    width: 6px;
 }
 
-.quest-tracker::-webkit-scrollbar-track {
-    background: rgba(0, 255, 0, 0.1);
-    border-left: 1px solid rgba(0, 255, 0, 0.3);
+.questTracker::-webkit-scrollbar-track {
+    background: rgba(42, 42, 78, 0.3);
+    border-radius: 3px;
 }
 
-.quest-tracker::-webkit-scrollbar-thumb {
-    background-color: #00ff00;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 255, 0, 0.5);
+.questTracker::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #ffcc00, #ffaa00);
+    border-radius: 3px;
+    box-shadow: 0 0 3px rgba(255, 204, 0, 0.3);
 }
 
-.quest-tracker::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 255, 0, 0.8);
+.questTracker::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #ffdd00, #ffbb00);
+    box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
 }

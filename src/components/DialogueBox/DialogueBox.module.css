@@ -1,22 +1,27 @@
 .dialogueBox {
   /* Fixed position at bottom of screen */
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
   padding: 20px;
   box-sizing: border-box; /* Ensures padding is included in the width */
 
-  /* Dark semi-transparent background */
-  background-color: rgba(0, 0, 0, 0.85);
-
-  /* Retro ASCII borders using box-drawing characters (simulated with box-shadow for a blocky/pixelated look) */
-  /* This creates a layered, chunky border effect common in retro UIs. */
-  border: 2px solid #555; /* Base border */
-  box-shadow:
-    0 0 0 4px #333, /* Inner dark shadow for depth */
-    0 0 0 6px #777, /* Outer lighter shadow for a blocky look */
-    0 0 0 8px #222; /* Even darker outer shadow for more depth */
+  /* Unified panel styling */
+  background: linear-gradient(135deg, 
+    rgba(10, 10, 20, 0.9) 0%, 
+    rgba(15, 15, 25, 0.95) 100%);
+  border: 2px solid #2a2a4e;
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(0, 255, 136, 0.15);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  position: relative;
 
   /* Monospace font (assuming 'Press Start 2P' is imported or available, otherwise falls back) */
   font-family: 'Press Start 2P', 'Courier New', Courier, monospace;
@@ -29,6 +34,55 @@
   /* Smooth fade-in animation */
   opacity: 0;
   animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Elegant border gradient effect */
+.dialogueBox::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    var(--primary-green, #00ff88), 
+    transparent 30%,
+    transparent 70%,
+    var(--primary-green, #00ff88));
+  border-radius: 8px;
+  opacity: 0.3;
+  z-index: -1;
+  animation: borderGlow 6s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+/* Inner corner accents */
+.dialogueBox::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(135deg, var(--primary-green, #00ff88) 0%, transparent 15px),
+    linear-gradient(225deg, var(--primary-green, #00ff88) 0%, transparent 15px),
+    linear-gradient(315deg, var(--primary-green, #00ff88) 0%, transparent 15px),
+    linear-gradient(45deg, var(--primary-green, #00ff88) 0%, transparent 15px);
+  background-position: 
+    top left,
+    top right,
+    bottom right,
+    bottom left;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  pointer-events: none;
+  border-radius: 8px;
 }
 
 /* Keyframes for the fade-in animation */
@@ -45,20 +99,22 @@
 
 /* Styling for NPC names */
 .npcName {
-  color: #FFFF00; /* Yellow for NPC names */
+  color: #00ff88; /* Green for NPC names matching theme */
   margin-bottom: 10px;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+  letter-spacing: 1.5px;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Styling for dialogue text */
 .dialogueText {
-  color: #00FFFF; /* Cyan text color for dialogue */
+  color: #e0e0e0; /* Light text for dialogue */
   margin-bottom: 20px;
   white-space: pre-wrap; /* Preserves whitespace and line breaks from content */
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Subtle shadow for readability */
 }
 
 /* Container for choice buttons */
@@ -70,28 +126,36 @@
 
 /* Styling for individual choice buttons */
 .choiceButton {
-  background-color: rgba(50, 50, 50, 0.7); /* Darker semi-transparent background */
-  color: #00FFFF; /* Cyan text for choices */
-  border: 2px solid #00FFFF; /* Cyan border */
+  background: linear-gradient(135deg, 
+    rgba(42, 42, 78, 0.8) 0%, 
+    rgba(26, 26, 46, 0.8) 100%);
+  color: #e0e0e0; /* Light text for choices */
+  border: 1px solid #2a2a4e; /* Panel border */
+  border-radius: 4px;
   padding: 10px 15px;
   font-family: inherit; /* Inherit monospace font */
-  font-size: 1em;
+  font-size: 0.9em;
   cursor: pointer;
   text-align: left; /* Align text to the left */
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease; /* Smooth transition for hover effects */
-  box-shadow: 2px 2px 0px 0px #008080; /* Subtle blocky shadow for depth */
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 2px 5px rgba(0, 0, 0, 0.3),
+    inset 0 0 10px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Hover effects for choice buttons */
 .choiceButton:hover {
-  background-color: #00FFFF; /* Cyan background on hover */
-  color: #000; /* Black text on hover */
-  border-color: #00FFFF; /* Keep border cyan */
-  box-shadow: 4px 4px 0px 0px #00FFFF; /* More pronounced shadow on hover */
+  background: linear-gradient(135deg, 
+    rgba(58, 58, 90, 0.9) 0%, 
+    rgba(42, 42, 78, 0.9) 100%);
+  color: #00ff88; /* Green text on hover */
+  border-color: #00ff88; /* Green border */
+  box-shadow: 
+    0 0 15px rgba(0, 255, 136, 0.4),
+    inset 0 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 /* Active (click) effect for choice buttons */
@@ -169,13 +233,32 @@
 }
 
 .speaker {
-    color: #39ff14; /* Emphasis green for speaker name, from Battle.module.css */
+    color: #00ff88; /* Theme green for speaker name */
     font-size: 1.2em;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 0 8px #39ff14; /* Stronger glow for emphasis */
+    letter-spacing: 1.5px;
+    text-shadow: 
+        0 0 10px rgba(0, 255, 136, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(42, 42, 78, 0.5);
+    position: relative;
+}
+
+.speaker::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, 
+        transparent, 
+        #00ff88, 
+        transparent);
+    opacity: 0.5;
 }
 
 .text {
@@ -200,19 +283,32 @@
 }
 
 .option {
-    background-color: #001a00; /* Darker green background, similar to enemy cards */
-    color: #00ff00; /* Bright green text */
-    border: 1px solid #00ff00; /* Green border */
+    background: linear-gradient(135deg, 
+        rgba(42, 42, 78, 0.8) 0%, 
+        rgba(26, 26, 46, 0.8) 100%);
+    color: #e0e0e0; /* Light text */
+    border: 1px solid #2a2a4e; /* Panel border */
+    border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
     text-align: left; /* Align text to the left, similar to choiceButton */
-    transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active */
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Subtle initial glow */
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 2px 5px rgba(0, 0, 0, 0.3),
+        inset 0 0 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .option:hover {
-    background-color: #004400; /* Lighter green on hover */
-    box-shadow: 0 0 15px #00ff00; /* Stronger glow on hover */
+    background: linear-gradient(135deg, 
+        rgba(58, 58, 90, 0.9) 0%, 
+        rgba(42, 42, 78, 0.9) 100%);
+    color: #00ff88;
+    border-color: #00ff88;
+    box-shadow: 
+        0 0 15px rgba(0, 255, 136, 0.4),
+        inset 0 0 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px); /* Lift effect, similar to actionButton */
 }
 

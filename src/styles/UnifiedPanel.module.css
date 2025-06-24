@@ -1,0 +1,230 @@
+/* UnifiedPanel.module.css - Professional JRPG Panel System */
+
+/* CSS Variables for consistent panel theming */
+:root {
+  --panel-bg: rgba(10, 10, 20, 0.85);
+  --panel-bg-solid: #0a0a14;
+  --panel-border-primary: #2a2a4e;
+  --panel-border-accent: #00ff88;
+  --panel-shadow-primary: rgba(0, 0, 0, 0.7);
+  --panel-shadow-glow: rgba(0, 255, 136, 0.15);
+  --panel-corner-radius: 8px;
+  --panel-padding: 15px;
+  --panel-header-text: #00ff88;
+  --panel-body-text: #e0e0e0;
+}
+
+/* Base unified panel styling */
+.unifiedPanel {
+  background: linear-gradient(135deg, 
+    var(--panel-bg) 0%, 
+    rgba(15, 15, 25, 0.9) 100%);
+  border: 2px solid var(--panel-border-primary);
+  border-radius: var(--panel-corner-radius);
+  box-shadow: 
+    0 4px 20px var(--panel-shadow-primary),
+    inset 0 0 30px rgba(0, 0, 0, 0.4),
+    0 0 40px var(--panel-shadow-glow);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+/* Elegant border gradient effect */
+.unifiedPanel::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    var(--panel-border-accent), 
+    transparent 30%,
+    transparent 70%,
+    #4a9eff);
+  border-radius: var(--panel-corner-radius);
+  opacity: 0.3;
+  z-index: -1;
+  animation: borderGlow 6s ease-in-out infinite;
+}
+
+/* Subtle border glow animation */
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+/* Inner corner accents */
+.unifiedPanel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(135deg, var(--panel-border-accent) 0%, transparent 15px),
+    linear-gradient(225deg, var(--panel-border-accent) 0%, transparent 15px),
+    linear-gradient(315deg, #4a9eff 0%, transparent 15px),
+    linear-gradient(45deg, #4a9eff 0%, transparent 15px);
+  background-position: 
+    top left,
+    top right,
+    bottom right,
+    bottom left;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  pointer-events: none;
+  border-radius: var(--panel-corner-radius);
+}
+
+/* Panel header styling */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--panel-padding);
+  border-bottom: 1px solid rgba(42, 42, 78, 0.5);
+  background: linear-gradient(to bottom, 
+    rgba(0, 255, 136, 0.05) 0%, 
+    transparent 100%);
+  position: relative;
+}
+
+.panelHeader::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, 
+    transparent, 
+    var(--panel-border-accent), 
+    transparent);
+  opacity: 0.5;
+}
+
+.panelTitle {
+  margin: 0;
+  color: var(--panel-header-text);
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Panel body styling */
+.panelBody {
+  padding: var(--panel-padding);
+  color: var(--panel-body-text);
+}
+
+/* Variants for different panel types */
+.statusPanel {
+  --panel-border-accent: #00ff88;
+  --panel-shadow-glow: rgba(0, 255, 136, 0.15);
+}
+
+.minimapPanel {
+  --panel-border-accent: #4a9eff;
+  --panel-shadow-glow: rgba(74, 158, 255, 0.15);
+}
+
+.questPanel {
+  --panel-border-accent: #ffcc00;
+  --panel-shadow-glow: rgba(255, 204, 0, 0.15);
+}
+
+.hotbarPanel {
+  --panel-border-accent: #ff6b6b;
+  --panel-shadow-glow: rgba(255, 107, 107, 0.15);
+}
+
+/* Hover effects */
+.unifiedPanel.interactive:hover {
+  border-color: var(--panel-border-accent);
+  box-shadow: 
+    0 4px 25px var(--panel-shadow-primary),
+    inset 0 0 35px rgba(0, 0, 0, 0.4),
+    0 0 50px var(--panel-shadow-glow);
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+/* Minimized state */
+.unifiedPanel.minimized {
+  height: auto;
+  min-height: 50px;
+  overflow: hidden;
+}
+
+.unifiedPanel.minimized .panelBody {
+  display: none;
+}
+
+/* Action buttons within panels */
+.panelButton {
+  background: linear-gradient(135deg, 
+    rgba(42, 42, 78, 0.8) 0%, 
+    rgba(26, 26, 46, 0.8) 100%);
+  border: 1px solid var(--panel-border-primary);
+  color: var(--panel-body-text);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.panelButton:hover {
+  background: linear-gradient(135deg, 
+    rgba(58, 58, 90, 0.9) 0%, 
+    rgba(42, 42, 78, 0.9) 100%);
+  border-color: var(--panel-border-accent);
+  box-shadow: 0 0 10px var(--panel-shadow-glow);
+  transform: translateY(-1px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .unifiedPanel {
+    --panel-padding: 10px;
+    border-width: 1px;
+  }
+  
+  .panelTitle {
+    font-size: 1em;
+    letter-spacing: 1px;
+  }
+}
+
+/* Glass morphism effect for modern feel */
+.unifiedPanel.glass {
+  background: linear-gradient(135deg, 
+    rgba(10, 10, 20, 0.6) 0%, 
+    rgba(15, 15, 25, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Subtle inner light effect */
+.unifiedPanel .innerLight {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, 
+    rgba(255, 255, 255, 0.02) 0%, 
+    transparent 70%);
+  pointer-events: none;
+  opacity: 1;
+}

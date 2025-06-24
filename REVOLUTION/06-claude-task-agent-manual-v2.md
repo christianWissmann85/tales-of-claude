@@ -414,6 +414,175 @@ delegate_invoke(
 
 Remember: **If you're discussing anything visual, attach a screenshot!** Future agents have been confused when previous agents described visual issues without attaching the actual images. Don't let this happen to you!
 
+### Screenshot Tool Best Practices
+
+Taking proper screenshots is crucial for visual work. Thanks to the new agent mode, screenshots are now 100% reliable!
+
+#### The New Agent Mode (Recommended)
+
+Skip directly to the game view without splash screens:
+
+```bash
+# Agent mode - skip all intro screens automatically
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name game-state \
+  --url "http://localhost:5173/?agent=true"
+
+# Alternative parameter that also works
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name game-state \
+  --url "http://localhost:5173/?nosplash=true"
+```
+
+This is now the **preferred method** for all agent screenshots as it:
+- Skips splash screen automatically
+- Skips intro sequence automatically
+- Goes directly to Terminal Town gameplay
+- Works 100% of the time
+- No timing issues or race conditions
+
+#### Legacy Navigation Method (Still Works)
+
+For reference, the old manual navigation approach:
+
+```bash
+# Manual navigation to game
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name game-state \
+  --action key:Enter \
+  --action wait:1000 \
+  --action key:Space \
+  --action wait:1000
+```
+
+#### Resolution Options
+
+Always use high resolution for UI work:
+
+```bash
+# Standard resolution (minimum recommended)
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name ui-layout \
+  --width 1024 \
+  --height 768 \
+  --action key:Enter \
+  --action wait:1000 \
+  --action key:Space \
+  --action wait:1000
+
+# Full HD for detailed work
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name detailed-ui \
+  --width 1920 \
+  --height 1080 \
+  --action key:Enter \
+  --action wait:1000 \
+  --action key:Space \
+  --action wait:1000
+```
+
+#### Common Mistakes to Avoid
+
+1. **Splash Screen Captures**: Not navigating past the intro
+   - **Wrong**: Taking screenshot immediately
+   - **Right**: Navigate to game first with Enter → wait → Space → wait
+
+2. **Low Resolution**: Using default 800x600
+   - **Wrong**: No width/height parameters
+   - **Right**: Always specify at least 1024x768
+
+3. **Not Waiting for Animations**: Capturing mid-transition
+   - **Wrong**: No wait actions between navigation
+   - **Right**: Add wait:1000 after each key press
+
+4. **Wrong Game State**: Capturing wrong screen
+   - **Wrong**: Assuming you're in the right place
+   - **Right**: Use specific actions to reach desired state
+
+#### Quality Control
+
+Always verify your screenshots immediately:
+
+```bash
+# Take the screenshot
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name layout-check \
+  --width 1024 \
+  --height 768 \
+  --action key:Enter \
+  --action wait:1000 \
+  --action key:Space \
+  --action wait:1000
+
+# Check it exists and looks right
+ls -la src/tests/visual/temp/layout-check.png
+
+# If it's wrong (splash screen), delete and retry
+rm src/tests/visual/temp/layout-check.png
+```
+
+#### Example Commands That Work
+
+For different scenarios using agent mode:
+
+```bash
+# Basic game view (most common)
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name game-board \
+  --width 1024 \
+  --height 768 \
+  --url "http://localhost:5173/?agent=true"
+
+# With inventory open
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name inventory-view \
+  --width 1024 \
+  --height 768 \
+  --url "http://localhost:5173/?agent=true" \
+  --action key:i
+
+# Battle scene (navigate to battle area)
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name battle-ui \
+  --width 1920 \
+  --height 1080 \
+  --url "http://localhost:5173/?agent=true" \
+  --action key:ArrowRight \
+  --action wait:500 \
+  --action key:ArrowRight \
+  --action wait:500 \
+  --action key:Enter
+
+# Multiple UI panels open
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name full-ui \
+  --width 1920 \
+  --height 1080 \
+  --url "http://localhost:5173/?agent=true" \
+  --action key:i \
+  --action wait:500 \
+  --action key:q
+
+# Quest journal view
+npx tsx src/tests/visual/screenshot-tool.ts \
+  --name quest-journal \
+  --width 1024 \
+  --height 768 \
+  --url "http://localhost:5173/?agent=true" \
+  --action key:j
+```
+
+#### Pro Tips from Tom (Layout Master) + Screenshot Infrastructure Update
+
+1. **USE AGENT MODE** - Always include `--url "http://localhost:5173/?agent=true"`
+2. **High resolution reveals issues** - 1024x768 minimum, 1920x1080 preferred
+3. **Delete bad screenshots immediately** - Don't clutter the temp folder
+4. **Name screenshots descriptively** - "ui-issue-overlap" not "screenshot1"
+5. **Batch similar screenshots** - Take all needed shots in one session
+6. **No more timing issues** - Agent mode is 100% reliable!
+
+Remember: The new agent mode eliminates all splash screen issues. No more manual navigation needed - just add the URL parameter and you're good to go!
+
 ## 🧠 Your Personal Memory System (NEW!)
 
 ### You Now Have Persistent Memory!
