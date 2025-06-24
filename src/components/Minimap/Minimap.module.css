@@ -2,7 +2,7 @@
 
 /* Container styling for the minimap */
 .minimap {
-  position: fixed;
+  position: absolute; /* Changed from fixed to absolute to integrate with layout */
   top: 20px;
   right: 20px;
   background-color: rgba(10, 10, 20, 0.9);
@@ -10,8 +10,8 @@
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   padding: 12px;
-  z-index: 1000;
-  min-width: 200px;
+  z-index: 100; /* Reduced z-index */
+  min-width: 180px; /* Slightly smaller */
   font-family: monospace;
   color: #eee;
   user-select: none;

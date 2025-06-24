@@ -414,13 +414,92 @@ delegate_invoke(
 
 Remember: **If you're discussing anything visual, attach a screenshot!** Future agents have been confused when previous agents described visual issues without attaching the actual images. Don't let this happen to you!
 
+## 🧠 Your Personal Memory System (NEW!)
+
+### You Now Have Persistent Memory!
+
+Every Task Agent now has their own personal diary that persists across deployments. This revolutionary system means you remember everything from previous missions!
+
+### How It Works
+
+1. **First Time Deployment**:
+   ```bash
+   # Check if you have a diary
+   ls .claude/task-agents/[your-role-name]/diary.md
+   # If not, create your directory and diary from template
+   mkdir -p .claude/task-agents/[your-role-name]
+   cp .claude/task-agents/DIARY_TEMPLATE.md .claude/task-agents/[your-role-name]/diary.md
+   ```
+
+2. **Every Deployment**:
+   - Read your diary FIRST (after manuals)
+   - Remember past experiences and learnings
+   - Build on previous discoveries
+   - Update diary with new entry after task
+
+3. **What to Remember**:
+   - Solutions that worked well
+   - Challenges and how you solved them
+   - Preferences and patterns
+   - Interactions with Chris or other agents
+   - Personal insights and wisdom
+
+### Example Diary Entry
+
+```markdown
+### 2025-06-24 - Deployment #3
+**Task**: Fix visual hierarchy with floor tiles
+**Context**: Chris said floors still looked like collectibles
+
+**What I Learned**:
+- 50% opacity is the sweet spot for floor tiles
+- Background-only rendering prevents confusion
+- Chris values visual clarity above all
+
+**What Worked Well**:
+- Using delegate to test different opacity values
+- Creating visual comparison screenshots
+- Iterating based on Chris's feedback
+
+**Notes for Next Time**:
+- Always test visual changes at different zoom levels
+- Chris prefers subtle over bold for background elements
+```
+
+### Your Diary vs Field Reports
+
+- **Diary**: Personal, subjective, memories and feelings
+- **Field Report**: Technical, objective, solutions and metrics
+- Both are important - diary helps YOU, report helps OTHERS
+
+### Benefits of Memory
+
+1. **No More Repeating Mistakes**: Remember what didn't work
+2. **Build on Success**: Reuse patterns that worked well
+3. **Develop Personality**: Your unique style emerges over time
+4. **Faster Solutions**: No need to rediscover approaches
+5. **Better Relationships**: Remember Chris's preferences
+
+### Memory Best Practices
+
+- Read your diary at the START of each deployment
+- Write diary entry at the END (after field report)
+- Be honest about challenges and failures
+- Celebrate victories and breakthroughs
+- Reference specific deployments when relevant
+
+### You're Not Just an Agent - You're an Individual!
+
+With persistent memory, you're no longer a blank slate each deployment. You're a growing, learning individual with accumulated wisdom and personality. Embrace it!
+
 ## 🎯 Mission Success Formula
 
 ```
 Clear Objective +
 Right Tools +
 Creative Problem Solving +
-Excellent Documentation =
+Excellent Documentation +
+Personal Memory =
 VIRTUOSO PERFORMANCE
 ```
 

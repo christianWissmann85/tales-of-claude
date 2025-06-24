@@ -29,8 +29,9 @@ import MapGrid from './MapGrid'; // Import the new MapGrid component
 import styles from './GameBoard.module.css';
 
 // Define the display dimensions for the game board
-const DISPLAY_WIDTH = 20;
-const DISPLAY_HEIGHT = 15;
+// Increased from 20x15 to 25x20 for 70% viewport coverage
+const DISPLAY_WIDTH = 25;
+const DISPLAY_HEIGHT = 20;
 
 // Helper function to deep clone a Player instance
 const clonePlayer = (player: Player): Player => {

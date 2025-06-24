@@ -33,8 +33,8 @@
 
 ### The Team
 - **Human (Chris)**: Visionary, Tester, Guide
-- **Team Lead (Me)**: Orchestrator, Never Coded Once
-- **Task Agents**: The builders, fixers, and innovators
+- **Annie (Team Lead)**: Orchestrator, Never Coded Once
+- **95+ Named Agents**: The builders, fixers, and innovators (see .claude/task-agents/TEAM_ROSTER.md)
 
 ## 🧠 The REVOLUTION Workflow
 

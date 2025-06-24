@@ -35,14 +35,15 @@
 
 /* Left sidebar for status and minimap */
 .leftSidebar {
-  width: 300px;
+  width: 220px; /* Reduced from 300px to give more space to game */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 15px;
+  padding: 15px;
   background-color: var(--ui-dark);
   border-right: 2px solid var(--panel-border);
   overflow-y: auto;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
 }
 
 /* Main content area - takes remaining space */
@@ -51,7 +52,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 20px;
+  padding: 10px; /* Reduced padding for more game space */
   min-width: 0; /* Prevents flex item overflow */
 }
 
@@ -69,16 +70,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 70vh; /* Ensure game board uses at least 70% of viewport height */
 }
 
 /* Bottom panel for hotbar */
 .bottomPanel {
   position: absolute;
   bottom: 0;
-  left: 300px; /* Align with main content */
+  left: 220px; /* Updated to match new sidebar width */
   right: 0;
-  padding: 20px;
+  padding: 15px;
   background: linear-gradient(to top, var(--ui-dark), transparent);
+  z-index: 10; /* Ensure hotbar is above game board */
 }
 
 /* Unified panel styling */
@@ -108,7 +111,7 @@
 
 /* Status panel specific styling */
 .statusPanel {
-  min-height: 200px;
+  min-height: 150px; /* Reduced to save space */
 }
 
 .statusPanel h3 {
@@ -122,7 +125,7 @@
 
 /* Minimap panel specific styling */
 .minimapPanel {
-  height: 300px;
+  height: 220px; /* Reduced to save space */
   display: flex;
   flex-direction: column;
 }
@@ -147,8 +150,8 @@
 
 /* Hotbar slots */
 .hotbarSlot {
-  width: 60px;
-  height: 60px;
+  width: 50px; /* Reduced from 60px */
+  height: 50px; /* Reduced from 60px */
   border: 2px solid var(--panel-border);
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -182,7 +185,7 @@
 }
 
 .hotbarIcon {
-  font-size: 1.8em;
+  font-size: 1.5em; /* Reduced to match smaller slots */
 }
 
 .inventory {
@@ -192,11 +195,11 @@
 /* Responsive design */
 @media (max-width: 1200px) {
   .leftSidebar {
-    width: 250px;
+    width: 200px;
   }
   
   .bottomPanel {
-    left: 250px;
+    left: 200px;
   }
 }
 

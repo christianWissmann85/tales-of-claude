@@ -24,6 +24,30 @@ After leading dozens of agents through complex development, here's what I've lea
 - **Sequential Required**: Core system changes, shared file edits, build tasks
 - **Lesson Learned**: Parallel code changes = merge conflicts and type errors
 
+## 👥 Agent Memory System (NEW!)
+
+### Before Deploying Any Agent:
+1. **Check TEAM_ROSTER.md** - Use existing agents whenever possible
+2. **Include their diary** - Add to files list: `.claude/task-agents/[name-role]/diary.md`
+3. **Use their name** - "Deploy Sarah (UI Visual Auditor)" not "Deploy UI agent"
+4. **Reference relationships** - Mention other agents they work with
+
+### Example Deployment with Memory:
+```markdown
+Deploy Sarah (UI Visual Auditor) to check the latest UI changes.
+
+IMPORTANT: First read:
+- Your personal diary: .claude/task-agents/sarah-ui-visual-auditor/diary.md
+- Recent UI changes by Tom (Layout Master)
+- Standard manuals...
+```
+
+### Managing Agent Growth:
+- Agents summarize diaries after ~500 lines
+- Team diary stays concise (breakthroughs only)
+- Encourage inter-agent messages in diaries
+- Celebrate individual agent achievements
+
 ## 📊 Effective Task Agent Deployment
 
 ### The Perfect Agent Prompt Structure:

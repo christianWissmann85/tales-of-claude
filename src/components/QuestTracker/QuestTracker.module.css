@@ -10,10 +10,10 @@
 .quest-tracker {
     /* 1. Positioning & Layout */
     position: fixed;
-    top: 20px;
+    top: 250px; /* Moved down to not overlap with minimap */
     right: 20px;
-    width: 300px; /* Default width */
-    max-height: 80vh; /* Limit height to prevent overflow on tall screens */
+    width: 260px; /* Reduced width */
+    max-height: 50vh; /* Reduced max height */
     overflow-y: auto; /* Enable scrolling for long quest lists */
     background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent dark background */
     border: 1px solid #00ff00; /* Green border */
@@ -24,11 +24,11 @@
     /* 2. Visual Style */
     color: #00ff00; /* Terminal green text */
     font-family: 'Share Tech Mono', monospace; /* Recommended terminal font */
-    font-size: 0.95em;
+    font-size: 0.9em; /* Slightly smaller */
     line-height: 1.4;
 
     /* 3. Responsive Design & 4. Special Effects (Fade-in) */
-    z-index: 1000; /* Above game content, below modals */
+    z-index: 100; /* Reduced z-index to match minimap */
     opacity: 0; /* Start invisible for fade-in */
     transform: translateY(-15px); /* Start slightly above for fade-in */
     transition: opacity 0.5s ease-out, transform 0.5s ease-out, max-height 0.3s ease-out;

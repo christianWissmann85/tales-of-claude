@@ -2,8 +2,14 @@
 
 /* Define CSS variables for consistent sizing */
 :root {
-  --cell-size: 48px; /* Increased for better visibility on larger screens */
-  --cell-font-size: 36px; /* Adjusted for readability of emojis/ASCII */
+  /* Responsive cell sizing based on viewport - aim for 70% coverage */
+  /* Calculate cell size based on viewport dimensions and grid size */
+  --cell-size: min(calc(70vw / 25), calc(70vh / 20), 60px); /* 70% viewport divided by grid cells */
+  --cell-font-size: calc(var(--cell-size) * 0.75); /* 75% of cell size */
+  
+  /* Map size in cells - adjust for 70% viewport coverage */
+  --map-cols: 25; /* Increased columns */
+  --map-rows: 20; /* Increased rows */
 }
 
 .gameBoard {
@@ -17,6 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem; /* Reduced padding for more game space */
 }
 
 /* Time of day atmospheric styling */
@@ -61,7 +68,7 @@
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   user-select: none; /* Prevent text selection on game elements */
   /* Optional: Add a subtle border for visual grid lines */
-  border: 1px solid rgba(255, 255, 255, 0.05); /* Uncommented for better visibility */
+  border: 1px solid rgba(255, 255, 255, 0.03); /* More subtle grid lines */
 }
 
 .mapGridContainer {
@@ -69,8 +76,7 @@
   /* Grid dimensions are set dynamically via inline style in MapGrid.tsx */
   width: 100%; /* Fill container width */
   height: 100%; /* Fill container height */
-  max-width: calc(var(--cell-size) * 30); /* Larger max width for bigger maps */
-  max-height: calc(var(--cell-size) * 25); /* Larger max height for bigger maps */
+  /* Remove fixed max-width/height constraints - let it fill the container */
   border: 2px solid #333;
   background-color: #1a1a1a; /* Dark background for contrast */
   font-family: 'monospace', 'Courier New', Courier, monospace;
@@ -80,6 +86,7 @@
   position: relative;
   box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
   image-rendering: pixelated;
+  margin: 0 auto; /* Center the grid if it doesn't fill width */
 }
 
 .fpsCounter {
