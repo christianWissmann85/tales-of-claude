@@ -125,7 +125,7 @@ async function testKeyboardInput() {
     
     console.log(`   Player found: ${playerData.found ? '✅' : '❌'}`);
     if (playerData.found) {
-      console.log(`   Player screen position: (${playerData.bounds.x}, ${playerData.bounds.y})`);
+      console.log(`   Player screen position: (${playerData.bounds ? playerData.bounds.x : 0}, ${playerData.bounds ? playerData.bounds.y : 0})`);
       if (playerData.positionText) {
         console.log(`   ${playerData.positionText}`);
       }

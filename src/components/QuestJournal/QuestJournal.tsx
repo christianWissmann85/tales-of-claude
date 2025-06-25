@@ -110,6 +110,10 @@ const QuestJournal: React.FC = () => {
     setPrevPressedKeys(new Set(pressedKeys));
   }, [pressedKeys, selectedCategory, filteredQuests.length, dispatch]);
 
+  const handleClose = () => {
+    dispatch({ type: 'SHOW_QUEST_LOG', payload: { show: false } });
+  };
+
   // Render quest type icon
   const getQuestIcon = (quest: Quest): string => {
     if (quest.id.startsWith('mq_')) return '⭐'; // Main quest

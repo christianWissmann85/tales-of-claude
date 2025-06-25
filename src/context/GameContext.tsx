@@ -33,7 +33,7 @@ import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Import dialogue 
 import { UIManager } from '../engine/UIManager'; // Import UIManager
 
 // Export GameAction type for external use
-export type { GameAction };
+// REMOVED: export type { GameAction }; // This line was removed as per instruction 1 & 3
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -794,7 +794,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       const item = newPlayer.removeItem(itemId);
       
       if (!item) {
-        return { ...state, notification: 'You don\'t have that item!' };
+        return { ...state, notification: 'You don't have that item!' };
       }
       
       newPlayer.addGold(price);
@@ -1001,5 +1001,7 @@ const useGameContext = () => {
 
 // Export values (components, hooks)
 export { GameProvider, useGameContext };
+// Add alias export for useGame as per instruction 2
+export const useGame = useGameContext;
 // Export types separately using 'export type' for isolatedModules compatibility
 export type { GameState, GameAction };

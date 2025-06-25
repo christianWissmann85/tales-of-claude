@@ -13,6 +13,7 @@ const TARGET_URL = process.env.TARGET_URL || 'http://localhost:5173';
 
 async function runVisualTest() {
   let browser: Browser | null = null;
+  let page: Page | null = null; // Declare page here to make it accessible in catch block
 
   try {
     // ALWAYS show warning first in visual mode
@@ -33,7 +34,7 @@ async function runVisualTest() {
       ]
     });
 
-    const page = await browser.newPage({
+    page = await browser.newPage({ // Assign to the declared page variable
       viewport: { width: 1920, height: 1080 }
     });
 
@@ -94,15 +95,12 @@ async function runVisualTest() {
   } catch (error) {
     console.error('\n❌ Test failed:', error);
     
-    // Try to capture error screenshot
-    if (browser) {
-      const pages = await browser.pages();
-      if (pages.length > 0) {
-        await pages[0].screenshot({ 
-          path: './visual-test-results/error-state.png' 
-        });
-        console.log('📸 Error screenshot saved: error-state.png');
-      }
+    // Try to capture error screenshot using the existing 'page' variable
+    if (browser && page) { // Ensure both browser and page were successfully created
+      await page.screenshot({ 
+        path: './visual-test-results/error-state.png' 
+      });
+      console.log('📸 Error screenshot saved: error-state.png');
     }
     
     throw error;

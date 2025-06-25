@@ -12,7 +12,7 @@ const CANCEL_KEYS = ['Escape', 'KeyX'];
 const MENU_KEYS = ['KeyM', 'Tab'];
 const CHARACTER_KEYS = ['KeyC'];
 const INVENTORY_KEYS = ['KeyI'];
-const QUEST_KEYS = ['KeyJ'];
+const QUEST_KEYS = ['KeyQ'];
 const FACTION_KEYS = ['KeyF'];
 
 /**

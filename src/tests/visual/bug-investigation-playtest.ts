@@ -230,8 +230,8 @@ const BUG_TESTS = [
             el.textContent?.includes('Objective')
           );
 
-          const overlapping = [];
-          const zIndexIssues = [];
+          const overlapping: any[] = [];
+          const zIndexIssues: any[] = [];
           
           questElements.forEach(el => {
             const rect = el.getBoundingClientRect();

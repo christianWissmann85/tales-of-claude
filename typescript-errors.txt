@@ -1,0 +1,46 @@
+
+> tales-of-claude@0.6.5 type-check
+> tsc --noEmit
+
+src/components/DebugPanel/DebugPanel.tsx(2,10): error TS2305: Module '"../../context/GameContext"' has no exported member 'useGame'.
+src/components/QuestJournal/QuestJournal.tsx(225,11): error TS2304: Cannot find name 'handleClose'.
+src/context/GameContext.tsx(36,15): error TS2300: Duplicate identifier 'GameAction'.
+src/context/GameContext.tsx(1005,26): error TS2300: Duplicate identifier 'GameAction'.
+src/engine/GameEngine.ts(758,39): error TS2339: Property 'enemies' does not exist on type 'never'.
+src/engine/GameEngine.ts(758,51): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/engine/StableUIManager.ts(12,38): error TS2675: Cannot extend a class '"/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/UIManager".UIManager'. Class constructor is marked as private.
+src/tests/test-enemy-respawn.ts(28,16): error TS2339: Property 'waitForTimeout' does not exist on type 'Page'.
+src/tests/test-enemy-respawn.ts(49,18): error TS2339: Property 'waitForTimeout' does not exist on type 'Page'.
+src/tests/test-enemy-respawn.ts(78,20): error TS2339: Property 'waitForTimeout' does not exist on type 'Page'.
+src/tests/test-enemy-respawn.ts(102,18): error TS2339: Property 'waitForTimeout' does not exist on type 'Page'.
+src/tests/test-enemy-respawn.ts(151,18): error TS2339: Property 'waitForTimeout' does not exist on type 'Page'.
+src/tests/visual/bug-investigation-playtest.ts(233,17): error TS7034: Variable 'overlapping' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/tests/visual/bug-investigation-playtest.ts(234,17): error TS7034: Variable 'zIndexIssues' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/tests/visual/bug-investigation-playtest.ts(253,25): error TS7005: Variable 'overlapping' implicitly has an 'any[]' type.
+src/tests/visual/bug-investigation-playtest.ts(253,41): error TS7005: Variable 'zIndexIssues' implicitly has an 'any[]' type.
+src/tests/visual/edge-case-bug-hunt.ts(2,36): error TS2307: Cannot find module '@playwright/test' or its corresponding type declarations.
+src/tests/visual/edge-case-bug-hunt.ts(80,30): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(88,79): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(140,55): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(183,48): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(225,81): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(275,53): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(323,61): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(380,63): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(437,51): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(502,55): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/edge-case-bug-hunt.ts(555,69): error TS7031: Binding element 'page' implicitly has an 'any' type.
+src/tests/visual/example-visual-test.ts(99,35): error TS2339: Property 'pages' does not exist on type 'Browser'.
+src/tests/visual/tamy-ultimate-bug-hunt-fixed.ts(749,40): error TS2339: Property 'metrics' does not exist on type 'Page'.
+src/tests/visual/tamy-ultimate-bug-hunt-fixed.ts(760,40): error TS2339: Property 'metrics' does not exist on type 'Page'.
+src/tests/visual/tamy-ultimate-bug-hunt.ts(709,40): error TS2339: Property 'metrics' does not exist on type 'Page'.
+src/tests/visual/tamy-ultimate-bug-hunt.ts(720,40): error TS2339: Property 'metrics' does not exist on type 'Page'.
+src/tests/visual/test-exit-fix.ts(47,60): error TS7006: Parameter 'log' implicitly has an 'any' type.
+src/tests/visual/test-exit-fix.ts(56,58): error TS7006: Parameter 'log' implicitly has an 'any' type.
+src/tests/visual/test-keyboard-input.ts(128,50): error TS18048: 'playerData.bounds' is possibly 'undefined'.
+src/tests/visual/test-keyboard-input.ts(128,74): error TS18048: 'playerData.bounds' is possibly 'undefined'.
+src/tests/visual/test-map-transitions.ts(2,36): error TS2307: Cannot find module '@playwright/test' or its corresponding type declarations.
+src/tests/visual/test-map-transitions.ts(3,43): error TS2307: Cannot find module './visual-test-utils' or its corresponding type declarations.
+src/tests/visual/test-map-transitions.ts(8,28): error TS7031: Binding element 'browser' implicitly has an 'any' type.
+src/tests/visual/test-ui-hotkeys-final.ts(67,37): error TS18046: 'error' is of type 'unknown'.
+src/tests/visual/test-ui-hotkeys-isolated.ts(46,51): error TS18046: 'error' is of type 'unknown'.

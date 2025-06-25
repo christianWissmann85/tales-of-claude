@@ -1,3 +1,4 @@
+```typescript
 import { chromium } from 'playwright';
 
 async function testMapTransitions() {
@@ -44,7 +45,7 @@ async function testMapTransitions() {
   
   // Get console logs before transition
   const logsBefore = await page.evaluate(() => (window as any).__consoleLogs);
-  console.log('Logs before transition:', logsBefore.filter(log => log.includes('MapLoader') || log.includes('GameEngine')));
+  console.log('Logs before transition:', logsBefore.filter((log: any) => log.includes('MapLoader') || log.includes('GameEngine')));
   
   // Try to transition
   console.log('Attempting transition...');
@@ -53,7 +54,7 @@ async function testMapTransitions() {
   
   // Get console logs after transition
   const logsAfter = await page.evaluate(() => (window as any).__consoleLogs);
-  console.log('Logs after transition:', logsAfter.filter(log => log.includes('MapLoader') || log.includes('GameEngine')));
+  console.log('Logs after transition:', logsAfter.filter((log: any) => log.includes('MapLoader') || log.includes('GameEngine')));
   
   // Check current map
   const gameState = await page.evaluate(() => {
@@ -73,3 +74,4 @@ async function testMapTransitions() {
 }
 
 testMapTransitions().catch(console.error);
+```

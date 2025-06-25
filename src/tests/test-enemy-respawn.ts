@@ -25,7 +25,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
     await page.waitForSelector('canvas', { timeout: 10000 });
     
     // Wait for game to initialize
-    await page.waitForTimeout(2000);
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Check initial enemy count
     const initialEnemyCount = await page.evaluate(() => {
@@ -46,7 +46,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
     // Move around to find an enemy
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press('ArrowRight');
-      await page.waitForTimeout(200);
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       const inBattle = await page.evaluate(() => {
         const state = (window as any).__gameState;
@@ -75,7 +75,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       // Spam attack to win quickly
       for (let i = 0; i < 20; i++) {
         await page.keyboard.press('1'); // Attack
-        await page.waitForTimeout(100);
+        await new Promise(resolve => setTimeout(resolve, 100));
         
         const battleEnded = await page.evaluate(() => {
           const state = (window as any).__gameState;
@@ -99,7 +99,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       
       // Test 4: Check enemy count after battle
       const afterBattleTime = Date.now();
-      await page.waitForTimeout(1000);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const enemyCountAfterBattle = await page.evaluate(() => {
         const state = (window as any).__gameState;
@@ -148,7 +148,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       // Test 6: Wait for respawn (using shorter test time)
       console.log(chalk.yellow('Waiting 30 seconds for respawn test...'));
       const respawnWaitTime = Date.now();
-      await page.waitForTimeout(30000); // Wait 30 seconds
+      await new Promise(resolve => setTimeout(resolve, 30000)); // Wait 30 seconds
       
       const respawnedEnemyData = await page.evaluate(() => {
         const state = (window as any).__gameState;

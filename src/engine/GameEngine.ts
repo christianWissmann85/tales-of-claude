@@ -13,6 +13,7 @@ import {
   DialogueOption, // Import DialogueOption
   DialogueLine, // Import DialogueLine
   TimeData, // Import TimeData
+  CombatEntity, // Import CombatEntity for type safety
 } from '../types/global.types';
 
 // 1. Add import for Enemy model from '../models/Enemy'
@@ -83,6 +84,8 @@ export class GameEngine {
   private _lastMovementTime: DOMHighResTimeStamp = 0;
   private _interactionCooldown: number = 300; // milliseconds between interaction attempts
   private _lastInteractionTime: DOMHighResTimeStamp = 0;
+  private _uiCooldown: number = 100; // milliseconds between UI toggles (shorter for better UX)
+  private _lastUITime: DOMHighResTimeStamp = 0;
 
   // Time system
   private _timeSystem: TimeSystem;
@@ -240,6 +243,7 @@ export class GameEngine {
     this._lastProcessedMovementDirection = null;
     this._lastMovementTime = 0;
     this._lastInteractionTime = 0;
+    this._lastUITime = 0;
     
     // Stop time system
     this._timeSystem.pause();
@@ -269,6 +273,7 @@ export class GameEngine {
     // Disabled to reduce console spam
     // console.log('GameEngine: _processInput called.');
     const now = performance.now();
+    
 
     // Movement input
     const currentDirection = this._getDirectionFromKeys(this._pressedKeys);
@@ -303,47 +308,50 @@ export class GameEngine {
     
     // Check for inventory toggle (i key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI', 'i'])) {
-      if (now - this._lastInteractionTime > this._interactionCooldown) {
+      if (now - this._lastUITime > this._uiCooldown) {
         console.log('[VICTOR DEBUG] Inventory key pressed, dispatching TOGGLE_INVENTORY');
         this._dispatch({ type: 'TOGGLE_INVENTORY' });
-        this._lastInteractionTime = now;
+        this._lastUITime = now;
       }
     }
     
-    // Check for quest journal toggle (j key) - Note: changed from 'q' to 'j' per standard RPG conventions
-    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyJ', 'j'])) {
-      if (now - this._lastInteractionTime > this._interactionCooldown) {
+    // Check for quest journal toggle (q key)
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyQ', 'q'])) {
+      if (now - this._lastUITime > this._uiCooldown) {
+        console.log('[VICTOR DEBUG] Quest key pressed, dispatching TOGGLE_QUEST_LOG');
         this._dispatch({ type: 'TOGGLE_QUEST_LOG' });
-        this._lastInteractionTime = now;
+        this._lastUITime = now;
       }
     }
     
     // Check for character screen toggle (c key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyC', 'c'])) {
-      if (now - this._lastInteractionTime > this._interactionCooldown) {
+      if (now - this._lastUITime > this._uiCooldown) {
+        console.log('[VICTOR DEBUG] Character key pressed, dispatching TOGGLE_CHARACTER_SCREEN');
         this._dispatch({ type: 'TOGGLE_CHARACTER_SCREEN' });
-        this._lastInteractionTime = now;
+        this._lastUITime = now;
       }
     }
     
     // Check for faction screen toggle (f key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyF', 'f'])) {
-      if (now - this._lastInteractionTime > this._interactionCooldown) {
+      if (now - this._lastUITime > this._uiCooldown) {
+        console.log('[VICTOR DEBUG] Faction key pressed, dispatching TOGGLE_FACTION_STATUS');
         this._dispatch({ type: 'TOGGLE_FACTION_STATUS' });
-        this._lastInteractionTime = now;
+        this._lastUITime = now;
       }
     }
     
     // Check for ESC key to close all panels
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['Escape', 'Esc'])) {
-      if (now - this._lastInteractionTime > this._interactionCooldown) {
+      if (now - this._lastUITime > this._uiCooldown) {
         // Check if any panel is open
         if (UIManager.isAnyPanelOpen(this._currentGameState)) {
           console.log('[UI Manager] ESC pressed - closing all panels');
           // Dispatch actions to close all panels
           const closeActions = UIManager.getCloseAllPanelsAction();
           closeActions.forEach(action => this._dispatch(action));
-          this._lastInteractionTime = now;
+          this._lastUITime = now;
         }
       }
     }
@@ -747,8 +755,8 @@ export class GameEngine {
       let positionsChanged = false;
       
       // Get enemies currently in battle to exclude them from the map
-      const enemiesInBattle = this._currentGameState.battle ? 
-        this._currentGameState.battle.enemies.map(e => e.id) : [];
+      const battle = this._currentGameState.battle;
+      const enemiesInBattle = battle ? battle.enemies.map((e: CombatEntity) => e.id) : [];
       
       this._currentGameState.enemies.forEach(enemy => {
         // Skip enemies that are currently in battle

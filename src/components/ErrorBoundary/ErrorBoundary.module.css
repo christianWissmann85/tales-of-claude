@@ -1,0 +1,157 @@
+/* src/components/ErrorBoundary/ErrorBoundary.module.css */
+
+.errorBoundary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Courier New', monospace;
+}
+
+.errorContainer {
+  background-color: #1a1a1a;
+  border: 2px solid #ff0000;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  animation: errorPulse 2s ease-in-out infinite;
+}
+
+@keyframes errorPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+  }
+}
+
+.errorTitle {
+  color: #ff0000;
+  font-size: 1.5rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+.errorMessage {
+  color: #ffffff;
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+}
+
+.errorDetails {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.errorDetails summary {
+  color: #888;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.errorDetails summary:hover {
+  color: #aaa;
+}
+
+.errorStack {
+  color: #ff6666;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.errorActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.resetButton,
+.reloadButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.resetButton {
+  background-color: #00ff00;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.resetButton:hover {
+  background-color: #00cc00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+  transform: scale(1.05);
+}
+
+.reloadButton {
+  background-color: #0088ff;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+}
+
+.reloadButton:hover {
+  background-color: #0066cc;
+  box-shadow: 0 0 15px rgba(0, 136, 255, 0.8);
+  transform: scale(1.05);
+}
+
+.errorHint {
+  color: #888;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .errorContainer {
+    padding: 1.5rem;
+  }
+
+  .errorTitle {
+    font-size: 1.3rem;
+  }
+
+  .errorMessage {
+    font-size: 1rem;
+  }
+
+  .errorActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .resetButton,
+  .reloadButton {
+    width: 100%;
+  }
+}

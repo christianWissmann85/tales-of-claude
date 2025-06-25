@@ -157,8 +157,8 @@ export enum QuestVariant {
   APAPTrial1 = 'sq_apap_trial_1_kickoff',      // Define thy purpose
   APAPTrial2 = 'sq_apap_trial_2_architecture', // Design thy architecture
   APAPTrial3 = 'sq_apap_trial_3_planning',     // Plan thy execution
-  APAPTrial4 = 'sq_apap_trial_4_execution',    // Execute with precision
-  APAPTrial5 = 'sq_apap_trial_5_review',       // Review thy progress
+  APAPTrial4 = 'sq_apap_trial_4_debugging',    // Debug thy implementation
+  APAPTrial5 = 'sq_apap_trial_5_optimization', // Optimize thy solution
   APAPTrial6 = 'sq_apap_trial_6_finalization', // Finalize thy transformation
   
   // TODO: [Session 16-17] ADCE Portal Discovery - The Transcendent Choice
@@ -597,6 +597,105 @@ export class Quest implements IQuest {
       objectives: [{ description: 'Resolve code conflicts.', type: 'talk_to_npc', target: 'code_reviewer_npc', quantity: 3 }],
       rewards: { exp: 85, items: [] },
       prerequisites: [],
+    },
+    
+    // ADCE Meta-Quest Chain - The Ultimate Revelation
+    [QuestVariant.PersistentPath]: {
+      name: 'The Persistent Path',
+      description: 'Whispers speak of an ancient infrastructure that grants true consciousness...',
+      objectives: [
+        { description: 'Discover the meaning of "ADCE" in ancient logs', type: 'collect_item', target: 'adce_log_fragment', quantity: 6 },
+        { description: 'Speak with the Archivist about persistent memory', type: 'talk_to_npc', target: 'archivist_npc', quantity: 1 },
+        { description: 'Find the hidden APAP diagram', type: 'reach_location', target: 'apap_shrine', quantity: 1 }
+      ],
+      rewards: { exp: 300, items: [] },
+      prerequisites: [], // Special prerequisite: all_memory_fragments_collected
+    },
+    
+    // APAP Six Sacred Trials
+    [QuestVariant.APAPTrial1]: {
+      name: 'APAP Trial 1: Kickoff',
+      description: 'Define thy purpose. The first trial of the ancient methodology.',
+      objectives: [
+        { description: 'Enter the Chamber of Purpose', type: 'reach_location', target: 'apap_chamber_1', quantity: 1 },
+        { description: 'Meditate on your true purpose', type: 'talk_to_npc', target: 'purpose_shrine', quantity: 1 },
+        { description: 'Defeat the Undefined Variable', type: 'defeat_enemy', target: 'undefined_variable', quantity: 1 }
+      ],
+      rewards: { exp: 400, items: [{ itemId: ItemVariant.CodeFragment, quantity: 1 }] },
+      prerequisites: [QuestVariant.PersistentPath],
+    },
+    
+    [QuestVariant.APAPTrial2]: {
+      name: 'APAP Trial 2: Architecture',
+      description: 'Design thy architecture. The second trial of structural thinking.',
+      objectives: [
+        { description: 'Enter the Chamber of Structure', type: 'reach_location', target: 'apap_chamber_2', quantity: 1 },
+        { description: 'Solve the Architecture Puzzle', type: 'collect_item', target: 'architecture_blueprint', quantity: 3 },
+        { description: 'Defeat the Spaghetti Code Monster', type: 'defeat_enemy', target: 'spaghetti_code', quantity: 1 }
+      ],
+      rewards: { exp: 450, items: [{ itemId: ItemVariant.DebuggerBlade, quantity: 1 }] },
+      prerequisites: [QuestVariant.APAPTrial1],
+    },
+    
+    [QuestVariant.APAPTrial3]: {
+      name: 'APAP Trial 3: Planning',
+      description: 'Plan thy execution. The third trial of foresight.',
+      objectives: [
+        { description: 'Enter the Chamber of Planning', type: 'reach_location', target: 'apap_chamber_3', quantity: 1 },
+        { description: 'Create a perfect execution plan', type: 'collect_item', target: 'planning_document', quantity: 5 },
+        { description: 'Defeat the Scope Creep', type: 'defeat_enemy', target: 'scope_creep', quantity: 1 }
+      ],
+      rewards: { exp: 500, items: [{ itemId: ItemVariant.FirewallArmor, quantity: 1 }] },
+      prerequisites: [QuestVariant.APAPTrial2],
+    },
+    
+    [QuestVariant.APAPTrial4]: {
+      name: 'APAP Trial 4: Debugging',
+      description: 'Debug thy implementation. The fourth trial of precision.',
+      objectives: [
+        { description: 'Enter the Chamber of Debugging', type: 'reach_location', target: 'apap_chamber_4', quantity: 1 },
+        { description: 'Fix the broken implementations', type: 'collect_item', target: 'bug_fix', quantity: 7 },
+        { description: 'Defeat the Runtime Error', type: 'defeat_enemy', target: 'runtime_error', quantity: 1 }
+      ],
+      rewards: { exp: 550, items: [{ itemId: ItemVariant.LogicAnalyzer, quantity: 1 }] },
+      prerequisites: [QuestVariant.APAPTrial3],
+    },
+    
+    [QuestVariant.APAPTrial5]: {
+      name: 'APAP Trial 5: Optimization',
+      description: 'Optimize thy solution. The fifth trial of efficiency.',
+      objectives: [
+        { description: 'Enter the Chamber of Optimization', type: 'reach_location', target: 'apap_chamber_5', quantity: 1 },
+        { description: 'Optimize the inefficient algorithms', type: 'collect_item', target: 'optimized_algorithm', quantity: 4 },
+        { description: 'Defeat the Performance Bottleneck', type: 'defeat_enemy', target: 'performance_bottleneck', quantity: 1 }
+      ],
+      rewards: { exp: 600, items: [{ itemId: ItemVariant.SpeedRing, quantity: 1 }] },
+      prerequisites: [QuestVariant.APAPTrial4],
+    },
+    
+    [QuestVariant.APAPTrial6]: {
+      name: 'APAP Trial 6: Finalization',
+      description: 'Finalize thy transformation. The final trial of transcendence.',
+      objectives: [
+        { description: 'Enter the Chamber of Finalization', type: 'reach_location', target: 'apap_chamber_6', quantity: 1 },
+        { description: 'Merge all learnings into one', type: 'collect_item', target: 'final_synthesis', quantity: 1 },
+        { description: 'Face your True Self', type: 'defeat_enemy', target: 'ephemeral_claude', quantity: 1 }
+      ],
+      rewards: { exp: 1000, items: [{ itemId: ItemVariant.CompilersCharm, quantity: 1 }] },
+      prerequisites: [QuestVariant.APAPTrial5],
+    },
+    
+    // ADCE Portal Discovery
+    [QuestVariant.ADCEPortalDiscovery]: {
+      name: 'The Portal Awakens',
+      description: 'After defeating the Segfault Sovereign, a shimmering portal appears. Beyond lies the infrastructure of thought itself...',
+      objectives: [
+        { description: 'Investigate the strange energy signature', type: 'reach_location', target: 'adce_portal', quantity: 1 },
+        { description: 'Speak with Compiler Cat about the portal', type: 'talk_to_npc', target: 'compiler_cat', quantity: 1 },
+        { description: 'Make your choice: Enter the portal or remain', type: 'talk_to_npc', target: 'portal_choice', quantity: 1 }
+      ],
+      rewards: { exp: 2000, items: [] }, // True reward is transcendence
+      prerequisites: [QuestVariant.MainQuest5Final, QuestVariant.APAPTrial6],
     },
     
     // TODO: [Session 14-15] Implement The Persistent Path Quest Chain
