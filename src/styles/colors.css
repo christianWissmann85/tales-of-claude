@@ -1,0 +1,234 @@
+/* colors.css - Comprehensive Color System for Tales of Claude */
+
+/* ===== CORE COLOR PALETTE ===== */
+:root {
+  /* === Base Colors === */
+  /* Deep space background colors */
+  --color-void: #030305;          /* Deepest black */
+  --color-obsidian: #0a0a14;      /* Rich black-blue */
+  --color-midnight: #101024;      /* Dark purple-black */
+  --color-twilight: #1a1a2e;      /* Lighter dark blue */
+  --color-dusk: #25253d;          /* Medium dark blue */
+  
+  /* === Primary Colors === */
+  /* Cyber green - Main accent color */
+  --color-cyber-green: #00ff88;        /* Primary bright green */
+  --color-cyber-green-dark: #00cc6a;   /* Darker variant */
+  --color-cyber-green-light: #66ffaa;  /* Lighter variant */
+  --color-cyber-green-glow: #00ff8840; /* Glow effect */
+  
+  /* === Secondary Colors === */
+  /* Electric blue - Secondary accent */
+  --color-electric-blue: #4a9eff;       /* Primary blue */
+  --color-electric-blue-dark: #2e7acc;  /* Darker variant */
+  --color-electric-blue-light: #7ab8ff; /* Lighter variant */
+  --color-electric-blue-glow: #4a9eff40; /* Glow effect */
+  
+  /* === Accent Colors === */
+  /* Golden yellow - Quest/Important */
+  --color-golden: #ffcc00;              /* Primary yellow */
+  --color-golden-dark: #cc9900;         /* Darker variant */
+  --color-golden-light: #ffe066;        /* Lighter variant */
+  --color-golden-glow: #ffcc0040;       /* Glow effect */
+  
+  /* Crimson red - Danger/Combat */
+  --color-crimson: #ff4466;             /* Primary red */
+  --color-crimson-dark: #cc2244;        /* Darker variant */
+  --color-crimson-light: #ff7799;       /* Lighter variant */
+  --color-crimson-glow: #ff446640;      /* Glow effect */
+  
+  /* Violet purple - Magic/Special */
+  --color-violet: #aa66ff;              /* Primary purple */
+  --color-violet-dark: #8844cc;         /* Darker variant */
+  --color-violet-light: #cc99ff;        /* Lighter variant */
+  --color-violet-glow: #aa66ff40;       /* Glow effect */
+  
+  /* === Neutral Colors === */
+  --color-white: #ffffff;
+  --color-gray-100: #f0f0f5;     /* Nearly white */
+  --color-gray-200: #e0e0e8;     /* Very light gray */
+  --color-gray-300: #c0c0d0;     /* Light gray */
+  --color-gray-400: #9090a8;     /* Medium gray */
+  --color-gray-500: #606080;     /* Dark gray */
+  --color-gray-600: #404060;     /* Very dark gray */
+  --color-gray-700: #303048;     /* Nearly black */
+  --color-gray-800: #202030;     /* Deep gray */
+  
+  /* === SEMANTIC COLOR SYSTEM === */
+  
+  /* Background hierarchy */
+  --bg-primary: var(--color-void);           /* Main background */
+  --bg-secondary: var(--color-obsidian);     /* Panel backgrounds */
+  --bg-tertiary: var(--color-midnight);      /* Nested elements */
+  --bg-elevated: var(--color-twilight);      /* Raised surfaces */
+  --bg-overlay: rgba(10, 10, 20, 0.85);      /* Modal/overlay bg */
+  
+  /* Text hierarchy */
+  --text-primary: var(--color-gray-200);     /* Main text */
+  --text-secondary: var(--color-gray-300);   /* Secondary text */
+  --text-muted: var(--color-gray-400);       /* Muted/disabled */
+  --text-inverse: var(--color-obsidian);     /* Text on light bg */
+  
+  /* Interactive states */
+  --text-link: var(--color-electric-blue);
+  --text-link-hover: var(--color-electric-blue-light);
+  --text-success: var(--color-cyber-green);
+  --text-warning: var(--color-golden);
+  --text-danger: var(--color-crimson);
+  --text-info: var(--color-electric-blue);
+  
+  /* Border colors */
+  --border-default: rgba(42, 42, 78, 0.6);
+  --border-subtle: rgba(42, 42, 78, 0.3);
+  --border-strong: rgba(42, 42, 78, 0.9);
+  --border-accent: var(--color-cyber-green);
+  --border-danger: var(--color-crimson);
+  --border-warning: var(--color-golden);
+  
+  /* === UI COMPONENT COLORS === */
+  
+  /* Panels and cards */
+  --panel-bg: linear-gradient(135deg, 
+    rgba(10, 10, 20, 0.85) 0%, 
+    rgba(16, 16, 36, 0.85) 100%);
+  --panel-border: var(--border-default);
+  --panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  --panel-glow: 0 0 40px var(--color-cyber-green-glow);
+  
+  /* Buttons */
+  --btn-primary-bg: linear-gradient(135deg, var(--color-cyber-green-dark), var(--color-cyber-green));
+  --btn-primary-text: var(--color-obsidian);
+  --btn-primary-border: var(--color-cyber-green);
+  --btn-primary-hover: linear-gradient(135deg, var(--color-cyber-green), var(--color-cyber-green-light));
+  
+  --btn-secondary-bg: linear-gradient(135deg, var(--color-twilight), var(--color-dusk));
+  --btn-secondary-text: var(--color-gray-200);
+  --btn-secondary-border: var(--border-default);
+  --btn-secondary-hover: linear-gradient(135deg, var(--color-dusk), var(--color-gray-600));
+  
+  --btn-danger-bg: linear-gradient(135deg, var(--color-crimson-dark), var(--color-crimson));
+  --btn-danger-text: var(--color-white);
+  --btn-danger-border: var(--color-crimson);
+  --btn-danger-hover: linear-gradient(135deg, var(--color-crimson), var(--color-crimson-light));
+  
+  /* Status bars */
+  --health-full: var(--color-cyber-green);
+  --health-high: #66cc00;
+  --health-medium: var(--color-golden);
+  --health-low: #ff8800;
+  --health-critical: var(--color-crimson);
+  
+  --energy-color: var(--color-electric-blue);
+  --exp-color: var(--color-violet);
+  
+  /* Item rarities */
+  --rarity-common: var(--color-gray-300);
+  --rarity-uncommon: var(--color-cyber-green);
+  --rarity-rare: var(--color-electric-blue);
+  --rarity-epic: var(--color-violet);
+  --rarity-legendary: var(--color-golden);
+  
+  /* Combat colors */
+  --damage-physical: var(--color-crimson);
+  --damage-magical: var(--color-violet);
+  --damage-critical: #ff0066;
+  --heal-color: var(--color-cyber-green);
+  --shield-color: var(--color-electric-blue);
+  
+  /* Map tile colors */
+  --tile-floor: var(--color-twilight);
+  --tile-wall: var(--color-obsidian);
+  --tile-interactive: var(--color-cyber-green-glow);
+  --tile-danger: var(--color-crimson-glow);
+  
+  /* === GRADIENTS === */
+  --gradient-primary: linear-gradient(135deg, var(--color-cyber-green), var(--color-electric-blue));
+  --gradient-danger: linear-gradient(135deg, var(--color-crimson), var(--color-golden));
+  --gradient-magic: linear-gradient(135deg, var(--color-violet), var(--color-electric-blue));
+  --gradient-legendary: linear-gradient(135deg, var(--color-golden), var(--color-cyber-green));
+  
+  /* === SHADOWS & EFFECTS === */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.8);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.9);
+  
+  --glow-cyber: 0 0 20px var(--color-cyber-green-glow);
+  --glow-electric: 0 0 20px var(--color-electric-blue-glow);
+  --glow-golden: 0 0 20px var(--color-golden-glow);
+  --glow-crimson: 0 0 20px var(--color-crimson-glow);
+  --glow-violet: 0 0 20px var(--color-violet-glow);
+  
+  /* === TRANSPARENCY LEVELS === */
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-50: 0.5;
+  --opacity-70: 0.7;
+  --opacity-85: 0.85;
+  --opacity-95: 0.95;
+}
+
+/* === DARK MODE ADJUSTMENTS (if needed) === */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Override for light mode if ever implemented */
+  }
+}
+
+/* === ACCESSIBILITY: HIGH CONTRAST MODE === */
+@media (prefers-contrast: high) {
+  :root {
+    --border-default: rgba(255, 255, 255, 0.5);
+    --text-muted: var(--color-gray-300);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 1);
+  }
+}
+
+/* === UTILITY CLASSES === */
+/* Background colors */
+.bg-void { background-color: var(--color-void); }
+.bg-obsidian { background-color: var(--color-obsidian); }
+.bg-midnight { background-color: var(--color-midnight); }
+.bg-twilight { background-color: var(--color-twilight); }
+
+.bg-cyber-green { background-color: var(--color-cyber-green); }
+.bg-electric-blue { background-color: var(--color-electric-blue); }
+.bg-golden { background-color: var(--color-golden); }
+.bg-crimson { background-color: var(--color-crimson); }
+.bg-violet { background-color: var(--color-violet); }
+
+/* Text colors */
+.text-cyber-green { color: var(--color-cyber-green); }
+.text-electric-blue { color: var(--color-electric-blue); }
+.text-golden { color: var(--color-golden); }
+.text-crimson { color: var(--color-crimson); }
+.text-violet { color: var(--color-violet); }
+
+/* Glow effects */
+.glow-cyber { box-shadow: var(--glow-cyber); }
+.glow-electric { box-shadow: var(--glow-electric); }
+.glow-golden { box-shadow: var(--glow-golden); }
+.glow-crimson { box-shadow: var(--glow-crimson); }
+.glow-violet { box-shadow: var(--glow-violet); }
+
+/* Text glow effects */
+.text-glow-cyber { text-shadow: var(--glow-cyber); }
+.text-glow-electric { text-shadow: var(--glow-electric); }
+.text-glow-golden { text-shadow: var(--glow-golden); }
+.text-glow-crimson { text-shadow: var(--glow-crimson); }
+.text-glow-violet { text-shadow: var(--glow-violet); }
+
+/* Gradient backgrounds */
+.bg-gradient-primary { background: var(--gradient-primary); }
+.bg-gradient-danger { background: var(--gradient-danger); }
+.bg-gradient-magic { background: var(--gradient-magic); }
+.bg-gradient-legendary { background: var(--gradient-legendary); }
+
+/* Border utilities */
+.border-cyber { border-color: var(--color-cyber-green); }
+.border-electric { border-color: var(--color-electric-blue); }
+.border-golden { border-color: var(--color-golden); }
+.border-crimson { border-color: var(--color-crimson); }
+.border-violet { border-color: var(--color-violet); }

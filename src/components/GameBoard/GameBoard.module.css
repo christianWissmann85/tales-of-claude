@@ -18,7 +18,7 @@
   width: 100%; /* Fill available width */
   height: 100%; /* Fill available height */
   overflow: hidden; /* Ensures content stays within the board boundaries */
-  background-color: #1a1a1a; /* Dark background for contrast */
+  background-color: var(--color-twilight); /* Use color system */
   transition: background-color 0.5s ease, box-shadow 0.5s ease;
   display: flex;
   align-items: center;
@@ -28,170 +28,291 @@
 
 /* Time of day atmospheric styling */
 .gameBoard.dawn {
-  background-color: #2a1a1a;
-  box-shadow: 0 0 20px rgba(255, 140, 90, 0.4);
+  background-color: var(--color-twilight);
+  box-shadow: 0 0 20px var(--color-golden-glow);
+  filter: brightness(1.1) hue-rotate(-10deg);
 }
 
 .gameBoard.dawn .gridCell {
-  color: #ffd4b3;
+  color: var(--color-golden-light);
 }
 
 .gameBoard.day {
-  background-color: #1f1f1f;
-  box-shadow: 0 0 15px rgba(135, 206, 235, 0.3);
+  background-color: var(--color-dusk);
+  box-shadow: 0 0 15px var(--color-electric-blue-glow);
+  filter: brightness(1.2);
 }
 
 .gameBoard.dusk {
-  background-color: #251818;
-  box-shadow: 0 0 20px rgba(255, 99, 71, 0.4);
+  background-color: var(--color-twilight);
+  box-shadow: 0 0 20px var(--color-crimson-glow);
+  filter: brightness(0.9) hue-rotate(10deg);
 }
 
 .gameBoard.dusk .gridCell {
-  color: #ffccbb;
+  color: var(--color-golden-light);
+  opacity: 0.9;
 }
 
 .gameBoard.night {
-  background-color: #0a0a15;
-  box-shadow: 0 0 25px rgba(25, 25, 112, 0.6);
+  background-color: var(--color-midnight);
+  box-shadow: 0 0 25px var(--color-violet-glow);
 }
 
 .gameBoard.night .gridCell {
-  color: #c4c4ff;
+  color: var(--color-electric-blue-light);
+  opacity: 0.8;
 }
 
-.gridCell {
+/* Map container with scroll */
+.mapContainer {
+  position: relative;
+  overflow: auto; /* Enable scrolling when map is larger than viewport */
+  max-width: calc(var(--cell-size) * var(--map-cols));
+  max-height: calc(var(--cell-size) * var(--map-rows));
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-default);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg), inset 0 0 20px rgba(0, 0, 0, 0.5);
+  background: var(--bg-secondary);
+}
+
+/* Custom scrollbar styling */
+.mapContainer::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.mapContainer::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+}
+
+.mapContainer::-webkit-scrollbar-thumb {
+  background: var(--color-cyber-green);
+  border-radius: 6px;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.mapContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyber-green-light);
+}
+
+/* Grid layout for cells */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--map-cols), var(--cell-size));
+  grid-template-rows: repeat(var(--map-rows), var(--cell-size));
+  gap: 0; /* No gap between cells for seamless map */
+  background-color: var(--bg-primary);
+  position: relative;
+}
+
+/* Individual grid cells */
+.gridCell {
   width: var(--cell-size);
   height: var(--cell-size);
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  user-select: none; /* Prevent text selection on game elements */
-  /* Optional: Add a subtle border for visual grid lines */
-  border: 1px solid rgba(255, 255, 255, 0.03); /* More subtle grid lines */
-}
-
-.mapGridContainer {
-  display: grid;
-  /* Grid dimensions are set dynamically via inline style in MapGrid.tsx */
-  width: 100%; /* Fill container width */
-  height: 100%; /* Fill container height */
-  /* Remove fixed max-width/height constraints - let it fill the container */
-  border: 2px solid #333;
-  background-color: #1a1a1a; /* Dark background for contrast */
-  font-family: 'monospace', 'Courier New', Courier, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: var(--cell-font-size);
-  color: #eee;
-  overflow: hidden;
+  line-height: 1;
   position: relative;
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-  image-rendering: pixelated;
-  margin: 0 auto; /* Center the grid if it doesn't fill width */
+  transition: all 0.15s ease;
+  background-color: var(--tile-floor);
+  color: var(--text-primary);
+  user-select: none;
+  cursor: default;
 }
 
-.fpsCounter {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  color: limegreen; /* Distinct color for FPS */
-  padding: 2px 5px;
-  font-size: 0.8em;
-  border-radius: 3px;
-  pointer-events: auto; /* Changed from none to allow button clicks */
-  z-index: 100; /* Ensure it's on top of other elements */
+/* Wall cells */
+.gridCell.wall {
+  background-color: var(--tile-wall);
+  color: var(--text-muted);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
-.asciiToggle {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #00ff00;
-  border: 1px solid #00ff00;
-  padding: 2px 6px;
-  border-radius: 3px;
+/* Floor cells */
+.gridCell.floor {
+  background-color: var(--tile-floor);
+}
+
+/* Interactive cells (NPCs, items, etc.) */
+.gridCell.interactive {
   cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
+  background-color: var(--tile-floor);
+  box-shadow: 0 0 10px var(--tile-interactive);
 }
 
-.asciiToggle:hover {
-  background-color: #00ff00;
-  color: #000;
-}
-
-/* Floor tile styles removed - now using background colors instead of emoji opacity */
-
-/* Define color palette for consistent theming */
-:root {
-  --primary-green: #00ff88;    /* Player/positive actions */
-  --danger-red: #ff4444;       /* Enemy/damage */
-  --warning-yellow: #ffaa00;   /* Caution/items */
-  --ui-dark: #1a1a2e;         /* Dark backgrounds */
-  --ui-light: #e0e0e0;        /* Light text */
-  --ui-accent: #4a9eff;       /* UI accent color */
-}
-
-/* Player cell highlighting - makes player always visible */
-.playerCell {
-  position: relative;
+.gridCell.interactive:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--color-cyber-green-glow);
   z-index: 10;
-  animation: player-glow 2s ease-in-out infinite;
 }
 
-.playerCell::before {
-  content: '';
+/* Dangerous cells */
+.gridCell.danger {
+  background-color: var(--tile-floor);
+  box-shadow: 0 0 10px var(--tile-danger);
+  animation: dangerPulse 2s infinite;
+}
+
+@keyframes dangerPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; box-shadow: 0 0 20px var(--color-crimson-glow); }
+}
+
+/* Player cell */
+.gridCell.player {
+  background-color: var(--color-cyber-green);
+  color: var(--color-obsidian);
+  font-weight: bold;
+  box-shadow: 0 0 20px var(--color-cyber-green-glow);
+  z-index: 20;
+  animation: playerGlow 2s infinite;
+}
+
+@keyframes playerGlow {
+  0%, 100% { box-shadow: 0 0 20px var(--color-cyber-green-glow); }
+  50% { box-shadow: 0 0 30px var(--color-cyber-green-glow), 0 0 40px var(--color-cyber-green-glow); }
+}
+
+/* Entity visibility states */
+.gridCell .entity {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.gridCell.fogOfWar .entity:not(.player) {
+  opacity: 0.3;
+}
+
+.gridCell.hidden .entity:not(.player) {
+  opacity: 0;
+}
+
+/* Special tile types */
+.gridCell.entrance {
+  background-color: var(--color-electric-blue);
+  color: var(--color-white);
+  box-shadow: 0 0 15px var(--color-electric-blue-glow);
+}
+
+.gridCell.exit {
+  background-color: var(--color-golden);
+  color: var(--color-obsidian);
+  box-shadow: 0 0 15px var(--color-golden-glow);
+}
+
+.gridCell.treasure {
+  background-color: var(--color-violet);
+  color: var(--color-white);
+  box-shadow: 0 0 15px var(--color-violet-glow);
+  animation: treasureSparkle 3s infinite;
+}
+
+@keyframes treasureSparkle {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.2); }
+}
+
+/* Movement indicators */
+.gridCell.validMove {
+  background-color: var(--color-cyber-green);
+  opacity: 0.3;
+  cursor: pointer;
+}
+
+.gridCell.invalidMove {
+  background-color: var(--color-crimson);
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Pathfinding visualization */
+.gridCell.path {
+  background-color: var(--color-electric-blue);
+  opacity: 0.4;
+}
+
+/* Combat indicators */
+.gridCell.targetable {
+  background-color: var(--color-crimson);
+  opacity: 0.5;
+  cursor: crosshair;
+  animation: targetPulse 1s infinite;
+}
+
+@keyframes targetPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.gridCell.selected {
+  border: 2px solid var(--color-golden);
+  box-shadow: 0 0 10px var(--color-golden-glow);
+}
+
+/* Weather effects overlay */
+.weatherOverlay {
   position: absolute;
-  inset: -4px;
-  border: 2px solid var(--primary-green);
-  border-radius: 4px;
-  box-shadow: 0 0 12px var(--primary-green), 
-              0 0 24px rgba(0, 255, 136, 0.4),
-              inset 0 0 12px rgba(0, 255, 136, 0.2);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
+  z-index: 100;
 }
 
-@keyframes player-glow {
-  0%, 100% { 
-    filter: drop-shadow(0 0 4px var(--primary-green));
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --cell-size: min(calc(85vw / 25), calc(85vh / 20), 40px);
   }
-  50% { 
-    filter: drop-shadow(0 0 8px var(--primary-green));
+  
+  .gameBoard {
+    padding: 0.5rem;
   }
-}
-
-/* Enemy cell highlighting - clear threat indication */
-.enemyCell {
-  position: relative;
-  animation: enemy-pulse 1.5s ease-in-out infinite;
-}
-
-.enemyCell::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border: 1px solid var(--danger-red);
-  border-radius: 3px;
-  box-shadow: 0 0 6px rgba(255, 68, 68, 0.6);
-  pointer-events: none;
-}
-
-@keyframes enemy-pulse {
-  0%, 100% { 
-    filter: drop-shadow(0 0 2px rgba(255, 68, 68, 0.4));
-  }
-  50% { 
-    filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.8));
+  
+  .mapContainer {
+    border-width: 1px;
   }
 }
 
-/* NPC cell highlighting - friendly indication */
-.npcCell {
-  position: relative;
+@media (min-width: 1920px) {
+  :root {
+    --cell-size: min(calc(60vw / 25), calc(60vh / 20), 80px);
+  }
 }
 
-.npcCell::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, transparent 40%, rgba(255, 255, 255, 0.1) 70%);
-  pointer-events: none;
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .gridCell,
+  .gridCell.interactive:hover,
+  .gridCell.player,
+  .gridCell.treasure {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .gridCell {
+    border: 1px solid var(--border-strong);
+  }
+  
+  .gridCell.wall {
+    background-color: var(--color-obsidian);
+    color: var(--color-white);
+  }
+  
+  .gridCell.player {
+    background-color: var(--color-white);
+    color: var(--color-obsidian);
+  }
 }

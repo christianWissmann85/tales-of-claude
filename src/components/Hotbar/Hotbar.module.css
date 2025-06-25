@@ -1,27 +1,5 @@
 /* src/components/Hotbar/Hotbar.module.css */
 
-/* --- CSS Variables for Dark Theme --- */
-:root {
-  --hotbar-bg: #1a1a1a; /* Very dark grey for the hotbar background */
-  --hotbar-border: #333; /* Dark grey border for the hotbar container */
-
-  --slot-bg: #2c2c2c; /* Dark grey for individual slot background */
-  --slot-border: #444; /* Slightly lighter grey for slot borders */
-  --slot-hover-bg: #3a3a3a; /* Darker grey on hover */
-  --slot-active-bg: #007bff; /* Accent blue for active/selected slot background */
-  --slot-active-border: #00aaff; /* Lighter blue for active slot border */
-
-  --text-color: #e0e0e0; /* Light grey for general text */
-  --placeholder-color: #555; /* Medium grey for empty slot indicators */
-  --quantity-bg: #000000cc; /* Semi-transparent black for quantity badge */
-
-  --cooldown-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for cooldown overlay */
-  --cooldown-text-color: #e0e0e0; /* Light text for cooldown timer */
-
-  --drag-over-border: #00cc99; /* Green accent for drag-over effect */
-  --drag-placeholder-border: #666; /* Grey for the original slot when dragging */
-}
-
 /* --- 1. Hotbar Container Styling --- */
 .hotbarContainer {
   position: fixed; /* Position relative to the viewport */
@@ -31,15 +9,13 @@
   display: flex; /* Arrange slots in a row */
   gap: 10px; /* Space between individual slots */
   padding: 15px 20px; /* Padding inside the hotbar container */
-  background: linear-gradient(135deg, 
-    rgba(10, 10, 20, 0.9) 0%, 
-    rgba(15, 15, 25, 0.95) 100%);
-  border: 2px solid #2a2a4e;
+  background: var(--panel-bg);
+  border: 2px solid var(--border-default);
   border-radius: 12px; /* Rounded corners for the container */
   box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.7),
+    var(--shadow-lg),
     inset 0 0 30px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(255, 107, 107, 0.15);
+    0 0 40px var(--color-crimson-glow);
   z-index: 1000; /* Ensure it stays on top of other content */
   user-select: none; /* Prevent text selection within the hotbar */
   overflow: hidden;
@@ -56,10 +32,10 @@
   right: -2px;
   bottom: -2px;
   background: linear-gradient(45deg, 
-    #ff6b6b, 
+    var(--color-crimson), 
     transparent 30%,
     transparent 70%,
-    #ff6b6b);
+    var(--color-crimson));
   border-radius: 12px;
   opacity: 0.2;
   z-index: -1;
@@ -80,10 +56,10 @@
   right: 0;
   bottom: 0;
   background-image: 
-    linear-gradient(135deg, #ff6b6b 0%, transparent 20px),
-    linear-gradient(225deg, #ff6b6b 0%, transparent 20px),
-    linear-gradient(315deg, #ff6b6b 0%, transparent 20px),
-    linear-gradient(45deg, #ff6b6b 0%, transparent 20px);
+    linear-gradient(135deg, var(--color-crimson) 0%, transparent 20px),
+    linear-gradient(225deg, var(--color-crimson) 0%, transparent 20px),
+    linear-gradient(315deg, var(--color-crimson) 0%, transparent 20px),
+    linear-gradient(45deg, var(--color-crimson) 0%, transparent 20px);
   background-position: 
     top left,
     top right,
@@ -102,9 +78,9 @@
   width: 64px; /* Standard square slot size */
   height: 64px;
   background: linear-gradient(135deg, 
-    rgba(26, 26, 46, 0.8) 0%, 
-    rgba(20, 20, 35, 0.8) 100%);
-  border: 2px solid rgba(42, 42, 78, 0.7);
+    var(--bg-tertiary) 0%, 
+    var(--bg-secondary) 100%);
+  border: 2px solid var(--border-default);
   border-radius: 8px; /* Slightly rounded corners for slots */
   display: flex;
   align-items: center;
@@ -120,44 +96,44 @@
 /* Hover Effect */
 .hotbarSlot:hover {
   background: linear-gradient(135deg, 
-    rgba(42, 42, 78, 0.9) 0%, 
-    rgba(35, 35, 60, 0.9) 100%);
-  border-color: #ff6b6b; /* Red accent for hotbar */
+    var(--bg-elevated) 0%, 
+    var(--bg-tertiary) 100%);
+  border-color: var(--color-crimson); /* Red accent for hotbar */
   box-shadow: 
     inset 0 0 15px rgba(0, 0, 0, 0.2),
-    0 0 15px rgba(255, 107, 107, 0.4);
+    0 0 15px var(--color-crimson-glow);
   transform: translateY(-2px);
 }
 
 /* --- 3. Active/Pressed State Animations --- */
 .hotbarSlot.active {
   background: linear-gradient(135deg, 
-    rgba(255, 107, 107, 0.3) 0%, 
-    rgba(255, 107, 107, 0.2) 100%);
-  border-color: #ff6b6b;
+    rgba(255, 68, 102, 0.3) 0%, 
+    rgba(255, 68, 102, 0.2) 100%);
+  border-color: var(--color-crimson);
   box-shadow: 
-    inset 0 0 20px rgba(255, 107, 107, 0.3),
-    0 0 20px rgba(255, 107, 107, 0.5);
+    inset 0 0 20px var(--color-crimson-glow),
+    0 0 20px var(--color-crimson-glow);
   transform: scale(1.05); /* Slightly enlarge the active slot */
 }
 
 .hotbarSlot.pressed {
   transform: scale(0.95); /* Slightly shrink when pressed/clicked */
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5); /* Inset shadow for pressed look */
-  background-color: var(--slot-hover-bg);
-  border-color: var(--slot-active-border);
+  background-color: var(--bg-elevated);
+  border-color: var(--color-electric-blue-light);
 }
 
 /* --- 4. Drag and Drop Visual Feedback --- */
 .hotbarSlot.dragging {
   opacity: 0.5; /* Make the original slot semi-transparent */
   border-style: dashed; /* Change border to dashed */
-  border-color: var(--drag-placeholder-border); /* Indicate it's a placeholder */
+  border-color: var(--border-subtle); /* Indicate it's a placeholder */
 }
 
 .hotbarSlot.dragOver {
-  border-color: var(--drag-over-border); /* Green border for valid drop target */
-  box-shadow: 0 0 12px var(--drag-over-border); /* Green glow for drop target */
+  border-color: var(--color-cyber-green); /* Green border for valid drop target */
+  box-shadow: 0 0 12px var(--color-cyber-green-glow); /* Green glow for drop target */
   transform: scale(1.05); /* Enlarge the target slot */
 }
 
@@ -175,25 +151,25 @@
   position: absolute;
   bottom: 2px;
   right: 2px;
-  background-color: var(--quantity-bg);
-  color: var(--text-color);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--text-primary);
   font-size: 0.75em;
   padding: 2px 5px;
   border-radius: 4px;
   min-width: 18px; /* Ensure badge is wide enough for single digits */
   text-align: center;
   line-height: 1; /* Compact line height */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); /* Small shadow for badge */
+  box-shadow: var(--shadow-sm); /* Small shadow for badge */
 }
 
 /* --- 6. Empty Slot Placeholder Styling --- */
 .emptySlot {
   /* Inherits base styles from .hotbarSlot */
   background: linear-gradient(135deg, 
-    rgba(26, 26, 46, 0.8) 0%, 
-    rgba(20, 20, 35, 0.8) 100%);
+    var(--bg-tertiary) 0%, 
+    var(--bg-secondary) 100%);
   border-style: dashed; /* Dashed border to signify emptiness */
-  border-color: rgba(42, 42, 78, 0.5);
+  border-color: var(--border-subtle);
 }
 
 .emptySlot::before {
@@ -201,7 +177,7 @@
   display: block;
   width: 30px;
   height: 30px;
-  border: 1px dashed rgba(42, 42, 78, 0.5);
+  border: 1px dashed var(--border-subtle);
   border-radius: 4px;
   opacity: 0.3; /* Subtle appearance */
 }
@@ -213,11 +189,11 @@
   left: 0;
   width: 100%;
   height: 100%; /* Full height when cooldown starts */
-  background-color: var(--cooldown-color);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cooldown-text-color);
+  color: var(--text-primary);
   font-size: 1.2em;
   font-weight: bold;
   pointer-events: none; /* Allow interaction with the slot underneath */
@@ -286,11 +262,11 @@
 /* Context Menu Styling */
 .contextMenu {
   position: fixed;
-  background-color: var(--hotbar-bg);
-  border: 1px solid var(--hotbar-border);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   padding: 4px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-md);
   z-index: 1100;
   min-width: 100px;
 }
@@ -300,7 +276,7 @@
   padding: 8px 16px;
   background: none;
   border: none;
-  color: var(--text-color);
+  color: var(--text-primary);
   text-align: left;
   cursor: pointer;
   font-size: 0.9em;
@@ -308,14 +284,14 @@
 }
 
 .contextMenu button:hover {
-  background-color: var(--slot-hover-bg);
+  background-color: var(--bg-elevated);
 }
 
 /* Cooldown Timer Text */
 .cooldownTimer {
   font-size: 0.85em;
   font-weight: bold;
-  color: var(--cooldown-text-color);
+  color: var(--text-primary);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
@@ -323,7 +299,7 @@
 .emptySlotContent {
   width: 30px;
   height: 30px;
-  border: 1px dashed rgba(42, 42, 78, 0.5);
+  border: 1px dashed var(--border-subtle);
   border-radius: 4px;
   opacity: 0.3;
 }
@@ -333,15 +309,15 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  background-color: #4caf50;
-  color: white;
+  background-color: var(--color-cyber-green);
+  color: var(--color-obsidian);
   font-size: 0.65em;
   padding: 2px 4px;
   border-radius: 3px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Item Name (shows on hover) */
@@ -351,7 +327,7 @@
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.9);
-  color: var(--text-color);
+  color: var(--text-primary);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.75em;
@@ -371,11 +347,11 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  color: #ff6b6b;
+  color: var(--color-crimson);
   font-size: 0.75em;
   font-weight: bold;
   text-shadow: 
-    0 0 3px rgba(255, 107, 107, 0.5),
+    0 0 3px var(--color-crimson-glow),
     1px 1px 2px rgba(0, 0, 0, 0.8);
   opacity: 0.8;
 }

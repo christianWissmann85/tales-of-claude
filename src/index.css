@@ -3,6 +3,9 @@
 /* Import the unified typography system */
 @import './styles/typography.css';
 
+/* Import the comprehensive color system */
+@import './styles/colors.css';
+
 /* CSS Reset */
 *,
 *::before,
@@ -10,12 +13,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-/* CSS Variables for Colors */
-:root {
-  --bg-color: #0a0a0f;
-  --text-color: #00ffff;
 }
 
 /* Base Styles for Tales of Claude */
@@ -26,7 +23,7 @@ body {
 }
 
 body {
-  background-color: var(--bg-color); /* Dark blue/black background */
-  color: var(--ui-light-text); /* Use typography system color */
+  background-color: var(--bg-primary); /* Use color system */
+  color: var(--text-primary); /* Use color system */
   /* Font family now handled by typography.css */
 }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color System Test</title>
+    <link rel="stylesheet" href="./src/styles/colors.css">
+    <style>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .color-swatch {
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .color-box {
+            width: 100%;
+            height: 80px;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .section {
+            margin: 3rem 0;
+        }
+        
+        h1 {
+            color: var(--color-cyber-green);
+            text-shadow: var(--glow-cyber);
+        }
+        
+        h2 {
+            color: var(--color-electric-blue);
+            margin-top: 2rem;
+        }
+        
+        .panel {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-default);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .text-samples p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tales of Claude - Color System Test</h1>
+    
+    <div class="section">
+        <h2>Base Colors</h2>
+        <div class="color-grid">
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-void);">Void</div>
+                <code>--color-void</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-obsidian);">Obsidian</div>
+                <code>--color-obsidian</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-midnight);">Midnight</div>
+                <code>--color-midnight</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-twilight);">Twilight</div>
+                <code>--color-twilight</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-dusk);">Dusk</div>
+                <code>--color-dusk</code>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Primary & Secondary Colors</h2>
+        <div class="color-grid">
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-cyber-green); color: var(--color-obsidian);">Cyber Green</div>
+                <code>--color-cyber-green</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-electric-blue);">Electric Blue</div>
+                <code>--color-electric-blue</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-golden); color: var(--color-obsidian);">Golden</div>
+                <code>--color-golden</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-crimson);">Crimson</div>
+                <code>--color-crimson</code>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--color-violet);">Violet</div>
+                <code>--color-violet</code>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>UI Panel Example</h2>
+        <div class="panel">
+            <h3 style="color: var(--color-cyber-green); margin-top: 0;">Panel Header</h3>
+            <p>This is a sample panel using our color system. The background uses <code>var(--panel-bg)</code> and borders use <code>var(--border-default)</code>.</p>
+            <div class="text-samples">
+                <p style="color: var(--text-primary);">Primary text color</p>
+                <p style="color: var(--text-secondary);">Secondary text color</p>
+                <p style="color: var(--text-muted);">Muted text color</p>
+                <p style="color: var(--color-cyber-green);">Success/cyber green text</p>
+                <p style="color: var(--color-golden);">Warning/golden text</p>
+                <p style="color: var(--color-crimson);">Danger/crimson text</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Glow Effects</h2>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; padding: 2rem; background: var(--color-void);">
+            <div style="padding: 1rem; color: var(--color-cyber-green); text-shadow: var(--glow-cyber); font-size: 1.5rem;">Cyber Glow</div>
+            <div style="padding: 1rem; color: var(--color-electric-blue); text-shadow: var(--glow-electric); font-size: 1.5rem;">Electric Glow</div>
+            <div style="padding: 1rem; color: var(--color-golden); text-shadow: var(--glow-golden); font-size: 1.5rem;">Golden Glow</div>
+            <div style="padding: 1rem; color: var(--color-crimson); text-shadow: var(--glow-crimson); font-size: 1.5rem;">Crimson Glow</div>
+            <div style="padding: 1rem; color: var(--color-violet); text-shadow: var(--glow-violet); font-size: 1.5rem;">Violet Glow</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,23 +2,21 @@
 
 /* CSS Variables for consistent panel theming */
 :root {
-  --panel-bg: rgba(10, 10, 20, 0.85);
-  --panel-bg-solid: #0a0a14;
-  --panel-border-primary: #2a2a4e;
-  --panel-border-accent: #00ff88;
-  --panel-shadow-primary: rgba(0, 0, 0, 0.7);
-  --panel-shadow-glow: rgba(0, 255, 136, 0.15);
+  --panel-bg: var(--bg-overlay);
+  --panel-bg-solid: var(--color-obsidian);
+  --panel-border-primary: var(--border-default);
+  --panel-border-accent: var(--color-cyber-green);
+  --panel-shadow-primary: var(--shadow-lg);
+  --panel-shadow-glow: var(--color-cyber-green-glow);
   --panel-corner-radius: 8px;
   --panel-padding: 15px;
-  --panel-header-text: #00ff88;
-  --panel-body-text: #e0e0e0;
+  --panel-header-text: var(--color-cyber-green);
+  --panel-body-text: var(--text-primary);
 }
 
 /* Base unified panel styling */
 .unifiedPanel {
-  background: linear-gradient(135deg, 
-    var(--panel-bg) 0%, 
-    rgba(15, 15, 25, 0.9) 100%);
+  background: var(--panel-bg);
   border: 2px solid var(--panel-border-primary);
   border-radius: var(--panel-corner-radius);
   box-shadow: 
@@ -42,7 +40,7 @@
     var(--panel-border-accent), 
     transparent 30%,
     transparent 70%,
-    #4a9eff);
+    var(--color-electric-blue));
   border-radius: var(--panel-corner-radius);
   opacity: 0.3;
   z-index: -1;
@@ -66,8 +64,8 @@
   background-image: 
     linear-gradient(135deg, var(--panel-border-accent) 0%, transparent 15px),
     linear-gradient(225deg, var(--panel-border-accent) 0%, transparent 15px),
-    linear-gradient(315deg, #4a9eff 0%, transparent 15px),
-    linear-gradient(45deg, #4a9eff 0%, transparent 15px);
+    linear-gradient(315deg, var(--color-electric-blue) 0%, transparent 15px),
+    linear-gradient(45deg, var(--color-electric-blue) 0%, transparent 15px);
   background-position: 
     top left,
     top right,
@@ -88,7 +86,7 @@
   padding: 12px var(--panel-padding);
   border-bottom: 1px solid rgba(42, 42, 78, 0.5);
   background: linear-gradient(to bottom, 
-    rgba(0, 255, 136, 0.05) 0%, 
+    var(--color-cyber-green-glow) 0%, 
     transparent 100%);
   position: relative;
 }
@@ -115,8 +113,8 @@
   text-transform: uppercase;
   letter-spacing: 1.5px;
   text-shadow: 
-    0 0 10px rgba(0, 255, 136, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.8);
+    var(--glow-cyber),
+    var(--shadow-md);
 }
 
 /* Panel body styling */
@@ -127,23 +125,23 @@
 
 /* Variants for different panel types */
 .statusPanel {
-  --panel-border-accent: #00ff88;
-  --panel-shadow-glow: rgba(0, 255, 136, 0.15);
+  --panel-border-accent: var(--color-cyber-green);
+  --panel-shadow-glow: var(--color-cyber-green-glow);
 }
 
 .minimapPanel {
-  --panel-border-accent: #4a9eff;
-  --panel-shadow-glow: rgba(74, 158, 255, 0.15);
+  --panel-border-accent: var(--color-electric-blue);
+  --panel-shadow-glow: var(--color-electric-blue-glow);
 }
 
 .questPanel {
-  --panel-border-accent: #ffcc00;
-  --panel-shadow-glow: rgba(255, 204, 0, 0.15);
+  --panel-border-accent: var(--color-golden);
+  --panel-shadow-glow: var(--color-golden-glow);
 }
 
 .hotbarPanel {
-  --panel-border-accent: #ff6b6b;
-  --panel-shadow-glow: rgba(255, 107, 107, 0.15);
+  --panel-border-accent: var(--color-crimson);
+  --panel-shadow-glow: var(--color-crimson-glow);
 }
 
 /* Hover effects */
@@ -171,8 +169,8 @@
 /* Action buttons within panels */
 .panelButton {
   background: linear-gradient(135deg, 
-    rgba(42, 42, 78, 0.8) 0%, 
-    rgba(26, 26, 46, 0.8) 100%);
+    var(--color-twilight) 0%, 
+    var(--color-midnight) 100%);
   border: 1px solid var(--panel-border-primary);
   color: var(--panel-body-text);
   padding: 6px 12px;
@@ -186,8 +184,8 @@
 
 .panelButton:hover {
   background: linear-gradient(135deg, 
-    rgba(58, 58, 90, 0.9) 0%, 
-    rgba(42, 42, 78, 0.9) 100%);
+    var(--color-dusk) 0%, 
+    var(--color-twilight) 100%);
   border-color: var(--panel-border-accent);
   box-shadow: 0 0 10px var(--panel-shadow-glow);
   transform: translateY(-1px);
@@ -210,7 +208,7 @@
 .unifiedPanel.glass {
   background: linear-gradient(135deg, 
     rgba(10, 10, 20, 0.6) 0%, 
-    rgba(15, 15, 25, 0.7) 100%);
+    rgba(16, 16, 36, 0.7) 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }

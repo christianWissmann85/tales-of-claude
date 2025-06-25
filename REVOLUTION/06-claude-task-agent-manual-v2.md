@@ -414,32 +414,67 @@ delegate_invoke(
 
 Remember: **If you're discussing anything visual, attach a screenshot!** Future agents have been confused when previous agents described visual issues without attaching the actual images. Don't let this happen to you!
 
-### Screenshot Tool Best Practices
+### Screenshot Tool Best Practices (Updated by Marcus)
 
-Taking proper screenshots is crucial for visual work. Thanks to the new agent mode, screenshots are now 100% reliable!
+Taking proper screenshots is crucial for visual work. After investigating timeout issues, here are the latest recommendations.
 
-#### The New Agent Mode (Recommended)
+#### ⚠️ Known Issues with Original Tool
+The original screenshot-tool.ts can experience timeouts due to:
+- Strict element waiting that may fail on some page loads
+- Fixed 30-60 second timeouts that may be too short
+- Navigation issues with certain browser configurations
 
-Skip directly to the game view without splash screens:
+#### 🎯 The Reliable Approach (NEW - Recommended!)
+
+Use the new `screenshot-reliable.ts` for guaranteed results:
 
 ```bash
-# Agent mode - skip all intro screens automatically
-npx tsx src/tests/visual/screenshot-tool.ts \
-  --name game-state \
-  --url "http://localhost:5173/?agent=true"
+# Basic screenshot with agent mode (default)
+npx tsx src/tests/visual/screenshot-reliable.ts my-screenshot
 
-# Alternative parameter that also works
-npx tsx src/tests/visual/screenshot-tool.ts \
-  --name game-state \
-  --url "http://localhost:5173/?nosplash=true"
+# Custom resolution
+npx tsx src/tests/visual/screenshot-reliable.ts hd-view --width 1920 --height 1080
+
+# With inventory open
+npx tsx src/tests/visual/screenshot-reliable.ts inventory --key i
+
+# Custom URL (if not using agent mode)
+npx tsx src/tests/visual/screenshot-reliable.ts custom --url "http://localhost:5173"
 ```
 
-This is now the **preferred method** for all agent screenshots as it:
+This tool:
+- Uses fixed wait times that always work (5s for agent mode, 8s for normal)
+- Defaults to agent mode (no splash screens)
+- Simple and reliable - no complex element checking
+- Always succeeds if the server is running
+
+#### 🔧 Alternative: screenshot-tool-v2.ts
+
+For more complex scenarios, use the improved v2 with debug mode:
+
+```bash
+# With debug output to diagnose issues
+npx tsx src/tests/visual/screenshot-tool-v2.ts \
+  --name debug-test \
+  --url "http://localhost:5173/?agent=true" \
+  --debug
+```
+
+#### Agent Mode URLs (Still Recommended)
+
+Always use agent mode for reliability:
+
+```bash
+# Both work identically
+--url "http://localhost:5173/?agent=true"
+--url "http://localhost:5173/?nosplash=true"
+```
+
+This mode:
 - Skips splash screen automatically
 - Skips intro sequence automatically
 - Goes directly to Terminal Town gameplay
-- Works 100% of the time
-- No timing issues or race conditions
+- Eliminates timing issues
 
 #### Legacy Navigation Method (Still Works)
 
@@ -582,6 +617,36 @@ npx tsx src/tests/visual/screenshot-tool.ts \
 6. **No more timing issues** - Agent mode is 100% reliable!
 
 Remember: The new agent mode eliminates all splash screen issues. No more manual navigation needed - just add the URL parameter and you're good to go!
+
+#### 🚨 Screenshot Troubleshooting Guide (by Marcus)
+
+**Problem: "Timeout 30000ms exceeded"**
+- **Solution**: Use `screenshot-reliable.ts` instead
+- **Why**: Original tool's element checks can fail unexpectedly
+
+**Problem: "Can't find game elements"**  
+- **Solution**: Always use agent mode URL: `?agent=true`
+- **Why**: Skips splash screens that confuse element detection
+
+**Problem: "Screenshot is black/empty"**
+- **Solution**: Increase wait time or use fixed waits
+- **Why**: Page might not be fully rendered
+
+**Problem: "Navigation failed"**
+- **Solution**: Check dev server is running on port 5173
+- **Command**: `curl http://localhost:5173` should return 200
+
+**Problem: "Need to capture specific UI state"**
+- **Solution**: Use action sequences with adequate waits
+- **Example**: `--key i --wait 1000` for inventory
+
+**Quick Decision Tree:**
+1. **Need a screenshot fast?** → Use `screenshot-reliable.ts`
+2. **Need complex actions?** → Use `screenshot-tool-v2.ts` with debug
+3. **Original tool timing out?** → Don't waste time, switch tools
+4. **Not sure what's wrong?** → Run with `--debug` flag
+
+**The Golden Rule**: If you spend more than 2 minutes fighting timeouts, switch to the reliable tool!
 
 ## 🧠 Your Personal Memory System (NEW!)
 

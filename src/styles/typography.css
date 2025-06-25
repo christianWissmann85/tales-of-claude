@@ -45,23 +45,16 @@
   --text-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.8);
   --text-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.8);
   
-  --text-glow-green: 0 0 10px var(--primary-green);
-  --text-glow-blue: 0 0 10px var(--ui-accent);
-  --text-glow-yellow: 0 0 10px var(--warning-yellow);
-  --text-glow-red: 0 0 10px var(--danger-red);
+  --text-glow-green: 0 0 10px var(--color-cyber-green);
+  --text-glow-blue: 0 0 10px var(--color-electric-blue);
+  --text-glow-yellow: 0 0 10px var(--color-golden);
+  --text-glow-red: 0 0 10px var(--color-crimson);
   
-  --text-glow-green-strong: 0 0 15px var(--primary-green), 0 0 25px rgba(0, 255, 136, 0.5);
-  --text-glow-blue-strong: 0 0 15px var(--ui-accent), 0 0 25px rgba(74, 158, 255, 0.5);
+  --text-glow-green-strong: 0 0 15px var(--color-cyber-green), 0 0 25px var(--color-cyber-green-glow);
+  --text-glow-blue-strong: 0 0 15px var(--color-electric-blue), 0 0 25px var(--color-electric-blue-glow);
 
-  /* === Color Variables (from your existing scheme) === */
-  --primary-green: #00ff88;
-  --ui-accent: #4a9eff;
-  --warning-yellow: #ffaa00;
-  --danger-red: #ff4444;
-  --ui-light-text: #e0e0e0;
-  --ui-dark-text: #0a0a0f;
-  --ui-medium-text: #a0a0a0;
-  --ui-faded-text: #666666;
+  /* === Color Variables - Now imported from colors.css === */
+  /* Text shadows use color variables from color system */
 }
 
 /* ===== BASE TYPOGRAPHY RESET ===== */
@@ -83,7 +76,7 @@ body {
   font-family: var(--font-primary);
   font-size: var(--text-base);
   line-height: var(--line-height-normal);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   font-weight: var(--font-weight-normal);
   letter-spacing: var(--letter-spacing-normal);
 }
@@ -100,7 +93,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: var(--text-4xl);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green-strong);
   letter-spacing: var(--letter-spacing-widest);
   font-weight: var(--font-weight-black);
@@ -108,34 +101,34 @@ h1 {
 
 h2 {
   font-size: var(--text-3xl);
-  color: var(--ui-accent);
+  color: var(--color-electric-blue);
   text-shadow: var(--text-glow-blue-strong);
   letter-spacing: var(--letter-spacing-wider);
 }
 
 h3 {
   font-size: var(--text-2xl);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green);
   letter-spacing: var(--letter-spacing-wider);
 }
 
 h4 {
   font-size: var(--text-xl);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   text-shadow: var(--text-shadow-md);
   letter-spacing: var(--letter-spacing-wide);
 }
 
 h5 {
   font-size: var(--text-lg);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   text-shadow: var(--text-shadow-sm);
 }
 
 h6 {
   font-size: var(--text-base);
-  color: var(--ui-medium-text);
+  color: var(--text-secondary);
   text-shadow: var(--text-shadow-sm);
 }
 
@@ -179,14 +172,14 @@ p {
 .tracking-widest { letter-spacing: var(--letter-spacing-widest); }
 
 /* ===== UTILITY CLASSES - COLORS ===== */
-.text-primary { color: var(--primary-green); }
-.text-accent { color: var(--ui-accent); }
-.text-warning { color: var(--warning-yellow); }
-.text-danger { color: var(--danger-red); }
-.text-light { color: var(--ui-light-text); }
-.text-medium { color: var(--ui-medium-text); }
-.text-faded { color: var(--ui-faded-text); }
-.text-dark { color: var(--ui-dark-text); }
+.text-primary { color: var(--color-cyber-green); }
+.text-accent { color: var(--color-electric-blue); }
+.text-warning { color: var(--color-golden); }
+.text-danger { color: var(--color-crimson); }
+.text-light { color: var(--text-primary); }
+.text-medium { color: var(--text-secondary); }
+.text-faded { color: var(--text-muted); }
+.text-dark { color: var(--text-inverse); }
 
 /* ===== UTILITY CLASSES - TEXT EFFECTS ===== */
 .text-glow-green { text-shadow: var(--text-glow-green); }
@@ -211,7 +204,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-4xl);
   font-weight: var(--font-weight-black);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green-strong);
   letter-spacing: var(--letter-spacing-widest);
   text-transform: uppercase;
@@ -223,7 +216,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green);
   letter-spacing: var(--letter-spacing-wider);
   text-transform: uppercase;
@@ -236,7 +229,7 @@ p {
   font-family: var(--font-monospace);
   font-size: var(--text-base);
   font-weight: var(--font-weight-bold);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   text-shadow: var(--text-shadow-sm);
   letter-spacing: var(--letter-spacing-wide);
   line-height: var(--line-height-normal);
@@ -245,7 +238,7 @@ p {
 .stat-label {
   font-family: var(--font-primary);
   font-size: var(--text-sm);
-  color: var(--ui-medium-text);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
 }
@@ -254,20 +247,20 @@ p {
   font-family: var(--font-monospace);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green);
 }
 
 /* Health/Energy specific colors */
-.stat-hp { color: var(--danger-red); text-shadow: var(--text-glow-red); }
-.stat-energy { color: var(--primary-green); text-shadow: var(--text-glow-green); }
-.stat-xp { color: var(--warning-yellow); text-shadow: var(--text-glow-yellow); }
+.stat-hp { color: var(--color-crimson); text-shadow: var(--text-glow-red); }
+.stat-energy { color: var(--color-cyber-green); text-shadow: var(--text-glow-green); }
+.stat-xp { color: var(--color-golden); text-shadow: var(--text-glow-yellow); }
 
 /* Dialogue Text */
 .dialogue-text {
   font-family: var(--font-primary);
   font-size: var(--text-base);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   line-height: var(--line-height-relaxed);
   text-shadow: var(--text-shadow-sm);
   margin: 0 0 1rem 0;
@@ -277,7 +270,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--ui-accent);
+  color: var(--color-electric-blue);
   text-shadow: var(--text-glow-blue);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
@@ -289,7 +282,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
@@ -300,7 +293,7 @@ p {
 .quest-description {
   font-family: var(--font-primary);
   font-size: var(--text-base);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   line-height: var(--line-height-relaxed);
   text-shadow: var(--text-shadow-sm);
   margin: 0 0 1rem 0;
@@ -309,7 +302,7 @@ p {
 .quest-objective {
   font-family: var(--font-primary);
   font-size: var(--text-sm);
-  color: var(--ui-medium-text);
+  color: var(--text-secondary);
   line-height: var(--line-height-normal);
   text-shadow: var(--text-shadow-sm);
   padding-left: 1.5rem;
@@ -320,11 +313,11 @@ p {
   content: '▸';
   position: absolute;
   left: 0.5rem;
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
 }
 
 .quest-objective.completed {
-  color: var(--ui-faded-text);
+  color: var(--text-muted);
   text-decoration: line-through;
 }
 
@@ -333,7 +326,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-black);
-  color: var(--danger-red);
+  color: var(--color-crimson);
   text-shadow: var(--text-glow-red);
   position: absolute;
   animation: floatUp 1s ease-out forwards;
@@ -343,7 +336,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-black);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green-strong);
   position: absolute;
   animation: floatUp 1s ease-out forwards;
@@ -363,13 +356,13 @@ p {
   letter-spacing: var(--letter-spacing-wide);
 }
 
-.status-buff { color: var(--ui-accent); }
-.status-debuff { color: var(--danger-red); }
+.status-buff { color: var(--color-electric-blue); }
+.status-debuff { color: var(--color-crimson); }
 
 .turn-order {
   font-family: var(--font-monospace);
   font-size: var(--text-sm);
-  color: var(--ui-medium-text);
+  color: var(--text-secondary);
   text-shadow: var(--text-shadow-sm);
   text-align: center;
 }
@@ -379,7 +372,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
   margin: 0 0 0.5rem 0;
 }
@@ -387,7 +380,7 @@ p {
 .tooltip-body {
   font-family: var(--font-primary);
   font-size: var(--text-sm);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   line-height: var(--line-height-relaxed);
   margin: 0 0 0.5rem 0;
 }
@@ -395,7 +388,7 @@ p {
 .tooltip-stats {
   font-family: var(--font-monospace);
   font-size: var(--text-sm);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-shadow-sm);
 }
 
@@ -410,19 +403,19 @@ p {
 }
 
 .button-primary {
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
 }
 
 .button-secondary {
-  color: var(--ui-accent);
+  color: var(--color-electric-blue);
 }
 
 .button-danger {
-  color: var(--danger-red);
+  color: var(--color-crimson);
 }
 
 .button-disabled {
-  color: var(--ui-faded-text);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
@@ -437,29 +430,29 @@ p {
 }
 
 .notification-success {
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green);
 }
 
 .notification-info {
-  color: var(--ui-accent);
+  color: var(--color-electric-blue);
   text-shadow: var(--text-glow-blue);
 }
 
 .notification-warning {
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
 }
 
 .notification-error {
-  color: var(--danger-red);
+  color: var(--color-crimson);
   text-shadow: var(--text-glow-red);
 }
 
 .notification-body {
   font-family: var(--font-primary);
   font-size: var(--text-sm);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   line-height: var(--line-height-normal);
 }
 
@@ -468,7 +461,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-base);
   font-weight: var(--font-weight-bold);
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
   text-shadow: var(--text-shadow-sm);
@@ -477,12 +470,12 @@ p {
 }
 
 .nav-item:hover {
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green);
 }
 
 .nav-item.active {
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
 }
 
@@ -491,7 +484,7 @@ p {
   font-family: var(--font-headers);
   font-size: var(--text-3xl);
   font-weight: var(--font-weight-black);
-  color: var(--primary-green);
+  color: var(--color-cyber-green);
   text-shadow: var(--text-glow-green-strong);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-widest);
@@ -501,7 +494,7 @@ p {
 .loading-message {
   font-family: var(--font-primary);
   font-size: var(--text-lg);
-  color: var(--ui-medium-text);
+  color: var(--text-secondary);
   animation: fadeInOut 2s infinite;
 }
 
@@ -510,14 +503,14 @@ p {
   font-family: var(--font-primary);
   font-size: var(--text-base);
   font-weight: var(--font-weight-bold);
-  color: var(--danger-red);
+  color: var(--color-crimson);
   text-shadow: var(--text-glow-red);
 }
 
 .warning-text {
   font-family: var(--font-primary);
   font-size: var(--text-base);
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
 }
 

@@ -27,8 +27,12 @@ async function ensureTempDir(): Promise<void> {
 
 async function captureScreenshot(options: ScreenshotOptions = {}): Promise<string> {
   let browser: Browser | null = null;
+  let attempt = 1;
+  const maxAttempts = 2;
   
-  try {
+  while (attempt <= maxAttempts) {
+    try {
+      console.log(`\n📷 Screenshot attempt ${attempt}/${maxAttempts}`);
     await ensureTempDir();
     
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -38,7 +42,7 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     console.log('🚀 Launching browser...');
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
     });
     
     const page = await browser.newPage({
@@ -50,19 +54,43 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
 
     const targetUrl = options.url || TARGET_URL;
     console.log(`📍 Navigating to ${targetUrl}...`);
-    await page.goto(targetUrl, { waitUntil: 'networkidle' });
+    
+    // Add retry logic for navigation
+    let navigationSuccess = false;
+    let retries = 3;
+    
+    while (!navigationSuccess && retries > 0) {
+      try {
+        await page.goto(targetUrl, { 
+          waitUntil: 'networkidle',
+          timeout: 60000 // Increased navigation timeout
+        });
+        navigationSuccess = true;
+      } catch (navError: any) {
+        retries--;
+        console.log(`⚠️ Navigation attempt failed, ${retries} retries left...`);
+        if (retries === 0) throw navError;
+        await page.waitForTimeout(2000); // Wait before retry
+      }
+    }
 
     // Wait for game to load - wait for React app to mount
-    await page.waitForFunction(() => {
-      const root = document.getElementById('root');
-      return root && root.children.length > 0;
-    }, { timeout: 30000 });
+    try {
+      await page.waitForFunction(() => {
+        const root = document.getElementById('root');
+        return root && root.children.length > 0;
+      }, { timeout: 60000 }); // Increased timeout for reliability
+    } catch (e) {
+      console.log('⚠️ Root element check timed out, continuing anyway...');
+    }
     
     // Extra wait for agent mode to fully initialize
     if (targetUrl.includes('agent=true') || targetUrl.includes('nosplash=true')) {
-      await page.waitForTimeout(3000); // Give agent mode time to skip phases
+      console.log('🏃 Agent mode detected - waiting for auto-skip...');
+      await page.waitForTimeout(5000); // Give agent mode more time to skip phases
     } else {
-      await page.waitForTimeout(2000); // Normal wait
+      console.log('⏳ Standard mode - waiting for initialization...');
+      await page.waitForTimeout(3000); // Normal wait increased slightly
     }
     console.log('✅ Game loaded');
 
@@ -70,7 +98,7 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     if (options.waitFor) {
       if (typeof options.waitFor === 'string') {
         console.log(`⏳ Waiting for selector: ${options.waitFor}`);
-        await page.waitForSelector(options.waitFor, { timeout: 5000 });
+        await page.waitForSelector(options.waitFor, { timeout: 10000 }); // Increased selector timeout
       } else {
         console.log(`⏳ Waiting ${options.waitFor}ms...`);
         await page.waitForTimeout(options.waitFor);
@@ -110,14 +138,27 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     console.log(`✅ Screenshot saved: ${filepath}`);
     return filepath;
 
-  } catch (error: any) {
-    console.error('❌ Error:', error.message);
-    throw error;
-  } finally {
-    if (browser) {
-      await browser.close();
+    } catch (error: any) {
+      console.error(`❌ Attempt ${attempt} failed:`, error.message);
+      
+      if (browser) {
+        await browser.close();
+        browser = null;
+      }
+      
+      if (attempt === maxAttempts) {
+        console.error('\n💥 All screenshot attempts failed!');
+        throw error;
+      }
+      
+      attempt++;
+      console.log('🔄 Retrying...');
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Wait before retry
     }
   }
+  
+  // This should never be reached due to the while loop structure
+  throw new Error('Screenshot failed after all attempts');
 }
 
 // Command-line interface

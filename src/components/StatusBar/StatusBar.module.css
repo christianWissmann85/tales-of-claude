@@ -4,7 +4,7 @@
   position: relative;
   width: 100%;
   background-color: transparent; /* Transparent to use panel background */
-  color: #e0e0e0; /* UI light text */
+  color: var(--text-primary);
   /* Typography handled by typography.css */
   font-size: var(--text-sm);
   padding: 10px;
@@ -22,19 +22,19 @@
 }
 
 .statusBarText {
-  color: var(--ui-light-text);
+  color: var(--text-primary);
   text-shadow: var(--text-shadow-sm);
 }
 
 .levelText {
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-monospace);
 }
 
 .xpText {
-  color: var(--warning-yellow);
+  color: var(--color-golden);
   text-shadow: var(--text-glow-yellow);
   font-family: var(--font-monospace);
 }
@@ -42,8 +42,8 @@
 .progressBarContainer {
   width: 120px; /* Fixed width for progress bars */
   height: 18px;
-  background-color: #333; /* Background for empty part of the bar */
-  border: 1px solid #4a4a4a; /* Subtle border */
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
   position: relative;
   overflow: hidden; /* Ensure fill stays within bounds */
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
@@ -58,18 +58,18 @@
 }
 
 .hpBar .progressBarFill {
-  background: linear-gradient(to right, #ff4444, #00ff88); /* Danger red to primary green */
-  box-shadow: 0 0 8px rgba(0, 255, 136, 0.4); /* Green glow when healthy */
+  background: linear-gradient(to right, var(--health-critical), var(--health-full));
+  box-shadow: var(--glow-cyber);
 }
 
 .energyBar .progressBarFill {
-  background: linear-gradient(to right, #005533, #00ff88); /* Dark to bright green */
-  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6); /* Green glow */
+  background: linear-gradient(to right, var(--color-cyber-green-dark), var(--color-cyber-green));
+  box-shadow: var(--glow-cyber);
 }
 
 .xpBar .progressBarFill {
-  background: linear-gradient(to right, #ffaa00, #ff8800); /* Warning yellow gradient */
-  box-shadow: 0 0 8px rgba(255, 170, 0, 0.6); /* Yellow glow */
+  background: linear-gradient(to right, var(--color-golden-dark), var(--color-golden));
+  box-shadow: var(--glow-golden);
 }
 
 .progressBarText {
@@ -77,9 +77,9 @@
   width: 100%;
   text-align: center;
   line-height: 18px; /* Vertically center text */
-  color: #fff; /* White text for readability over bars */
+  color: var(--color-white);
   font-size: 0.8em;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8); /* Dark shadow for contrast */
+  text-shadow: var(--text-shadow-md);
 }
 
 /* Responsive adjustments */
