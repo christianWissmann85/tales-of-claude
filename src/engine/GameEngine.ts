@@ -252,8 +252,10 @@ export class GameEngine {
    * @param keys A Set of currently pressed keyboard event codes (e.g., 'KeyW', 'Space').
    */
   public handleKeyboardInput(keys: Set<string>): void {
-    // Disabled to reduce console spam
-    // console.log('GameEngine: handleKeyboardInput received keys:', Array.from(keys));
+    // Enable debug logging temporarily to diagnose input issues
+    if (keys.size > 0) {
+      console.log('[VICTOR DEBUG] GameEngine: handleKeyboardInput received keys:', Array.from(keys));
+    }
     this._pressedKeys = new Set(keys); // Take a snapshot of the keys
   }
 
@@ -298,15 +300,16 @@ export class GameEngine {
     }
     
     // Check for inventory toggle (i key)
-    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI'])) {
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI', 'i'])) {
       if (now - this._lastInteractionTime > this._interactionCooldown) {
+        console.log('[VICTOR DEBUG] Inventory key pressed, dispatching TOGGLE_INVENTORY');
         this._dispatch({ type: 'TOGGLE_INVENTORY' });
         this._lastInteractionTime = now;
       }
     }
     
-    // Check for quest log toggle (q key)
-    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyQ'])) {
+    // Check for quest journal toggle (j key) - Note: changed from 'q' to 'j' per standard RPG conventions
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyJ', 'j'])) {
       if (now - this._lastInteractionTime > this._interactionCooldown) {
         this._dispatch({ type: 'TOGGLE_QUEST_LOG' });
         this._lastInteractionTime = now;
@@ -314,9 +317,17 @@ export class GameEngine {
     }
     
     // Check for character screen toggle (c key)
-    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyC'])) {
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyC', 'c'])) {
       if (now - this._lastInteractionTime > this._interactionCooldown) {
         this._dispatch({ type: 'TOGGLE_CHARACTER_SCREEN' });
+        this._lastInteractionTime = now;
+      }
+    }
+    
+    // Check for faction screen toggle (f key)
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyF', 'f'])) {
+      if (now - this._lastInteractionTime > this._interactionCooldown) {
+        this._dispatch({ type: 'TOGGLE_FACTION_STATUS' });
         this._lastInteractionTime = now;
       }
     }

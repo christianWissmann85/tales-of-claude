@@ -82,8 +82,13 @@
     position: relative;
     overflow: hidden;
     
-    animation: slideInRight 0.5s ease-out forwards;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: slide-in-right var(--animation-duration-medium) var(--animation-ease-out) forwards;
+    transition: 
+        background-color var(--animation-duration-short) var(--animation-ease-out), 
+        transform var(--animation-duration-short) var(--animation-ease-out), 
+        box-shadow var(--animation-duration-short) var(--animation-ease-out);
+    transform: translateX(100%);
+    opacity: 0;
 }
 
 .notification:hover {
@@ -95,7 +100,7 @@
 }
 
 .notification.exiting {
-    animation: fadeOut 0.5s ease-in forwards;
+    animation: slide-out-left var(--animation-duration-medium) var(--animation-ease-in) forwards;
 }
 
 .notification.success {

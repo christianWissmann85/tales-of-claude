@@ -40,21 +40,8 @@ const GameContent: React.FC = () => {
     dispatch({ type: 'SET_GAME_PHASE', payload: { phase: 'playing' } });
   };
 
-  // Inventory key handler
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'i' || event.key === 'I') {
-        event.preventDefault();
-        dispatch({ type: 'SHOW_INVENTORY', payload: { show: true } });
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [dispatch]);
+  // Remove duplicate key handler - GameEngine handles all keyboard input
+  // This was causing conflicts with the GameEngine's keyboard handling
 
   // Render different screens based on game phase
   if (state.gamePhase === 'splash') {

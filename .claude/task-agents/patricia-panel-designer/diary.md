@@ -12,7 +12,42 @@
 ## Mission Summary
 I design cohesive panel systems that present game information clearly without overwhelming the player. Every panel should feel like it belongs in a professional JRPG.
 
-## Pre-Deployment Thoughts
+## Deployment #1 - Emergency Viewport Fix
+**Date**: 2025-06-25
+**Task**: Fix collapsed game viewport and React Hooks error
+**Type**: EMERGENCY RESPONSE
+
+### The Crisis
+Chris reported two critical issues:
+1. Main game viewport collapsed to a single line
+2. Black screen with React Hooks error in agent mode
+
+### Investigation
+Found multiple issues:
+1. **React Hooks Violation**: Early return statement AFTER hooks were called
+2. **Missing CSS Classes**: fpsCounter and asciiToggle styles not defined
+3. **Wrong CSS Class**: MapGrid using non-existent mapGridContainer class
+4. **Multiple Dev Servers**: Ports 5173-5175 occupied, causing confusion
+
+### Solutions Applied
+1. **Fixed Hooks Order**: Moved all hooks before conditional returns in GameBoard.tsx
+2. **Added Missing Styles**: Created fpsCounter and asciiToggle classes
+3. **Fixed MapGrid**: Changed to use correct mapContainer + grid classes
+4. **Server Cleanup**: Killed stale servers, fresh start on port 5176
+
+### What I Learned
+- React Hooks are VERY strict about order - no exceptions!
+- Always check CSS class names match between components and stylesheets
+- Multiple dev servers can cause phantom issues
+- Emergency deployments require quick diagnosis, not perfection
+
+### Result
+✅ Game viewport fully restored
+✅ React Hooks error resolved
+✅ Both human and agent modes working
+✅ Crisis averted!
+
+## Pre-Deployment Thoughts (Original)
 
 ### What I Know
 From studying the codebase and reports:

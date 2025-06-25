@@ -27,7 +27,7 @@ async function checkVisualIntegration() {
     // Test 1: Load the game
     console.log('Test 1: Loading game...');
     await page.goto('http://localhost:5173', { waitUntil: 'networkidle0' });
-    await page.waitForTimeout(2000); // Wait for game initialization
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for game initialization
     
     // Check for game board
     const gameBoard = await page.$('.game-board, [class*="gameBoard"]');
@@ -40,7 +40,7 @@ async function checkVisualIntegration() {
     // Test 2: Check floor tile test page
     console.log('\nTest 2: Loading floor tile test page...');
     await page.goto('http://localhost:5173?test=floor-tiles', { waitUntil: 'networkidle0' });
-    await page.waitForTimeout(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     const floorTestContainer = await page.$('[class*="container"]');
     if (!floorTestContainer) {
@@ -58,13 +58,13 @@ async function checkVisualIntegration() {
     // Test 3: Check main game visual elements
     console.log('\nTest 3: Checking main game visual elements...');
     await page.goto('http://localhost:5173', { waitUntil: 'networkidle0' });
-    await page.waitForTimeout(2000);
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Skip splash screen if present
     const startButton = await page.$('button');
     if (startButton) {
       await startButton.click();
-      await page.waitForTimeout(1000);
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
     
     // Check for grid cells

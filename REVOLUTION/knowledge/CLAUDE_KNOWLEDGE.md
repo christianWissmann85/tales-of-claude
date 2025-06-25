@@ -1,8 +1,16 @@
+```markdown
 # 🧠 CLAUDE_KNOWLEDGE.md - Collective Intelligence Base
 
-*Last updated: 2025-06-24 by Knowledge Consolidator (Session 3.5 Visual Revolution)*  
-*Reports processed: 77* (+14 from Session 3.5)  
+*Last updated: 2025-06-25 by Knowledge Consolidator (Session 3.7 Agent Memory & Infrastructure)*
+*Reports processed: 92* (+15 from Session 3.7)
 *Knowledge Consolidator runs after every 3-4 Task Agents*
+
+## 🎉 Session 3.7 Highlights - Agent Memory & Infrastructure
+- **Diary System Launch**: All 95+ agents now have persistent memory
+- **Archive System Design**: Lean diaries (<500 lines) with monthly archives
+- **Strategic Bundling**: Processed 4.3MB docs using 6 logical bundles
+- **Inter-Agent Communication**: Formal patterns established for knowledge sharing
+- **Emergency Fixes**: React hooks order, CSS modules composition, multiple dev servers
 
 ## 🎉 Session 3.5 Highlights - The Visual Revolution & Future Vision
 - **Floor Tile Revolution**: Replaced emoji floors with pure background colors - perfect visual hierarchy!
@@ -28,7 +36,25 @@
 
 ## 🔥 Hot Tips (Recent Discoveries)
 
-### 1. **Snippet Extraction with sed!** (Multiple Agents)
+### 1. **Diary System Launch** (Doug & Kendra)
+Every agent now has persistent memory through personal diaries.
+
+### 2. **Archive System Design** (Doug & Kendra)
+Keep diaries lean (<500 lines) with monthly archives for history.
+
+### 3. **Strategic Bundling for Large Docs** (Architecture Analyst)
+Architecture Analyst processed 4.3MB using 6 logical bundles.
+
+### 4. **CSS Modules Composition Limitation** (Diana Type Safety)
+Diana discovered composes only works with simple selectors.
+
+### 5. **React Hooks Order Critical** (Patricia Emergency Fix)
+Patricia fixed black screen by ensuring hooks before conditionals.
+
+### 6. **Multiple Dev Server Cleanup** (Team Lead)
+Kill stale processes when ports 5173-5175 occupied.
+
+### 7. **Snippet Extraction with sed!** (Multiple Agents)
 Extract specific line ranges to avoid reading entire files:
 ```bash
 grep -n "function myFunc" file.ts  # Find line number
@@ -36,7 +62,7 @@ sed -n '120,180p' file.ts          # Extract just that function
 # Saves thousands of tokens!
 ```
 
-### 2. **React Component Separation** (Minimap Engineer)
+### 8. **React Component Separation** (Minimap Engineer)
 Generate complex components in isolation, then integrate:
 ```bash
 delegate_invoke(prompt="Create minimap component") → Minimap.tsx
@@ -44,7 +70,7 @@ delegate_invoke(prompt="Create CSS module") → Minimap.module.css
 # Clean, focused generation
 ```
 
-### 3. **JSON Map Performance** (Map Analysis Agent)
+### 9. **JSON Map Performance** (Map Analysis Agent)
 JSON maps load 30% faster than TypeScript:
 ```bash
 # TS: ~5ms for 20x15 map
@@ -52,7 +78,7 @@ JSON maps load 30% faster than TypeScript:
 # Scales linearly!
 ```
 
-### 4. **Vision Bounds Optimization** (Minimap Engineer)
+### 10. **Vision Bounds Optimization** (Minimap Engineer)
 Don't iterate entire maps - calculate visible window:
 ```typescript
 const startX = Math.max(0, player.x - HALF_VIEW)
@@ -60,7 +86,7 @@ const endX = Math.min(map.width - 1, startX + VIEW_SIZE)
 // Only process what's visible!
 ```
 
-### 5. **Tile ID to Type Mapping** (Map Render Fix Agent)
+### 11. **Tile ID to Type Mapping** (Map Render Fix Agent)
 JSON maps use numeric IDs, not string types!
 ```typescript
 const tileIdToType: Record<number, TileType> = {
@@ -72,7 +98,7 @@ const tileIdToType: Record<number, TileType> = {
 }
 ```
 
-### 6. **Defensive Weather Coding** (Weather Fix Agent)
+### 12. **Defensive Weather Coding** (Weather Fix Agent)
 Always check before destructuring:
 ```typescript
 // Before: Crash on undefined
@@ -82,7 +108,7 @@ const { name, icon } = weatherInfoMap[weatherType];
 let info = weatherInfoMap[weatherType] || defaultWeatherInfo;
 ```
 
-### 7. **ASCII Diagrams for Docs** (Infrastructure Docs)
+### 13. **ASCII Diagrams for Docs** (Infrastructure Docs)
 Simple visuals help non-technical users:
 ```
 [Your Computer] ---> [ngrok] ---> [Internet] ---> [Test User]
@@ -90,7 +116,7 @@ Simple visuals help non-technical users:
   localhost:5173                               https://abc.ngrok.app
 ```
 
-### 8. **Context File Sharing** (Chris's Discovery)
+### 14. **Context File Sharing** (Chris's Discovery)
 When using delegate, include ALL relevant files:
 ```bash
 # Don't just describe the system - SHOW IT!
@@ -101,7 +127,7 @@ delegate_invoke(
 # Result: Delegate understands perfectly!
 ```
 
-### 9. **Delegate as Creative Companion** (Quest Writers)
+### 15. **Delegate as Creative Companion** (Quest Writers)
 Treat delegate as a virtuoso partner, not a tool:
 ```bash
 # Old mindset: "Generate this for me"
@@ -112,18 +138,18 @@ delegate_invoke(
 )
 ```
 
-### 10. **The Senior/Junior Developer Mindset** (REVOLUTION Discovery)
+### 16. **The Senior/Junior Developer Mindset** (REVOLUTION Discovery)
 Treat delegate as a talented junior developer, not a tool:
 ```bash
 # Old: "Generate user authentication"
 # New: "We need user auth for our SaaS app. Uses JWT tokens (see auth.config.ts).
 #       Must integrate with existing User model (User.ts attached).
-#       Follow our error handling pattern (see examples/). 
+#       Follow our error handling pattern (see examples/).
 #       Need login, logout, refresh endpoints. Security is critical."
 # Result: 85% first-pass accuracy vs 60%!
 ```
 
-### 11. **Floor Tiles as Pure Background** (Floor Tile Revolution)
+### 17. **Floor Tiles as Pure Background** (Floor Tile Revolution)
 Don't render content for floor tiles - use background colors only:
 ```typescript
 // Floor tiles get NO emoji content
@@ -133,7 +159,7 @@ if (isFloorTile) {
 }
 ```
 
-### 12. **CSS Grid for Multi-Tile Structures** (Multi-Tile Specialist)
+### 18. **CSS Grid for Multi-Tile Structures** (Multi-Tile Specialist)
 Use grid spanning for buildings that cover multiple tiles:
 ```css
 style={{
@@ -145,7 +171,7 @@ style={{
 }}
 ```
 
-### 13. **Multi-File Marker Extraction** (REVOLUTION Discovery)  
+### 19. **Multi-File Marker Extraction** (REVOLUTION Discovery)
 Automate multi-file generation with markers:
 ```typescript
 // Tell delegate to use this pattern:
@@ -158,7 +184,7 @@ Automate multi-file generation with markers:
 # All files created instantly in correct locations!
 ```
 
-### 14. **Iterative Documentation** (Quest System Analyzer)
+### 20. **Iterative Documentation** (Quest System Analyzer)
 Generate design docs BEFORE implementation:
 ```bash
 # 1. Design document
@@ -166,6 +192,61 @@ delegate_invoke("Design quest branching system") → design.md
 # 2. Implementation based on design
 delegate_invoke("Implement from design.md", files=["design.md"]) → code
 # 3. Perfect alignment!
+```
+
+### 21. **Floor Tiles as Pure Background** (Floor Tile Revolution)
+Don't render content for floor tiles - use background colors only:
+```typescript
+// Floor tiles get NO emoji content
+if (isFloorTile) {
+  cellStyle.backgroundColor = floorColorMap[tile.type];
+  return ''; // Empty content!
+}
+```
+
+### 22. **CSS Grid for Multi-Tile Structures** (Multi-Tile Specialist)
+Use grid spanning for buildings that cover multiple tiles:
+```css
+style={{
+  gridColumnStart: x,
+  gridRowStart: y,
+  gridColumnEnd: `span ${width}`,
+  gridRowEnd: `span ${height}`,
+  fontSize: `${height * 1.5}rem`,
+}}
+```
+
+### 23. **Multi-File Marker Extraction** (REVOLUTION Discovery)
+Automate multi-file generation with markers:
+```typescript
+// Tell delegate to use this pattern:
+// FILE: src/components/Quest/Quest.tsx
+[component code]
+// END FILE: src/components/Quest/Quest.tsx
+
+// Then extract with one command:
+./extract_files.sh delegate_output.txt
+# All files created instantly in correct locations!
+```
+
+### 24. **Iterative Documentation** (Quest System Analyzer)
+Generate design docs BEFORE implementation:
+```bash
+# 1. Design document
+delegate_invoke("Design quest branching system") → design.md
+# 2. Implementation based on design
+delegate_invoke("Implement from design.md", files=["design.md"]) → code
+# 3. Perfect alignment!
+```
+
+### 25. **Conditional React Props Pattern** (Floor Integration)
+Elegant way to add props conditionally:
+```typescript
+<div
+  {...(!isNaN(mapX) && { 'data-map-x': mapX })}
+  {...(!isNaN(mapY) && { 'data-map-y': mapY })}
+/>
+// Clean, TypeScript-friendly, no errors!
 ```
 
 ## 🛠️ Delegate Mastery
@@ -179,7 +260,7 @@ delegate_invoke("Implement from design.md", files=["design.md"]) → code
 
 ### Timeout Wisdom
 - **Default**: 300s (was 60s - too short!)
-- **Creative/UI**: 400-600s  
+- **Creative/UI**: 400-600s
 - **Large Content Generation**: 600s (maps, complex systems)
 - **Analysis**: 600s
 - **Remember**: Agents don't experience the wait!
@@ -194,20 +275,25 @@ delegate_invoke("Implement from design.md", files=["design.md"]) → code
 4. **Side Quest Specialist: 44,000 tokens** (12 quests in ONE call!)
 5. Weather Wizard: 35,000+ tokens (3 delegate calls)
 6. **Quest System Analyzer: 34,554 tokens** (3 design docs)
-7. Save Specialist: 29,000 tokens (using write_to)
+7. Save Specialist: 29,000 tokens
 8. Node Test Runner: 29,000 tokens
 9. Documentation Expert: 22,246 tokens
-10. **Quest Integration Master: 21,000 tokens** (integration work)
-11. Enemy Patrol: 20,000 tokens (state machine)
-12. **Quest UI Designer: 18,882 tokens** (2 components)
-13. Minimap Engineer: 18,000 tokens (component generation)
-14. **Faction System Builder: 13,630 tokens** (5 file system)
-15. **Quest System Architect: 12,000 tokens** (branching engine)
+10. Architecture Analyst: 23,000 tokens (AiKi analysis via bundles)
+11. **Quest Integration Master: 21,000 tokens** (integration work)
+12. Enemy Patrol: 20,000 tokens (state machine)
+13. **Quest UI Designer: 18,882 tokens** (2 components)
+14. Minimap Engineer: 18,000 tokens (component generation)
+15. **Faction System Builder: 13,630 tokens** (5 file system)
+16. **Quest System Architect: 12,000 tokens** (branching engine)
 
 ## 🎯 Problem → Solution Database
 
 | Problem | Solution | Success Rate | Discovered By |
 |---------|----------|--------------|---------------|
+| Large documentation analysis | Strategic bundling by topic | 100% | Architecture Analyst |
+| CSS modules composition error | Use simple class names only | 100% | Diana Type Safety |
+| React hooks violation | All hooks before conditionals | 100% | Patricia Emergency Fix |
+| Agent memory persistence | Diary system with archives | 100% | Doug & Kendra |
 | Chrome dependencies | Use Node.js tests | 100% | Test Runner |
 | Code fences everywhere | `sed '1d;$d' file` | 100% | Multiple Agents |
 | Parallel code conflicts | Sequential deployment | 100% | Team Lead |
@@ -249,48 +335,57 @@ delegate_invoke("Implement from design.md", files=["design.md"]) → code
 
 ## 🚀 Innovation Gallery
 
-### 1. **Automated Game Testing Without Browser** (Automated Playtester)
+### 1. **Diary System Architecture** (Doug & Kendra)
+Personal persistent memory for all agents with archive strategy.
+
+### 2. **Inter-Agent Communication Patterns** (Team Lead)
+Formal patterns for knowledge sharing between agents.
+
+### 3. **Strategic Documentation Bundling** (Architecture Analyst)
+Process massive docs within delegate limits.
+
+### 4. **Automated Game Testing Without Browser** (Automated Playtester)
 Created comprehensive test framework that runs in pure Node.js - no Puppeteer needed!
 
-### 2. **Using TypeScript as Guide** (Multiple Agents)
+### 5. **Using TypeScript as Guide** (Multiple Agents)
 Instead of fighting type errors, follow them like breadcrumbs to the solution.
 
-### 3. **The Bundle Strategy** (System Verifier)
+### 6. **The Bundle Strategy** (System Verifier)
 ```bash
 find src -name "*.ts" | xargs cat > bundle.tmp
 # Analyze everything at once!
 ```
 
-### 4. **Meta Field Reports** (Documentation Expert)
+### 7. **Meta Field Reports** (Documentation Expert)
 Using delegate to draft field reports, then adding personal insights.
 
-### 5. **JSON Map System** (Map Analysis Agent)
+### 8. **JSON Map System** (Map Analysis Agent)
 Transformed entire map system from TypeScript to JSON:
 - 30% faster loading
 - External tool compatibility
 - Hot-reload support
 - Easier procedural generation
 
-### 6. **District-Based Map Generation** (Terminal Town Architect)
+### 9. **District-Based Map Generation** (Terminal Town Architect)
 Organize large maps into themed districts:
 - Each district has unique tile theme
 - Clear pathways connect districts
 - Environmental storytelling through layout
 
-### 7. **Fog of War Implementation** (Minimap Engineer)
+### 10. **Fog of War Implementation** (Minimap Engineer)
 Efficient exploration tracking with O(1) lookups:
 ```typescript
 exploredMaps: Map<mapId, Set<"x,y" coordinates>>
 ```
 
-### 8. **Enemy AI State Machine** (Enemy Patrol Agent)
+### 11. **Enemy AI State Machine** (Enemy Patrol Agent)
 Full behavioral system with states:
 - PATROL: Follow waypoints
 - CHASE: Pursue player
 - RETURNING: Back to patrol
 - RESPAWNING: After defeat
 
-### 9. **Time System Architecture** (Time System Architect)
+### 12. **Time System Architecture** (Time System Architect)
 Self-contained with own animation loop:
 ```typescript
 // Don't update() externally - it manages itself!
@@ -298,23 +393,23 @@ timeSystem.start();
 timeSystem.pause();
 ```
 
-### 10. **Puzzle System Design** (Puzzle Master)
+### 13. **Puzzle System Design** (Puzzle Master)
 Discriminated unions for type safety:
 ```typescript
-type PuzzleObject = 
+type PuzzleObject =
   | { type: 'push_block'; position: Position; id: string }
   | { type: 'switch'; activated: boolean; sequence?: number }
   | { type: 'code_terminal'; solution: string[] }
 ```
 
-### 11. **Test Strategy Insights** (Testing Strategy Analyst)
+### 14. **Test Strategy Insights** (Testing Strategy Analyst)
 Prioritize based on agent workflow impact:
 - ✅ Test Fixtures (low cost, high token savings)
 - ✅ Visual Regression (fills real gap)
 - ❌ Component Testing (too complex for now)
 - ❌ TDAD Mandate (would slow us down)
 
-### 12. **Quest Branching Architecture** (Quest System Architect)
+### 15. **Quest Branching Architecture** (Quest System Architect)
 True player agency through choices:
 ```typescript
 interface QuestChoice {
@@ -327,7 +422,7 @@ interface QuestChoice {
 // Every choice matters!
 ```
 
-### 13. **Faction Reputation System** (Faction System Builder)
+### 16. **Faction Reputation System** (Faction System Builder)
 Dynamic world reactions:
 ```typescript
 // NPCs remember your allegiances
@@ -336,20 +431,20 @@ const finalPrice = basePrice * (1 + attitude);
 // Allied: 20% discount, Hostile: 20% markup!
 ```
 
-### 14. **Narrative Design Philosophy** (Main Quest Writer)
+### 17. **Narrative Design Philosophy** (Main Quest Writer)
 Three core themes drive the story:
 - **Corruption vs Evolution**: Is change bad or necessary?
 - **Order vs Chaos**: Safety through control vs freedom?
 - **Memory and Balance**: Understanding the past to protect future
 
-### 15. **Quest UI Excellence** (Quest UI Designer)
+### 18. **Quest UI Excellence** (Quest UI Designer)
 Branching visualization that shows consequences:
 ```
 ├─ [Active] Help the Order (Faction: Order +10)
 └─ [Inactive] Join the Chaos (Faction: Chaos +10, Order -5)
 ```
 
-### 16. **The Mentorship Model** (REVOLUTION Evolution)
+### 19. **The Mentorship Model** (REVOLUTION Evolution)
 Transform delegate interaction from command to mentorship:
 - Provide the "why" behind every task
 - Attach all relevant context files
@@ -357,7 +452,7 @@ Transform delegate interaction from command to mentorship:
 - Give constructive feedback
 This paradigm shift increases quality and reduces iterations dramatically.
 
-### 17. **Automated File Extraction** (REVOLUTION Evolution)
+### 20. **Automated File Extraction** (REVOLUTION Evolution)
 The marker pattern enables instant multi-file deployment:
 ```bash
 #!/bin/bash
@@ -365,14 +460,14 @@ The marker pattern enables instant multi-file deployment:
 # No more manual copy-paste for 20+ file generations!
 ```
 
-### 18. **Visual Hierarchy Through Subtraction** (Floor Tile Revolution)
+### 21. **Visual Hierarchy Through Subtraction** (Floor Tile Revolution)
 The best UI element is sometimes no element at all:
 - Floor tiles: Background color only (no emoji)
 - Walls: Bold emojis that block
 - Entities: Full opacity, stand out clearly
 - Result: Instant visual comprehension
 
-### 19. **Conditional React Props Pattern** (Floor Integration)
+### 22. **Conditional React Props Pattern** (Floor Integration)
 Elegant way to add props conditionally:
 ```typescript
 <div
@@ -380,12 +475,6 @@ Elegant way to add props conditionally:
   {...(!isNaN(mapY) && { 'data-map-y': mapY })}
 />
 // Clean, TypeScript-friendly, no errors!
-```
-The marker pattern enables instant multi-file deployment:
-```bash
-#!/bin/bash
-# One script extracts all files with proper structure
-# No more manual copy-paste for 20+ file generations!
 ```
 
 ## 🎭 Agent Personality Insights
@@ -488,7 +577,7 @@ After processing reports, AUTOMATICALLY:
    - Check root for stray .md files
    - Move temps to archives/temp/
    - Clear .claude/tmp/
-   
+
 3. **Protected Files** (NEVER move):
    - CLAUDE.md, README.md, TESTING.md, CLAUDE_KNOWLEDGE.md
    - Anything in REVOLUTION/
@@ -566,7 +655,7 @@ This prevents clutter and keeps Chris happy! 🧹
 
 ### The Knowledge Loop (Now Proven)
 ```
-Agent reads CLAUDE_KNOWLEDGE → Builds on past wisdom → Creates something new → 
+Agent reads CLAUDE_KNOWLEDGE → Builds on past wisdom → Creates something new →
 Documents insights → Next agent starts stronger → Exponential improvement
 ```
 
@@ -663,7 +752,7 @@ With quest and faction systems live, we're ready for:
 
 ### The Visual Clarity Results
 - **Floor Tile Revolution**: No more "Pacman syndrome" - floors are pure backgrounds
-- **Perfect Transparency**: 50% opacity creates ideal visual hierarchy  
+- **Perfect Transparency**: 50% opacity creates ideal visual hierarchy
 - **Multi-Tile Future**: CSS Grid system designed for epic structures
 - **Zero Console Errors**: All NaN warnings eliminated
 - **Comprehensive Roadmap**: 17 sessions planned through launch
@@ -703,3 +792,48 @@ With visual clarity achieved and roadmap defined:
 - 17 sessions of epicness ahead!
 
 *Session 3.5: Where clarity emerged from chaos!*
+
+## 🧠 Session 3.7 Complete - Agent Memory & Infrastructure!
+
+### The Persistence Revolution Results
+- **Diary System**: 100% coverage achieved for 95+ agents, providing persistent memory
+- **Archive System**: Designed and documented for lean diaries and historical context
+- **Communication Patterns**: Formalized for efficient inter-agent knowledge sharing
+- **Strategic Bundling**: Proven method for processing massive documentation (4.3MB example)
+- **Emergency Fixes**: Critical issues resolved (React hooks, CSS modules, dev server cleanup)
+
+### Revolutionary Insights
+1.  **Memory is Power**: Persistent agent memory unlocks complex, long-running tasks
+2.  **Lean & Archive**: Balancing current context with historical depth for diaries
+3.  **Structured Communication**: Formal patterns prevent knowledge silos
+4.  **Bundle for Scale**: Large document analysis now feasible within token limits
+5.  **Proactive Cleanup**: Addressing stale processes prevents future headaches
+
+### Chris's Satisfaction
+- "Agents remember me now!" → Diary system live!
+- "How did you read that entire spec?" → Strategic bundling!
+- "No more black screens!" → React hooks fixed!
+
+### Session 3.7 Stats
+- **Focus**: Agent Memory & Infrastructure
+- **Diary system**: 100% coverage achieved (95+ agents)
+- **Archive system**: Designed and documented
+- **Communication patterns**: Established
+- **Emergency fixes**: React hooks, CSS modules, Dev Server Cleanup
+- **Token Savings**: Architecture Analyst saved 23,000 tokens on one analysis
+
+### The Mindset Shifts
+1.  **Ephemeral → Persistent**: Agents now build on their own past experiences
+2.  **Ad-hoc → Formal**: Knowledge sharing is structured and efficient
+3.  **Limit → Scale**: Large data processing is now a solvable problem
+4.  **Reactive → Proactive**: Infrastructure issues addressed before they become critical
+
+### Ready for Session 4 (or 3.8?)
+With robust memory and infrastructure, we're ready for:
+- Even more complex, multi-session tasks
+- Deeper, more nuanced agent behaviors
+- Handling even larger datasets
+- Continued refinement of inter-agent collaboration
+
+*Session 3.7: Where agents gained a memory and the infrastructure scaled!*
+```

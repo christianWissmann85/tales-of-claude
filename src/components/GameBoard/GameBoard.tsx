@@ -75,6 +75,24 @@ const GameBoard: React.FC = () => {
   const { notify } = useNotification();
   const [combatLog, setCombatLog] = React.useState<CombatLogEntry[]>([]);
   const [isAsciiMode, setIsAsciiMode] = useState(false); // New state for ASCII mode
+  const prevBattleRef = useRef(state.battle);
+
+  // Create an InventoryModel instance from the player's inventory items
+  const playerInventory = React.useMemo(() => {
+    const inventory = new InventoryModel();
+    state.player.inventory.forEach(item => {
+      if (item && item.id && item.type) {
+        if (!(item instanceof ItemClass) && 'name' in item) {
+          inventory.addItem(item as any);
+        } else {
+          inventory.addItem(item);
+        }
+      } else {
+        console.error('Invalid item in player inventory:', item);
+      }
+    });
+    return inventory;
+  }, [state.player.inventory]);
 
   // Get current time period for atmospheric styling
   const getTimeOfDay = (): TimeOfDay => {
@@ -117,7 +135,6 @@ const GameBoard: React.FC = () => {
   }, [pressedKeys]);
   
   // Track defeated enemies from battle results
-  const prevBattleRef = useRef(state.battle);
   useEffect(() => {
     if (prevBattleRef.current && !state.battle && gameEngineRef.current) {
       const defeatedEnemyIds = prevBattleRef.current.enemies
@@ -131,37 +148,7 @@ const GameBoard: React.FC = () => {
     prevBattleRef.current = state.battle;
   }, [state.battle]);
 
-  // Add loading check before rendering
-  if (state.currentMap.id === 'loading' || !state.currentMap.tiles || state.currentMap.tiles.length === 0) {
-    return (
-      <div className={styles.gameBoard} style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '600px'
-      }}>
-        <div>Loading map...</div>
-      </div>
-    );
-  }
-
-  // Create an InventoryModel instance from the player's inventory items
-  const playerInventory = React.useMemo(() => {
-    const inventory = new InventoryModel();
-    state.player.inventory.forEach(item => {
-      if (item && item.id && item.type) {
-        if (!(item instanceof ItemClass) && 'name' in item) {
-          inventory.addItem(item as any);
-        } else {
-          inventory.addItem(item);
-        }
-      } else {
-        console.error('Invalid item in player inventory:', item);
-      }
-    });
-    return inventory;
-  }, [state.player.inventory]);
-
+  // Define all callbacks before any conditional returns
   const handleHotbarConfigChange = useCallback((newConfig: (string | null)[]) => {
     dispatch({ type: 'UPDATE_HOTBAR_CONFIG', payload: { hotbarConfig: newConfig } });
   }, [dispatch]);
@@ -286,6 +273,20 @@ const GameBoard: React.FC = () => {
   const handleToggleAsciiMode = useCallback(() => {
     setIsAsciiMode(prev => !prev);
   }, []);
+
+  // Add loading check after all hooks
+  if (state.currentMap.id === 'loading' || !state.currentMap.tiles || state.currentMap.tiles.length === 0) {
+    return (
+      <div className={styles.gameBoard} style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '600px'
+      }}>
+        <div>Loading map...</div>
+      </div>
+    );
+  }
 
   return (
     <>

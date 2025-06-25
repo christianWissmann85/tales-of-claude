@@ -388,16 +388,18 @@ const MapGrid: React.FC<MapGridProps> = ({
   }
 
   return (
-    <div
-      className={styles.mapGridContainer}
-      style={{
-        gridTemplateColumns: `repeat(${display_width}, 1fr)`,
-        gridTemplateRows: `repeat(${display_height}, 1fr)`,
-        position: 'relative', // Ensure proper stacking context
-      }}
-    >
-      {gridCells}
-      {structureCells}
+    <div className={styles.mapContainer}>
+      <div
+        className={styles.grid}
+        style={{
+          gridTemplateColumns: `repeat(${display_width}, var(--cell-size))`,
+          gridTemplateRows: `repeat(${display_height}, var(--cell-size))`,
+          position: 'relative', // Ensure proper stacking context
+        }}
+      >
+        {gridCells}
+        {structureCells}
+      </div>
     </div>
   );
 };

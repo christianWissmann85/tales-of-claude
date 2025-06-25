@@ -21,6 +21,7 @@
   overflow: hidden;
   backdrop-filter: blur(10px);
   position: relative;
+  animation: slide-in-up var(--animation-duration-long) var(--animation-ease-out);
 }
 
 /* Elegant border gradient effect */
@@ -86,7 +87,11 @@
   align-items: center;
   justify-content: center;
   cursor: grab; /* Indicate draggable items */
-  transition: all 0.2s ease-in-out; /* Smooth transitions for hover/active states */
+  transition:
+    transform var(--animation-duration-short) var(--animation-ease-out),
+    box-shadow var(--animation-duration-short) var(--animation-ease-out),
+    border-color var(--animation-duration-short) var(--animation-ease-out),
+    background var(--animation-duration-short) var(--animation-ease-out);
   overflow: hidden; /* Crucial for cooldown overlay to clip */
   box-shadow: 
     inset 0 0 10px rgba(0, 0, 0, 0.3),
@@ -102,7 +107,7 @@
   box-shadow: 
     inset 0 0 15px rgba(0, 0, 0, 0.2),
     0 0 15px var(--color-crimson-glow);
-  transform: translateY(-2px);
+  transform: scale(var(--scale-hover-slight)) translateY(-2px);
 }
 
 /* --- 3. Active/Pressed State Animations --- */
@@ -114,11 +119,12 @@
   box-shadow: 
     inset 0 0 20px var(--color-crimson-glow),
     0 0 20px var(--color-crimson-glow);
-  transform: scale(1.05); /* Slightly enlarge the active slot */
+  transform: scale(var(--scale-hover-slight)); /* Slightly enlarge the active slot */
+  animation: pulse 2s var(--animation-ease-in-out) infinite;
 }
 
 .hotbarSlot.pressed {
-  transform: scale(0.95); /* Slightly shrink when pressed/clicked */
+  transform: scale(var(--scale-active-slight)); /* Slightly shrink when pressed/clicked */
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5); /* Inset shadow for pressed look */
   background-color: var(--bg-elevated);
   border-color: var(--color-electric-blue-light);

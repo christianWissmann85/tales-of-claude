@@ -41,7 +41,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeIn 0.3s ease-out;
+  animation: fade-in var(--animation-duration-medium) var(--animation-ease-out) forwards;
 }
 
 /* 2. Inventory Container */
@@ -62,7 +62,8 @@
   /* Typography handled by typography.css */
   color: var(--terminal-text-primary);
   position: relative;
-  animation: slideUp 0.3s ease-out;
+  animation: slide-in-up var(--animation-duration-medium) var(--animation-ease-out) forwards;
+  transform: translateY(20px); /* Initial position for slide-in effect */
 }
 
 /* Corner accents like DialogueBox */
@@ -139,15 +140,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--animation-duration-short) var(--animation-ease-out),
+    box-shadow var(--animation-duration-short) var(--animation-ease-out),
+    color var(--animation-duration-short) var(--animation-ease-out);
   text-shadow: var(--text-shadow-md);
   box-shadow: 0 0 10px var(--terminal-shadow);
 }
 
 .closeButton:hover {
-  transform: scale(1.1);
+  transform: scale(var(--scale-hover-slight));
   box-shadow: 0 0 20px var(--terminal-glow);
   color: var(--terminal-text-secondary);
+}
+
+.closeButton:active {
+  transform: scale(var(--scale-active-slight));
 }
 
 /* 4. Player Info Section */
@@ -212,14 +220,18 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--animation-duration-short) var(--animation-ease-out),
+    box-shadow var(--animation-duration-short) var(--animation-ease-out),
+    border-color var(--animation-duration-short) var(--animation-ease-out),
+    background-color var(--animation-duration-short) var(--animation-ease-out);
   position: relative;
   overflow: hidden;
 }
 
 .itemSlot:hover {
   border-color: var(--terminal-border);
-  transform: translateY(-2px);
+  transform: scale(var(--scale-hover-slight)) translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
   background: rgba(0, 255, 0, 0.1);
 }
@@ -380,7 +392,10 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--animation-duration-short) var(--animation-ease-out),
+    box-shadow var(--animation-duration-short) var(--animation-ease-out),
+    color var(--animation-duration-short) var(--animation-ease-out);
   position: relative;
   overflow: hidden;
 }
@@ -395,11 +410,14 @@
   background: var(--terminal-glow);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease;
+  transition: 
+    width var(--animation-duration-medium) var(--animation-ease-out), 
+    height var(--animation-duration-medium) var(--animation-ease-out),
+    opacity var(--animation-duration-medium) var(--animation-ease-out);
 }
 
 .actionButton:hover {
-  transform: translateY(-2px);
+  transform: scale(var(--scale-hover-slight));
   box-shadow: 0 5px 15px var(--terminal-shadow);
   color: var(--terminal-text-secondary);
 }
@@ -411,7 +429,7 @@
 }
 
 .actionButton:active {
-  transform: translateY(0);
+  transform: scale(var(--scale-active-slight));
 }
 
 .actionButton.equipButton {
@@ -460,7 +478,10 @@
   border-bottom: 3px solid transparent;
   padding: 10px 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    color var(--animation-duration-short) var(--animation-ease-out),
+    text-shadow var(--animation-duration-short) var(--animation-ease-out),
+    border-bottom-color var(--animation-duration-short) var(--animation-ease-out);
   position: relative;
 }
 
@@ -484,7 +505,7 @@
   height: 2px;
   background: var(--terminal-glow);
   box-shadow: 0 0 10px var(--terminal-glow);
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 1.5s var(--animation-ease-in-out) infinite;
 }
 
 /* 10. Sort Options */

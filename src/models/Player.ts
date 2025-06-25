@@ -539,4 +539,59 @@ export class Player implements IPlayer {
       }
     }
   }
+
+  /**
+   * Applies a status effect to the player.
+   * If the same effect type already exists, it refreshes/updates the effect.
+   * @param newEffect The status effect to apply.
+   */
+  applyStatusEffect(newEffect: StatusEffect): void {
+    const existingEffectIndex = this.statusEffects.findIndex(
+      (effect) => effect.type === newEffect.type,
+    );
+
+    if (existingEffectIndex > -1) {
+      // If effect already exists, refresh or extend its duration and update properties
+      this.statusEffects[existingEffectIndex].duration = newEffect.duration;
+      if (newEffect.damagePerTurn !== undefined) {
+        this.statusEffects[existingEffectIndex].damagePerTurn = newEffect.damagePerTurn;
+      }
+      if (newEffect.speedMultiplier !== undefined) {
+        this.statusEffects[existingEffectIndex].speedMultiplier = newEffect.speedMultiplier;
+      }
+    } else {
+      // If it doesn't exist, add the new effect
+      this.statusEffects.push(newEffect);
+    }
+  }
+
+  /**
+   * Updates status effects by processing their effects and decrementing duration.
+   * This should be called once per turn.
+   */
+  updateStatusEffects(): void {
+    // Process each status effect
+    this.statusEffects.forEach((effect) => {
+      switch (effect.type) {
+        case 'corrupted':
+          // Apply damage over time
+          if (effect.damagePerTurn) {
+            this._baseStats.hp = Math.max(0, this._baseStats.hp - effect.damagePerTurn);
+          }
+          break;
+        case 'frozen':
+          // Frozen effect is handled in speed calculations (already done in stats getter)
+          break;
+        case 'optimized':
+          // Optimized effect is handled in speed calculations (already done in stats getter)
+          break;
+      }
+
+      // Decrement duration
+      effect.duration--;
+    });
+
+    // Remove expired effects
+    this.statusEffects = this.statusEffects.filter((effect) => effect.duration > 0);
+  }
 }

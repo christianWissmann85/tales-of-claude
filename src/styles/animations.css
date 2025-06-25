@@ -1,0 +1,507 @@
+/*
+ * src/styles/animations.css
+ *
+ * Comprehensive CSS Animation Utilities for Tales of Claude
+ *
+ * This file provides a set of subtle, professional animations
+ * designed to enhance the game's UI and overall feel,
+ * inspired by the polished aesthetic of games like Octopath Traveler.
+ *
+ * All animations prioritize performance using `transform` and `opacity`
+ * and respect the user's `prefers-reduced-motion` setting.
+ */
+
+/* ==========================================================================
+   1. Core Animation Variables
+   ========================================================================== */
+
+:root {
+    /* Timing */
+    --animation-duration-shortest: 100ms;
+    --animation-duration-short: 200ms;
+    --animation-duration-medium: 300ms;
+    --animation-duration-long: 500ms;
+    --animation-duration-extra-long: 800ms;
+    --animation-delay-short: 50ms;
+    --animation-delay-medium: 100ms;
+    --animation-delay-long: 200ms;
+
+    /* Easing Functions */
+    --animation-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* Material Design standard */
+    --animation-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --animation-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --animation-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --animation-ease-linear: linear;
+
+    /* Colors & Glows - Using game's design system */
+    --color-primary-glow: var(--color-cyber-green-glow); /* From colors.css */
+    --color-secondary-glow: var(--color-golden-glow); /* From colors.css */
+    --color-success-glow: var(--color-cyber-green-glow); /* From colors.css */
+    --color-danger-glow: var(--color-crimson-glow); /* From colors.css */
+    --color-neutral-glow: rgba(255, 255, 255, 0.3); /* White */
+
+    /* General Sizes */
+    --scale-hover-slight: 1.03;
+    --scale-active-slight: 0.97;
+    --scale-ripple-max: 2.5; /* Max scale for ripple effect */
+}
+
+/* ==========================================================================
+   2. Reusable Keyframes
+   ========================================================================== */
+
+/* Fade Effects */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Slide Effects */
+@keyframes slide-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-out-down {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+@keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-20px); }
+}
+
+/* Pulse & Bob */
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 var(--color-neutral-glow); }
+    70% { transform: scale(1.02); box-shadow: 0 0 8px 4px var(--color-neutral-glow); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 var(--color-neutral-glow); }
+}
+
+@keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Shimmer for Loading */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Ripple Effect */
+@keyframes ripple-scale-fade {
+    from {
+        transform: scale(0);
+        opacity: 0.7;
+    }
+    to {
+        transform: scale(var(--scale-ripple-max));
+        opacity: 0;
+    }
+}
+
+/* Float Up & Fade (for damage numbers, item pickups) */
+@keyframes float-up-fade {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+/* Level Up Burst */
+@keyframes level-up-burst {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+        box-shadow: 0 0 0 0 var(--color-success-glow);
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+        box-shadow: 0 0 20px 10px var(--color-success-glow);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+        box-shadow: 0 0 0 0 var(--color-success-glow);
+    }
+}
+
+/* Scale Out for item pickups */
+@keyframes scale-out {
+    from { transform: scale(0.5); }
+    to { transform: scale(1.5); }
+}
+
+/* ==========================================================================
+   3. Global Animation Utilities & Transitions
+   ========================================================================== */
+
+/* Base transition for common properties */
+.animated-transition {
+    transition:
+        transform var(--animation-duration-short) var(--animation-ease-out),
+        opacity var(--animation-duration-short) var(--animation-ease-out),
+        box-shadow var(--animation-duration-short) var(--animation-ease-out),
+        background-color var(--animation-duration-short) var(--animation-ease-out),
+        filter var(--animation-duration-short) var(--animation-ease-out),
+        width var(--animation-duration-medium) var(--animation-ease-in-out);
+}
+
+/* Utility classes for quick animations */
+.anim-fade-in {
+    animation: fade-in var(--animation-duration-medium) var(--animation-ease-out) forwards;
+}
+
+.anim-fade-out {
+    animation: fade-out var(--animation-duration-medium) var(--animation-ease-in) forwards;
+}
+
+.anim-slide-in-up {
+    animation: slide-in-up var(--animation-duration-medium) var(--animation-ease-out) forwards;
+}
+
+.anim-slide-out-down {
+    animation: slide-out-down var(--animation-duration-medium) var(--animation-ease-in) forwards;
+}
+
+.anim-pulse {
+    animation: pulse 2s var(--animation-ease-in-out) infinite;
+}
+
+.anim-bob {
+    animation: bob 1.5s var(--animation-ease-in-out) infinite;
+}
+
+/* ==========================================================================
+   4. Component-Specific Animations
+   ========================================================================== */
+
+/* --- Button Animations --- */
+.btn, [role="button"] {
+    position: relative; /* For ripple effect */
+    overflow: hidden; /* For ripple effect */
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation; /* Improves responsiveness on touch devices */
+    /* Apply base transitions */
+    transition:
+        transform var(--animation-duration-short) var(--animation-ease-out),
+        opacity var(--animation-duration-short) var(--animation-ease-out),
+        box-shadow var(--animation-duration-short) var(--animation-ease-out),
+        background-color var(--animation-duration-short) var(--animation-ease-out),
+        filter var(--animation-duration-short) var(--animation-ease-out);
+}
+
+.btn:hover, [role="button"]:hover {
+    transform: scale(var(--scale-hover-slight));
+    box-shadow: 0 0 10px 2px var(--color-primary-glow);
+}
+
+.btn:active, [role="button"]:active {
+    transform: scale(var(--scale-active-slight));
+    box-shadow: inset 0 0 5px 1px rgba(0, 0, 0, 0.3); /* Recessed look */
+}
+
+.btn.is-disabled, .btn:disabled, [role="button"].is-disabled, [role="button"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none; /* Remove hover/active transforms */
+    box-shadow: none;
+}
+
+/* Ripple Effect (requires JS to add/remove .ripple-active class) */
+.btn.ripple-active::after, [role="button"].ripple-active::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    width: 100px; /* Initial size, will scale */
+    height: 100px; /* Initial size, will scale */
+    top: var(--ripple-y, 50%); /* Set by JS */
+    left: var(--ripple-x, 50%); /* Set by JS */
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    animation: ripple-scale-fade var(--animation-duration-medium) var(--animation-ease-out) forwards;
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+/* --- Panel Animations (Modals, Journals, Inventory) --- */
+.panel-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    animation: fade-in var(--animation-duration-medium) var(--animation-ease-out) forwards;
+    z-index: 999; /* Below panel, above game */
+}
+
+.panel-backdrop.is-closing {
+    animation: fade-out var(--animation-duration-medium) var(--animation-ease-in) forwards;
+}
+
+.panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(20px); /* Initial offset for slide-in */
+    opacity: 0;
+    animation: slide-in-up var(--animation-duration-long) var(--animation-ease-out) forwards;
+    z-index: 1000; /* Above backdrop */
+}
+
+.panel.is-closing {
+    animation: slide-out-down var(--animation-duration-long) var(--animation-ease-in) forwards;
+}
+
+/* --- Hover Effects --- */
+.item-card, .inventory-slot {
+    /* Apply base transitions */
+    transition:
+        transform var(--animation-duration-short) var(--animation-ease-out),
+        opacity var(--animation-duration-short) var(--animation-ease-out),
+        box-shadow var(--animation-duration-short) var(--animation-ease-out),
+        background-color var(--animation-duration-short) var(--animation-ease-out),
+        filter var(--animation-duration-short) var(--animation-ease-out);
+}
+
+.item-card:hover, .inventory-slot:hover {
+    transform: scale(var(--scale-hover-slight));
+    box-shadow: 0 0 8px 2px var(--color-secondary-glow);
+}
+
+.npc-character {
+    animation: bob 1.8s var(--animation-ease-in-out) infinite;
+}
+
+.interactive-tile {
+    animation: pulse 2.5s var(--animation-ease-in-out) infinite;
+}
+
+/* --- State Transitions --- */
+/* Assuming a structure like: <div class="bar-container"><div class="bar-fill"></div></div> */
+.health-bar .bar-fill, 
+.energy-bar .bar-fill, 
+.xp-bar .bar-fill {
+    transition: width var(--animation-duration-long) var(--animation-ease-in-out);
+    /* Example: width: 75%; */
+}
+
+.xp-gain-text {
+    position: absolute; /* Needs to be positioned relative to its container */
+    animation: float-up-fade var(--animation-duration-medium) var(--animation-ease-out) forwards;
+    white-space: nowrap;
+    pointer-events: none; /* Don't block clicks */
+}
+
+.level-up-effect {
+    animation: level-up-burst 1s var(--animation-ease-bounce) forwards;
+    /* Apply to an element that appears briefly on level up */
+}
+
+/* --- Notification Animations --- */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* For stacking */
+    z-index: 1001;
+}
+
+.notification {
+    background-color: rgba(30, 30, 30, 0.9);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%); /* Start off-screen */
+    opacity: 0;
+    animation: slide-in-right var(--animation-duration-medium) var(--animation-ease-out) forwards;
+}
+
+.notification.is-fading-out {
+    animation: slide-out-left var(--animation-duration-medium) var(--animation-ease-in) forwards;
+    animation-delay: var(--notification-fade-delay, 2s); /* Set by JS */
+}
+
+/* --- Combat Feedback --- */
+.damage-number {
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: red;
+    text-shadow: 1px 1px 2px black;
+    animation: float-up-fade var(--animation-duration-long) var(--animation-ease-out) forwards;
+}
+
+.damage-number.critical-hit {
+    font-size: 2em;
+    color: yellow;
+    text-shadow: 0 0 5px orange, 0 0 10px red;
+    animation: float-up-fade var(--animation-duration-long) var(--animation-ease-bounce) forwards;
+    animation-delay: var(--animation-delay-short); /* Slight delay for emphasis */
+}
+
+.hit-flash-effect {
+    /* Apply to the character/enemy element */
+    animation: hit-flash var(--animation-duration-short) var(--animation-ease-out);
+}
+
+@keyframes hit-flash {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.5); } /* Bright flash */
+    100% { filter: brightness(1); }
+}
+
+/* --- Map Transitions --- */
+.player-character {
+    transition: transform var(--animation-duration-medium) var(--animation-ease-in-out);
+    /* Example: transform: translate(var(--player-x), var(--player-y)); */
+}
+
+.map-tile.revealed {
+    animation: fade-in var(--animation-duration-short) var(--animation-ease-out) forwards;
+    /* Use animation-delay for staggered reveals */
+}
+
+.map-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 2000; /* Highest z-index */
+    opacity: 0;
+    pointer-events: none; /* Don't block interaction by default */
+}
+
+.map-transition-overlay.is-transitioning-out {
+    animation: fade-in var(--animation-duration-long) var(--animation-ease-in) forwards;
+    pointer-events: auto;
+}
+
+.map-transition-overlay.is-transitioning-in {
+    animation: fade-out var(--animation-duration-long) var(--animation-ease-out) forwards;
+    animation-delay: var(--animation-duration-medium); /* Stay black for a moment */
+}
+
+/* --- Loading States --- */
+.skeleton-loader {
+    background-color: #333;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative; /* For shimmer */
+}
+
+.skeleton-loader::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 8px;
+    background-color: var(--color-primary-glow);
+    border-radius: 4px;
+    transition: width var(--animation-duration-medium) var(--animation-ease-in-out);
+    /* Example: width: 75%; */
+}
+
+/* --- Special Effects --- */
+.quest-complete-banner {
+    animation: slide-in-up var(--animation-duration-long) var(--animation-ease-bounce) forwards,
+               fade-out var(--animation-duration-long) var(--animation-ease-in) forwards;
+    animation-delay: 0s, 3s; /* Slide in immediately, fade out after 3 seconds */
+    animation-fill-mode: forwards;
+    /* Add styling for the banner itself */
+}
+
+.item-pickup-sparkle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    animation: float-up-fade var(--animation-duration-medium) var(--animation-ease-out) forwards,
+               scale-out var(--animation-duration-medium) var(--animation-ease-out) forwards;
+    @keyframes scale-out {
+        from { transform: scale(0.5); }
+        to { transform: scale(1.5); }
+    }
+    pointer-events: none;
+}
+
+.level-up-glow-burst {
+    position: absolute;
+    width: 100px; /* Example size */
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-success-glow) 0%, rgba(0,0,0,0) 70%);
+    animation: level-up-burst 1s var(--animation-ease-bounce) forwards;
+    pointer-events: none;
+    transform: translate(-50%, -50%); /* Center on its position */
+}
+
+
+/* ==========================================================================
+   5. Prefers Reduced Motion Override
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    /* Disable all animations and transitions */
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Specifically remove hover/active transforms and shadows if they are purely decorative */
+    .btn:hover, .btn:active, 
+    [role="button"]:hover, [role="button"]:active, 
+    .item-card:hover, .item-card:active, 
+    .inventory-slot:hover, .inventory-slot:active {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Remove specific continuous animations */
+    .npc-character, .interactive-tile {
+        animation: none !important;
+    }
+
+    /* Simplify loading states */
+    .skeleton-loader::after {
+        animation: none !important;
+        background: none !important;
+    }
+}

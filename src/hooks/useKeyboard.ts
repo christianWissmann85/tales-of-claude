@@ -11,6 +11,9 @@ const INTERACT_KEYS = ['Space', 'Enter'];
 const CANCEL_KEYS = ['Escape', 'KeyX'];
 const MENU_KEYS = ['KeyM', 'Tab'];
 const CHARACTER_KEYS = ['KeyC'];
+const INVENTORY_KEYS = ['KeyI'];
+const QUEST_KEYS = ['KeyJ'];
+const FACTION_KEYS = ['KeyF'];
 
 /**
  * A custom React hook for handling keyboard input in a game context.
@@ -40,7 +43,10 @@ export const useKeyboard = () => {
       INTERACT_KEYS.includes(event.code) ||
       CANCEL_KEYS.includes(event.code) ||
       MENU_KEYS.includes(event.code) ||
-      CHARACTER_KEYS.includes(event.code)
+      CHARACTER_KEYS.includes(event.code) ||
+      INVENTORY_KEYS.includes(event.code) ||
+      QUEST_KEYS.includes(event.code) ||
+      FACTION_KEYS.includes(event.code)
     ) {
       event.preventDefault();
     }

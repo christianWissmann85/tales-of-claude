@@ -6,6 +6,9 @@
 /* Import the comprehensive color system */
 @import './styles/colors.css';
 
+/* Import the animation utilities */
+@import './styles/animations.css';
+
 /* CSS Reset */
 *,
 *::before,

@@ -39,7 +39,7 @@ async function takeScreenshot() {
     
     console.log('Taking screenshot of new UI...');
     await page.screenshot({
-      path: path.join(screenshotDir, 'new-ui-layout.png'),
+      path: path.join(screenshotDir, 'new-ui-layout.png') as `${string}.png`,
       fullPage: true
     });
     
