@@ -794,7 +794,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       const item = newPlayer.removeItem(itemId);
       
       if (!item) {
-        return { ...state, notification: 'You don't have that item!' };
+        return { ...state, notification: 'You don\'t have that item!' };
       }
       
       newPlayer.addGold(price);

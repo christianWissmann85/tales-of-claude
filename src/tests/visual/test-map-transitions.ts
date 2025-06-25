@@ -1,4 +1,3 @@
-```typescript
 import { chromium, Browser, Page } from 'playwright';
 
 async function testMapTransitions() {
@@ -82,4 +81,3 @@ async function testMapTransitions() {
 
 // Run the test
 testMapTransitions();
-```

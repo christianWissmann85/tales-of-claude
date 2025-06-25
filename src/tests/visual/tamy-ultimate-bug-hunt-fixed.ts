@@ -1,5 +1,16 @@
 import { chromium, Browser, Page } from 'playwright';
 
+// Extend window.performance with memory property
+declare global {
+  interface Performance {
+    memory?: {
+      JSHeapUsedSize: number;
+      usedJSHeapSize: number;
+      totalJSHeapSize: number;
+    };
+  }
+}
+
 const GAME_URL = 'http://localhost:5174';
 const SCREENSHOT_DIR = 'src/tests/visual/tamy-bug-hunt-screenshots';
 const TIMEOUT = 120000; // 2 minutes total
@@ -18,6 +29,12 @@ interface TestResult {
   status: 'working' | 'broken' | 'partially-working';
   notes: string;
   bugs?: BugReport[];
+}
+
+interface BrowserMemoryMetrics {
+  JSHeapUsedSize: number;
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
 }
 
 class TamyUltimateBugHunter {
@@ -746,8 +763,7 @@ class TamyUltimateBugHunter {
     
     try {
       // Get initial metrics
-      // const metrics1 = await this.page.metrics(); // Not available in playwright
-      const metrics1 = null;
+      const metrics1: BrowserMemoryMetrics = await this.page.evaluate(() => window.performance.memory as any);
       
       // Do intensive actions
       for (let i = 0; i < 50; i++) {
@@ -758,15 +774,14 @@ class TamyUltimateBugHunter {
       }
       
       // Get final metrics
-      // const metrics2 = await this.page.metrics(); // Not available in playwright
-      const metrics2 = null;
+      const metrics2: BrowserMemoryMetrics = await this.page.evaluate(() => window.performance.memory as any);
       
       // The following lines would cause a TypeScript error (TS2531: Object is possibly 'null'.)
       // if strictNullChecks is enabled, because metrics1 and metrics2 are now null.
       // Per instructions, we only fix the 'metrics' property error.
       // If you wish to disable this performance check entirely or provide dummy data,
       // you would modify this section further.
-      const heapGrowth = metrics2!.JSHeapUsedSize - metrics1!.JSHeapUsedSize; // Using non-null assertion to suppress potential TS2531 error
+      const heapGrowth = metrics2.JSHeapUsedSize - metrics1.JSHeapUsedSize;
       const heapGrowthMB = (heapGrowth / 1024 / 1024).toFixed(2);
       
       console.log(`  - Heap growth: ${heapGrowthMB} MB`);

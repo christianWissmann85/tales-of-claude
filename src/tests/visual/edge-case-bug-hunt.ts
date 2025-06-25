@@ -257,9 +257,9 @@ async function inventoryStressTest(page: Page) {
     const targetSlot = '#itemSlot2'; // Another item slot
     if (await page.locator(itemSlot).isVisible() && await page.locator(targetSlot).isVisible()) {
         for (let i = 0; i < 5; i++) {
-            await page.locator(itemSlot).dragAndDrop(targetSlot);
+            await page.locator(itemSlot).dragTo(page.locator(targetSlot));
             await page.waitForTimeout(100);
-            await page.locator(targetSlot).dragAndDrop(itemSlot); // Drag back
+            await page.locator(targetSlot).dragTo(page.locator(itemSlot)); // Drag back
             await page.waitForTimeout(100);
         }
     }
@@ -563,7 +563,7 @@ async function multipleUIPanelsOpenInteractionEdgeCases(page: Page) {
     const itemToDrag = page.locator('#itemSlot1');
     const emptySlot = page.locator('#itemSlot2');
     if (await itemToDrag.isVisible() && await emptySlot.isVisible()) {
-        await itemToDrag.dragAndDrop(emptySlot);
+        await itemToDrag.dragTo(emptySlot);
         await page.waitForTimeout(500);
         await itemToDrag.waitFor({ state: 'hidden' }); // Item should have moved
         await emptySlot.waitFor({ state: 'visible' }); // Item should be in new slot

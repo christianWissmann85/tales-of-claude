@@ -14,6 +14,7 @@ import {
   DialogueLine, // Import DialogueLine
   TimeData, // Import TimeData
   CombatEntity, // Import CombatEntity for type safety
+  BattleState, // Import BattleState for type safety
 } from '../types/global.types';
 
 // 1. Add import for Enemy model from '../models/Enemy'
@@ -755,8 +756,12 @@ export class GameEngine {
       let positionsChanged = false;
       
       // Get enemies currently in battle to exclude them from the map
-      const battle = this._currentGameState.battle;
-      const enemiesInBattle = battle ? battle.enemies.map((e: CombatEntity) => e.id) : [];
+      const gameState = this._currentGameState as any;
+      const battle = gameState.battle as BattleState | null;
+      let enemiesInBattle: string[] = [];
+      if (battle) {
+        enemiesInBattle = battle.enemies.map((e: CombatEntity) => e.id);
+      }
       
       this._currentGameState.enemies.forEach(enemy => {
         // Skip enemies that are currently in battle

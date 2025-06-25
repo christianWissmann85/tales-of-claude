@@ -1,0 +1,1810 @@
+
+> tales-of-claude@0.6.5 lint
+> eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/docs/Consultant-Proposals/simple_visual_test_proposal/simple_visual_test.ts
+    3:33  warning  'writeFileSync' is defined but never used                  @typescript-eslint/no-unused-vars
+   18:15  error    Missing trailing comma                                     comma-dangle
+   45:75  error    Missing trailing comma                                     comma-dangle
+   48:11  error    'executablePath' is never reassigned. Use 'const' instead  prefer-const
+   63:86  error    Missing trailing comma                                     comma-dangle
+   77:20  error    Missing trailing comma                                     comma-dangle
+  105:16  error    Strings must use singlequote                               quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/docs/Consultant-Proposals/simple_visual_test_proposal/visual_analyzer.ts
+    3:10  warning  'readFileSync' is defined but never used                                  @typescript-eslint/no-unused-vars
+    3:39  warning  'existsSync' is defined but never used                                    @typescript-eslint/no-unused-vars
+   18:69  error    Missing trailing comma                                                    comma-dangle
+   24:85  error    Missing trailing comma                                                    comma-dangle
+   29:92  error    Missing trailing comma                                                    comma-dangle
+   30:6   error    Missing trailing comma                                                    comma-dangle
+  169:31  warning  'report' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/App.tsx
+  73:26  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/assets/legendary-items.ts
+   32:22   error  Missing trailing comma  comma-dangle
+   36:56   error  Missing trailing comma  comma-dangle
+   39:28   error  Missing trailing comma  comma-dangle
+   48:29   error  Missing trailing comma  comma-dangle
+   52:69   error  Missing trailing comma  comma-dangle
+   55:23   error  Missing trailing comma  comma-dangle
+   64:28   error  Missing trailing comma  comma-dangle
+   68:54   error  Missing trailing comma  comma-dangle
+   71:23   error  Missing trailing comma  comma-dangle
+   80:19   error  Missing trailing comma  comma-dangle
+   84:67   error  Missing trailing comma  comma-dangle
+   87:25   error  Missing trailing comma  comma-dangle
+   96:22   error  Missing trailing comma  comma-dangle
+  100:63   error  Missing trailing comma  comma-dangle
+  103:23   error  Missing trailing comma  comma-dangle
+  114:19   error  Missing trailing comma  comma-dangle
+  119:69   error  Missing trailing comma  comma-dangle
+  122:28   error  Missing trailing comma  comma-dangle
+  131:19   error  Missing trailing comma  comma-dangle
+  135:61   error  Missing trailing comma  comma-dangle
+  138:23   error  Missing trailing comma  comma-dangle
+  147:29   error  Missing trailing comma  comma-dangle
+  151:49   error  Missing trailing comma  comma-dangle
+  154:23   error  Missing trailing comma  comma-dangle
+  163:23   error  Missing trailing comma  comma-dangle
+  167:61   error  Missing trailing comma  comma-dangle
+  170:23   error  Missing trailing comma  comma-dangle
+  179:59   error  Missing trailing comma  comma-dangle
+  182:25   error  Missing trailing comma  comma-dangle
+  193:28   error  Missing trailing comma  comma-dangle
+  197:98   error  Missing trailing comma  comma-dangle
+  200:23   error  Missing trailing comma  comma-dangle
+  209:29   error  Missing trailing comma  comma-dangle
+  213:80   error  Missing trailing comma  comma-dangle
+  216:23   error  Missing trailing comma  comma-dangle
+  226:68   error  Missing trailing comma  comma-dangle
+  229:28   error  Missing trailing comma  comma-dangle
+  238:140  error  Missing trailing comma  comma-dangle
+  241:23   error  Missing trailing comma  comma-dangle
+  249:22   error  Missing trailing comma  comma-dangle
+  253:52   error  Missing trailing comma  comma-dangle
+  256:23   error  Missing trailing comma  comma-dangle
+  267:19   error  Missing trailing comma  comma-dangle
+  271:66   error  Missing trailing comma  comma-dangle
+  274:28   error  Missing trailing comma  comma-dangle
+  282:23   error  Missing trailing comma  comma-dangle
+  286:59   error  Missing trailing comma  comma-dangle
+  289:23   error  Missing trailing comma  comma-dangle
+  298:23   error  Missing trailing comma  comma-dangle
+  302:71   error  Missing trailing comma  comma-dangle
+  305:23   error  Missing trailing comma  comma-dangle
+  315:63   error  Missing trailing comma  comma-dangle
+  318:23   error  Missing trailing comma  comma-dangle
+  327:24   error  Missing trailing comma  comma-dangle
+  331:56   error  Missing trailing comma  comma-dangle
+  334:23   error  Missing trailing comma  comma-dangle
+  345:20   error  Missing trailing comma  comma-dangle
+  349:51   error  Missing trailing comma  comma-dangle
+  352:28   error  Missing trailing comma  comma-dangle
+  361:21   error  Missing trailing comma  comma-dangle
+  365:74   error  Missing trailing comma  comma-dangle
+  368:27   error  Missing trailing comma  comma-dangle
+  377:19   error  Missing trailing comma  comma-dangle
+  382:61   error  Missing trailing comma  comma-dangle
+  385:23   error  Missing trailing comma  comma-dangle
+  394:156  error  Missing trailing comma  comma-dangle
+  397:23   error  Missing trailing comma  comma-dangle
+  406:28   error  Missing trailing comma  comma-dangle
+  411:49   error  Missing trailing comma  comma-dangle
+  414:25   error  Missing trailing comma  comma-dangle
+  415:6    error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/assets/maps/binaryForest.ts
+    4:10  warning  'GameMap' is defined but never used                                      @typescript-eslint/no-unused-vars
+  190:27  error    Missing trailing comma                                                   comma-dangle
+  205:28  error    Missing trailing comma                                                   comma-dangle
+  213:19  error    Missing trailing comma                                                   comma-dangle
+  216:29  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  219:29  error    Missing trailing comma                                                   comma-dangle
+  225:21  error    Missing trailing comma                                                   comma-dangle
+  232:28  error    Missing trailing comma                                                   comma-dangle
+  243:22  error    Missing trailing comma                                                   comma-dangle
+  251:22  error    Missing trailing comma                                                   comma-dangle
+  252:4   error    Missing trailing comma                                                   comma-dangle
+  260:30  error    Missing trailing comma                                                   comma-dangle
+  265:31  error    Missing trailing comma                                                   comma-dangle
+  270:30  error    Missing trailing comma                                                   comma-dangle
+  271:4   error    Missing trailing comma                                                   comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/assets/maps/debugDungeon.ts
+    3:10  warning  'Position' is defined but never used      @typescript-eslint/no-unused-vars
+    4:10  warning  'GameMap' is defined but never used       @typescript-eslint/no-unused-vars
+  253:27  error    Missing trailing comma                    comma-dangle
+  278:27  error    Missing trailing comma                    comma-dangle
+  291:27  error    Missing trailing comma                    comma-dangle
+  300:27  error    Missing trailing comma                    comma-dangle
+  304:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  310:29  error    Missing trailing comma                    comma-dangle
+  316:29  error    Missing trailing comma                    comma-dangle
+  322:29  error    Missing trailing comma                    comma-dangle
+  329:29  error    Missing trailing comma                    comma-dangle
+  335:29  error    Missing trailing comma                    comma-dangle
+  341:29  error    Missing trailing comma                    comma-dangle
+  349:30  error    Missing trailing comma                    comma-dangle
+  356:30  error    Missing trailing comma                    comma-dangle
+  363:30  error    Missing trailing comma                    comma-dangle
+  370:30  error    Missing trailing comma                    comma-dangle
+  377:30  error    Missing trailing comma                    comma-dangle
+  378:4   error    Missing trailing comma                    comma-dangle
+  386:31  error    Missing trailing comma                    comma-dangle
+  391:31  error    Missing trailing comma                    comma-dangle
+  396:29  error    Missing trailing comma                    comma-dangle
+  397:4   error    Missing trailing comma                    comma-dangle
+  408:22  error    Missing trailing comma                    comma-dangle
+  409:4   error    Missing trailing comma                    comma-dangle
+  416:19  error    Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Battle/Battle.tsx
+    2:37  warning  'Ability' is defined but never used                  @typescript-eslint/no-unused-vars
+  163:8   error    Missing trailing comma                               comma-dangle
+  195:10  warning  'selectedItemId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  228:28  error    Expected { after 'if' condition                      curly
+  239:21  error    Expected { after 'if' condition                      curly
+  261:23  error    Expected { after 'if' condition                      curly
+  326:28  error    Expected { after 'if' condition                      curly
+  400:31  error    Missing trailing comma                               comma-dangle
+  401:14  error    Missing trailing comma                               comma-dangle
+  419:58  error    Missing trailing comma                               comma-dangle
+  420:14  error    Missing trailing comma                               comma-dangle
+  434:59  error    Expected { after 'if' condition                      curly
+  435:63  error    Expected { after 'if' condition                      curly
+  436:65  error    Expected { after 'if' condition                      curly
+  583:7   error    Strings must use singlequote                         quotes
+  584:7   error    Strings must use singlequote                         quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/CharacterScreen/CharacterScreen.tsx
+   4:10  warning  'Item' is defined but never used                 @typescript-eslint/no-unused-vars
+   5:10  warning  'TalentTree' is defined but never used           @typescript-eslint/no-unused-vars
+   5:30  warning  'TalentEffectType' is defined but never used     @typescript-eslint/no-unused-vars
+   5:48  warning  'TalentSpecialEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  30:65  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/DebugPanel/DebugPanel.tsx
+  29:31  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/DialogueBox/DialogueBox.tsx
+  5:10  warning  'DialogueState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Equipment/EquipmentDisplay.tsx
+  8:10  warning  'PlayerStats' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/ErrorBoundary/ErrorBoundary.tsx
+   33:35  warning  'error' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  123:57  error    Missing trailing comma                                                   comma-dangle
+  125:10  error    Component definition is missing display name                             react/display-name
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/FactionStatus/FactionStatus.tsx
+    1:17  warning  'useState' is defined but never used   @typescript-eslint/no-unused-vars
+    1:27  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+   19:31  error    Missing trailing comma                 comma-dangle
+   60:11  error    Missing trailing comma                 comma-dangle
+  134:10  error    Strings must use singlequote           quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/GameBoard/GameBoard.tsx
+    7:10  warning  'MovementSystem' is defined but never used                                  @typescript-eslint/no-unused-vars
+    8:20  warning  'TileType' is defined but never used                                        @typescript-eslint/no-unused-vars
+    8:30  warning  'Enemy' is defined but never used                                           @typescript-eslint/no-unused-vars
+    8:37  warning  'NPC' is defined but never used                                             @typescript-eslint/no-unused-vars
+    8:50  warning  'IItem' is defined but never used                                           @typescript-eslint/no-unused-vars
+   46:26  error    Expected { after 'if' condition                                             curly
+   47:25  error    Expected { after 'if' condition                                             curly
+   48:29  error    Expected { after 'if' condition                                             curly
+   73:24  warning  'getDirection' is assigned a value but never used                           @typescript-eslint/no-unused-vars
+   86:37  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+   99:26  error    Expected { after 'if' condition                                             curly
+  101:32  error    Expected { after 'if' condition                                             curly
+  102:33  error    Expected { after 'if' condition                                             curly
+  103:34  error    Expected { after 'if' condition                                             curly
+  129:16  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  130:16  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  168:54  warning  'quantity' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  191:32  error    Missing trailing comma                                                      comma-dangle
+  212:36  error    Missing trailing comma                                                      comma-dangle
+  230:53  error    Missing trailing comma                                                      comma-dangle
+  253:36  error    Missing trailing comma                                                      comma-dangle
+  267:30  error    Missing trailing comma                                                      comma-dangle
+  287:27  error    Missing trailing comma                                                      comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/GameBoard/MapGrid.tsx
+  176:47  error  Expected { after 'if' condition                       curly
+  177:43  error  Expected { after 'if' condition                       curly
+  181:47  error  Expected { after 'if' condition                       curly
+  182:43  error  Expected { after 'if' condition                       curly
+  199:45  error  Expected { after 'if' condition                       curly
+  200:46  error  Expected { after 'if' condition                       curly
+  201:39  error  Expected { after 'if' condition                       curly
+  216:59  error  Missing trailing comma                                comma-dangle
+  275:17  error  Missing trailing comma                                comma-dangle
+  282:11  error  'cellStyle' is never reassigned. Use 'const' instead  prefer-const
+  300:63  error  Missing trailing comma                                comma-dangle
+  319:25  error  Expected { after 'if' condition                       curly
+  320:24  error  Expected { after 'if' condition                       curly
+  321:22  error  Expected { after 'if' condition                       curly
+  385:15  error  Missing trailing comma                                comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Hotbar/Hotbar.tsx
+  109:18  error  Expected { after 'if' condition  curly
+  151:18  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Inventory/Inventory.tsx
+  109:9    error  'filteredItems' is never reassigned. Use 'const' instead                      prefer-const
+  111:70   error  Expected { after 'if' condition                                               curly
+  112:67   error  Expected { after 'if' condition                                               curly
+  113:84   error  Expected { after 'if' condition                                               curly
+  116:88   error  Expected { after 'if' condition                                               curly
+  130:57   error  Expected { after 'if' condition                                               curly
+  196:28   error  Expected { after 'if' condition                                               curly
+  270:9    error  Closing curly brace does not appear on the same line as the subsequent block  brace-style
+  274:9    error  Closing curly brace does not appear on the same line as the subsequent block  brace-style
+  291:37   error  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  291:73   error  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  388:68   error  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  431:78   error  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  431:120  error  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/ItemTooltip/ItemTooltip.tsx
+    4:18  warning  'EquipmentSlotType' is defined but never used   @typescript-eslint/no-unused-vars
+    5:10  warning  'ItemType' is defined but never used            @typescript-eslint/no-unused-vars
+   23:27  error    Expected { after 'if' condition                 curly
+   24:27  error    Expected { after 'if' condition                 curly
+   25:26  error    Expected { after 'if' condition                 curly
+   26:26  error    Expected { after 'if' condition                 curly
+   30:28  error    Expected { after 'if' condition                 curly
+   31:28  error    Expected { after 'if' condition                 curly
+   32:27  error    Expected { after 'if' condition                 curly
+   33:27  error    Expected { after 'if' condition                 curly
+   79:26  error    Expected { after 'if' condition                 curly
+   84:26  error    Expected { after 'if' condition                 curly
+  113:70  error    Missing trailing comma                          comma-dangle
+  121:21  error    Expected { after 'if' condition                 curly
+  124:11  warning  'diffColor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Minimap/Minimap.tsx
+  103:31  error  Expected { after 'if' condition  curly
+  105:25  error  Expected { after 'if' condition  curly
+  112:16  error  Expected { after 'if' condition  curly
+  118:60  error  Expected { after 'if' condition  curly
+  161:40  error  Expected { after 'if' condition  curly
+  162:39  error  Expected { after 'if' condition  curly
+  163:36  error  Expected { after 'if' condition  curly
+  168:38  error  Expected { after 'if' condition  curly
+  172:16  error  Expected { after 'if' condition  curly
+  174:31  error  Expected { after 'if' condition  curly
+  175:33  error  Expected { after 'if' condition  curly
+  176:62  error  Expected { after 'if' condition  curly
+  214:17  error  Missing trailing comma           comma-dangle
+  220:15  error  Missing trailing comma           comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/OpeningScene/OpeningScene.tsx
+  33:11  error  Strings must use singlequote  quotes
+  47:11  error  Strings must use singlequote  quotes
+  61:11  error  Strings must use singlequote  quotes
+  78:11  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/QuestJournal/QuestJournal.tsx
+   10:3   warning  'QuestChoice' is defined but never used         @typescript-eslint/no-unused-vars
+   11:3   warning  'QuestBranch' is defined but never used         @typescript-eslint/no-unused-vars
+   13:3   warning  'BranchingObjective' is defined but never used  @typescript-eslint/no-unused-vars
+   20:11  warning  'state' is assigned a value but never used      @typescript-eslint/no-unused-vars
+   37:61  error    Missing trailing comma                          comma-dangle
+   41:61  error    Missing trailing comma                          comma-dangle
+   54:22  error    Expected { after 'if' condition                 curly
+   61:60  error    Missing trailing comma                          comma-dangle
+   62:8   error    Missing trailing comma                          comma-dangle
+   86:54  error    Missing trailing comma                          comma-dangle
+  100:78  error    Missing trailing comma                          comma-dangle
+  119:37  error    Expected { after 'if' condition                 curly
+  120:37  error    Expected { after 'if' condition                 curly
+  121:25  error    Expected { after 'if' condition                 curly
+  127:39  error    Expected { after 'if' condition                 curly
+  128:41  error    Expected { after 'if' condition                 curly
+  129:36  error    Expected { after 'if' condition                 curly
+  137:51  error    Missing trailing comma                          comma-dangle
+  140:38  error    Expected { after 'if' condition                 curly
+  160:54  error    Expected { after 'if' condition                 curly
+  169:51  error    Missing trailing comma                          comma-dangle
+  170:27  error    Missing trailing comma                          comma-dangle
+  185:91  error    Missing trailing comma                          comma-dangle
+  198:69  error    Expected { after 'if' condition                 curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/QuestLog/QuestLog.tsx
+   13:11  warning  'state' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+   25:42  error    Missing trailing comma                                                   comma-dangle
+   63:53  error    Missing trailing comma                                                   comma-dangle
+   74:73  error    Missing trailing comma                                                   comma-dangle
+   94:28  error    Expected { after 'if' condition                                          curly
+  171:55  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/QuestTracker/QuestTracker.tsx
+   68:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   79:21  error  Expected { after 'if' condition           curly
+   93:84  error  Missing trailing comma                    comma-dangle
+  111:37  error  Expected { after 'if' condition           curly
+  112:37  error  Expected { after 'if' condition           curly
+  132:32  error  Strings must use singlequote              quotes
+  132:47  error  Strings must use singlequote              quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/Shop/Shop.tsx
+   5:10  warning  'ShopItem' is defined but never used   @typescript-eslint/no-unused-vars
+   5:26  warning  'ShopState' is defined but never used  @typescript-eslint/no-unused-vars
+  81:87  error    Strings must use singlequote           quotes
+  84:83  error    Strings must use singlequote           quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/TestPages/FloorTileTest.tsx
+   18:22  error  Missing trailing comma           comma-dangle
+   33:16  error  Missing trailing comma           comma-dangle
+   48:17  error  Missing trailing comma           comma-dangle
+   56:51  error  Missing trailing comma           comma-dangle
+   60:51  error  Missing trailing comma           comma-dangle
+   61:6   error  Missing trailing comma           comma-dangle
+   71:54  error  Missing trailing comma           comma-dangle
+   78:54  error  Missing trailing comma           comma-dangle
+   85:48  error  Missing trailing comma           comma-dangle
+   86:6   error  Missing trailing comma           comma-dangle
+  133:59  error  Missing trailing comma           comma-dangle
+  156:25  error  Missing trailing comma           comma-dangle
+  159:28  error  Expected { after 'if' condition  curly
+  166:18  error  Expected { after 'if' condition  curly
+  169:19  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/TimeDisplay/TimeDisplay.tsx
+  3:10  warning  'TimeOfDay' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/VisualEffects/VisualEffects.tsx
+  18:17  error  Expected { after 'if' condition  curly
+  24:17  error  Expected { after 'if' condition  curly
+  30:17  error  Expected { after 'if' condition  curly
+  39:17  error  Expected { after 'if' condition  curly
+  45:17  error  Expected { after 'if' condition  curly
+  51:17  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/components/WeatherDisplay/WeatherDisplay.tsx
+  40:30  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/constants/TileVisuals.ts
+   3:10  warning  'TileType' is defined but never used  @typescript-eslint/no-unused-vars
+  80:51  error    Expected { after 'if' condition       curly
+  81:48  error    Expected { after 'if' condition       curly
+  82:55  error    Expected { after 'if' condition       curly
+  83:51  error    Expected { after 'if' condition       curly
+  86:23  error    Expected { after 'if' condition       curly
+  89:52  error    Expected { after 'if' condition       curly
+  92:79  error    Expected { after 'if' condition       curly
+  93:78  error    Expected { after 'if' condition       curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/context/GameContext.tsx
+    7:3    warning  'BattleState' is defined but never used           @typescript-eslint/no-unused-vars
+   18:3    warning  'TimeOfDay' is defined but never used             @typescript-eslint/no-unused-vars
+   20:3    warning  'WeatherType' is defined but never used           @typescript-eslint/no-unused-vars
+   29:10   warning  'Quest' is defined but never used                 @typescript-eslint/no-unused-vars
+   29:17   warning  'QuestVariant' is defined but never used          @typescript-eslint/no-unused-vars
+   32:10   warning  'getNPCDialogueId' is defined but never used      @typescript-eslint/no-unused-vars
+   33:10   warning  'UIManager' is defined but never used             @typescript-eslint/no-unused-vars
+   70:26   error    Expected { after 'if' condition                   curly
+   71:25   error    Expected { after 'if' condition                   curly
+   72:29   error    Expected { after 'if' condition                   curly
+  285:30   error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  285:40   error    Missing trailing comma                            comma-dangle
+  292:35   error    Missing trailing comma                            comma-dangle
+  479:54   error    Missing trailing comma                            comma-dangle
+  481:73   error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  486:59   error    Missing trailing comma                            comma-dangle
+  493:67   error    Missing trailing comma                            comma-dangle
+  522:27   error    Missing trailing comma                            comma-dangle
+  528:67   error    Missing trailing comma                            comma-dangle
+  560:58   error    Missing trailing comma                            comma-dangle
+  635:60   error    Missing trailing comma                            comma-dangle
+  641:110  error    Missing trailing comma                            comma-dangle
+  689:52   error    Missing trailing comma                            comma-dangle
+  691:71   error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  692:24   error    Empty block statement                             no-empty
+  754:29   error    Expected { after 'if' condition                   curly
+  790:29   error    Expected { after 'if' condition                   curly
+  922:10   warning  'isMapLoaded' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  944:15   warning  'npcs' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  945:15   warning  'enemies' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  947:15   warning  'items' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  967:75   error    Missing trailing comma                            comma-dangle
+  968:14   error    Missing trailing comma                            comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/BattleSystem.ts
+    9:3   warning  'StatusEffectType' is defined but never used                             @typescript-eslint/no-unused-vars
+   10:3   warning  'ItemType' is defined but never used                                     @typescript-eslint/no-unused-vars
+   16:10  warning  'TalentEffect' is defined but never used                                 @typescript-eslint/no-unused-vars
+   16:24  warning  'TalentSpecialEffect' is defined but never used                          @typescript-eslint/no-unused-vars
+  184:9   error    'currentEffects' is never reassigned. Use 'const' instead                prefer-const
+  328:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  363:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  364:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  366:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  374:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  375:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  377:17  error    Unexpected lexical declaration in case block                             no-case-declarations
+  668:29  warning  'enemy' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/FactionManager.ts
+   69:17  error  Strings must use singlequote  quotes
+   70:17  error  Strings must use singlequote  quotes
+   71:17  error  Strings must use singlequote  quotes
+   72:17  error  Strings must use singlequote  quotes
+   73:17  error  Strings must use singlequote  quotes
+   73:73  error  Missing trailing comma        comma-dangle
+  110:21  error  Strings must use singlequote  quotes
+  139:87  error  Missing trailing comma        comma-dangle
+  189:85  error  Missing trailing comma        comma-dangle
+  235:16  error  Strings must use singlequote  quotes
+  244:54  error  Strings must use singlequote  quotes
+  255:25  error  Strings must use singlequote  quotes
+  255:47  error  Strings must use singlequote  quotes
+  255:72  error  Strings must use singlequote  quotes
+  264:54  error  Strings must use singlequote  quotes
+  279:18  error  Strings must use singlequote  quotes
+  281:18  error  Strings must use singlequote  quotes
+  298:47  error  Missing trailing comma        comma-dangle
+  314:29  error  Strings must use singlequote  quotes
+  326:90  error  Missing trailing comma        comma-dangle
+  341:21  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/GameEngine.ts
+    7:3   warning  'Tile' is defined but never used                                       @typescript-eslint/no-unused-vars
+    8:14  warning  'IGameMap' is defined but never used                                   @typescript-eslint/no-unused-vars
+    9:3   warning  'NPC' is defined but never used                                        @typescript-eslint/no-unused-vars
+   10:3   warning  'Item' is defined but never used                                       @typescript-eslint/no-unused-vars
+   11:3   warning  'Exit' is defined but never used                                       @typescript-eslint/no-unused-vars
+   13:3   warning  'DialogueOption' is defined but never used                             @typescript-eslint/no-unused-vars
+   21:19  warning  'EnemyClass' is defined but never used                                 @typescript-eslint/no-unused-vars
+   28:10  warning  'Player' is defined but never used                                     @typescript-eslint/no-unused-vars
+   37:10  warning  'mapDataIndex' is defined but never used                               @typescript-eslint/no-unused-vars
+  111:72  error    Missing trailing comma                                                 comma-dangle
+  117:51  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+  143:71  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+  291:71  error    Missing trailing comma                                                 comma-dangle
+  500:51  error    Missing trailing comma                                                 comma-dangle
+  501:12  error    Missing trailing comma                                                 comma-dangle
+  508:50  error    Missing trailing comma                                                 comma-dangle
+  509:12  error    Missing trailing comma                                                 comma-dangle
+  518:65  error    Missing trailing comma                                                 comma-dangle
+  519:12  error    Missing trailing comma                                                 comma-dangle
+  559:31  error    Strings must use singlequote                                           quotes
+  559:74  error    Missing trailing comma                                                 comma-dangle
+  566:31  error    Strings must use singlequote                                           quotes
+  566:88  error    Missing trailing comma                                                 comma-dangle
+  759:51  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+  780:43  error    Missing trailing comma                                                 comma-dangle
+  809:47  error    Missing trailing comma                                                 comma-dangle
+  861:70  error    Missing trailing comma                                                 comma-dangle
+  912:31  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+  916:32  error    Missing trailing comma                                                 comma-dangle
+  924:33  warning  'map' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  925:30  error    Expected { after 'if' condition                                        curly
+  932:39  error    Expected { after 'if' condition                                        curly
+  933:47  error    Expected { after 'if' condition                                        curly
+  934:48  error    Expected { after 'if' condition                                        curly
+  935:47  error    Expected { after 'if' condition                                        curly
+  936:57  error    Expected { after 'if' condition                                        curly
+  939:54  error    Unexpected any. Specify a different type                               @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/MapLoader.ts
+    7:3    warning  'JsonMapNPC' is defined but never used        @typescript-eslint/no-unused-vars
+    8:3    warning  'JsonMapEnemy' is defined but never used      @typescript-eslint/no-unused-vars
+    9:3    warning  'JsonMapItem' is defined but never used       @typescript-eslint/no-unused-vars
+   10:3    warning  'JsonMapExit' is defined but never used       @typescript-eslint/no-unused-vars
+   11:3    warning  'JsonMapDoor' is defined but never used       @typescript-eslint/no-unused-vars
+   12:3    warning  'JsonMapStructure' is defined but never used  @typescript-eslint/no-unused-vars
+   15:21   error    Missing trailing comma                        comma-dangle
+  101:87   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  105:39   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  106:55   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  107:43   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  108:37   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  109:33   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  148:21   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  159:25   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  195:21   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  219:21   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  381:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  392:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  393:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  395:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  399:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  400:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  401:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  411:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  413:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  414:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  418:57   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  428:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  429:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  431:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  448:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  457:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  458:13   error    Unexpected lexical declaration in case block  no-case-declarations
+  468:83   error    Missing trailing comma                        comma-dangle
+  509:92   error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  509:126  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/PatrolSystem.ts
+    4:37  warning  'WeatherType' is defined but never used                                       @typescript-eslint/no-unused-vars
+   48:33  error    Missing trailing comma                                                        comma-dangle
+   55:34  error    Missing trailing comma                                                        comma-dangle
+   62:34  error    Missing trailing comma                                                        comma-dangle
+   69:34  error    Missing trailing comma                                                        comma-dangle
+   76:34  error    Missing trailing comma                                                        comma-dangle
+   77:10  error    Missing trailing comma                                                        comma-dangle
+   98:27  error    Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  107:44  error    Missing trailing comma                                                        comma-dangle
+  136:31  error    Missing trailing comma                                                        comma-dangle
+  146:57  error    Missing trailing comma                                                        comma-dangle
+  154:57  error    Missing trailing comma                                                        comma-dangle
+  177:15  warning  'currentTime' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  180:15  warning  'weather' is assigned a value but never used                                  @typescript-eslint/no-unused-vars
+  305:57  error    Missing trailing comma                                                        comma-dangle
+  309:69  error    Missing trailing comma                                                        comma-dangle
+  364:9   error    Closing curly brace does not appear on the same line as the subsequent block  brace-style
+  605:62  error    Missing trailing comma                                                        comma-dangle
+  617:60  error    Missing trailing comma                                                        comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/PuzzleInteractionHandler.ts
+    1:24  warning  'PuzzleState' is defined but never used  @typescript-eslint/no-unused-vars
+   57:28  error    Missing trailing comma                   comma-dangle
+   86:28  error    Missing trailing comma                   comma-dangle
+  112:28  error    Missing trailing comma                   comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/StableUIManager.ts
+   21:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:36  error  Missing trailing comma                    comma-dangle
+   39:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   59:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   60:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   60:36  error  Missing trailing comma                    comma-dangle
+   80:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:58  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/TimeSystem.ts
+   24:34  error  Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   26:35  error  Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   33:36  error  Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   41:36  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  174:67  error  Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+  183:68  error  Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+  241:20  error  Strings must use singlequote                                                                                                                                                                                                                                                                                                                                                                                        quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/UIManager.ts
+   36:16  error  Missing trailing comma                    comma-dangle
+   52:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   53:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   56:32  error  Expected { after 'if' condition           curly
+   57:31  error  Expected { after 'if' condition           curly
+   58:38  error  Expected { after 'if' condition           curly
+   59:36  error  Expected { after 'if' condition           curly
+   60:27  error  Expected { after 'if' condition           curly
+   85:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:29  error  Missing trailing comma                    comma-dangle
+   98:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:30  error  Expected { after 'if' condition           curly
+  113:29  error  Expected { after 'if' condition           curly
+  114:36  error  Expected { after 'if' condition           curly
+  115:34  error  Expected { after 'if' condition           curly
+  116:26  error  Expected { after 'if' condition           curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/engine/WeatherSystem.ts
+   32:34   error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   39:35   error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   51:36   error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   64:36   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+   86:60   error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+   87:61   error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+  172:20   error    Strings must use singlequote                                                                                                                                                                                                                                                                                                                                                                                        quotes
+  216:17   error    Strings must use singlequote                                                                                                                                                                                                                                                                                                                                                                                        quotes
+  345:9    error    Closing curly brace does not appear on the same line as the subsequent block                                                                                                                                                                                                                                                                                                                                        brace-style
+  350:11   warning  'totalAdjustment' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  354:13   error    'currentSum' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                               prefer-const
+  369:22   error    Missing trailing comma                                                                                                                                                                                                                                                                                                                                                                                              comma-dangle
+  404:9    error    'rand' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                     prefer-const
+  482:110  error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+  491:111  error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+  532:34   error    Missing trailing comma                                                                                                                                                                                                                                                                                                                                                                                              comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/hooks/useStableKeyboard.ts
+   45:23  error  Expected { after 'if' condition  curly
+   69:34  error  Missing trailing comma           comma-dangle
+  171:65  error  Expected { after 'if' condition  curly
+  172:65  error  Expected { after 'if' condition  curly
+  173:65  error  Expected { after 'if' condition  curly
+  174:65  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Enemy.ts
+   9:3  warning  'StatusEffectType' is defined but never used  @typescript-eslint/no-unused-vars
+  12:3  warning  'CombatEntity' is defined but never used      @typescript-eslint/no-unused-vars
+  13:3  warning  'AbilityType' is defined but never used       @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Faction.ts
+   51:9   error  Strings must use singlequote  quotes
+   51:61  error  Strings must use singlequote  quotes
+   52:9   error  Strings must use singlequote  quotes
+   52:54  error  Strings must use singlequote  quotes
+   53:9   error  Strings must use singlequote  quotes
+   53:58  error  Strings must use singlequote  quotes
+   69:92  error  Missing trailing comma        comma-dangle
+   75:43  error  Strings must use singlequote  quotes
+   86:9   error  Strings must use singlequote  quotes
+   87:9   error  Strings must use singlequote  quotes
+   89:9   error  Strings must use singlequote  quotes
+   90:41  error  Missing trailing comma        comma-dangle
+   98:9   error  Strings must use singlequote  quotes
+   99:9   error  Strings must use singlequote  quotes
+  101:9   error  Strings must use singlequote  quotes
+  102:41  error  Missing trailing comma        comma-dangle
+  110:9   error  Strings must use singlequote  quotes
+  111:9   error  Strings must use singlequote  quotes
+  113:9   error  Strings must use singlequote  quotes
+  114:41  error  Missing trailing comma        comma-dangle
+  129:54  error  Missing trailing comma        comma-dangle
+  143:49  error  Missing trailing comma        comma-dangle
+  157:53  error  Missing trailing comma        comma-dangle
+  178:16  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Inventory.ts
+  3:18  warning  'IItem' is defined but never used     @typescript-eslint/no-unused-vars
+  3:25  warning  'ItemType' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Item.ts
+  311:43  error  Strings must use singlequote  quotes
+  314:43  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Map.ts
+   3:10  warning  'Position' is defined but never used      @typescript-eslint/no-unused-vars
+   3:26  warning  'TileType' is defined but never used      @typescript-eslint/no-unused-vars
+  44:27  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:27  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:22  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:22  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:22  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:22  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:38  error    Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/NPC.ts
+    3:24  warning  'BaseCharacter' is defined but never used  @typescript-eslint/no-unused-vars
+   40:23  error    Missing trailing comma                     comma-dangle
+  150:23  error    Missing trailing comma                     comma-dangle
+  160:16  error    Missing trailing comma                     comma-dangle
+  170:24  error    Missing trailing comma                     comma-dangle
+  181:24  error    Missing trailing comma                     comma-dangle
+  192:24  error    Missing trailing comma                     comma-dangle
+  203:24  error    Missing trailing comma                     comma-dangle
+  214:24  error    Missing trailing comma                     comma-dangle
+  225:24  error    Missing trailing comma                     comma-dangle
+  236:24  error    Missing trailing comma                     comma-dangle
+  248:24  error    Missing trailing comma                     comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Player.ts
+  162:32  error  Expected { after 'if' condition  curly
+  163:33  error  Expected { after 'if' condition  curly
+  164:31  error  Expected { after 'if' condition  curly
+  427:26  error  Expected { after 'if' condition  curly
+  428:25  error  Expected { after 'if' condition  curly
+  429:29  error  Expected { after 'if' condition  curly
+  517:25  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/Quest.ts
+     8:3    warning  'Position' is defined but never used  @typescript-eslint/no-unused-vars
+   609:116  error    Missing trailing comma                comma-dangle
+   622:122  error    Missing trailing comma                comma-dangle
+   634:122  error    Missing trailing comma                comma-dangle
+   646:108  error    Missing trailing comma                comma-dangle
+   658:112  error    Missing trailing comma                comma-dangle
+   670:130  error    Missing trailing comma                comma-dangle
+   682:110  error    Missing trailing comma                comma-dangle
+   695:131  error    Missing trailing comma                comma-dangle
+   768:42   error    Missing trailing comma                comma-dangle
+   810:22   error    Missing trailing comma                comma-dangle
+   880:35   error    Missing trailing comma                comma-dangle
+  1202:80   error    Expected { after 'if' condition       curly
+  1203:80   error    Expected { after 'if' condition       curly
+  1220:82   error    Expected { after 'if' condition       curly
+  1221:82   error    Expected { after 'if' condition       curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/models/QuestManager.ts
+    8:12  warning  'IQuest' is defined but never used        @typescript-eslint/no-unused-vars
+   17:14  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  122:37  error    Missing trailing comma                    comma-dangle
+  139:60  error    Missing trailing comma                    comma-dangle
+  402:64  error    Missing trailing comma                    comma-dangle
+  407:53  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  407:74  error    Missing trailing comma                    comma-dangle
+  408:14  error    Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/services/SaveGame.ts
+    4:10  warning  'TalentTree' is defined but never used      @typescript-eslint/no-unused-vars
+    4:22  warning  'Talent' is defined but never used          @typescript-eslint/no-unused-vars
+   14:3   warning  'CombatEntity' is defined but never used    @typescript-eslint/no-unused-vars
+   17:3   warning  'Quest' is defined but never used           @typescript-eslint/no-unused-vars
+   18:3   warning  'CombatLogEntry' is defined but never used  @typescript-eslint/no-unused-vars
+   19:14  warning  'IGameMap' is defined but never used        @typescript-eslint/no-unused-vars
+   22:3   warning  'TileType' is defined but never used        @typescript-eslint/no-unused-vars
+   23:11  warning  'IItem' is defined but never used           @typescript-eslint/no-unused-vars
+   24:3   warning  'WeatherType' is defined but never used     @typescript-eslint/no-unused-vars
+   25:14  error    Missing trailing comma                      comma-dangle
+  127:23  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  128:24  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  160:36  error    Missing trailing comma                      comma-dangle
+  180:34  error    Missing trailing comma                      comma-dangle
+  181:17  error    Missing trailing comma                      comma-dangle
+  197:34  error    Missing trailing comma                      comma-dangle
+  315:29  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/check-visual-integration.ts
+  131:23  error  Expected { after 'if' condition  curly
+  168:35  error  Expected { after 'if' condition  curly
+  169:32  error  Expected { after 'if' condition  curly
+  170:26  error  Expected { after 'if' condition  curly
+  171:33  error  Expected { after 'if' condition  curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/node-test-runner.ts
+    23:6   error    Missing trailing comma                                                                                               comma-dangle
+    41:27  warning  'callback' is defined but never used. Allowed unused args must match /^_/u                                           @typescript-eslint/no-unused-vars
+    59:4   error    Missing trailing comma                                                                                               comma-dangle
+    71:20  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+    72:24  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+    74:31  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+    80:7   error    Unexpected lexical declaration in case block                                                                         no-case-declarations
+    81:7   error    Unexpected lexical declaration in case block                                                                         no-case-declarations
+    82:7   error    Unexpected lexical declaration in case block                                                                         no-case-declarations
+    83:31  error    Expected { after 'if' condition                                                                                      curly
+    84:38  error    Expected { after 'if' condition                                                                                      curly
+    85:38  error    Expected { after 'if' condition                                                                                      curly
+    86:39  error    Expected { after 'if' condition                                                                                      curly
+    93:73  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+    94:70  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+    95:71  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   104:64  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   106:88  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   119:62  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   121:90  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   304:1   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+   306:1   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+   320:18  warning  'EquippableItem' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   320:34  warning  'EquipmentSlotType' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+   324:10  warning  'NPCModel' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   333:10  warning  'QuestStatus' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   333:23  warning  'CombatEntity' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   335:3   warning  'Position' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   336:3   warning  'Direction' is defined but never used                                                                                @typescript-eslint/no-unused-vars
+   337:11  warning  'IItem' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   340:3   warning  'PlayerStats' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   341:3   warning  'CombatStats' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   343:3   warning  'DialogueState' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   346:3   warning  'CombatLogEntry' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   348:3   warning  'Exit' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+   349:3   warning  'Tile' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+   350:3   warning  'TileType' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   363:7   warning  'yellow' is assigned a value but never used                                                                          @typescript-eslint/no-unused-vars
+   371:5   warning  'currentSuiteName' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+   402:10  warning  'assertNotEqual' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   414:33  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   433:34  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   433:49  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   456:15  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   465:15  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   731:22  error    Expected { after 'if' condition                                                                                      curly
+   795:21  error    Expected { after 'if' condition                                                                                      curly
+   818:26  error    Expected { after 'if' condition                                                                                      curly
+   866:60  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   866:91  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   883:60  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   883:91  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   897:60  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+   897:91  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1061:9   warning  'defBoostTalent' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+  1158:11  warning  'mockQuests' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+  1252:24  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1380:13  warning  'serializedState' is assigned a value but never used                                                                 @typescript-eslint/no-unused-vars
+  1381:24  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1513:9   warning  'battleSystem' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  1514:9   warning  'mockBattleState' is assigned a value but never used                                                                 @typescript-eslint/no-unused-vars
+  1530:27  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1531:29  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1531:44  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1609:10  warning  'testGameEngine' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+  1929:24  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1956:13  warning  'mockQuestsForSave' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+  1966:10  error    Missing trailing comma                                                                                               comma-dangle
+  1987:33  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  1993:68  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  2006:65  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  2012:52  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  2057:13  warning  'mockQuestsForLoad' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+  2067:10  error    Missing trailing comma                                                                                               comma-dangle
+  2094:52  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  2099:52  error    Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/test-branching-quests.ts
+  11:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:39  error  Strings must use singlequote              quotes
+  49:13  error  Strings must use singlequote              quotes
+  64:13  error  Strings must use singlequote              quotes
+  88:13  error  Strings must use singlequote              quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/test-enemy-respawn.ts
+   15:55  error  Missing trailing comma                    comma-dangle
+   32:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   40:39  error  Missing trailing comma                    comma-dangle
+   52:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   56:21  error  Expected { after 'if' condition           curly
+   60:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   68:45  error  Missing trailing comma                    comma-dangle
+   81:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:26  error  Expected { after 'if' condition           curly
+   89:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   97:44  error  Missing trailing comma                    comma-dangle
+  105:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  115:47  error  Missing trailing comma                    comma-dangle
+  122:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  124:41  error  Expected { after 'if' condition           curly
+  126:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  127:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:50  error  Missing trailing comma                    comma-dangle
+  138:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:48  error  Missing trailing comma                    comma-dangle
+  154:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:41  error  Expected { after 'if' condition           curly
+  158:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  170:52  error  Missing trailing comma                    comma-dangle
+  172:13  error  Missing trailing comma                    comma-dangle
+  182:47  error  Missing trailing comma                    comma-dangle
+  191:18  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-playtest.ts
+   37:25  error  Missing trailing comma                    comma-dangle
+   48:52  error  Missing trailing comma                    comma-dangle
+   62:65  error  Missing trailing comma                    comma-dangle
+   78:52  error  Missing trailing comma                    comma-dangle
+   81:63  error  Missing trailing comma                    comma-dangle
+   92:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   97:6   error  Missing trailing comma                    comma-dangle
+  111:25  error  Missing trailing comma                    comma-dangle
+  185:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  190:6   error  Missing trailing comma                    comma-dangle
+  204:25  error  Missing trailing comma                    comma-dangle
+  230:50  error  Missing trailing comma                    comma-dangle
+  233:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  234:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  253:54  error  Missing trailing comma                    comma-dangle
+  279:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  284:6   error  Missing trailing comma                    comma-dangle
+  298:25  error  Missing trailing comma                    comma-dangle
+  329:54  error  Missing trailing comma                    comma-dangle
+  354:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  359:6   error  Missing trailing comma                    comma-dangle
+  373:25  error  Missing trailing comma                    comma-dangle
+  462:80  error  Missing trailing comma                    comma-dangle
+  471:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  476:6   error  Missing trailing comma                    comma-dangle
+  477:4   error  Missing trailing comma                    comma-dangle
+  509:57  error  Missing trailing comma                    comma-dangle
+  517:47  error  Missing trailing comma                    comma-dangle
+  543:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  564:76  error  Missing trailing comma                    comma-dangle
+  565:6   error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/edge-case-bug-hunt.ts
+   68:17  error    Strings must use singlequote                             quotes
+   71:17  error    Strings must use singlequote                             quotes
+   83:17  error    Strings must use singlequote                             quotes
+   93:11  warning  'enemyLocator' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  185:11  warning  'transitionZone' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  226:11  warning  'equipSlot' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  227:11  warning  'playerStatsDisplay' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  395:27  error    Expected { after 'if' condition                          curly
+  410:26  error    Expected { after 'if' condition                          curly
+  420:26  error    Expected { after 'if' condition                          curly
+  620:53  error    Missing trailing comma                                   comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/example-visual-test.ts
+   25:38  error  Missing trailing comma  comma-dangle
+   33:36  error  Missing trailing comma  comma-dangle
+   34:8   error  Missing trailing comma  comma-dangle
+   38:46  error  Missing trailing comma  comma-dangle
+   54:22  error  Missing trailing comma  comma-dangle
+   66:55  error  Missing trailing comma  comma-dangle
+   76:55  error  Missing trailing comma  comma-dangle
+   88:54  error  Missing trailing comma  comma-dangle
+  101:54  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/quick-screenshot.ts
+   8:55  error  Missing trailing comma  comma-dangle
+  43:21  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/screenshot-hires.ts
+    2:29  warning  'Page' is defined but never used          @typescript-eslint/no-unused-vars
+   40:57  error    Missing trailing comma                    comma-dangle
+   46:38  error    Missing trailing comma                    comma-dangle
+   47:8   error    Missing trailing comma                    comma-dangle
+   98:29  error    Missing trailing comma                    comma-dangle
+  104:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/screenshot-reliable.ts
+    9:20  warning  'Browser' is defined but never used       @typescript-eslint/no-unused-vars
+    9:29  warning  'Page' is defined but never used          @typescript-eslint/no-unused-vars
+   47:55  error    Missing trailing comma                    comma-dangle
+  128:16  error    Missing trailing comma                    comma-dangle
+  153:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/screenshot-tool-v2.ts
+   30:14  error  Expected { after 'if' condition           curly
+   38:16  error  Expected { after 'if' condition           curly
+   40:16  error  Expected { after 'if' condition           curly
+   48:23  error  Missing trailing comma                    comma-dangle
+   50:16  error  Expected { after 'if' condition           curly
+   52:16  error  Expected { after 'if' condition           curly
+   61:16  error  Expected { after 'if' condition           curly
+   63:16  error  Expected { after 'if' condition           curly
+   84:76  error  Missing trailing comma                    comma-dangle
+   90:40  error  Missing trailing comma                    comma-dangle
+   91:10  error  Missing trailing comma                    comma-dangle
+  108:27  error  Missing trailing comma                    comma-dangle
+  112:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  115:33  error  Expected { after 'if' condition           curly
+  191:31  error  Missing trailing comma                    comma-dangle
+  202:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  287:16  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/screenshot-tool.ts
+    2:29  warning  'Page' is defined but never used          @typescript-eslint/no-unused-vars
+   45:74  error    Missing trailing comma                    comma-dangle
+   51:38  error    Missing trailing comma                    comma-dangle
+   52:8   error    Missing trailing comma                    comma-dangle
+   66:25  error    Missing trailing comma                    comma-dangle
+   69:26  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   72:28  error    Expected { after 'if' condition           curly
+  135:29  error    Missing trailing comma                    comma-dangle
+  141:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  210:16  error    Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/simple-playtest.ts
+   51:22  error  Expected { after 'if' condition           curly
+   55:18  error  Expected { after 'if' condition           curly
+   60:45  error  Expected { after 'if' condition           curly
+   61:45  error  Expected { after 'if' condition           curly
+   62:45  error  Expected { after 'if' condition           curly
+   65:20  error  Expected { after 'if' condition           curly
+   68:6   error  Missing trailing comma                    comma-dangle
+  100:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:62  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  120:6   error  Missing trailing comma                    comma-dangle
+  138:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  144:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  163:6   error  Missing trailing comma                    comma-dangle
+  187:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  193:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  211:6   error  Missing trailing comma                    comma-dangle
+  255:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  281:6   error  Missing trailing comma                    comma-dangle
+  282:4   error  Missing trailing comma                    comma-dangle
+  306:48  error  Missing trailing comma                    comma-dangle
+  324:41  error  Missing trailing comma                    comma-dangle
+  332:57  error  Missing trailing comma                    comma-dangle
+  336:45  error  Missing trailing comma                    comma-dangle
+  358:23  error  Missing trailing comma                    comma-dangle
+  374:21  error  Strings must use singlequote              quotes
+  379:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  387:17  error  Empty block statement                     no-empty
+  405:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/tamy-epic-playtest.ts
+   41:61  error  Missing trailing comma        comma-dangle
+   50:13  error  Strings must use singlequote  quotes
+   51:13  error  Strings must use singlequote  quotes
+   56:18  error  Missing trailing comma        comma-dangle
+   60:46  error  Missing trailing comma        comma-dangle
+   65:13  error  Strings must use singlequote  quotes
+   72:13  error  Strings must use singlequote  quotes
+   78:13  error  Strings must use singlequote  quotes
+   85:15  error  Strings must use singlequote  quotes
+   89:15  error  Strings must use singlequote  quotes
+  100:15  error  Strings must use singlequote  quotes
+  106:17  error  Strings must use singlequote  quotes
+  108:17  error  Strings must use singlequote  quotes
+  111:15  error  Strings must use singlequote  quotes
+  115:13  error  Strings must use singlequote  quotes
+  116:13  error  Strings must use singlequote  quotes
+  121:13  error  Strings must use singlequote  quotes
+  127:13  error  Strings must use singlequote  quotes
+  132:42  error  Missing trailing comma        comma-dangle
+  144:13  error  Strings must use singlequote  quotes
+  157:15  error  Strings must use singlequote  quotes
+  165:15  error  Strings must use singlequote  quotes
+  170:13  error  Strings must use singlequote  quotes
+  173:13  error  Strings must use singlequote  quotes
+  197:13  error  Strings must use singlequote  quotes
+  209:13  error  Strings must use singlequote  quotes
+  221:32  error  Missing trailing comma        comma-dangle
+  232:13  error  Strings must use singlequote  quotes
+  244:15  error  Strings must use singlequote  quotes
+  260:13  error  Strings must use singlequote  quotes
+  263:13  error  Strings must use singlequote  quotes
+  276:17  error  Strings must use singlequote  quotes
+  283:19  error  Strings must use singlequote  quotes
+  294:17  error  Strings must use singlequote  quotes
+  304:13  error  Strings must use singlequote  quotes
+  320:17  error  Strings must use singlequote  quotes
+  327:13  error  Strings must use singlequote  quotes
+  328:13  error  Strings must use singlequote  quotes
+  338:17  error  Strings must use singlequote  quotes
+  359:19  error  Strings must use singlequote  quotes
+  369:13  error  Strings must use singlequote  quotes
+  372:13  error  Strings must use singlequote  quotes
+  385:15  error  Strings must use singlequote  quotes
+  395:13  error  Strings must use singlequote  quotes
+  406:13  error  Strings must use singlequote  quotes
+  411:13  error  Strings must use singlequote  quotes
+  422:13  error  Strings must use singlequote  quotes
+  429:13  error  Strings must use singlequote  quotes
+  429:20  error  Strings must use singlequote  quotes
+  430:13  error  Strings must use singlequote  quotes
+  431:13  error  Strings must use singlequote  quotes
+  438:13  error  Strings must use singlequote  quotes
+  439:13  error  Strings must use singlequote  quotes
+  440:13  error  Strings must use singlequote  quotes
+  441:13  error  Strings must use singlequote  quotes
+  442:13  error  Strings must use singlequote  quotes
+  443:13  error  Strings must use singlequote  quotes
+  444:13  error  Strings must use singlequote  quotes
+  447:13  error  Strings must use singlequote  quotes
+  452:13  error  Strings must use singlequote  quotes
+  455:15  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/tamy-redemption-playtest.ts
+   55:21  error  Missing trailing comma        comma-dangle
+   83:57  error  Missing trailing comma        comma-dangle
+   93:13  error  Strings must use singlequote  quotes
+   94:13  error  Strings must use singlequote  quotes
+   95:13  error  Strings must use singlequote  quotes
+  100:18  error  Missing trailing comma        comma-dangle
+  104:46  error  Missing trailing comma        comma-dangle
+  109:13  error  Strings must use singlequote  quotes
+  116:13  error  Strings must use singlequote  quotes
+  122:13  error  Strings must use singlequote  quotes
+  129:15  error  Strings must use singlequote  quotes
+  137:13  error  Strings must use singlequote  quotes
+  142:13  error  Strings must use singlequote  quotes
+  147:35  error  Missing trailing comma        comma-dangle
+  161:13  error  Strings must use singlequote  quotes
+  162:13  error  Strings must use singlequote  quotes
+  176:15  error  Strings must use singlequote  quotes
+  187:15  error  Strings must use singlequote  quotes
+  192:13  error  Strings must use singlequote  quotes
+  195:13  error  Strings must use singlequote  quotes
+  212:13  error  Strings must use singlequote  quotes
+  226:13  error  Strings must use singlequote  quotes
+  241:13  error  Strings must use singlequote  quotes
+  242:13  error  Strings must use singlequote  quotes
+  255:19  error  Strings must use singlequote  quotes
+  273:19  error  Strings must use singlequote  quotes
+  277:19  error  Strings must use singlequote  quotes
+  282:17  error  Strings must use singlequote  quotes
+  292:13  error  Strings must use singlequote  quotes
+  308:17  error  Strings must use singlequote  quotes
+  316:13  error  Strings must use singlequote  quotes
+  317:13  error  Strings must use singlequote  quotes
+  326:17  error  Strings must use singlequote  quotes
+  346:21  error  Strings must use singlequote  quotes
+  363:13  error  Strings must use singlequote  quotes
+  366:13  error  Strings must use singlequote  quotes
+  381:13  error  Strings must use singlequote  quotes
+  392:15  error  Strings must use singlequote  quotes
+  409:13  error  Strings must use singlequote  quotes
+  423:17  error  Strings must use singlequote  quotes
+  441:13  error  Strings must use singlequote  quotes
+  445:13  error  Strings must use singlequote  quotes
+  457:13  error  Strings must use singlequote  quotes
+  471:15  error  Strings must use singlequote  quotes
+  485:13  error  Strings must use singlequote  quotes
+  485:20  error  Strings must use singlequote  quotes
+  486:13  error  Strings must use singlequote  quotes
+  487:13  error  Strings must use singlequote  quotes
+  498:13  error  Strings must use singlequote  quotes
+  499:13  error  Strings must use singlequote  quotes
+  500:13  error  Strings must use singlequote  quotes
+  501:13  error  Strings must use singlequote  quotes
+  502:13  error  Strings must use singlequote  quotes
+  503:13  error  Strings must use singlequote  quotes
+  504:13  error  Strings must use singlequote  quotes
+  505:13  error  Strings must use singlequote  quotes
+  507:13  error  Strings must use singlequote  quotes
+  508:13  error  Strings must use singlequote  quotes
+  509:13  error  Strings must use singlequote  quotes
+  511:13  error  Strings must use singlequote  quotes
+  512:13  error  Strings must use singlequote  quotes
+  515:13  error  Strings must use singlequote  quotes
+  520:13  error  Strings must use singlequote  quotes
+  523:15  error  Strings must use singlequote  quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/tamy-ultimate-bug-hunt-fixed.ts
+   16:7    warning  'TIMEOUT' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   48:17   error    Strings must use singlequote                  quotes
+   49:17   error    Strings must use singlequote                  quotes
+   59:57   error    Missing trailing comma                        comma-dangle
+   73:68   error    Missing trailing comma                        comma-dangle
+   96:60   error    Missing trailing comma                        comma-dangle
+  110:17   error    Strings must use singlequote                  quotes
+  119:21   error    Strings must use singlequote                  quotes
+  137:69   error    Missing trailing comma                        comma-dangle
+  143:61   error    Missing trailing comma                        comma-dangle
+  154:52   error    Missing trailing comma                        comma-dangle
+  163:58   error    Missing trailing comma                        comma-dangle
+  173:61   error    Missing trailing comma                        comma-dangle
+  180:17   error    Strings must use singlequote                  quotes
+  186:69   error    Missing trailing comma                        comma-dangle
+  207:104  error    Missing trailing comma                        comma-dangle
+  213:41   error    Missing trailing comma                        comma-dangle
+  228:106  error    Missing trailing comma                        comma-dangle
+  235:54   error    Missing trailing comma                        comma-dangle
+  243:52   error    Missing trailing comma                        comma-dangle
+  250:17   error    Strings must use singlequote                  quotes
+  272:85   error    Missing trailing comma                        comma-dangle
+  278:45   error    Missing trailing comma                        comma-dangle
+  296:69   error    Missing trailing comma                        comma-dangle
+  303:107  error    Missing trailing comma                        comma-dangle
+  311:57   error    Missing trailing comma                        comma-dangle
+  317:17   error    Strings must use singlequote                  quotes
+  328:50   error    Missing trailing comma                        comma-dangle
+  354:51   error    Missing trailing comma                        comma-dangle
+  362:54   error    Missing trailing comma                        comma-dangle
+  368:17   error    Strings must use singlequote                  quotes
+  399:101  error    Missing trailing comma                        comma-dangle
+  406:60   error    Missing trailing comma                        comma-dangle
+  412:58   error    Missing trailing comma                        comma-dangle
+  420:64   error    Missing trailing comma                        comma-dangle
+  426:17   error    Strings must use singlequote                  quotes
+  452:70   error    Missing trailing comma                        comma-dangle
+  460:74   error    Missing trailing comma                        comma-dangle
+  466:17   error    Strings must use singlequote                  quotes
+  480:23   error    Strings must use singlequote                  quotes
+  497:93   error    Missing trailing comma                        comma-dangle
+  505:57   error    Missing trailing comma                        comma-dangle
+  520:71   error    Missing trailing comma                        comma-dangle
+  529:63   error    Missing trailing comma                        comma-dangle
+  535:17   error    Strings must use singlequote                  quotes
+  552:23   error    Strings must use singlequote                  quotes
+  566:98   error    Missing trailing comma                        comma-dangle
+  577:54   error    Missing trailing comma                        comma-dangle
+  588:60   error    Missing trailing comma                        comma-dangle
+  597:63   error    Missing trailing comma                        comma-dangle
+  603:17   error    Strings must use singlequote                  quotes
+  645:57   error    Missing trailing comma                        comma-dangle
+  652:89   error    Missing trailing comma                        comma-dangle
+  659:62   error    Missing trailing comma                        comma-dangle
+  668:62   error    Missing trailing comma                        comma-dangle
+  674:17   error    Strings must use singlequote                  quotes
+  678:19   error    Strings must use singlequote                  quotes
+  701:83   error    Missing trailing comma                        comma-dangle
+  709:58   error    Missing trailing comma                        comma-dangle
+  715:19   error    Strings must use singlequote                  quotes
+  729:56   error    Missing trailing comma                        comma-dangle
+  735:19   error    Strings must use singlequote                  quotes
+  749:55   error    Missing trailing comma                        comma-dangle
+  756:67   error    Missing trailing comma                        comma-dangle
+  762:17   error    Strings must use singlequote                  quotes
+  766:106  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  777:106  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  794:86   error    Missing trailing comma                        comma-dangle
+  801:66   error    Missing trailing comma                        comma-dangle
+  810:17   error    Strings must use singlequote                  quotes
+  811:17   error    Strings must use singlequote                  quotes
+  813:17   error    Strings must use singlequote                  quotes
+  819:17   error    Strings must use singlequote                  quotes
+  824:17   error    Strings must use singlequote                  quotes
+  829:17   error    Strings must use singlequote                  quotes
+  834:17   error    Strings must use singlequote                  quotes
+  842:19   error    Strings must use singlequote                  quotes
+  846:27   error    Expected { after 'if' condition               curly
+  851:19   error    Strings must use singlequote                  quotes
+  855:27   error    Expected { after 'if' condition               curly
+  860:19   error    Strings must use singlequote                  quotes
+  868:19   error    Strings must use singlequote                  quotes
+  874:17   error    Strings must use singlequote                  quotes
+  876:19   error    Strings must use singlequote                  quotes
+  877:19   error    Strings must use singlequote                  quotes
+  879:19   error    Strings must use singlequote                  quotes
+  880:19   error    Strings must use singlequote                  quotes
+  882:19   error    Strings must use singlequote                  quotes
+  883:19   error    Strings must use singlequote                  quotes
+  885:19   error    Strings must use singlequote                  quotes
+  886:19   error    Strings must use singlequote                  quotes
+  889:17   error    Strings must use singlequote                  quotes
+  890:17   error    Strings must use singlequote                  quotes
+  891:17   error    Strings must use singlequote                  quotes
+  892:17   error    Strings must use singlequote                  quotes
+  893:17   error    Strings must use singlequote                  quotes
+  894:17   error    Strings must use singlequote                  quotes
+  896:17   error    Strings must use singlequote                  quotes
+  897:17   error    Strings must use singlequote                  quotes
+  898:17   error    Strings must use singlequote                  quotes
+  899:17   error    Strings must use singlequote                  quotes
+  900:17   error    Strings must use singlequote                  quotes
+  901:17   error    Strings must use singlequote                  quotes
+  902:17   error    Strings must use singlequote                  quotes
+  916:21   error    Strings must use singlequote                  quotes
+  933:21   error    Strings must use singlequote                  quotes
+  938:39   error    Missing trailing comma                        comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/tamy-ultimate-bug-hunt.ts
+   16:7    warning  'TIMEOUT' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   48:17   error    Strings must use singlequote                  quotes
+   49:17   error    Strings must use singlequote                  quotes
+   59:57   error    Missing trailing comma                        comma-dangle
+   72:68   error    Missing trailing comma                        comma-dangle
+   95:60   error    Missing trailing comma                        comma-dangle
+  109:17   error    Strings must use singlequote                  quotes
+  123:62   error    Missing trailing comma                        comma-dangle
+  129:47   error    Missing trailing comma                        comma-dangle
+  138:41   error    Missing trailing comma                        comma-dangle
+  147:61   error    Missing trailing comma                        comma-dangle
+  154:17   error    Strings must use singlequote                  quotes
+  160:69   error    Missing trailing comma                        comma-dangle
+  181:104  error    Missing trailing comma                        comma-dangle
+  187:41   error    Missing trailing comma                        comma-dangle
+  202:106  error    Missing trailing comma                        comma-dangle
+  209:54   error    Missing trailing comma                        comma-dangle
+  217:52   error    Missing trailing comma                        comma-dangle
+  224:17   error    Strings must use singlequote                  quotes
+  246:85   error    Missing trailing comma                        comma-dangle
+  252:45   error    Missing trailing comma                        comma-dangle
+  263:69   error    Missing trailing comma                        comma-dangle
+  270:104  error    Missing trailing comma                        comma-dangle
+  278:57   error    Missing trailing comma                        comma-dangle
+  284:17   error    Strings must use singlequote                  quotes
+  295:50   error    Missing trailing comma                        comma-dangle
+  321:51   error    Missing trailing comma                        comma-dangle
+  329:54   error    Missing trailing comma                        comma-dangle
+  335:17   error    Strings must use singlequote                  quotes
+  366:101  error    Missing trailing comma                        comma-dangle
+  373:60   error    Missing trailing comma                        comma-dangle
+  379:58   error    Missing trailing comma                        comma-dangle
+  387:64   error    Missing trailing comma                        comma-dangle
+  393:17   error    Strings must use singlequote                  quotes
+  419:70   error    Missing trailing comma                        comma-dangle
+  427:74   error    Missing trailing comma                        comma-dangle
+  433:17   error    Strings must use singlequote                  quotes
+  447:23   error    Strings must use singlequote                  quotes
+  464:93   error    Missing trailing comma                        comma-dangle
+  472:57   error    Missing trailing comma                        comma-dangle
+  487:71   error    Missing trailing comma                        comma-dangle
+  496:63   error    Missing trailing comma                        comma-dangle
+  502:17   error    Strings must use singlequote                  quotes
+  519:23   error    Strings must use singlequote                  quotes
+  533:98   error    Missing trailing comma                        comma-dangle
+  544:54   error    Missing trailing comma                        comma-dangle
+  555:60   error    Missing trailing comma                        comma-dangle
+  564:63   error    Missing trailing comma                        comma-dangle
+  570:17   error    Strings must use singlequote                  quotes
+  605:57   error    Missing trailing comma                        comma-dangle
+  612:89   error    Missing trailing comma                        comma-dangle
+  619:62   error    Missing trailing comma                        comma-dangle
+  628:62   error    Missing trailing comma                        comma-dangle
+  634:17   error    Strings must use singlequote                  quotes
+  638:19   error    Strings must use singlequote                  quotes
+  661:83   error    Missing trailing comma                        comma-dangle
+  669:58   error    Missing trailing comma                        comma-dangle
+  675:19   error    Strings must use singlequote                  quotes
+  689:56   error    Missing trailing comma                        comma-dangle
+  695:19   error    Strings must use singlequote                  quotes
+  709:55   error    Missing trailing comma                        comma-dangle
+  716:67   error    Missing trailing comma                        comma-dangle
+  722:17   error    Strings must use singlequote                  quotes
+  727:106  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  738:106  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  750:86   error    Missing trailing comma                        comma-dangle
+  757:66   error    Missing trailing comma                        comma-dangle
+  766:17   error    Strings must use singlequote                  quotes
+  767:17   error    Strings must use singlequote                  quotes
+  769:17   error    Strings must use singlequote                  quotes
+  775:17   error    Strings must use singlequote                  quotes
+  780:17   error    Strings must use singlequote                  quotes
+  785:17   error    Strings must use singlequote                  quotes
+  790:17   error    Strings must use singlequote                  quotes
+  798:19   error    Strings must use singlequote                  quotes
+  802:27   error    Expected { after 'if' condition               curly
+  807:19   error    Strings must use singlequote                  quotes
+  811:27   error    Expected { after 'if' condition               curly
+  816:19   error    Strings must use singlequote                  quotes
+  824:19   error    Strings must use singlequote                  quotes
+  830:17   error    Strings must use singlequote                  quotes
+  832:19   error    Strings must use singlequote                  quotes
+  833:19   error    Strings must use singlequote                  quotes
+  835:19   error    Strings must use singlequote                  quotes
+  836:19   error    Strings must use singlequote                  quotes
+  838:19   error    Strings must use singlequote                  quotes
+  839:19   error    Strings must use singlequote                  quotes
+  841:19   error    Strings must use singlequote                  quotes
+  842:19   error    Strings must use singlequote                  quotes
+  845:17   error    Strings must use singlequote                  quotes
+  846:17   error    Strings must use singlequote                  quotes
+  847:17   error    Strings must use singlequote                  quotes
+  848:17   error    Strings must use singlequote                  quotes
+  849:17   error    Strings must use singlequote                  quotes
+  850:17   error    Strings must use singlequote                  quotes
+  851:17   error    Strings must use singlequote                  quotes
+  853:17   error    Strings must use singlequote                  quotes
+  854:17   error    Strings must use singlequote                  quotes
+  855:17   error    Strings must use singlequote                  quotes
+  856:17   error    Strings must use singlequote                  quotes
+  857:17   error    Strings must use singlequote                  quotes
+  858:17   error    Strings must use singlequote                  quotes
+  859:17   error    Strings must use singlequote                  quotes
+  873:21   error    Strings must use singlequote                  quotes
+  892:21   error    Strings must use singlequote                  quotes
+  897:39   error    Missing trailing comma                        comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-exit-fix.ts
+   9:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  46:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:17  error  Expected { after 'if' condition           curly
+  66:48  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-first-keypress.ts
+   9:37  error  Missing trailing comma                    comma-dangle
+  37:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-keyboard-input.ts
+    2:29  warning  'Page' is defined but never used          @typescript-eslint/no-unused-vars
+   15:57  error    Missing trailing comma                    comma-dangle
+   19:45  error    Missing trailing comma                    comma-dangle
+   37:36  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   37:72  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   51:18  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   70:22  error    Missing trailing comma                    comma-dangle
+  120:23  error    Missing trailing comma                    comma-dangle
+  139:35  error    Expected { after 'if' condition           curly
+  140:36  error    Expected { after 'if' condition           curly
+  141:36  error    Expected { after 'if' condition           curly
+  154:22  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  155:34  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  159:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-manual-hotkeys.ts
+  9:37  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-map-transitions.ts
+  51:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  77:19  error  Expected { after 'if' condition           curly
+  78:22  error  Expected { after 'if' condition           curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-movement-fix.ts
+    2:29  warning  'Page' is defined but never used          @typescript-eslint/no-unused-vars
+   15:57  error    Missing trailing comma                    comma-dangle
+   19:45  error    Missing trailing comma                    comma-dangle
+   74:22  error    Missing trailing comma                    comma-dangle
+   81:22  error    Missing trailing comma                    comma-dangle
+  138:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-q-key-focus.ts
+   9:37  error  Missing trailing comma                    comma-dangle
+  29:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:46  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys-comprehensive.ts
+    9:37   error  Missing trailing comma                    comma-dangle
+   38:138  error  Missing trailing comma                    comma-dangle
+   53:38   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   60:60   error  Missing trailing comma                    comma-dangle
+   61:12   error  Missing trailing comma                    comma-dangle
+   71:19   error  Strings must use singlequote              quotes
+   76:21   error  Strings must use singlequote              quotes
+   78:21   error  Strings must use singlequote              quotes
+  101:36   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:46   error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys-debug.ts
+   9:37  error  Missing trailing comma                    comma-dangle
+  42:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  66:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys-final.ts
+   9:37  error  Missing trailing comma                    comma-dangle
+  27:81  error  Missing trailing comma                    comma-dangle
+  44:21  error  Strings must use singlequote              quotes
+  66:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys-isolated.ts
+   9:37  error  Missing trailing comma                    comma-dangle
+  38:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys-timing.ts
+   9:37  error  Missing trailing comma                                comma-dangle
+  36:9   error  'inventory' is never reassigned. Use 'const' instead  prefer-const
+  54:61  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  79:58  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+  82:18  error  Expected { after 'if' condition                       curly
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/test-ui-hotkeys.ts
+  10:37  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/visual-test-runner.ts
+   28:26  error  Missing trailing comma                    comma-dangle
+   33:18  error  Missing trailing comma                    comma-dangle
+   41:6   error  Missing trailing comma                    comma-dangle
+   49:6   error  Missing trailing comma                    comma-dangle
+   57:6   error  Missing trailing comma                    comma-dangle
+   73:6   error  Missing trailing comma                    comma-dangle
+   74:4   error  Missing trailing comma                    comma-dangle
+   93:27  error  Missing trailing comma                    comma-dangle
+  105:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:57  error  Missing trailing comma                    comma-dangle
+  139:45  error  Missing trailing comma                    comma-dangle
+  186:25  error  Missing trailing comma                    comma-dangle
+  203:19  error  Missing trailing comma                    comma-dangle
+  211:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:31  error  Missing trailing comma                    comma-dangle
+  225:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  575:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/visual-test-warning.ts
+  23:31  error  Missing trailing comma  comma-dangle
+  30:38  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/types/global.types.ts
+  188:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  423:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  429:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/types/puzzle.types.ts
+   2:10  warning  'Position' is defined but never used  @typescript-eslint/no-unused-vars
+   9:11  error    Strings must use singlequote          quotes
+  20:11  error    Strings must use singlequote          quotes
+  31:11  error    Strings must use singlequote          quotes
+  41:11  error    Strings must use singlequote          quotes
+  55:11  error    Strings must use singlequote          quotes
+  67:11  error    Strings must use singlequote          quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/animationHelpers.ts
+    3:18  error  Expected { after 'if' condition  curly
+  155:73  error  Expected { after 'if' condition  curly
+  187:34  error  Missing trailing comma           comma-dangle
+  235:29  error  Missing trailing comma           comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/dialogueHelpers.ts
+  79:4  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/inputStabilizer.ts
+  19:46  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  19:56  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  51:46  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  51:56  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  59:9   error  Unexpected aliasing of 'this' to local variable  @typescript-eslint/no-this-alias
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/mapCreator.ts
+    8:3   warning  'JsonMapNPC' is defined but never used              @typescript-eslint/no-unused-vars
+    9:3   warning  'JsonMapEnemy' is defined but never used            @typescript-eslint/no-unused-vars
+   10:3   warning  'JsonMapItem' is defined but never used             @typescript-eslint/no-unused-vars
+   11:3   warning  'JsonMapExit' is defined but never used             @typescript-eslint/no-unused-vars
+   11:14  error    Missing trailing comma                              comma-dangle
+   13:20  warning  'NPCRole' is defined but never used                 @typescript-eslint/no-unused-vars
+   51:19  error    Missing trailing comma                              comma-dangle
+   77:74  error    Missing trailing comma                              comma-dangle
+   87:19  error    Missing trailing comma                              comma-dangle
+  107:19  error    Missing trailing comma                              comma-dangle
+  114:19  error    Missing trailing comma                              comma-dangle
+  115:8   error    Missing trailing comma                              comma-dangle
+  116:6   error    Missing trailing comma                              comma-dangle
+  134:38  error    Expected { after 'if' condition                     curly
+  189:20  error    Missing trailing comma                              comma-dangle
+  194:38  error    Expected { after 'if' condition                     curly
+  221:7   error    'current' is never reassigned. Use 'const' instead  prefer-const
+  247:15  error    Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  248:65  error    Missing trailing comma                              comma-dangle
+  253:35  error    Expected { after 'if' condition                     curly
+  276:36  error    Missing trailing comma                              comma-dangle
+  293:23  error    Missing trailing comma                              comma-dangle
+  306:53  error    Missing trailing comma                              comma-dangle
+  316:52  error    Missing trailing comma                              comma-dangle
+  325:25  error    Missing trailing comma                              comma-dangle
+  334:52  error    Missing trailing comma                              comma-dangle
+  335:6   error    Missing trailing comma                              comma-dangle
+  350:35  error    Missing trailing comma                              comma-dangle
+  355:24  error    Missing trailing comma                              comma-dangle
+  360:28  error    Missing trailing comma                              comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/mapPerformance.ts
+    3:10  warning  'JsonMap' is defined but never used             @typescript-eslint/no-unused-vars
+    7:10  warning  'convertTsMapToJson' is defined but never used  @typescript-eslint/no-unused-vars
+   25:39  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+   31:39  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+   41:39  error    Missing trailing comma                          comma-dangle
+   69:41  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+   76:39  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+   86:43  error    Missing trailing comma                          comma-dangle
+   98:18  error    Strings must use singlequote                    quotes
+  115:41  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  122:19  error    Missing trailing comma                          comma-dangle
+  126:39  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  136:21  error    Missing trailing comma                          comma-dangle
+  149:27  error    Missing trailing comma                          comma-dangle
+  174:21  error    Missing trailing comma                          comma-dangle
+  235:30  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  240:15  error    Strings must use singlequote                    quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/mapValidation.ts
+   12:3    warning  'JsonMapDoor' is defined but never used   @typescript-eslint/no-unused-vars
+   12:14   error    Missing trailing comma                    comma-dangle
+   14:31   warning  'Tile' is defined but never used          @typescript-eslint/no-unused-vars
+   14:37   warning  'TileType' is defined but never used      @typescript-eslint/no-unused-vars
+   14:75   warning  'Exit' is defined but never used          @typescript-eslint/no-unused-vars
+   14:81   warning  'ItemType' is defined but never used      @typescript-eslint/no-unused-vars
+   15:10   warning  'Enemy' is defined but never used         @typescript-eslint/no-unused-vars
+   15:17   warning  'EnemyVariant' is defined but never used  @typescript-eslint/no-unused-vars
+   16:18   warning  'ItemClass' is defined but never used     @typescript-eslint/no-unused-vars
+   16:29   warning  'ItemVariant' is defined but never used   @typescript-eslint/no-unused-vars
+   24:39   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   68:31   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:33   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  114:35   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  147:15   error    Missing trailing comma                    comma-dangle
+  179:19   error    Missing trailing comma                    comma-dangle
+  198:37   error    Missing trailing comma                    comma-dangle
+  199:10   error    Missing trailing comma                    comma-dangle
+  202:98   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  202:134  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  210:30   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  211:19   error    Missing trailing comma                    comma-dangle
+  212:10   error    Missing trailing comma                    comma-dangle
+  224:31   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  225:24   error    Missing trailing comma                    comma-dangle
+  226:12   error    Missing trailing comma                    comma-dangle
+  242:47   error    Missing trailing comma                    comma-dangle
+  243:8    error    Missing trailing comma                    comma-dangle
+  252:23   error    Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/shopPricing.ts
+  16:35  error    Missing trailing comma                           comma-dangle
+  24:11  warning  'reputation' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/src/utils/validateMap.ts
+    6:13  warning  'path' is defined but never used  @typescript-eslint/no-unused-vars
+   34:15  error    Missing trailing comma            comma-dangle
+   35:6   error    Missing trailing comma            comma-dangle
+  122:19  error    Missing trailing comma            comma-dangle
+  132:81  error    Missing trailing comma            comma-dangle
+  135:24  error    Expected { after 'if' condition   curly
+  138:37  error    Missing trailing comma            comma-dangle
+  157:26  error    Expected { after 'if' condition   curly
+  171:23  error    Missing trailing comma            comma-dangle
+  207:53  error    Missing trailing comma            comma-dangle
+  210:19  error    Expected { after 'if' condition   curly
+  213:34  error    Missing trailing comma            comma-dangle
+  229:18  error    Missing trailing comma            comma-dangle
+  246:56  error    Missing trailing comma            comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/browser/automated-playtester.ts
+    76:41   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   151:27   error  Missing trailing comma                    comma-dangle
+   179:172  error  Missing trailing comma                    comma-dangle
+   190:41   error  Missing trailing comma                    comma-dangle
+   195:47   error  Missing trailing comma                    comma-dangle
+   200:40   error  Missing trailing comma                    comma-dangle
+   208:46   error  Missing trailing comma                    comma-dangle
+   214:38   error  Missing trailing comma                    comma-dangle
+   223:57   error  Missing trailing comma                    comma-dangle
+   224:10   error  Missing trailing comma                    comma-dangle
+   232:33   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   325:41   error  Missing trailing comma                    comma-dangle
+   335:29   error  Missing trailing comma                    comma-dangle
+   342:56   error  Missing trailing comma                    comma-dangle
+   347:83   error  Missing trailing comma                    comma-dangle
+   359:25   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   386:25   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   397:77   error  Missing trailing comma                    comma-dangle
+   404:22   error  Strings must use singlequote              quotes
+   407:22   error  Strings must use singlequote              quotes
+   409:22   error  Strings must use singlequote              quotes
+   412:22   error  Strings must use singlequote              quotes
+   414:29   error  Strings must use singlequote              quotes
+   476:37   error  Strings must use singlequote              quotes
+   485:51   error  Expected { after 'if' condition           curly
+   495:39   error  Expected { after 'if' condition           curly
+   499:37   error  Strings must use singlequote              quotes
+   513:48   error  Expected { after 'if' condition           curly
+   514:53   error  Expected { after 'if' condition           curly
+   515:53   error  Expected { after 'if' condition           curly
+   516:22   error  Expected { after 'else'                   curly
+   534:33   error  Strings must use singlequote              quotes
+   541:33   error  Strings must use singlequote              quotes
+   565:30   error  Strings must use singlequote              quotes
+   575:33   error  Strings must use singlequote              quotes
+   591:26   error  Strings must use singlequote              quotes
+   594:26   error  Strings must use singlequote              quotes
+   609:41   error  Strings must use singlequote              quotes
+   618:37   error  Strings must use singlequote              quotes
+   620:26   error  Strings must use singlequote              quotes
+   625:37   error  Strings must use singlequote              quotes
+   639:26   error  Strings must use singlequote              quotes
+   651:41   error  Strings must use singlequote              quotes
+   660:37   error  Strings must use singlequote              quotes
+   662:30   error  Strings must use singlequote              quotes
+   672:33   error  Strings must use singlequote              quotes
+   708:41   error  Strings must use singlequote              quotes
+   713:37   error  Strings must use singlequote              quotes
+   728:46   error  Strings must use singlequote              quotes
+   732:41   error  Strings must use singlequote              quotes
+   741:26   error  Strings must use singlequote              quotes
+   745:37   error  Strings must use singlequote              quotes
+   777:26   error  Strings must use singlequote              quotes
+   800:33   error  Strings must use singlequote              quotes
+   811:26   error  Strings must use singlequote              quotes
+   818:37   error  Strings must use singlequote              quotes
+   821:26   error  Strings must use singlequote              quotes
+   828:26   error  Strings must use singlequote              quotes
+   832:26   error  Strings must use singlequote              quotes
+   838:37   error  Strings must use singlequote              quotes
+   841:26   error  Strings must use singlequote              quotes
+   856:26   error  Strings must use singlequote              quotes
+   865:33   error  Strings must use singlequote              quotes
+   873:33   error  Strings must use singlequote              quotes
+   913:33   error  Strings must use singlequote              quotes
+   920:33   error  Strings must use singlequote              quotes
+   980:41   error  Strings must use singlequote              quotes
+   997:26   error  Strings must use singlequote              quotes
+  1002:37   error  Strings must use singlequote              quotes
+  1004:26   error  Strings must use singlequote              quotes
+  1010:37   error  Strings must use singlequote              quotes
+  1015:26   error  Strings must use singlequote              quotes
+  1019:37   error  Strings must use singlequote              quotes
+  1021:26   error  Strings must use singlequote              quotes
+  1030:33   error  Strings must use singlequote              quotes
+  1041:126  error  Missing trailing comma                    comma-dangle
+  1045:37   error  Strings must use singlequote              quotes
+  1085:26   error  Strings must use singlequote              quotes
+  1091:26   error  Strings must use singlequote              quotes
+  1093:26   error  Strings must use singlequote              quotes
+  1096:26   error  Strings must use singlequote              quotes
+  1103:18   error  Strings must use singlequote              quotes
+  1107:22   error  Strings must use singlequote              quotes
+  1108:21   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  1114:26   error  Strings must use singlequote              quotes
+  1115:53   error  Missing trailing comma                    comma-dangle
+  1153:31   error  Missing trailing comma                    comma-dangle
+  1161:18   error  Strings must use singlequote              quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/browser/puppeteer-test-runner.ts
+    8:10  warning  'AutomatedPlaytester' is defined but never used                             @typescript-eslint/no-unused-vars
+    8:31  warning  'TestConfig' is defined but never used                                      @typescript-eslint/no-unused-vars
+    8:55  warning  'GameState' is defined but never used                                       @typescript-eslint/no-unused-vars
+  132:73  error    Missing trailing comma                                                      comma-dangle
+  136:44  error    Missing trailing comma                                                      comma-dangle
+  137:18  error    Missing trailing comma                                                      comma-dangle
+  168:46  error    Missing trailing comma                                                      comma-dangle
+  253:60  error    Missing trailing comma                                                      comma-dangle
+  280:17  error    Unused eslint-disable directive (no problems were reported from 'no-eval')
+  286:57  error    Missing trailing comma                                                      comma-dangle
+  294:51  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  301:28  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  314:39  error    Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  340:40  error    Expected { after 'if' condition                                             curly
+  341:45  error    Expected { after 'if' condition                                             curly
+  342:45  error    Expected { after 'if' condition                                             curly
+  440:86  error    Missing trailing comma                                                      comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/browser/run-automated-tests.ts
+  14:33  error  Missing trailing comma                    comma-dangle
+  28:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/concept/playwright-runner-clean.ts
+    1:51   warning  'Request' is defined but never used                       @typescript-eslint/no-unused-vars
+    1:60   warning  'Response' is defined but never used                      @typescript-eslint/no-unused-vars
+   35:5    error    'currentReport' is never reassigned. Use 'const' instead  prefer-const
+   63:21   error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  204:35   error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  206:53   error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  208:29   error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  215:111  error    Missing trailing comma                                    comma-dangle
+  225:123  error    Missing trailing comma                                    comma-dangle
+  250:21   error    Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  261:21   error    Strings must use singlequote                              quotes
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/concept/playwright-test-runner.ts
+  1:0  error  Parsing error: Unknown keyword or identifier. Did you mean 'this'?
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/concept/puppeteer-runner-clean.ts
+   76:31  error  Missing trailing comma                    comma-dangle
+   86:23  error  Strings must use singlequote              quotes
+  106:23  error  Strings must use singlequote              quotes
+  245:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  246:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  254:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  264:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  285:24  error  Missing trailing comma                    comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/concept/run-puppeteer-tests.ts
+  14:37  error  Missing trailing comma  comma-dangle
+  15:10  error  Missing trailing comma  comma-dangle
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/concept/simple-puppeteer-runner.ts
+  1:0  error  Parsing error: Unknown keyword or identifier. Did you mean 'this'?
+
+/home/chris/repos/delegate-field-tests/tales-of-claude/tests/unit/maps.test.ts
+    5:21  warning  'IGameMap' is defined but never used                                    @typescript-eslint/no-unused-vars
+    5:31  warning  'TileType' is defined but never used                                    @typescript-eslint/no-unused-vars
+    5:41  warning  'NPCRole' is defined but never used                                     @typescript-eslint/no-unused-vars
+    5:50  warning  'ItemType' is defined but never used                                    @typescript-eslint/no-unused-vars
+   13:17  warning  'EnemyVariant' is defined but never used                                @typescript-eslint/no-unused-vars
+   14:18  warning  'ItemClass' is defined but never used                                   @typescript-eslint/no-unused-vars
+   14:29  warning  'ItemVariant' is defined but never used                                 @typescript-eslint/no-unused-vars
+  147:7   warning  'originalFetch' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+  148:47  warning  'init' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  167:18  warning  'test' is defined but never used                                        @typescript-eslint/no-unused-vars
+  179:28  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  202:19  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  205:19  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  334:32  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  335:32  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  348:33  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  366:13  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  371:81  error    Missing trailing comma                                                  comma-dangle
+  601:57  error    Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+✖ 1562 problems (1394 errors, 168 warnings)
+  1125 errors and 0 warnings potentially fixable with the `--fix` option.
+
