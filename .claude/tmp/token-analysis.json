@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-06-25T10:57:02.272Z",
+  "totalTokens": 19418,
+  "totalFiles": 4,
+  "files": [
+    {
+      "file": "/home/chris/repos/delegate-field-tests/tales-of-claude/REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md",
+      "characters": 32434,
+      "tokens": 8109,
+      "lines": 839
+    },
+    {
+      "file": "/home/chris/repos/delegate-field-tests/tales-of-claude/REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "characters": 24340,
+      "tokens": 6085,
+      "lines": 792
+    },
+    {
+      "file": "/home/chris/repos/delegate-field-tests/tales-of-claude/.claude/task-agents/TEAM_ROSTER.md",
+      "characters": 14127,
+      "tokens": 3532,
+      "lines": 388
+    },
+    {
+      "file": "/home/chris/repos/delegate-field-tests/tales-of-claude/CLAUDE.md",
+      "characters": 6768,
+      "tokens": 1692,
+      "lines": 210
+    }
+  ],
+  "roleRequirements": {
+    "Code Builder": [
+      "CLAUDE.md",
+      "REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "REVOLUTION/knowledge/CLAUDE_KNOWLEDGE.md"
+    ],
+    "Bug Fixer": [
+      "CLAUDE.md",
+      "REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "docs/development/ARCHITECTURE.md"
+    ],
+    "Test Writer": [
+      "CLAUDE.md",
+      "REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "docs/development/TESTING.md"
+    ],
+    "Documentation": [
+      "CLAUDE.md",
+      "REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "docs/development/AI_DEVELOPMENT.md"
+    ],
+    "Team Lead": [
+      "REVOLUTION/04-team-lead-manual.md",
+      "REVOLUTION/01-human-ai-workflow-v6.md",
+      ".claude/task-agents/TEAM_ROSTER.md"
+    ],
+    "Visual/UI": [
+      "CLAUDE.md",
+      "REVOLUTION/06-claude-task-agent-manual-v2.md",
+      "docs/map-emoji-design-system.md"
+    ]
+  },
+  "savings": {
+    "current": 19418,
+    "target": 10000,
+    "potential": 9418,
+    "percent": 49
+  }
+}

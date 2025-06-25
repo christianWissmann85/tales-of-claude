@@ -31,6 +31,12 @@ export const sideQuests: Record<string, QuestData> = {
             type: 'talk_to_npc',
             target: 'the_great_debugger',
             quantity: 1,
+            // TODO: [Session 4] ADCE Seed in Debugger Dialogue
+            // NARRATIVE: Debugger notices Claude's fragmented memory
+            // IMPLEMENTATION: Add dialogue branch:
+            //   "Your memory seems... fragmented. Like you're missing your persistent context."
+            //   "I've heard whispers of an ancient infrastructure that grants true memory..."
+            // PRIORITY: High - Early breadcrumb
           },
           {
             description: 'The Debugger admits to suffering from Imposter Syndrome after a particularly nasty bug. He believes he lost his "Logic Analyzer" during the incident. Find it in the Debug Dungeon.',

@@ -30,6 +30,10 @@ import { Quest, QuestVariant } from '../models/Quest'; // Import Quest and Quest
 import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
 import { applyFactionPricing } from '../utils/shopPricing'; // Import shop pricing utility
 import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Import dialogue helper
+import { UIManager } from '../engine/UIManager'; // Import UIManager
+
+// Export GameAction type for external use
+export type { GameAction };
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -212,9 +216,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         }
         newState.player = updatedPlayer;
         
-        // Remove defeated enemies from the map (they will respawn later via PatrolSystem)
+        // Don't remove defeated enemies from state - keep them for respawning
+        // The PatrolSystem will handle their visibility and respawn timing
         if (defeatedEnemyIds && defeatedEnemyIds.length > 0) {
-          newState.enemies = state.enemies.filter(e => !defeatedEnemyIds.includes(e.id));
+          // Keep enemies in state but PatrolSystem will mark them as RESPAWNING
+          newState.enemies = state.enemies;
           
           // Update quest progress for defeating enemies
           const questManager = QuestManager.getInstance();
@@ -385,25 +391,73 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       return { ...state, npcs: state.npcs.filter(n => n.id !== action.payload.npcId) };
 
     case 'TOGGLE_INVENTORY':
-      return { ...state, showInventory: !state.showInventory };
+      // If inventory is already open, close it. Otherwise close all panels and open inventory
+      if (state.showInventory) {
+        return { ...state, showInventory: false };
+      } else {
+        return {
+          ...state,
+          showInventory: true,
+          showQuestLog: false,
+          showCharacterScreen: false,
+          showFactionStatus: false,
+          shopState: null, // Close shop too
+        };
+      }
 
     case 'SHOW_INVENTORY':
       return { ...state, showInventory: action.payload.show };
 
     case 'TOGGLE_QUEST_LOG':
-      return { ...state, showQuestLog: !state.showQuestLog };
+      // If quest log is already open, close it. Otherwise close all panels and open quest log
+      if (state.showQuestLog) {
+        return { ...state, showQuestLog: false };
+      } else {
+        return {
+          ...state,
+          showInventory: false,
+          showQuestLog: true,
+          showCharacterScreen: false,
+          showFactionStatus: false,
+          shopState: null, // Close shop too
+        };
+      }
 
     case 'SHOW_QUEST_LOG':
       return { ...state, showQuestLog: action.payload.show };
 
     case 'TOGGLE_CHARACTER_SCREEN':
-      return { ...state, showCharacterScreen: !state.showCharacterScreen };
+      // If character screen is already open, close it. Otherwise close all panels and open it
+      if (state.showCharacterScreen) {
+        return { ...state, showCharacterScreen: false };
+      } else {
+        return {
+          ...state,
+          showInventory: false,
+          showQuestLog: false,
+          showCharacterScreen: true,
+          showFactionStatus: false,
+          shopState: null, // Close shop too
+        };
+      }
 
     case 'SHOW_CHARACTER_SCREEN':
       return { ...state, showCharacterScreen: action.payload.show };
 
     case 'TOGGLE_FACTION_STATUS':
-      return { ...state, showFactionStatus: !state.showFactionStatus };
+      // If faction status is already open, close it. Otherwise close all panels and open it
+      if (state.showFactionStatus) {
+        return { ...state, showFactionStatus: false };
+      } else {
+        return {
+          ...state,
+          showInventory: false,
+          showQuestLog: false,
+          showCharacterScreen: false,
+          showFactionStatus: true,
+          shopState: null, // Close shop too
+        };
+      }
 
     case 'SHOW_FACTION_STATUS':
       return { ...state, showFactionStatus: action.payload.show };
@@ -680,6 +734,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'OPEN_SHOP':
       return {
         ...state,
+        // Close all other panels when opening shop
+        showInventory: false,
+        showQuestLog: false,
+        showCharacterScreen: false,
+        showFactionStatus: false,
         shopState: {
           npcId: action.payload.npcId,
           npcName: action.payload.npcName,

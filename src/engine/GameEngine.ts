@@ -41,6 +41,8 @@ import { WeatherSystem } from './WeatherSystem';
 // Import PatrolSystem
 import { PatrolSystem } from './PatrolSystem';
 import { EnemyVariant } from '../models/Enemy';
+// Import UIManager
+import { UIManager } from './UIManager';
 
 // Define interfaces for the imported dialogue data structure to match dialogues.json
 interface DialogueEntryData {
@@ -331,6 +333,20 @@ export class GameEngine {
         this._lastInteractionTime = now;
       }
     }
+    
+    // Check for ESC key to close all panels
+    if (this._isAnyOfKeysPressed(this._pressedKeys, ['Escape', 'Esc'])) {
+      if (now - this._lastInteractionTime > this._interactionCooldown) {
+        // Check if any panel is open
+        if (UIManager.isAnyPanelOpen(this._currentGameState)) {
+          console.log('[UI Manager] ESC pressed - closing all panels');
+          // Dispatch actions to close all panels
+          const closeActions = UIManager.getCloseAllPanelsAction();
+          closeActions.forEach(action => this._dispatch(action));
+          this._lastInteractionTime = now;
+        }
+      }
+    }
     // Add other input types here (e.g., menu, cancel)
   }
 
@@ -462,6 +478,7 @@ export class GameEngine {
     // Check for map exits
     const exit = currentMap.exits.find(e => e.position.x === newX && e.position.y === newY);
     if (exit) {
+      console.log(`[GameEngine] Found exit to ${exit.targetMapId} at (${exit.position.x}, ${exit.position.y})`);
       
       // Load the target map
       const newMap = await this.loadMap(exit.targetMapId);
@@ -582,7 +599,7 @@ export class GameEngine {
 
   /**
    * Checks for enemy encounters at a given position after player movement.
-   * If an enemy is found, dispatches START_BATTLE and removes the enemy from the map.
+   * If an enemy is found, dispatches START_BATTLE.
    * @param position The position to check for an enemy encounter.
    * @returns True if a battle was initiated, false otherwise.
    */
@@ -590,7 +607,8 @@ export class GameEngine {
     const enemy = this.getEnemyAtPosition(position);
     if (enemy) {
       this._dispatch({ type: 'START_BATTLE', payload: { enemies: [enemy] } });
-      this._dispatch({ type: 'REMOVE_ENEMY', payload: { enemyId: enemy.id } });
+      // Don't remove enemy here - let the battle system and patrol system handle it
+      // This allows enemies to respawn properly after being defeated
       return true;
     }
     return false;
@@ -728,7 +746,16 @@ export class GameEngine {
       const updatedEnemies: Enemy[] = [];
       let positionsChanged = false;
       
+      // Get enemies currently in battle to exclude them from the map
+      const enemiesInBattle = this._currentGameState.battle ? 
+        this._currentGameState.battle.enemies.map(e => e.id) : [];
+      
       this._currentGameState.enemies.forEach(enemy => {
+        // Skip enemies that are currently in battle
+        if (enemiesInBattle.includes(enemy.id)) {
+          return;
+        }
+        
         const patrolData = this._patrolSystem!.getEnemyData(enemy.id);
         if (patrolData && patrolData.state !== 'RESPAWNING') {
           // Check if position actually changed before updating
@@ -745,8 +772,11 @@ export class GameEngine {
             // No position change, add the original enemy
             updatedEnemies.push(enemy);
           }
+        } else if (patrolData && patrolData.state === 'RESPAWNING') {
+          // Enemy is respawning, don't add it to visible enemies
+          // It will be added back when respawn timer completes
         } else {
-          // Enemy is respawning, keep it as is
+          // No patrol data, keep enemy as is
           updatedEnemies.push(enemy);
         }
       });

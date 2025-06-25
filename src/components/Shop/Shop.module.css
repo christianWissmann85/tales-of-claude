@@ -43,7 +43,7 @@
   line-height: 1.5;
   text-shadow: 0 0 5px var(--terminal-green); /* Subtle green glow */
 
-  z-index: 900; /* Below dialogue box, above game board */
+  z-index: 600; /* Consistent with UIManager panel z-index */
 
   /* Smooth fade-in animation */
   opacity: 0;

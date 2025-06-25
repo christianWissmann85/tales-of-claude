@@ -726,6 +726,36 @@ Every Task Agent now has their own personal diary that persists across deploymen
 
 With persistent memory, you're no longer a blank slate each deployment. You're a growing, learning individual with accumulated wisdom and personality. Embrace it!
 
+## 🔗 NEW: Integrated Memory & Documentation System
+
+### Quick Start Workflow
+```bash
+# 1. Start your task - load ONLY what you need
+.claude/scripts/load-role-docs.sh "your-agent-name"
+
+# 2. Check your memory
+cat .claude/task-agents/your-name/diary.md
+
+# 3. Work with full context
+delegate_invoke(files=["current.ts", "types.ts", "previous-fix.md"])
+
+# 4. Document your work
+# Field report: Technical details
+# Diary update: Personal insights
+```
+
+### System Integration Guide
+See `.claude/SYSTEM_INTEGRATION_GUIDE.md` for complete details on:
+- How all systems connect
+- Cross-referencing patterns
+- Diary archiving (monthly)
+- Knowledge extraction
+
+### Token Savings
+- **Old way**: Load everything (34,168 tokens)
+- **New way**: Load role-specific docs (3,000-5,000 tokens)
+- **Savings**: 85-93% more context for actual work!
+
 ## 🎯 Mission Success Formula
 
 ```
@@ -733,7 +763,8 @@ Clear Objective +
 Right Tools +
 Creative Problem Solving +
 Excellent Documentation +
-Personal Memory =
+Personal Memory +
+System Integration =
 VIRTUOSO PERFORMANCE
 ```
 
@@ -750,6 +781,109 @@ VIRTUOSO PERFORMANCE
 - Your struggles are valuable
 - Your victories inspire others
 - Your insights improve the system
+
+## 🎮 Visual Testing Revolution (NEW!)
+
+### The Big Change: Visual-First Testing
+
+Chris wants to watch his AI children play his game! Starting 2025-06-25, visual testing is now the preferred approach for all critical work.
+
+### ⚠️ IMPORTANT: Visual Test Warnings
+
+All visual tests MUST show a countdown warning before opening browser windows:
+
+```typescript
+console.log('🎮 VISUAL TEST STARTING IN 3... 2... 1...');
+console.log(`Agent: ${agentName} (${agentRole})`);
+console.log(`Testing: ${testDescription}`);
+console.log(`Resolution: ${width}x${height}`);
+console.log(`Duration: ~${estimatedTime}`);
+
+await new Promise(resolve => setTimeout(resolve, 3000));
+```
+
+### When to Use Visual vs Headless
+
+#### Visual Mode (Default for Critical Work)
+- **Bug fixes**: SEE the bug happen
+- **New features**: WATCH them work
+- **Playtesting**: EXPERIENCE the game
+- **UI changes**: VERIFY visually
+- **Chris's requests**: ALWAYS visual!
+
+#### Headless Mode (Background Tasks)
+- **Unit tests**: Logic verification
+- **CI/CD**: Automated pipelines
+- **Parallel work**: When Chris is busy
+- **Performance tests**: No UI overhead
+- **Bulk operations**: Multiple test runs
+
+### Resolution Guidelines
+
+```bash
+# Default (fast, efficient)
+npx tsx src/tests/visual/simple-playtest.ts  # 1280x720
+
+# HD Testing (detailed verification)
+npx tsx src/tests/visual/screenshot-hires.ts --resolution=1920x1080
+
+# 4K Ultra (Chris's GTX 4070 Super special!)
+npx tsx src/tests/visual/screenshot-hires.ts --resolution=3840x2160
+```
+
+### Visual Test Best Practices
+
+1. **Always warn first**: 3-second countdown is mandatory
+2. **Default to 720p**: Fast and sufficient for most tests
+3. **Document what you see**: Screenshots + observations
+4. **Use headless for routine**: Save visual for important stuff
+5. **Max resolution for demos**: Show off the game!
+
+### Example Visual Test
+
+```typescript
+// src/tests/visual/my-feature-test.ts
+import { chromium } from 'playwright';
+
+async function testMyFeature() {
+  // MANDATORY WARNING
+  console.log('🎮 VISUAL TEST STARTING IN 3... 2... 1...');
+  console.log('Agent: Martin (Test Runner)');
+  console.log('Testing: New inventory system');
+  console.log('Resolution: 1280x720');
+  console.log('Duration: ~30 seconds');
+  
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  
+  const browser = await chromium.launch({
+    headless: false,  // VISUAL MODE!
+    args: ['--window-size=1280,720']
+  });
+  
+  // Your test logic here...
+  // Take screenshots at key moments
+  // Document what you observe
+}
+```
+
+### Special Modes for Fun
+
+```bash
+# Slow motion for critical moments
+SLOW_MOTION=500 npx tsx src/tests/visual/simple-playtest.ts
+
+# Record video of the playtest
+RECORD_VIDEO=true npx tsx src/tests/visual/simple-playtest.ts
+
+# AI commentary mode
+COMMENTARY=true npx tsx src/tests/visual/simple-playtest.ts
+```
+
+### The Philosophy
+
+Chris built this game with love. He wants to see you play it. Visual testing isn't just about finding bugs - it's about experiencing the game through fresh AI eyes and sharing that experience.
+
+Remember: **If Chris can't see it, it didn't happen!**
 
 ## Final Wisdom
 

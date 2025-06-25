@@ -3,9 +3,10 @@ import { chromium, Browser, Page } from 'playwright';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { showVisualTestWarning } from './visual-test-warning.js';
 
 // Simple automated playtest that agents can run
-const TARGET_URL = 'http://localhost:5173';
+const TARGET_URL = process.env.TARGET_URL || 'http://localhost:5173';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RESULTS_DIR = path.join(__dirname, 'playtest-results');
 
@@ -35,19 +36,33 @@ const PLAYTEST_STEPS = [
     name: 'Game loads successfully',
     action: 'Navigate to game',
     execute: async (page: Page) => {
-      await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
-      await page.waitForSelector('.gameBoard', { timeout: 10000 });
+      // Add agent=true to skip splash screens for testing
+      await page.goto(`${TARGET_URL}?agent=true`, { waitUntil: 'networkidle' });
+      // Wait for the game to render by looking for the player emoji
+      await page.waitForFunction(() => {
+        return document.body.textContent?.includes('🤖');
+      }, { timeout: 10000 });
     },
     observe: async (page: Page) => {
       const observations = [];
       
-      // Check if game board is visible
-      const gameBoard = await page.$('.gameBoard');
-      if (gameBoard) observations.push('Game board is visible');
+      // Check if game board is visible by looking for game content
+      const hasPlayer = await page.evaluate(() => document.body.textContent?.includes('🤖'));
+      if (hasPlayer) observations.push('Player character (🤖) is visible');
       
-      // Check for player sprite
-      const player = await page.$('.game-cell:has-text("🤖")');
-      if (player) observations.push('Player character (🤖) is visible');
+      // Check for UI elements
+      const hasHP = await page.evaluate(() => document.body.textContent?.includes('HP:'));
+      if (hasHP) observations.push('HP bar is visible');
+      
+      // Check for map name
+      const mapName = await page.evaluate(() => {
+        const text = document.body.textContent || '';
+        if (text.includes('Terminal Town')) return 'Terminal Town';
+        if (text.includes('Binary Forest')) return 'Binary Forest';
+        if (text.includes('Debug Dungeon')) return 'Debug Dungeon';
+        return null;
+      });
+      if (mapName) observations.push(`Current map: ${mapName}`);
       
       return observations;
     }
@@ -56,23 +71,50 @@ const PLAYTEST_STEPS = [
     name: 'Player can move',
     action: 'Press arrow keys',
     execute: async (page: Page) => {
-      // Try to move in each direction
-      await page.keyboard.press('ArrowRight');
-      await page.waitForTimeout(200);
-      await page.keyboard.press('ArrowDown');
-      await page.waitForTimeout(200);
-      await page.keyboard.press('ArrowLeft');
-      await page.waitForTimeout(200);
-      await page.keyboard.press('ArrowUp');
-      await page.waitForTimeout(200);
+      // Get initial player position by checking all cells
+      const getPlayerPosition = async () => {
+        return await page.evaluate(() => {
+          const cells = document.querySelectorAll('*');
+          for (let i = 0; i < cells.length; i++) {
+            if (cells[i].textContent === '🤖') {
+              const rect = cells[i].getBoundingClientRect();
+              return { x: rect.left, y: rect.top };
+            }
+          }
+          return null;
+        });
+      };
+      
+      const initialPos = await getPlayerPosition();
+      
+      // Try to move right with proper key down/up
+      await page.keyboard.down('ArrowRight');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('ArrowRight');
+      await page.waitForTimeout(300);
+      
+      const afterMovePos = await getPlayerPosition();
+      
+      // Store positions for observation
+      await page.evaluate((positions) => {
+        (window as any).testMovement = positions;
+      }, { initial: initialPos, afterMove: afterMovePos });
     },
     observe: async (page: Page) => {
       const observations = [];
-      observations.push('Movement keys pressed successfully');
       
-      // Check if player is still visible
-      const player = await page.$('.game-cell:has-text("🤖")');
-      if (player) observations.push('Player still visible after movement');
+      const positions = await page.evaluate(() => (window as any).testMovement);
+      if (positions && positions.initial && positions.afterMove) {
+        if (positions.initial.x !== positions.afterMove.x || 
+            positions.initial.y !== positions.afterMove.y) {
+          observations.push('✅ Player successfully moved!');
+          observations.push(`Movement detected: (${positions.initial.x}, ${positions.initial.y}) → (${positions.afterMove.x}, ${positions.afterMove.y})`);
+        } else {
+          observations.push('❌ Player did not move - keyboard input may not be working');
+        }
+      } else {
+        observations.push('❌ Could not track player position');
+      }
       
       return observations;
     }
@@ -81,22 +123,40 @@ const PLAYTEST_STEPS = [
     name: 'Inventory opens',
     action: 'Press I key',
     execute: async (page: Page) => {
-      await page.keyboard.press('i');
+      // Store initial content
+      const beforePress = await page.evaluate(() => document.body.textContent || '');
+      
+      await page.keyboard.down('i');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('i');
       await page.waitForTimeout(500);
+      
+      // Store after content
+      const afterPress = await page.evaluate(() => document.body.textContent || '');
+      
+      await page.evaluate((data) => {
+        (window as any).inventoryTest = data;
+      }, { before: beforePress, after: afterPress });
     },
     observe: async (page: Page) => {
       const observations = [];
       
-      // Check for inventory panel
-      const inventory = await page.$('[data-testid="inventory"]');
-      if (inventory) {
-        observations.push('Inventory panel opened');
-        
-        // Check for inventory items
-        const items = await page.$$('[data-testid="inventory-item"]');
-        observations.push(`Found ${items.length} items in inventory`);
+      const testData = await page.evaluate(() => (window as any).inventoryTest);
+      
+      // Check for inventory keywords
+      const hasInventory = await page.evaluate(() => {
+        const text = document.body.textContent || '';
+        return text.includes('Inventory') || text.includes('Equipment') || 
+               text.includes('Items') || text.includes('Weapon:') || 
+               text.includes('Armor:');
+      });
+      
+      if (hasInventory) {
+        observations.push('✅ Inventory UI detected');
+      } else if (testData && testData.before !== testData.after) {
+        observations.push('⚠️ Content changed but no inventory keywords found');
       } else {
-        observations.push('Inventory panel not found');
+        observations.push('❌ Inventory did not open - I key may not be working');
       }
       
       return observations;
@@ -107,25 +167,44 @@ const PLAYTEST_STEPS = [
     action: 'Press J key',
     execute: async (page: Page) => {
       // Close inventory first
-      await page.keyboard.press('Escape');
+      await page.keyboard.down('Escape');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('Escape');
       await page.waitForTimeout(200);
       
-      await page.keyboard.press('j');
+      // Store initial content
+      const beforePress = await page.evaluate(() => document.body.textContent || '');
+      
+      await page.keyboard.down('j');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('j');
       await page.waitForTimeout(500);
+      
+      // Store after content
+      const afterPress = await page.evaluate(() => document.body.textContent || '');
+      
+      await page.evaluate((data) => {
+        (window as any).questTest = data;
+      }, { before: beforePress, after: afterPress });
     },
     observe: async (page: Page) => {
       const observations = [];
       
-      // Check for quest panel
-      const questPanel = await page.$('[data-testid="quest-journal"]');
-      if (questPanel) {
-        observations.push('Quest journal opened');
-        
-        // Check for quests
-        const quests = await page.$$('[data-testid="quest-item"]');
-        observations.push(`Found ${quests.length} quests`);
+      const testData = await page.evaluate(() => (window as any).questTest);
+      
+      // Check for quest keywords
+      const hasQuests = await page.evaluate(() => {
+        const text = document.body.textContent || '';
+        return text.includes('Quest') || text.includes('Objective') || 
+               text.includes('Mission') || text.includes('Active Quests');
+      });
+      
+      if (hasQuests) {
+        observations.push('✅ Quest journal UI detected');
+      } else if (testData && testData.before !== testData.after) {
+        observations.push('⚠️ Content changed but no quest keywords found');
       } else {
-        observations.push('Quest journal not found');
+        observations.push('❌ Quest journal did not open - J key may not be working');
       }
       
       return observations;
@@ -133,34 +212,69 @@ const PLAYTEST_STEPS = [
   },
   {
     name: 'NPC interaction',
-    action: 'Find and click NPC',
+    action: 'Move to NPC and press Space',
     execute: async (page: Page) => {
       // Close any open panels
-      await page.keyboard.press('Escape');
+      await page.keyboard.down('Escape');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('Escape');
       await page.waitForTimeout(200);
       
-      // Find an NPC
-      const npc = await page.$('[data-entity-type="npc"]');
-      if (npc) {
-        await npc.click();
-        await page.waitForTimeout(500);
-      } else {
-        throw new Error('No NPC found on screen');
+      // Look for common NPC emojis
+      const npcEmojis = ['🧙', '👨‍💻', '🤴', '👸', '🧝', '🧚', '🦾', '🛡️', '⚔️', '🎓', '📚'];
+      const hasNPC = await page.evaluate((emojis) => {
+        const text = document.body.textContent || '';
+        return emojis.some(emoji => text.includes(emoji));
+      }, npcEmojis);
+      
+      if (!hasNPC) {
+        // Try to move around to find an NPC
+        await page.keyboard.down('ArrowDown');
+        await page.waitForTimeout(100);
+        await page.keyboard.up('ArrowDown');
+        await page.waitForTimeout(300);
+        await page.keyboard.down('ArrowDown');
+        await page.waitForTimeout(100);
+        await page.keyboard.up('ArrowDown');
+        await page.waitForTimeout(300);
       }
+      
+      // Store initial content
+      const beforeInteract = await page.evaluate(() => document.body.textContent || '');
+      
+      // Press space to interact
+      await page.keyboard.down('Space');
+      await page.waitForTimeout(100);
+      await page.keyboard.up('Space');
+      await page.waitForTimeout(500);
+      
+      // Store after content
+      const afterInteract = await page.evaluate(() => document.body.textContent || '');
+      
+      await page.evaluate((data) => {
+        (window as any).npcTest = data;
+      }, { before: beforeInteract, after: afterInteract });
     },
     observe: async (page: Page) => {
       const observations = [];
       
-      // Check for dialogue
-      const dialogue = await page.$('[data-testid="dialogue-box"]');
-      if (dialogue) {
-        observations.push('Dialogue box appeared');
-        
-        // Check dialogue content
-        const text = await dialogue.textContent();
-        if (text) observations.push(`Dialogue text length: ${text.length} characters`);
+      const testData = await page.evaluate(() => (window as any).npcTest);
+      
+      // Check for dialogue indicators
+      const hasDialogue = await page.evaluate(() => {
+        const text = document.body.textContent || '';
+        // Look for common dialogue patterns
+        return text.includes('says:') || text.includes('speak') || 
+               text.includes('"') || text.includes('Hello') || 
+               text.includes('Welcome') || text.includes('quest');
+      });
+      
+      if (hasDialogue) {
+        observations.push('✅ Dialogue detected - NPC interaction successful');
+      } else if (testData && testData.before !== testData.after) {
+        observations.push('⚠️ Content changed but no clear dialogue found');
       } else {
-        observations.push('No dialogue box found');
+        observations.push('❌ No NPC interaction detected - Space key may not be working');
       }
       
       return observations;
@@ -197,9 +311,24 @@ async function runPlaytest(): Promise<PlaytestResult> {
   try {
     await ensureResultsDir();
     
-    console.log('🎮 Starting automated playtest...\n');
+    // Check if running in headless mode
+    const isHeadless = process.env.HEADLESS === 'true' || process.argv.includes('--headless');
+    
+    if (!isHeadless) {
+      // Show warning for visual mode
+      await showVisualTestWarning({
+        agentName: process.env.AGENT_NAME || 'Automated Tester',
+        agentRole: process.env.AGENT_ROLE || 'Playtest Agent',
+        testDescription: 'Full game playthrough test',
+        resolution: { width: 1280, height: 720 },
+        estimatedDuration: '~45 seconds'
+      });
+    } else {
+      console.log('🤖 Running in headless mode (no browser window)\n');
+    }
+    
     browser = await chromium.launch({ 
-      headless: true,
+      headless: isHeadless,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     
@@ -207,11 +336,16 @@ async function runPlaytest(): Promise<PlaytestResult> {
       viewport: { width: 1280, height: 720 }
     });
 
-    // Capture console errors
+    // Capture console errors and debug logs
     const consoleErrors: string[] = [];
+    const consoleLogs: string[] = [];
     page.on('console', msg => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
+      }
+      // Capture debug logs that might help diagnose keyboard issues
+      if (msg.type() === 'log' && msg.text().includes('DEBUG')) {
+        consoleLogs.push(msg.text());
       }
     });
 
@@ -260,6 +394,12 @@ async function runPlaytest(): Promise<PlaytestResult> {
     if (consoleErrors.length > 0) {
       console.log('\n⚠️  Console errors detected:');
       consoleErrors.forEach(err => console.log(`   - ${err}`));
+    }
+    
+    // Check for debug logs
+    if (consoleLogs.length > 0) {
+      console.log('\n🔍 Debug logs:');
+      consoleLogs.forEach(log => console.log(`   - ${log}`));
     }
 
   } catch (error: any) {

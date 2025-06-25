@@ -125,6 +125,9 @@ const GameBoard: React.FC = () => {
     if (gameEngineRef.current) {
       gameEngineRef.current.setGameState(state);
     }
+    // Expose game state and engine for debugging
+    (window as any).__gameState = state;
+    (window as any).__gameEngine = gameEngineRef.current;
   }, [state]);
 
   // Pass raw keyboard input (set of pressed keys) to the GameEngine.

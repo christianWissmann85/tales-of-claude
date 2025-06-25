@@ -409,19 +409,38 @@ export class MapLoader {
             break;
           case 'exit':
             const jsonExit = obj as JsonExitObject;
+            // Handle both flat and nested targetPosition formats
+            let targetX: number;
+            let targetY: number;
+            
+            if ('targetPosition' in jsonExit.properties) {
+              // Handle nested format (e.g., terminalTown.json)
+              const nestedPos = (jsonExit.properties as any).targetPosition;
+              targetX = nestedPos.x;
+              targetY = nestedPos.y;
+            } else {
+              // Handle flat format (original)
+              targetX = jsonExit.properties.targetPositionX as number;
+              targetY = jsonExit.properties.targetPositionY as number;
+            }
+            
+            // Use the object's position directly
+            const exitX = Math.floor(jsonExit.position.x);
+            const exitY = Math.floor(jsonExit.position.y);
+            
             const exit: Exit = {
-              position: jsonExit.position,
+              position: { x: exitX, y: exitY },
               targetMapId: jsonExit.properties.targetMapId as string,
               targetPosition: {
-                x: jsonExit.properties.targetPositionX as number,
-                y: jsonExit.properties.targetPositionY as number,
+                x: targetX,
+                y: targetY,
               },
             };
             gameMap.exits.push(exit);
             // Ensure the tile itself is marked as 'exit' and walkable
-            if (gameMap.tiles[y] && gameMap.tiles[y][x]) {
-              gameMap.tiles[y][x].type = 'exit';
-              gameMap.tiles[y][x].walkable = true;
+            if (gameMap.tiles[exitY] && gameMap.tiles[exitY][exitX]) {
+              gameMap.tiles[exitY][exitX].type = 'exit';
+              gameMap.tiles[exitY][exitX].walkable = true;
             }
             break;
           case 'door':

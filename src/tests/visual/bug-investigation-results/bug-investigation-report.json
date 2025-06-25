@@ -1,0 +1,118 @@
+{
+  "timestamp": "2025-06-25T14:24:07.189Z",
+  "duration": 11369,
+  "bugs": [
+    {
+      "bugName": "Binary Forest Claude Disappears",
+      "description": "Claude disappears when entering Binary Forest",
+      "reproduced": false,
+      "severity": "Critical",
+      "steps": [
+        "Starting in Terminal Town",
+        "Moving east to find Binary Forest entrance",
+        "Entered Binary Forest after 9 steps"
+      ],
+      "screenshots": [
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/binary-forest-bug-1-initial-2025-06-25T14-23-55-981Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/binary-forest-bug-2-in-forest-2025-06-25T14-23-58-044Z.png"
+      ],
+      "observations": [
+        "Claude visible in Terminal Town: true",
+        "In Binary Forest: true",
+        "Claude visible in Binary Forest: true"
+      ]
+    },
+    {
+      "bugName": "Dialogue Not Working",
+      "description": "Dialogue system not functioning properly",
+      "reproduced": true,
+      "severity": "High",
+      "steps": [
+        "Looking for NPCs to interact with",
+        "Attempting Space key interaction",
+        "Space key failed, trying Enter key"
+      ],
+      "screenshots": [
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/dialogue-bug-1-pre-interaction-2025-06-25T14-23-59-064Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/dialogue-bug-2-post-interaction-2025-06-25T14-24-00-382Z.png"
+      ],
+      "observations": [
+        "Found NPC: 🧙",
+        "Dialogue appeared: false",
+        "BUG REPRODUCED: No dialogue appeared after NPC interaction!"
+      ]
+    },
+    {
+      "bugName": "Quest Panel Weird Rendering",
+      "description": "Quest panel has rendering issues",
+      "reproduced": true,
+      "severity": "Medium",
+      "steps": [
+        "Opening quest journal with J key",
+        "Testing quest panel close/reopen"
+      ],
+      "screenshots": [
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/quest-panel-bug-1-pre-open-2025-06-25T14-24-01-321Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/quest-panel-bug-2-open-2025-06-25T14-24-02-033Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/quest-panel-bug-3-reopen-2025-06-25T14-24-02-942Z.png"
+      ],
+      "observations": [
+        "Quest elements found: 29",
+        "BUG REPRODUCED: Quest panel rendering issues detected!",
+        "- Zero-size element detected",
+        "- Zero-size element detected",
+        "- Zero-size element detected",
+        "- Zero-size element detected"
+      ]
+    },
+    {
+      "bugName": "Status Bar Doubled",
+      "description": "Status bar appears twice on screen",
+      "reproduced": true,
+      "severity": "Medium",
+      "steps": [
+        "Checking for duplicate status bars",
+        "Testing status bar with inventory open"
+      ],
+      "screenshots": [
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/status-bar-bug-1-initial-2025-06-25T14-24-03-871Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/status-bar-bug-2-with-ui-2025-06-25T14-24-04-390Z.png"
+      ],
+      "observations": [
+        "HP indicators: 2",
+        "MP indicators: 0",
+        "Level indicators: 1",
+        "Status elements: 20",
+        "BUG REPRODUCED: Duplicate status bar elements detected!"
+      ]
+    },
+    {
+      "bugName": "Popup Notes Shift Game Up",
+      "description": "Popup notifications cause the game view to shift upward",
+      "reproduced": false,
+      "severity": "High",
+      "steps": [
+        "Recording initial game position",
+        "Triggering potential popup events"
+      ],
+      "screenshots": [
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/popup-shift-bug-1-initial-2025-06-25T14-24-05-317Z.png",
+        "/home/chris/repos/delegate-field-tests/tales-of-claude/src/tests/visual/bug-investigation-results/popup-shift-bug-2-after-popup-2025-06-25T14-24-07-038Z.png"
+      ],
+      "observations": [
+        "Initial game position: {\"top\":0,\"left\":0}",
+        "After popup position: {\"top\":0,\"left\":0}",
+        "Popup elements found: 0"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "reproduced": 3,
+    "notReproduced": 2,
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0
+  }
+}

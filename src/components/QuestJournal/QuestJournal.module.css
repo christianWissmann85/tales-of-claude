@@ -58,7 +58,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* High z-index to appear on top of other game elements */
+  /* Fix: Ensure overlay captures pointer events */
+  pointer-events: auto;
+  z-index: 500; /* Consistent with UIManager panel z-index */
   opacity: 0; /* Start hidden for fade-in animation */
   animation: fadeIn var(--transition-speed-medium) ease-out forwards; /* Smooth fade-in effect */
 }

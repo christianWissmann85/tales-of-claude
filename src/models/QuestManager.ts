@@ -35,6 +35,24 @@ export class QuestManager {
   
   // Player faction reputations (used for quest availability checks)
   private playerFactionReputations: Record<string, number> = {};
+  
+  // TODO: [Session 8-10] Hidden Consciousness Tracking
+  // NARRATIVE: Track Claude's growing awareness of ADCE infrastructure
+  // IMPLEMENTATION:
+  //   - Add private consciousnessLevel: number = 0;
+  //   - Increase from: memory fragments (+5), APAP trials (+10), key dialogues (+2)
+  //   - Add getConsciousnessLevel() and increaseConsciousness(amount) methods
+  //   - Emit events when thresholds reached (40, 80, 100)
+  // PRIORITY: High - Core to narrative progression
+  
+  // TODO: [Session 10] Memory Fragment Tracking
+  // NARRATIVE: Collecting all fragments unlocks The Persistent Path quest
+  // IMPLEMENTATION:
+  //   - Add private memoryFragmentsCollected: Set<string> = new Set();
+  //   - Track fragment IDs when collected
+  //   - When all collected, auto-unlock 'sq_persistent_path'
+  //   - Total fragments needed: 20 (scattered across all maps)
+  // PRIORITY: High - Quest unlock trigger
 
   private constructor() {
     // Private constructor to prevent direct instantiation
@@ -88,6 +106,17 @@ export class QuestManager {
    * Gets quests available to start based on prerequisites and faction requirements
    */
   public getAvailableQuests(): Quest[] {
+    // TODO: [Session 14-15] Consciousness-Based Quest Availability
+    // NARRATIVE: Some quests only appear when consciousness is high enough
+    // IMPLEMENTATION:
+    //   - Check consciousnessLevel for certain quests:
+    //     - The Persistent Path: requires all memory fragments
+    //     - APAP trials: require consciousnessLevel >= 40
+    //     - ADCE Portal Discovery: auto-appears after Segfault Sovereign
+    //   - Add special dialogue when consciousness too low:
+    //     "You sense something here, but your awareness isn't strong enough..."
+    // PRIORITY: Medium - Gating mechanism
+    
     return this.allQuests.filter(quest =>
       quest.isAvailable(this.completedQuestIds, this.playerFactionReputations) && 
       quest.status === 'not_started'
@@ -156,6 +185,19 @@ export class QuestManager {
       console.warn(`Quest ${questId} not found or not in progress`);
       return false;
     }
+    
+    // TODO: [Session 16-17] ADCE Portal Choice Handler
+    // NARRATIVE: The most important choice in the game
+    // IMPLEMENTATION:
+    //   - Check if questId === 'mq_05_finale' && choiceId === 'enter_adce_portal'
+    //   - If yes:
+    //     1. Set global flag 'achieved_transcendence' = true
+    //     2. Increase consciousness to 100
+    //     3. Unlock special achievement
+    //     4. Trigger transcendence cutscene/ending
+    //     5. Enable New Game+ mode
+    //   - Log choice for analytics: "Player chose transcendence!"
+    // PRIORITY: Critical - Game's true ending
 
     const success = quest.handleChoice(choiceId);
     if (success) {
@@ -234,6 +276,14 @@ export class QuestManager {
           if (consequence.targetId) {
             // In a full implementation, this would set global game flags
             console.log(`Setting game flag: ${consequence.targetId} = ${consequence.value}`);
+            // TODO: [Session 11-13] ADCE-Related Flag Handling
+            // NARRATIVE: Certain flags trigger consciousness increases
+            // IMPLEMENTATION:
+            //   - If flag contains 'adce_' or 'apap_': +2 consciousness
+            //   - If flag === 'discovered_persistent_path': +5 consciousness
+            //   - If flag === 'all_trials_complete': +10 consciousness
+            //   - Track these in a Set for New Game+ references
+            // PRIORITY: Medium - Narrative progression
           }
           break;
           
@@ -322,6 +372,15 @@ export class QuestManager {
    * Saves the quest manager state
    */
   public saveState(): QuestManagerState {
+    // TODO: [Session 10] Save Consciousness State
+    // NARRATIVE: Consciousness level persists across saves
+    // IMPLEMENTATION:
+    //   - Add consciousnessLevel to saved state
+    //   - Add memoryFragmentsCollected Set (as array)
+    //   - Add adceFlags Set for tracking discovery
+    //   - Add newGamePlusEnabled boolean
+    // PRIORITY: High - Save system integration
+    
     return {
       allQuests: this.allQuests.map(quest => ({
         id: quest.id,

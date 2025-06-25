@@ -259,14 +259,55 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
     };
   }, [contextMenu, selectedQuantityItem]);
 
+  // Handle ESC key to close inventory
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        // If quantity selector is open, close it first
+        if (selectedQuantityItem) {
+          setSelectedQuantityItem(null);
+          setQuantityToUse(1);
+        } 
+        // If context menu is open, close it
+        else if (contextMenu.visible) {
+          setContextMenu({ visible: false, x: 0, y: 0, item: null });
+        }
+        // Otherwise close the inventory
+        else {
+          onClose();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, selectedQuantityItem, contextMenu]);
+
   // Determine current and max capacity
   const currentTotalItems = calculateTotalItemCount();
   // Assuming Inventory class has getMaxCapacity() method, otherwise use fallback
   const maxCapacity = (inventory as any).getMaxCapacity ? (inventory as any).getMaxCapacity() : MAX_INVENTORY_SLOTS;
 
   return (
-    <div className={`${styles.inventoryOverlay} ${styles.visible}`}>
-      <div className={styles.inventoryContainer} ref={inventoryRef}>
+    <div 
+      className={styles.inventoryOverlay}
+      onClick={(e) => {
+        // Close inventory when clicking on the overlay background (not the container)
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className={styles.inventoryContainer} 
+        ref={inventoryRef}
+        onClick={(e) => {
+          // Prevent clicks inside the container from bubbling up to the overlay
+          e.stopPropagation();
+        }}
+      >
         <div className={styles.inventoryHeader}>
           <h2 className={styles.inventoryTitle}>Inventory</h2>
           <button className={styles.closeButton} onClick={onClose}>

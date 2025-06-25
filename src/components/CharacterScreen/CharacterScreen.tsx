@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './CharacterScreen.module.css';
 import { Player, EquipmentSlotType } from '../../models/Player';
 import { Item } from '../../types/global.types';
@@ -42,6 +42,20 @@ const CharacterScreen: React.FC<CharacterScreenProps> = ({
 
   // Helper to check if any talent has points invested for reset button
   const hasInvestedTalentPoints = talents.some(talent => talent.currentRank > 0);
+
+  // Handle ESC key to close character screen
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 
   // Helper function to render talent effects
   const renderTalentEffects = (talent: Talent) => {
@@ -90,8 +104,22 @@ const CharacterScreen: React.FC<CharacterScreenProps> = ({
 
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.characterScreenContainer}>
+    <div 
+      className={styles.overlay}
+      onClick={(e) => {
+        // Close character screen when clicking on the overlay background
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className={styles.characterScreenContainer}
+        onClick={(e) => {
+          // Prevent clicks inside the screen from bubbling up
+          e.stopPropagation();
+        }}
+      >
         <div className={styles.header}>
           <h2 className={styles.title}>Character Screen</h2>
           <button className={styles.closeButton} onClick={onClose}>

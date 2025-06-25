@@ -37,8 +37,13 @@ const FactionStatus: React.FC = () => {
       dispatch({ type: 'TOGGLE_FACTION_STATUS' });
     }
     
+    // Check for 'ESC' key press to close
+    if (currentPressedKeys.has('Escape') && !prevPressedKeys.current.has('Escape') && isVisible) {
+      dispatch({ type: 'SHOW_FACTION_STATUS', payload: { show: false } });
+    }
+    
     prevPressedKeys.current = currentPressedKeys;
-  }, [pressedKeys, dispatch]);
+  }, [pressedKeys, dispatch, isVisible]);
 
   if (!isVisible || !state.factionManager) {
     return null;

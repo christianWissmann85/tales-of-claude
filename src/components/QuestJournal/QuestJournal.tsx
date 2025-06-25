@@ -101,8 +101,9 @@ const QuestJournal: React.FC = () => {
       });
     }
 
-    // Q to close journal
-    if (pressedKeys.has('KeyQ') && !prevPressedKeys.has('KeyQ')) {
+    // Q or ESC to close journal
+    if ((pressedKeys.has('KeyQ') && !prevPressedKeys.has('KeyQ')) ||
+        (pressedKeys.has('Escape') && !prevPressedKeys.has('Escape'))) {
       dispatch({ type: 'UPDATE_GAME_FLAG', payload: { key: 'showQuestLog', value: false } });
     }
 
@@ -216,8 +217,22 @@ const QuestJournal: React.FC = () => {
   const borderString = '─'.repeat(80);
 
   return (
-    <div className={styles.questJournalOverlay}>
-      <div className={styles.questJournal}>
+    <div 
+      className={styles.questLogOverlay}
+      onClick={(e) => {
+        // Close quest journal when clicking on the overlay background
+        if (e.target === e.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
+      <div 
+        className={styles.questLogContainer}
+        onClick={(e) => {
+          // Prevent clicks inside the journal from bubbling up
+          e.stopPropagation();
+        }}
+      >
         <div className={styles.borderTop}>┌{borderString}┐</div>
         
         <div className={styles.header}>
