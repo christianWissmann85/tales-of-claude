@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testManualHotkeys() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   const page = await browser.newPage();

@@ -67,9 +67,9 @@ const clonePlayer = (player: Player): Player => {
   }));
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability })); // Deep copy abilities
   // Copy equipped items
-  if (player.weaponSlot) newPlayer.weaponSlot = { ...player.weaponSlot };
-  if (player.armorSlot) newPlayer.armorSlot = { ...player.armorSlot };
-  if (player.accessorySlot) newPlayer.accessorySlot = { ...player.accessorySlot };
+  if (player.weaponSlot) { newPlayer.weaponSlot = { ...player.weaponSlot }; }
+  if (player.armorSlot) { newPlayer.armorSlot = { ...player.armorSlot }; }
+  if (player.accessorySlot) { newPlayer.accessorySlot = { ...player.accessorySlot }; }
   // Copy quest tracking
   newPlayer.activeQuestIds = [...player.activeQuestIds];
   newPlayer.completedQuestIds = [...player.completedQuestIds];
@@ -282,14 +282,14 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           'abilities' in entity && 
           Array.isArray(entity.abilities) &&
           'stats' in entity &&
-          'hp' in (entity as any).stats
+          'hp' in (entity as any).stats,
       );
       const newItems = newMap.entities.filter(
         (entity): entity is Item => 
           'type' in entity && 
           typeof entity.type === 'string' && 
           !('role' in entity) && 
-          !('abilities' in entity)
+          !('abilities' in entity),
       );
 
       return {
@@ -476,21 +476,21 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
   }
         const stateWithQuests = {
           ...state,
-          questManagerState: questManager.saveState()
+          questManagerState: questManager.saveState(),
         };
         const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
         if (saveSuccess) {
             return { 
             ...state, 
             dialogue: null,
-            notification: 'Game saved successfully! Meow~' 
+            notification: 'Game saved successfully! Meow~', 
           };
         } else {
           console.error('Failed to save game');
           return { 
             ...state, 
             dialogue: null,
-            notification: 'Failed to save game! Please try again.' 
+            notification: 'Failed to save game! Please try again.', 
           };
         }
       } else if (choiceAction === 'load_game') {
@@ -519,13 +519,13 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             notification: 'Game loaded successfully! Welcome back!',
             gamePhase: 'playing', // Ensure we're in playing phase after loading
             shopState: null, // Ensure shop is closed when loading
-            factionManager // Include faction manager in state
+            factionManager, // Include faction manager in state
           };
         } else {
           return { 
             ...state, 
             dialogue: null,
-            notification: 'No saved game found or loading failed!' 
+            notification: 'No saved game found or loading failed!', 
           };
         }
       } else if (choiceAction === 'end_dialogue') {
@@ -557,7 +557,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           return {
             ...state,
             dialogue: null,
-            notification: `Quest started: ${quest.name}!`
+            notification: `Quest started: ${quest.name}!`,
           };
         }
       } else if (choiceAction === 'open_shop_bit_merchant') {
@@ -632,13 +632,13 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
               ...state,
               player: updatedPlayer,
               dialogue: null,
-              notification: `Quest started: ${quest.name}!`
+              notification: `Quest started: ${quest.name}!`,
             };
           } else {
             return {
               ...state,
               dialogue: null,
-              notification: `Cannot start quest: ${quest.name}. Check prerequisites or faction requirements.`
+              notification: `Cannot start quest: ${quest.name}. Check prerequisites or faction requirements.`,
             };
           }
         }
@@ -686,7 +686,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
   }
       const stateWithQuests = {
         ...state,
-        questManagerState: questManager.saveState()
+        questManagerState: questManager.saveState(),
       };
       const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
       if (saveSuccess) {
@@ -751,7 +751,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       return { ...state, shopState: null };
     
     case 'BUY_ITEM': {
-      if (!state.shopState) return state;
+      if (!state.shopState) { return state; }
       
       const { itemId, price } = action.payload;
       const shopItem = state.shopState.items.find(si => si.item.id === itemId);
@@ -787,7 +787,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     }
     
     case 'SELL_ITEM': {
-      if (!state.shopState) return state;
+      if (!state.shopState) { return state; }
       
       const { itemId, price } = action.payload;
       const newPlayer = clonePlayer(state.player);
@@ -964,8 +964,8 @@ const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           dispatch({ 
             type: 'SHOW_NOTIFICATION', 
             payload: { 
-              message: 'Save game found! Talk to Compiler Cat to load it.' 
-            } 
+              message: 'Save game found! Talk to Compiler Cat to load it.', 
+            }, 
           });
         }
       } catch (error) {

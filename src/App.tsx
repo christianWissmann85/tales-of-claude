@@ -70,7 +70,7 @@ const GameContent: React.FC = () => {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            color: '#666'
+            color: '#666',
           }}>
             {state.currentMap.name || 'Unknown Area'}
           </div>

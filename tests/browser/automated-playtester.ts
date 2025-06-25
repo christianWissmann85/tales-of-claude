@@ -148,7 +148,7 @@ function simulateKey(key: string, type: 'down' | 'up', target: EventTarget = doc
 async function waitFor<T>(
     conditionFn: () => T | Promise<T>,
     timeout: number,
-    interval: number = 100
+    interval: number = 100,
 ): Promise<T> {
     const startTime = Date.now();
     while (Date.now() - startTime < timeout) {
@@ -176,7 +176,7 @@ function readGameState(): GameState {
             inventory: [],
             shop: { active: false },
             quests: [],
-            ui: { characterScreenActive: false, inventoryScreenActive: false, mapScreenActive: false, shopScreenActive: false, dialogueActive: false, battleActive: false }
+            ui: { characterScreenActive: false, inventoryScreenActive: false, mapScreenActive: false, shopScreenActive: false, dialogueActive: false, battleActive: false },
         };
     }
     return {
@@ -187,17 +187,17 @@ function readGameState(): GameState {
             maxHp: game.player?.maxHp ?? 0,
             inventory: game.player?.inventory ?? [],
             equipped: game.player?.equipped ?? [],
-            gold: game.player?.gold ?? 0
+            gold: game.player?.gold ?? 0,
         },
         map: {
             current: game.map?.current ?? 'unknown',
             // Fix 1: Direct assignment is now possible as GameState.map.entities matches window.game.map.entities
-            entities: game.map?.entities ?? []
+            entities: game.map?.entities ?? [],
         },
         dialogue: {
             active: game.dialogue?.active ?? false,
             text: game.dialogue?.text ?? '',
-            npcId: game.dialogue?.npcId
+            npcId: game.dialogue?.npcId,
         },
         battle: {
             active: game.battle?.active ?? false,
@@ -205,13 +205,13 @@ function readGameState(): GameState {
             enemyMaxHp: game.battle?.enemyMaxHp,
             enemyName: game.battle?.enemyName,
             playerTurn: game.battle?.playerTurn,
-            abilities: game.battle?.abilities
+            abilities: game.battle?.abilities,
         },
         inventory: game.inventory ?? [],
         shop: {
             active: game.shop?.active ?? false,
             items: game.shop?.items,
-            shopId: game.shop?.shopId
+            shopId: game.shop?.shopId,
         },
         quests: game.quests ?? [],
         ui: {
@@ -220,8 +220,8 @@ function readGameState(): GameState {
             mapScreenActive: game.ui?.mapScreenActive ?? false,
             shopScreenActive: game.ui?.shopScreenActive ?? false,
             dialogueActive: game.ui?.dialogueActive ?? false,
-            battleActive: game.ui?.battleActive ?? false
-        }
+            battleActive: game.ui?.battleActive ?? false,
+        },
     };
 }
 
@@ -322,7 +322,7 @@ class AutomatedPlaytester {
     private async waitForState(
         conditionFn: (state: GameState) => boolean | Promise<boolean>,
         timeout: number = this.config.stateCheckTimeout,
-        message: string = 'state change'
+        message: string = 'state change',
     ): Promise<void> {
         await waitFor(async () => conditionFn(this.readGameState()), timeout, this.config.stateCheckInterval)
             .catch(e => { throw new Error(`Failed to wait for ${message}: ${e instanceof Error ? e.message : String(e)}`); });
@@ -332,19 +332,19 @@ class AutomatedPlaytester {
         await this.waitForState(
             (state) => state.player.x !== initialPos.x || state.player.y !== initialPos.y,
             timeout,
-            'player to move'
+            'player to move',
         );
     }
 
     private async waitForUIState(
         uiProperty: keyof GameState['ui'],
         expectedState: boolean,
-        timeout: number = this.config.stateCheckTimeout
+        timeout: number = this.config.stateCheckTimeout,
     ): Promise<void> {
         await this.waitForState(
             (state) => state.ui[uiProperty] === expectedState,
             timeout,
-            `${String(uiProperty)} to be ${expectedState ? 'active' : 'inactive'}`
+            `${String(uiProperty)} to be ${expectedState ? 'active' : 'inactive'}`,
         );
     }
 
@@ -394,24 +394,24 @@ class AutomatedPlaytester {
                 status: status,
                 message: message,
                 errors: [...initialErrors, ...(window._capturedErrors || [])].filter((e, i, a) => a.indexOf(e) === i),
-                logs: window._capturedConsoleLogs?.slice(initialLogs.length)
+                logs: window._capturedConsoleLogs?.slice(initialLogs.length),
             });
         }
     }
 
     private async resetGame(): Promise<void> {
         if (window.game?._debug?.resetGame) {
-            this.log("Attempting to reset game state via debug function...");
+            this.log('Attempting to reset game state via debug function...');
             window.game._debug!.resetGame!(); // Fix: Add non-null assertion for the function call
             await sleep(this.config.interactionDelay * 2);
-            this.log("Game reset initiated.");
+            this.log('Game reset initiated.');
         } else if (window.game?.startGame) {
-            this.log("Attempting to start new game via startGame function...");
+            this.log('Attempting to start new game via startGame function...');
             window.game.startGame();
             await sleep(this.config.interactionDelay * 2);
-            this.log("New game started.");
+            this.log('New game started.');
         } else {
-            this.logWarning("No game reset or start function available. Tests might not start from a clean state.");
+            this.logWarning('No game reset or start function available. Tests might not start from a clean state.');
         }
     }
 
@@ -473,7 +473,7 @@ class AutomatedPlaytester {
             await this.runTest('Collision Detection', async () => {
                 const game = window.game;
                 if (!game?._debug?.teleportPlayer || !game.map?.isWalkable) {
-                    this.logWarning("Skipping collision test: Debug teleport or map.isWalkable not available.");
+                    this.logWarning('Skipping collision test: Debug teleport or map.isWalkable not available.');
                     return;
                 }
 
@@ -482,7 +482,7 @@ class AutomatedPlaytester {
 
                 for (let dx = -1; dx <= 1; dx++) {
                     for (let dy = -1; dy <= 1; dy++) {
-                        if (dx === 0 && dy === 0) continue;
+                        if (dx === 0 && dy === 0) { continue; }
                         const targetX = playerPos.x + dx;
                         const targetY = playerPos.y + dy;
                         // game.map.isWalkable is checked in the outer if-condition
@@ -492,11 +492,11 @@ class AutomatedPlaytester {
                             break;
                         }
                     }
-                    if (wallX !== -1) break;
+                    if (wallX !== -1) { break; }
                 }
 
                 if (wallX === -1) {
-                    this.logWarning("Could not find an adjacent wall for collision test. Skipping.");
+                    this.logWarning('Could not find an adjacent wall for collision test. Skipping.');
                     return;
                 }
 
@@ -510,10 +510,7 @@ class AutomatedPlaytester {
                 this.log(`  Teleported to (${preCollisionPos.x}, ${preCollisionPos.y}). Attempting to move into wall at (${wallX}, ${wallY}).`);
 
                 let keyToPress: string;
-                if (wallX > preCollisionPos.x) keyToPress = 'd';
-                else if (wallX < preCollisionPos.x) keyToPress = 'a';
-                else if (wallY > preCollisionPos.y) keyToPress = 's';
-                else keyToPress = 'w';
+                if (wallX > preCollisionPos.x) { keyToPress = 'd'; } else if (wallX < preCollisionPos.x) { keyToPress = 'a'; } else if (wallY > preCollisionPos.y) { keyToPress = 's'; } else { keyToPress = 'w'; }
 
                 await this.pressKey(keyToPress);
                 await sleep(this.config.movementDelay * 2);
@@ -531,14 +528,14 @@ class AutomatedPlaytester {
         await this.runSuite('NPC Interaction Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer) {
-                this.logWarning("Skipping NPC interaction test: Debug teleport not available.");
+                this.logWarning('Skipping NPC interaction test: Debug teleport not available.');
                 return;
             }
 
             // Filter for NPC entities
             const npcs = this.readGameState().map.entities.filter(e => e.type === 'npc');
             if (npcs.length === 0) {
-                this.logWarning("No NPCs found on the current map. Skipping NPC interaction test.");
+                this.logWarning('No NPCs found on the current map. Skipping NPC interaction test.');
                 return;
             }
 
@@ -562,7 +559,7 @@ class AutomatedPlaytester {
                     if (this.readGameState().dialogue.active) {
                         throw new Error(`Dialogue did not dismiss for NPC ${npc.name || npc.id}.`);
                     }
-                    this.log(`  Dialogue dismissed.`);
+                    this.log('  Dialogue dismissed.');
                 });
             }
         });
@@ -572,7 +569,7 @@ class AutomatedPlaytester {
         await this.runSuite('Combat Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer || !game?._debug?.spawnEnemy) {
-                this.logWarning("Skipping Combat test: Debug teleport or spawnEnemy not available.");
+                this.logWarning('Skipping Combat test: Debug teleport or spawnEnemy not available.');
                 return;
             }
 
@@ -588,10 +585,10 @@ class AutomatedPlaytester {
                 game._debug!.spawnEnemy!('Goblin', enemySpawnX, enemySpawnY); // Fix: Add non-null assertion for the function call
                 await sleep(this.config.interactionDelay);
 
-                this.log("  Moving into enemy to start combat.");
+                this.log('  Moving into enemy to start combat.');
                 await this.pressKey('d');
                 await this.waitForUIState('battleActive', true, this.config.stateCheckTimeout);
-                this.log("  Combat started.");
+                this.log('  Combat started.');
 
                 await this.waitForState(s => s.battle.active && s.battle.playerTurn === true, this.config.stateCheckTimeout, 'player turn in battle'); // Fix 2: Explicitly check for true
 
@@ -606,7 +603,7 @@ class AutomatedPlaytester {
                         this.log(`  Player turn. Using ability: ${battleState.abilities[0]}.`);
                         await this.pressKey('1', this.config.battleActionDelay);
                     } else {
-                        this.logWarning("  Player turn but no abilities available or not player's turn. Waiting...");
+                        this.logWarning('  Player turn but no abilities available or not player\'s turn. Waiting...');
                     }
                     await sleep(this.config.battleActionDelay);
                     battleState = this.readGameState().battle;
@@ -615,14 +612,14 @@ class AutomatedPlaytester {
 
                 await this.waitForState(s => !s.battle.active, this.config.stateCheckTimeout * 5, 'battle to end');
                 if (this.readGameState().battle.active) {
-                    throw new Error("Combat did not end after repeated attacks.");
+                    throw new Error('Combat did not end after repeated attacks.');
                 }
-                this.log("  Combat ended. Assuming win.");
+                this.log('  Combat ended. Assuming win.');
             });
 
             await this.runTest('Enter Combat and Lose (if possible)', async () => {
                 if (!game._debug?.teleportPlayer || !game._debug?.spawnEnemy) {
-                    this.logWarning("Skipping 'Combat and Lose' test: Debug teleport/spawnEnemy not available.");
+                    this.logWarning('Skipping \'Combat and Lose\' test: Debug teleport/spawnEnemy not available.');
                     return;
                 }
 
@@ -636,7 +633,7 @@ class AutomatedPlaytester {
 
                 await this.pressKey('d');
                 await this.waitForUIState('battleActive', true, this.config.stateCheckTimeout);
-                this.log("  Combat started. Expecting loss.");
+                this.log('  Combat started. Expecting loss.');
 
                 let battleState = this.readGameState().battle;
                 let attempts = 0;
@@ -648,7 +645,7 @@ class AutomatedPlaytester {
                     if (battleState.playerTurn === true && battleState.abilities && battleState.abilities.length > 0) {
                         await this.pressKey('1', this.config.battleActionDelay);
                     } else {
-                        this.logWarning("  Player turn but no abilities available or not player's turn. Waiting...");
+                        this.logWarning('  Player turn but no abilities available or not player\'s turn. Waiting...');
                     }
                     await sleep(this.config.battleActionDelay);
                     battleState = this.readGameState().battle;
@@ -657,9 +654,9 @@ class AutomatedPlaytester {
 
                 await this.waitForState(s => !s.battle.active, this.config.stateCheckTimeout * 10, 'battle to end (loss)');
                 if (this.readGameState().player.hp > 0) {
-                    this.logWarning("  Player did not lose combat. Perhaps the 'Overlord' wasn't strong enough or game logic prevented loss.");
+                    this.logWarning('  Player did not lose combat. Perhaps the \'Overlord\' wasn\'t strong enough or game logic prevented loss.');
                 } else {
-                    this.log("  Player lost combat. Test passed.");
+                    this.log('  Player lost combat. Test passed.');
                 }
             });
         });
@@ -669,7 +666,7 @@ class AutomatedPlaytester {
         await this.runSuite('Item Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer || !game?._debug?.giveItem) {
-                this.logWarning("Skipping Item test: Debug teleport or giveItem not available.");
+                this.logWarning('Skipping Item test: Debug teleport or giveItem not available.');
                 return;
             }
 
@@ -705,12 +702,12 @@ class AutomatedPlaytester {
                     game._debug!.giveItem!('Health Potion'); // Fix: Add non-null assertion for the function call
                     await sleep(this.config.interactionDelay);
                     if (!this.readGameState().inventory.includes('Health Potion')) {
-                        throw new Error("Failed to give 'Health Potion' for testing.");
+                        throw new Error('Failed to give \'Health Potion\' for testing.');
                     }
                 }
 
                 if (initialHP === maxHP) {
-                    this.logWarning("  Player already at max HP. Attempting to lower HP for potion test.");
+                    this.logWarning('  Player already at max HP. Attempting to lower HP for potion test.');
                     if (game._debug?.spawnEnemy && game._debug?.teleportPlayer) {
                         game._debug!.teleportPlayer!(10, 10); // Fix: Add non-null assertion for the function call
                         await sleep(this.config.interactionDelay);
@@ -725,11 +722,11 @@ class AutomatedPlaytester {
                         }
                         initialHP = this.readGameState().player.hp;
                         if (initialHP === maxHP) {
-                             this.logWarning("  Could not effectively lower player HP for potion test. Skipping.");
+                             this.logWarning('  Could not effectively lower player HP for potion test. Skipping.');
                              return;
                         }
                     } else {
-                        this.logWarning("  No debug function to lower player HP. Skipping potion test.");
+                        this.logWarning('  No debug function to lower player HP. Skipping potion test.');
                         return;
                     }
                 }
@@ -738,11 +735,11 @@ class AutomatedPlaytester {
                 await this.pressKey('i', this.config.uiDelay);
                 await this.waitForUIState('inventoryScreenActive', true);
 
-                this.log("  Using Health Potion from inventory (simulating '1' then 'e').");
+                this.log('  Using Health Potion from inventory (simulating \'1\' then \'e\').');
                 const inventory = this.readGameState().inventory;
                 const itemIndex = inventory.indexOf('Health Potion');
                 if (itemIndex === -1) {
-                    throw new Error(`Item 'Health Potion' not found in inventory after giving.`);
+                    throw new Error('Item \'Health Potion\' not found in inventory after giving.');
                 }
                 // Fix 3: The conversion to string is already correctly handled here.
                 await this.pressKey(String(itemIndex + 1), this.config.uiDelay);
@@ -774,7 +771,7 @@ class AutomatedPlaytester {
                 await this.pressKey('i', this.config.uiDelay);
                 await this.waitForUIState('inventoryScreenActive', true);
 
-                this.log("  Equipping Iron Sword (simulating item selection then 'e').");
+                this.log('  Equipping Iron Sword (simulating item selection then \'e\').');
                 const inventory = this.readGameState().inventory;
                 const itemIndex = inventory.indexOf(itemName);
                 if (itemIndex === -1) {
@@ -797,7 +794,7 @@ class AutomatedPlaytester {
         await this.runSuite('Save/Load Testing', async () => {
             const game = window.game;
             if (!game?.saveGame || !game?.loadGame || !game?._debug?.teleportPlayer || !game?._debug?.giveItem) {
-                this.logWarning("Skipping Save/Load test: Save/Load functions or debug functions not available.");
+                this.logWarning('Skipping Save/Load test: Save/Load functions or debug functions not available.');
                 return;
             }
 
@@ -808,37 +805,37 @@ class AutomatedPlaytester {
                 await this.resetGame();
                 await sleep(this.config.interactionDelay * 2);
 
-                this.log("  Manipulating state for save test: teleporting and giving item.");
+                this.log('  Manipulating state for save test: teleporting and giving item.');
                 game._debug!.teleportPlayer!(testX, testY); // Fix: Add non-null assertion for the function call
                 game._debug!.giveItem!(testItem); // Fix: Add non-null assertion for the function call
                 await sleep(this.config.interactionDelay);
 
                 const stateBeforeSave = this.readGameState();
                 if (stateBeforeSave.player.x !== testX || stateBeforeSave.player.y !== testY || !stateBeforeSave.inventory.includes(testItem)) {
-                    throw new Error("Failed to set up state for save test.");
+                    throw new Error('Failed to set up state for save test.');
                 }
 
-                this.log("  Calling saveGame().");
+                this.log('  Calling saveGame().');
                 if (game.saveGame) {
                     game.saveGame();
                 } else {
                     throw new Error('saveGame function not available');
                 }
                 await sleep(this.config.interactionDelay * 2);
-                this.log("  Save operation completed (assuming success).");
+                this.log('  Save operation completed (assuming success).');
             });
 
             await this.runTest('Load Game', async () => {
-                this.log("  Changing state before load: teleporting to (0,0) and attempting to clear inventory.");
+                this.log('  Changing state before load: teleporting to (0,0) and attempting to clear inventory.');
                 game._debug!.teleportPlayer!(0, 0); // Fix: Add non-null assertion for the function call
                 await sleep(this.config.interactionDelay);
 
                 const stateBeforeLoad = this.readGameState();
                 if (stateBeforeLoad.player.x === testX && stateBeforeLoad.player.y === testY) {
-                    this.logWarning("  State did not change before load, might affect test validity.");
+                    this.logWarning('  State did not change before load, might affect test validity.');
                 }
 
-                this.log("  Calling loadGame().");
+                this.log('  Calling loadGame().');
                 if (game.loadGame) {
                     game.loadGame();
                 } else {
@@ -853,7 +850,7 @@ class AutomatedPlaytester {
                 if (!stateAfterLoad.inventory.includes(testItem)) {
                     throw new Error(`Item '${testItem}' not restored in inventory. Inventory: ${stateAfterLoad.inventory.join(', ')}`);
                 }
-                this.log("  Load operation successful. State restored.");
+                this.log('  Load operation successful. State restored.');
             });
         });
     }
@@ -862,7 +859,7 @@ class AutomatedPlaytester {
         await this.runSuite('Map Transition Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer) {
-                this.logWarning("Skipping Map Transition test: Debug teleport not available.");
+                this.logWarning('Skipping Map Transition test: Debug teleport not available.');
                 return;
             }
 
@@ -870,7 +867,7 @@ class AutomatedPlaytester {
             // The filter ensures that `e.targetMap` is defined for elements in `portals`.
             const portals = this.readGameState().map.entities.filter(e => e.type === 'portal' && e.targetMap);
             if (portals.length === 0) {
-                this.logWarning("No portals with target maps found on the current map. Skipping map transition test.");
+                this.logWarning('No portals with target maps found on the current map. Skipping map transition test.');
                 return;
             }
 
@@ -910,14 +907,14 @@ class AutomatedPlaytester {
         await this.runSuite('Shop Interaction Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer || !game?._debug?.giveItem) {
-                this.logWarning("Skipping Shop Interaction test: Debug teleport or giveItem not available.");
+                this.logWarning('Skipping Shop Interaction test: Debug teleport or giveItem not available.');
                 return;
             }
 
             // Filter for shop entities
             const shops = this.readGameState().map.entities.filter(e => e.type === 'shop');
             if (shops.length === 0) {
-                this.logWarning("No shops found on the current map. Skipping shop interaction test.");
+                this.logWarning('No shops found on the current map. Skipping shop interaction test.');
                 return;
             }
 
@@ -977,7 +974,7 @@ class AutomatedPlaytester {
                         }
                         this.log(`  Successfully sold '${itemToSell}'. Gold: ${initialGold} -> ${currentGold}.`);
                     } else {
-                        this.logWarning("  No items in inventory to sell. Skipping sell test.");
+                        this.logWarning('  No items in inventory to sell. Skipping sell test.');
                     }
 
                     await this.pressKey('e', this.config.interactionDelay);
@@ -994,31 +991,31 @@ class AutomatedPlaytester {
     private async testCharacterScreen(): Promise<void> {
         await this.runSuite('Character Screen Testing', async () => {
             await this.runTest('Open and Close Character Screen', async () => {
-                this.log("  Opening character screen (pressing 'C').");
+                this.log('  Opening character screen (pressing \'C\').');
                 await this.pressKey('c', this.config.uiDelay);
                 await this.waitForUIState('characterScreenActive', true);
 
                 if (!this.readGameState().ui.characterScreenActive) {
-                    throw new Error("Character screen did not open.");
+                    throw new Error('Character screen did not open.');
                 }
-                this.log("  Character screen opened successfully.");
+                this.log('  Character screen opened successfully.');
 
                 const playerState = this.readGameState().player;
                 // These checks are technically redundant because readGameState provides default 0,
                 // but keeping them doesn't hurt and reflects original intent.
                 if (playerState.hp === undefined || playerState.gold === undefined) {
-                    this.logWarning("  Could not verify player HP/Gold on character screen (data not exposed or UI not checked).");
+                    this.logWarning('  Could not verify player HP/Gold on character screen (data not exposed or UI not checked).');
                 } else {
                     this.log(`  Verified player HP: ${playerState.hp}, Gold: ${playerState.gold} on screen.`);
                 }
 
-                this.log("  Closing character screen (pressing 'C' again).");
+                this.log('  Closing character screen (pressing \'C\' again).');
                 await this.pressKey('c', this.config.uiDelay);
                 await this.waitForUIState('characterScreenActive', false);
                 if (this.readGameState().ui.characterScreenActive) {
-                    throw new Error("Character screen did not close.");
+                    throw new Error('Character screen did not close.');
                 }
-                this.log("  Character screen closed successfully.");
+                this.log('  Character screen closed successfully.');
             });
         });
     }
@@ -1027,7 +1024,7 @@ class AutomatedPlaytester {
         await this.runSuite('Quest System Testing', async () => {
             const game = window.game;
             if (!game?._debug?.teleportPlayer || !game?._debug?.completeQuest) {
-                this.logWarning("Skipping Quest System test: Debug teleport or completeQuest not available.");
+                this.logWarning('Skipping Quest System test: Debug teleport or completeQuest not available.');
                 return;
             }
 
@@ -1038,11 +1035,11 @@ class AutomatedPlaytester {
                 // Filter for NPC entities that are also quest givers
                 // This is now type-safe as GameMapEntity includes giverId as optional
                 const questGivers = this.readGameState().map.entities.filter(e =>
-                    e.type === 'npc' && this.readGameState().map.entities.some(q => q.type === 'quest' && q.giverId === e.id)
+                    e.type === 'npc' && this.readGameState().map.entities.some(q => q.type === 'quest' && q.giverId === e.id),
                 );
 
                 if (questGivers.length === 0) {
-                    this.logWarning("No quest givers found. Skipping quest acceptance test.");
+                    this.logWarning('No quest givers found. Skipping quest acceptance test.');
                     return;
                 }
                 const questGiver = questGivers[0];
@@ -1082,37 +1079,37 @@ class AutomatedPlaytester {
             });
 
             await this.runTest('Open and Close Quest Log', async () => {
-                this.log("  Opening quest log (assuming 'J' key).");
+                this.log('  Opening quest log (assuming \'J\' key).');
                 await this.pressKey('j', this.config.uiDelay);
                 // The original code checks mapScreenActive, which might be a placeholder for a generic UI screen.
                 // If there's a specific quest log UI state, it should be used here.
                 // For now, keeping mapScreenActive as per original.
                 await this.waitForUIState('mapScreenActive', true);
-                this.log("  Quest log opened successfully (placeholder check).");
+                this.log('  Quest log opened successfully (placeholder check).');
 
-                this.log("  Closing quest log (pressing 'J' again).");
+                this.log('  Closing quest log (pressing \'J\' again).');
                 await this.pressKey('j', this.config.uiDelay);
                 await this.waitForUIState('mapScreenActive', false);
-                this.log("  Quest log closed successfully (placeholder check).");
+                this.log('  Quest log closed successfully (placeholder check).');
             });
         });
     }
 
     public async start(suitesToRun?: string[]): Promise<void> {
         setupMonitoring();
-        this.log("Automated Playtester starting...");
+        this.log('Automated Playtester starting...');
 
         try {
             await waitFor(() => !!window.game, Number(this.config.stateCheckTimeout) * 2, this.config.stateCheckInterval);
-            this.log("window.game detected. Proceeding with tests.");
+            this.log('window.game detected. Proceeding with tests.');
         } catch (e: any) {
             this.logError(`Game object (window.game) not found after timeout. Cannot proceed with tests: ${e.message}`);
             this.results.push({
                 suite: 'Framework Setup',
                 test: 'Game Object Availability',
                 status: 'FAIL',
-                message: `window.game was not found. Ensure the game is loaded and exposes its state.`,
-                errors: window._capturedErrors || []
+                message: 'window.game was not found. Ensure the game is loaded and exposes its state.',
+                errors: window._capturedErrors || [],
             });
             this.generateReport();
             cleanupMonitoring();
@@ -1150,7 +1147,7 @@ class AutomatedPlaytester {
                     test: 'Suite Selection',
                     status: 'SKIP',
                     message: `Suite "${suiteName}" was requested but not found.`,
-                    errors: []
+                    errors: [],
                 });
             }
             await sleep(this.config.interactionDelay * 2);
@@ -1158,7 +1155,7 @@ class AutomatedPlaytester {
 
         this.generateReport();
         cleanupMonitoring();
-        this.log("Automated Playtester finished.");
+        this.log('Automated Playtester finished.');
     }
 
     private generateReport(): void {

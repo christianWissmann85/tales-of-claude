@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testUIHotkeysTiming() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   const page = await browser.newPage();
@@ -33,7 +33,7 @@ async function testUIHotkeysTiming() {
     await page.keyboard.press('i');
     await page.waitForTimeout(1000);
     
-    let inventory = await page.$('[class*="inventory"], [class*="Inventory"]');
+    const inventory = await page.$('[class*="inventory"], [class*="Inventory"]');
     console.log(`Inventory visible: ${!!inventory}`);
     
     if (inventory) {
@@ -79,7 +79,7 @@ async function testUIHotkeysTiming() {
       const state = await page.evaluate(() => (window as any).__gameState?.showQuestLog);
       console.log(`  Quest Log state: ${state}`);
       
-      if (state) break;
+      if (state) { break; }
     }
 
   } catch (error) {

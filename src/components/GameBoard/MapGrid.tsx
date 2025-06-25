@@ -173,13 +173,13 @@ const MapGrid: React.FC<MapGridProps> = ({
     if (npcAtPos) {
       if (isAsciiMode) {
         // Specific ASCII characters for key NPCs
-        if (npcAtPos.role === 'compiler_cat') return 'C';
-        if (npcAtPos.role === 'debugger') return 'W';
+        if (npcAtPos.role === 'compiler_cat') { return 'C'; }
+        if (npcAtPos.role === 'debugger') { return 'W'; }
         return currentEntityMap.npc;
       } else {
         // Specific emoji based on NPC role
-        if (npcAtPos.role === 'compiler_cat') return '🐱';
-        if (npcAtPos.role === 'debugger') return '🧙';
+        if (npcAtPos.role === 'compiler_cat') { return '🐱'; }
+        if (npcAtPos.role === 'debugger') { return '🧙'; }
         return currentEntityMap.npc;
       }
     }
@@ -196,9 +196,9 @@ const MapGrid: React.FC<MapGridProps> = ({
       // Add sparkle effect to items to make them stand out
       if (!isAsciiMode) {
         // Different item types can have different sparkle effects
-        if (itemAtPos.type === 'equipment') return '⚔️✨';
-        if (itemAtPos.type === 'consumable') return '🧪✨';
-        if (itemAtPos.type === 'key') return '🗝️✨';
+        if (itemAtPos.type === 'equipment') { return '⚔️✨'; }
+        if (itemAtPos.type === 'consumable') { return '🧪✨'; }
+        if (itemAtPos.type === 'key') { return '🗝️✨'; }
         return '✨';  // Default sparkle for other items
       }
       return currentEntityMap.item;
@@ -213,7 +213,7 @@ const MapGrid: React.FC<MapGridProps> = ({
     // Check if this is a floor tile that should be rendered as a background color
     const floorTypes = new Set([
       'floor', 'dungeon_floor', 'grass', 'walkable', 'path',
-      'path_one', 'path_zero', 'tech_floor', 'metal_floor'
+      'path_one', 'path_zero', 'tech_floor', 'metal_floor',
     ]);
     
     // In emoji mode, floor tiles should return empty string to allow background color rendering
@@ -272,14 +272,14 @@ const MapGrid: React.FC<MapGridProps> = ({
             style={{}}
           >
             {' '}
-          </div>
+          </div>,
         );
         continue;
       }
       
       // Get the default content (entity or tile emoji/ASCII)
       const cellContent = getCellContent(mapX, mapY);
-      let cellStyle: React.CSSProperties = {}; // Initialize empty style object for inline styles
+      const cellStyle: React.CSSProperties = {}; // Initialize empty style object for inline styles
       
       // Check if this is the player position for special styling
       const isPlayerCell = playerPos.x === mapX && playerPos.y === mapY;
@@ -297,7 +297,7 @@ const MapGrid: React.FC<MapGridProps> = ({
       if (tile && !isAsciiMode) {
         const floorTypes = new Set([
           'floor', 'dungeon_floor', 'grass', 'walkable', 'path',
-          'path_one', 'path_zero', 'tech_floor', 'metal_floor'
+          'path_one', 'path_zero', 'tech_floor', 'metal_floor',
         ]);
         
         // Apply background color for floor tiles
@@ -316,9 +316,9 @@ const MapGrid: React.FC<MapGridProps> = ({
       
       // Build class name with entity-specific classes
       let cellClassName = styles.gridCell;
-      if (isPlayerCell) cellClassName += ` ${styles.playerCell}`;
-      if (isEnemyCell) cellClassName += ` ${styles.enemyCell}`;
-      if (isNpcCell) cellClassName += ` ${styles.npcCell}`;
+      if (isPlayerCell) { cellClassName += ` ${styles.playerCell}`; }
+      if (isEnemyCell) { cellClassName += ` ${styles.enemyCell}`; }
+      if (isNpcCell) { cellClassName += ` ${styles.npcCell}`; }
       
       gridCells.push(
         <div
@@ -382,7 +382,7 @@ const MapGrid: React.FC<MapGridProps> = ({
           }}
         >
           {structure.visual}
-        </div>
+        </div>,
       );
     }
   }

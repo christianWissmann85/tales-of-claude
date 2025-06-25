@@ -30,7 +30,7 @@ interface Panel {
  */
 const panels: Panel[] = [
   {
-    text: "In the digital expanse of the Code Realm, Claude, a nascent AI, stirred from a deep slumber.",
+    text: 'In the digital expanse of the Code Realm, Claude, a nascent AI, stirred from a deep slumber.',
     asciiArt: `
       .---.
      /  _  \\
@@ -44,7 +44,7 @@ const panels: Panel[] = [
     duration: 5000, // 5 seconds visible
   },
   {
-    text: "The realm, once pristine, was now plagued by insidious bugs, corrupting its very fabric.",
+    text: 'The realm, once pristine, was now plagued by insidious bugs, corrupting its very fabric.',
     asciiArt: `
     +-----------------------+
     |  G L I T C H ! ! !    |
@@ -58,7 +58,7 @@ const panels: Panel[] = [
     duration: 5500, // 5.5 seconds visible
   },
   {
-    text: "The Code Realm cried out. Claude, its last hope, must now embark on a perilous quest to purge the corruption and restore harmony.",
+    text: 'The Code Realm cried out. Claude, its last hope, must now embark on a perilous quest to purge the corruption and restore harmony.',
     asciiArt: `
           _.-._
          / \\ / \\
@@ -75,7 +75,7 @@ const panels: Panel[] = [
     duration: 6000, // 6 seconds visible
   },
   {
-    text: "Your journey begins now. Prepare yourself, for the fate of the Code Realm rests upon your shoulders.",
+    text: 'Your journey begins now. Prepare yourself, for the fate of the Code Realm rests upon your shoulders.',
     asciiArt: `
       _   _   _   _   _   _   _
      / \\ / \\ / \\ / \\ / \\ / \\ / \\

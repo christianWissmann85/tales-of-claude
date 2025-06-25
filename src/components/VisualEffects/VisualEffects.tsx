@@ -15,19 +15,19 @@ const VisualEffectsContext = createContext<VisualEffectsContextType | undefined>
 
 export const useScreenShake = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useScreenShake must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useScreenShake must be used within a VisualEffectsProvider'); }
   return context.triggerScreenShake;
 };
 
 export const useParticle = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useParticle must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useParticle must be used within a VisualEffectsProvider'); }
   return context.triggerParticle;
 };
 
 export const useGlow = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useGlow must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useGlow must be used within a VisualEffectsProvider'); }
   return {
     triggerGlow: context.triggerGlow,
     isGlowing: context.isGlowing,
@@ -36,19 +36,19 @@ export const useGlow = () => {
 
 export const useMapTransition = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useMapTransition must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useMapTransition must be used within a VisualEffectsProvider'); }
   return context.startMapFade;
 };
 
 export const useLevelUpSparkle = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useLevelUpSparkle must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useLevelUpSparkle must be used within a VisualEffectsProvider'); }
   return context.triggerLevelUpSparkle;
 };
 
 export const useCombatHitFlash = () => {
   const context = useContext(VisualEffectsContext);
-  if (!context) throw new Error('useCombatHitFlash must be used within a VisualEffectsProvider');
+  if (!context) { throw new Error('useCombatHitFlash must be used within a VisualEffectsProvider'); }
   return context.triggerCombatHitFlash;
 };
 

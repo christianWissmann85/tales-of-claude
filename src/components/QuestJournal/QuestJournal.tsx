@@ -34,11 +34,11 @@ const QuestJournal: React.FC = () => {
     switch (selectedCategory) {
       case 'main':
         return allQuests.filter(q => 
-          q.id.startsWith('mq_') && q.status !== 'completed'
+          q.id.startsWith('mq_') && q.status !== 'completed',
         );
       case 'side':
         return allQuests.filter(q => 
-          q.id.startsWith('sq_') && q.status !== 'completed'
+          q.id.startsWith('sq_') && q.status !== 'completed',
         );
       case 'completed':
         return allQuests.filter(q => q.status === 'completed');
@@ -51,15 +51,15 @@ const QuestJournal: React.FC = () => {
   const filteredQuests = useMemo(() => {
     const quests = getQuestsByCategory();
     
-    if (!searchTerm) return quests;
+    if (!searchTerm) { return quests; }
     
     const lowerSearch = searchTerm.toLowerCase();
     return quests.filter(quest => 
       quest.name.toLowerCase().includes(lowerSearch) ||
       quest.description.toLowerCase().includes(lowerSearch) ||
       quest.objectives.some(obj => 
-        obj.description.toLowerCase().includes(lowerSearch)
-      )
+        obj.description.toLowerCase().includes(lowerSearch),
+      ),
     );
   }, [getQuestsByCategory, searchTerm]);
 
@@ -83,7 +83,7 @@ const QuestJournal: React.FC = () => {
 
     if (pressedKeys.has('ArrowDown') && !prevPressedKeys.has('ArrowDown')) {
       setSelectedQuestIndex(prev => 
-        Math.min(filteredQuests.length - 1, prev + 1)
+        Math.min(filteredQuests.length - 1, prev + 1),
       );
     }
 
@@ -97,7 +97,7 @@ const QuestJournal: React.FC = () => {
       // Would need a ref to actually focus the input
       dispatch({
         type: 'SHOW_NOTIFICATION',
-        payload: { message: 'Search mode activated - type to filter quests' }
+        payload: { message: 'Search mode activated - type to filter quests' },
       });
     }
 
@@ -116,17 +116,17 @@ const QuestJournal: React.FC = () => {
 
   // Render quest type icon
   const getQuestIcon = (quest: Quest): string => {
-    if (quest.id.startsWith('mq_')) return '⭐'; // Main quest
-    if (quest.id.startsWith('sq_')) return '◆'; // Side quest
-    if (quest.branches) return '🌿'; // Branching quest
+    if (quest.id.startsWith('mq_')) { return '⭐'; } // Main quest
+    if (quest.id.startsWith('sq_')) { return '◆'; } // Side quest
+    if (quest.branches) { return '🌿'; } // Branching quest
     return '•';
   };
 
   // Render quest status color class
   const getQuestStatusClass = (quest: Quest): string => {
-    if (quest.status === 'completed') return styles.completedQuest;
-    if (quest.status === 'in_progress') return styles.activeQuest;
-    if (quest.status === 'failed') return styles.failedQuest;
+    if (quest.status === 'completed') { return styles.completedQuest; }
+    if (quest.status === 'in_progress') { return styles.activeQuest; }
+    if (quest.status === 'failed') { return styles.failedQuest; }
     return styles.availableQuest;
   };
 
@@ -134,10 +134,10 @@ const QuestJournal: React.FC = () => {
   const renderFactionImpact = (consequences: QuestConsequence[]) => {
     const factionChanges = consequences.filter(c => 
       c.type === ConsequenceType.FACTION_CHANGE || 
-      c.type === ConsequenceType.REPUTATION_CHANGE
+      c.type === ConsequenceType.REPUTATION_CHANGE,
     );
 
-    if (factionChanges.length === 0) return null;
+    if (factionChanges.length === 0) { return null; }
 
     return (
       <div className={styles.factionImpact}>
@@ -157,7 +157,7 @@ const QuestJournal: React.FC = () => {
 
   // Render branching visualization
   const renderBranchVisualization = (quest: Quest) => {
-    if (!quest.branches || !showBranchVisualization) return null;
+    if (!quest.branches || !showBranchVisualization) { return null; }
 
     return (
       <div className={styles.branchVisualization}>
@@ -166,8 +166,8 @@ const QuestJournal: React.FC = () => {
           const isActive = quest.currentBranchId === branchId;
           const isCompleted = branch.objectives.every(obj => 
             quest.objectives.find(qObj => 
-              qObj.description === obj.description
-            )?.isCompleted
+              qObj.description === obj.description,
+            )?.isCompleted,
           );
 
           return (
@@ -182,7 +182,7 @@ const QuestJournal: React.FC = () => {
               {branch.factionRequirements && (
                 <div className={styles.branchRequirements}>
                   Requirements: {branch.factionRequirements.map(req => 
-                    `${req.factionId} ${req.minReputation ? `≥${req.minReputation}` : ''}`
+                    `${req.factionId} ${req.minReputation ? `≥${req.minReputation}` : ''}`,
                   ).join(', ')}
                 </div>
               )}
@@ -195,7 +195,7 @@ const QuestJournal: React.FC = () => {
 
   // Render choice history
   const renderChoiceHistory = (quest: Quest) => {
-    if (!quest.currentChoices || quest.currentChoices.length === 0) return null;
+    if (!quest.currentChoices || quest.currentChoices.length === 0) { return null; }
 
     return (
       <div className={styles.choiceSection}>

@@ -48,9 +48,9 @@ export class Faction implements IFaction {
      * These tiers align with the `isHostile`, `isNeutral`, and `isAllied` methods.
      */
     private static readonly DEFAULT_REPUTATION_TIERS: Record<string, { min: number; max: number; description: string }> = {
-        "Hostile": { min: -Infinity, max: -21, description: "Actively opposes your goals. Actions will be met with resistance." },
-        "Neutral": { min: -20, max: 20, description: "Indifferent towards you. Neither friend nor foe." },
-        "Allied": { min: 21, max: Infinity, description: "Strongly supports you. A trusted ally." },
+        'Hostile': { min: -Infinity, max: -21, description: 'Actively opposes your goals. Actions will be met with resistance.' },
+        'Neutral': { min: -20, max: 20, description: 'Indifferent towards you. Neither friend nor foe.' },
+        'Allied': { min: 21, max: Infinity, description: 'Strongly supports you. A trusted ally.' },
     };
 
     /**
@@ -66,13 +66,13 @@ export class Faction implements IFaction {
         name: string,
         initialReputation: number,
         description?: string,
-        reputationTiers?: Record<string, { min: number; max: number; description: string }>
+        reputationTiers?: Record<string, { min: number; max: number; description: string }>,
     ) {
         this.id = id;
         this.name = name;
         this.initialReputation = initialReputation;
         this.reputation = initialReputation;
-        this.description = description || "";
+        this.description = description || '';
         this.reputationTiers = reputationTiers || Faction.DEFAULT_REPUTATION_TIERS;
     }
 
@@ -83,11 +83,11 @@ export class Faction implements IFaction {
      * They are lawful, structured, and love perfect syntax.
      */
     private static readonly _orderOfCleanCode: Faction = new Faction(
-        "order",
-        "Order of Clean Code",
+        'order',
+        'Order of Clean Code',
         0, // Neutral initial reputation
-        "A lawful and structured faction that values perfect syntax, rigorous testing, and maintainable code above all else. They believe in strict adherence to coding standards.",
-        Faction.DEFAULT_REPUTATION_TIERS
+        'A lawful and structured faction that values perfect syntax, rigorous testing, and maintainable code above all else. They believe in strict adherence to coding standards.',
+        Faction.DEFAULT_REPUTATION_TIERS,
     );
 
     /**
@@ -95,11 +95,11 @@ export class Faction implements IFaction {
      * They are creative, experimental, and break conventions.
      */
     private static readonly _chaosCoders: Faction = new Faction(
-        "chaos",
-        "Chaos Coders",
+        'chaos',
+        'Chaos Coders',
         0, // Neutral initial reputation
-        "A creative and experimental faction that thrives on innovation, rapid prototyping, and breaking conventions. They prioritize functionality and speed over strict rules, often leading to 'spaghetti code'.",
-        Faction.DEFAULT_REPUTATION_TIERS
+        'A creative and experimental faction that thrives on innovation, rapid prototyping, and breaking conventions. They prioritize functionality and speed over strict rules, often leading to \'spaghetti code\'.',
+        Faction.DEFAULT_REPUTATION_TIERS,
     );
 
     /**
@@ -107,11 +107,11 @@ export class Faction implements IFaction {
      * They are protectors of data and neutral mediators.
      */
     private static readonly _memoryGuardians: Faction = new Faction(
-        "memory",
-        "Memory Guardians",
+        'memory',
+        'Memory Guardians',
         0, // Neutral initial reputation
-        "A neutral and ancient faction dedicated to the protection and efficient management of data. They act as mediators in disputes, ensuring data integrity and preventing memory leaks or corruption.",
-        Faction.DEFAULT_REPUTATION_TIERS
+        'A neutral and ancient faction dedicated to the protection and efficient management of data. They act as mediators in disputes, ensuring data integrity and preventing memory leaks or corruption.',
+        Faction.DEFAULT_REPUTATION_TIERS,
     );
 
     // --- Static Factory Methods ---
@@ -126,7 +126,7 @@ export class Faction implements IFaction {
             Faction._orderOfCleanCode.name,
             Faction._orderOfCleanCode.initialReputation,
             Faction._orderOfCleanCode.description,
-            Faction._orderOfCleanCode.reputationTiers
+            Faction._orderOfCleanCode.reputationTiers,
         );
     }
 
@@ -140,7 +140,7 @@ export class Faction implements IFaction {
             Faction._chaosCoders.name,
             Faction._chaosCoders.initialReputation,
             Faction._chaosCoders.description,
-            Faction._chaosCoders.reputationTiers
+            Faction._chaosCoders.reputationTiers,
         );
     }
 
@@ -154,7 +154,7 @@ export class Faction implements IFaction {
             Faction._memoryGuardians.name,
             Faction._memoryGuardians.initialReputation,
             Faction._memoryGuardians.description,
-            Faction._memoryGuardians.reputationTiers
+            Faction._memoryGuardians.reputationTiers,
         );
     }
 
@@ -175,7 +175,7 @@ export class Faction implements IFaction {
                 return tierName;
             }
         }
-        return "Unknown"; // Fallback, though tiers should cover all ranges
+        return 'Unknown'; // Fallback, though tiers should cover all ranges
     }
 
     /**

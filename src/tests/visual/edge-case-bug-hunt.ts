@@ -65,10 +65,10 @@ async function openUIPanel(page: Page, key: string, panelSelector: string) {
  * Closes a UI panel by pressing ESC.
  */
 async function closeUIPanel(page: Page, panelSelector: string) {
-    console.log(`Attempting to close UI panel: ESC`);
+    console.log('Attempting to close UI panel: ESC');
     await pressKey(page, 'Escape');
     await page.waitForSelector(panelSelector, { state: 'hidden', timeout: 5000 });
-    console.log(`UI panel closed.`);
+    console.log('UI panel closed.');
 }
 
 /**
@@ -80,7 +80,7 @@ async function rapidAction(page: Page, action: () => Promise<void>, count: numbe
         await action();
         await page.waitForTimeout(50); // Small delay between actions
     }
-    console.log(`Rapid action completed.`);
+    console.log('Rapid action completed.');
 }
 
 // --- Test Suite Functions (converted from test blocks) ---
@@ -392,7 +392,7 @@ async function memoryLeakSimulation(page: Page) {
         await closeUIPanel(page, '#mapPanel');
         await closeUIPanel(page, '#inventoryPanel');
         await page.waitForTimeout(50);
-        if (i % 10 === 0) console.log(`  UI cycle ${i + 1}/50`);
+        if (i % 10 === 0) { console.log(`  UI cycle ${i + 1}/50`); }
     }
 
     // Repeatedly enter/exit a combat scenario (if possible to force)
@@ -407,7 +407,7 @@ async function memoryLeakSimulation(page: Page) {
         await page.waitForSelector('#combatUI', { state: 'hidden', timeout: 30000 });
         await moveCharacter(page, 'a', 1000); // Move away
         await page.waitForTimeout(1000);
-        if (i % 2 === 0) console.log(`  Combat cycle ${i + 1}/10`);
+        if (i % 2 === 0) { console.log(`  Combat cycle ${i + 1}/10`); }
     }
 
     // Repeatedly transition maps
@@ -417,7 +417,7 @@ async function memoryLeakSimulation(page: Page) {
         await page.waitForTimeout(1000); // Wait for transition
         await moveCharacter(page, 'a', 500); // Exit transition
         await page.waitForTimeout(1000);
-        if (i % 5 === 0) console.log(`  Map transition cycle ${i + 1}/20`);
+        if (i % 5 === 0) { console.log(`  Map transition cycle ${i + 1}/20`); }
     }
 
     // After all actions, check for responsiveness
@@ -617,7 +617,7 @@ async function runEdgeCaseBugHunt() {
             memoryLeakSimulation,
             questProgressionEdgeCases,
             npcStatePersistenceEdgeCases,
-            multipleUIPanelsOpenInteractionEdgeCases
+            multipleUIPanelsOpenInteractionEdgeCases,
         ];
 
         for (const testFn of tests) {

@@ -26,7 +26,7 @@ const DebugPanel: React.FC = () => {
       fontFamily: 'monospace',
       fontSize: '12px',
       zIndex: 9999,
-      border: '1px solid lime'
+      border: '1px solid lime',
     }}>
       <h3 style={{ margin: '0 0 10px 0', color: 'lime' }}>DEBUG PANEL</h3>
       <div>Map: {debugInfo.mapName} ({debugInfo.mapId})</div>

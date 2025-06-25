@@ -34,7 +34,7 @@ const BUG_TESTS = [
         severity: 'Critical',
         steps: [],
         screenshots: [],
-        observations: []
+        observations: [],
       };
 
       try {
@@ -45,7 +45,7 @@ const BUG_TESTS = [
 
         // Check initial Claude visibility
         const claudeVisibleInitial = await page.evaluate(() => 
-          document.body.textContent?.includes('🤖')
+          document.body.textContent?.includes('🤖'),
         );
         result.observations.push(`Claude visible in Terminal Town: ${claudeVisibleInitial}`);
 
@@ -59,7 +59,7 @@ const BUG_TESTS = [
           
           // Check if we're in Binary Forest
           const inBinaryForest = await page.evaluate(() => 
-            document.body.textContent?.includes('Binary Forest')
+            document.body.textContent?.includes('Binary Forest'),
           );
           
           if (inBinaryForest) {
@@ -75,10 +75,10 @@ const BUG_TESTS = [
 
         // Check Claude visibility in Binary Forest
         const claudeVisibleInForest = await page.evaluate(() => 
-          document.body.textContent?.includes('🤖')
+          document.body.textContent?.includes('🤖'),
         );
         const inBinaryForest = await page.evaluate(() => 
-          document.body.textContent?.includes('Binary Forest')
+          document.body.textContent?.includes('Binary Forest'),
         );
 
         result.observations.push(`In Binary Forest: ${inBinaryForest}`);
@@ -94,7 +94,7 @@ const BUG_TESTS = [
       }
 
       return result;
-    }
+    },
   },
   {
     name: 'Dialogue Not Working',
@@ -108,7 +108,7 @@ const BUG_TESTS = [
         severity: 'High',
         steps: [],
         screenshots: [],
-        observations: []
+        observations: [],
       };
 
       try {
@@ -187,7 +187,7 @@ const BUG_TESTS = [
       }
 
       return result;
-    }
+    },
   },
   {
     name: 'Quest Panel Weird Rendering',
@@ -201,7 +201,7 @@ const BUG_TESTS = [
         severity: 'Medium',
         steps: [],
         screenshots: [],
-        observations: []
+        observations: [],
       };
 
       try {
@@ -227,7 +227,7 @@ const BUG_TESTS = [
           const elements = Array.from(document.querySelectorAll('*'));
           const questElements = elements.filter(el => 
             el.textContent?.includes('Quest') || 
-            el.textContent?.includes('Objective')
+            el.textContent?.includes('Objective'),
           );
 
           const overlapping: any[] = [];
@@ -250,7 +250,7 @@ const BUG_TESTS = [
 
           return {
             questElementCount: questElements.length,
-            issues: [...overlapping, ...zIndexIssues]
+            issues: [...overlapping, ...zIndexIssues],
           };
         });
 
@@ -281,7 +281,7 @@ const BUG_TESTS = [
       }
 
       return result;
-    }
+    },
   },
   {
     name: 'Status Bar Doubled',
@@ -295,7 +295,7 @@ const BUG_TESTS = [
         severity: 'Medium',
         steps: [],
         screenshots: [],
-        observations: []
+        observations: [],
       };
 
       try {
@@ -326,7 +326,7 @@ const BUG_TESTS = [
             mpCount: mpMatches,
             levelCount: levelMatches,
             expCount: expMatches,
-            statusElementCount: statusElements.length
+            statusElementCount: statusElements.length,
           };
         });
 
@@ -356,7 +356,7 @@ const BUG_TESTS = [
       }
 
       return result;
-    }
+    },
   },
   {
     name: 'Popup Notes Shift Game Up',
@@ -370,7 +370,7 @@ const BUG_TESTS = [
         severity: 'High',
         steps: [],
         screenshots: [],
-        observations: []
+        observations: [],
       };
 
       try {
@@ -459,7 +459,7 @@ const BUG_TESTS = [
 
           return {
             popupCount: popupElements.length,
-            popupClasses: popupElements.map(el => el.className).filter(Boolean)
+            popupClasses: popupElements.map(el => el.className).filter(Boolean),
           };
         });
 
@@ -473,8 +473,8 @@ const BUG_TESTS = [
       }
 
       return result;
-    }
-  }
+    },
+  },
 ];
 
 async function ensureResultsDir(): Promise<void> {
@@ -506,7 +506,7 @@ async function runBugInvestigation(): Promise<void> {
     
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     for (const bugTest of BUG_TESTS) {
@@ -514,7 +514,7 @@ async function runBugInvestigation(): Promise<void> {
       console.log(`   Severity: ${bugTest.severity}`);
       
       const page = await browser.newPage({
-        viewport: { width: 1280, height: 720 }
+        viewport: { width: 1280, height: 720 },
       });
 
       // Navigate to game with agent flag
@@ -561,8 +561,8 @@ async function runBugInvestigation(): Promise<void> {
       critical: results.filter(r => r.severity === 'Critical' && r.reproduced).length,
       high: results.filter(r => r.severity === 'High' && r.reproduced).length,
       medium: results.filter(r => r.severity === 'Medium' && r.reproduced).length,
-      low: results.filter(r => r.severity === 'Low' && r.reproduced).length
-    }
+      low: results.filter(r => r.severity === 'Low' && r.reproduced).length,
+    },
   };
 
   // Save report

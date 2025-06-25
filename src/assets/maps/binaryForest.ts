@@ -187,7 +187,7 @@ exits.forEach(exit => {
 // Create a false tree wall that can be walked through
 tiles[5][20] = { 
   walkable: true,
-  type: 'tree' as TileType
+  type: 'tree' as TileType,
 };
 
 // Hidden grove area (21-23, 4-6)
@@ -202,7 +202,7 @@ for (let y = 4; y <= 6; y++) {
 // Peaceful fountain in the center
 tiles[5][22] = { 
   walkable: true, 
-  type: 'water' as TileType
+  type: 'water' as TileType,
 };
 
 // Secret 2: Tree Push Puzzle (12,10)
@@ -210,26 +210,26 @@ tiles[5][22] = {
 const pushableTrees: Position[] = [
   { x: 11, y: 9 },
   { x: 13, y: 9 },
-  { x: 12, y: 11 }
+  { x: 12, y: 11 },
 ];
 
 pushableTrees.forEach((pos, index) => {
   tiles[pos.y][pos.x] = {
     walkable: false,
-    type: 'tree' as TileType
+    type: 'tree' as TileType,
   };
 });
 
 // Secret trainer location (initially blocked)
 tiles[10][12] = { 
-  ...forestFloorTile
+  ...forestFloorTile,
 };
 
 // Secret 3: Waterfall Cache (22,11)
 // The water tile is walkable and leads to treasure
 tiles[11][22] = {
   walkable: true,
-  type: 'water' as TileType
+  type: 'water' as TileType,
 };
 
 // Add secret NPCs
@@ -240,7 +240,7 @@ const secretNpcs: NPC[] = [
     role: 'trainer' as NPCRole,
     dialogueId: 'dialogue_elder_willow',
     position: { x: 12, y: 10 },
-    statusEffects: []
+    statusEffects: [],
   },
   {
     id: 'forest_spirit',
@@ -248,8 +248,8 @@ const secretNpcs: NPC[] = [
     role: 'quest_giver' as NPCRole,
     dialogueId: 'dialogue_forest_spirit',
     position: { x: 22, y: 5 },
-    statusEffects: []
-  }
+    statusEffects: [],
+  },
 ];
 
 // Add legendary items
@@ -257,18 +257,18 @@ const legendaryItems: Item[] = [
   { 
     ...ItemClass.createItem(ItemVariant.DebuggerBlade),
     id: 'natures_wrath',
-    position: { x: 22, y: 4 }
+    position: { x: 22, y: 4 },
   },
   {
     ...ItemClass.createItem(ItemVariant.HealthPotion),
     id: 'forest_gem',
-    position: { x: 22, y: 11 }
+    position: { x: 22, y: 11 },
   },
   {
     ...ItemClass.createItem(ItemVariant.FirewallArmor),
     id: 'bark_armor',
-    position: { x: 23, y: 5 }
-  }
+    position: { x: 23, y: 5 },
+  },
 ];
 
 // Add all secret entities to the main arrays

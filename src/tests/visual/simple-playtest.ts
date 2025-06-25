@@ -48,24 +48,24 @@ const PLAYTEST_STEPS = [
       
       // Check if game board is visible by looking for game content
       const hasPlayer = await page.evaluate(() => document.body.textContent?.includes('🤖'));
-      if (hasPlayer) observations.push('Player character (🤖) is visible');
+      if (hasPlayer) { observations.push('Player character (🤖) is visible'); }
       
       // Check for UI elements
       const hasHP = await page.evaluate(() => document.body.textContent?.includes('HP:'));
-      if (hasHP) observations.push('HP bar is visible');
+      if (hasHP) { observations.push('HP bar is visible'); }
       
       // Check for map name
       const mapName = await page.evaluate(() => {
         const text = document.body.textContent || '';
-        if (text.includes('Terminal Town')) return 'Terminal Town';
-        if (text.includes('Binary Forest')) return 'Binary Forest';
-        if (text.includes('Debug Dungeon')) return 'Debug Dungeon';
+        if (text.includes('Terminal Town')) { return 'Terminal Town'; }
+        if (text.includes('Binary Forest')) { return 'Binary Forest'; }
+        if (text.includes('Debug Dungeon')) { return 'Debug Dungeon'; }
         return null;
       });
-      if (mapName) observations.push(`Current map: ${mapName}`);
+      if (mapName) { observations.push(`Current map: ${mapName}`); }
       
       return observations;
-    }
+    },
   },
   {
     name: 'Player can move',
@@ -117,7 +117,7 @@ const PLAYTEST_STEPS = [
       }
       
       return observations;
-    }
+    },
   },
   {
     name: 'Inventory opens',
@@ -160,7 +160,7 @@ const PLAYTEST_STEPS = [
       }
       
       return observations;
-    }
+    },
   },
   {
     name: 'Quest journal opens',
@@ -208,7 +208,7 @@ const PLAYTEST_STEPS = [
       }
       
       return observations;
-    }
+    },
   },
   {
     name: 'NPC interaction',
@@ -278,8 +278,8 @@ const PLAYTEST_STEPS = [
       }
       
       return observations;
-    }
-  }
+    },
+  },
 ];
 
 async function ensureResultsDir(): Promise<void> {
@@ -303,7 +303,7 @@ async function runPlaytest(): Promise<PlaytestResult> {
     timestamp: new Date().toISOString(),
     duration: 0,
     steps: [],
-    summary: { total: 0, passed: 0, failed: 0 }
+    summary: { total: 0, passed: 0, failed: 0 },
   };
 
   let browser: Browser | null = null;
@@ -321,7 +321,7 @@ async function runPlaytest(): Promise<PlaytestResult> {
         agentRole: process.env.AGENT_ROLE || 'Playtest Agent',
         testDescription: 'Full game playthrough test',
         resolution: { width: 1280, height: 720 },
-        estimatedDuration: '~45 seconds'
+        estimatedDuration: '~45 seconds',
       });
     } else {
       console.log('🤖 Running in headless mode (no browser window)\n');
@@ -329,11 +329,11 @@ async function runPlaytest(): Promise<PlaytestResult> {
     
     browser = await chromium.launch({ 
       headless: isHeadless,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     const page = await browser.newPage({
-      viewport: { width: 1280, height: 720 }
+      viewport: { width: 1280, height: 720 },
     });
 
     // Capture console errors and debug logs
@@ -355,7 +355,7 @@ async function runPlaytest(): Promise<PlaytestResult> {
       const stepResult: StepResult = {
         name: step.name,
         action: step.action,
-        success: false
+        success: false,
       };
 
       try {
@@ -371,7 +371,7 @@ async function runPlaytest(): Promise<PlaytestResult> {
         stepResult.screenshot = await takeScreenshot(page, step.name);
         
         stepResult.success = true;
-        console.log(`   ✅ Success`);
+        console.log('   ✅ Success');
         if (stepResult.observations) {
           stepResult.observations.forEach(obs => console.log(`      - ${obs}`));
         }

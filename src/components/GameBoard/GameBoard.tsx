@@ -43,9 +43,9 @@ const clonePlayer = (player: Player): Player => {
     position: item.position ? { ...item.position } : undefined,
   }));
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability }));
-  if (player.weaponSlot) newPlayer.weaponSlot = { ...player.weaponSlot };
-  if (player.armorSlot) newPlayer.armorSlot = { ...player.armorSlot };
-  if (player.accessorySlot) newPlayer.accessorySlot = { ...player.accessorySlot };
+  if (player.weaponSlot) { newPlayer.weaponSlot = { ...player.weaponSlot }; }
+  if (player.armorSlot) { newPlayer.armorSlot = { ...player.armorSlot }; }
+  if (player.accessorySlot) { newPlayer.accessorySlot = { ...player.accessorySlot }; }
   
   // Copy talent system
   newPlayer.talentPoints = player.talentPoints;
@@ -96,11 +96,11 @@ const GameBoard: React.FC = () => {
 
   // Get current time period for atmospheric styling
   const getTimeOfDay = (): TimeOfDay => {
-    if (!state.timeData) return 'day';
+    if (!state.timeData) { return 'day'; }
     const hour = state.timeData.hours;
-    if (hour >= 6 && hour < 8) return 'dawn';
-    if (hour >= 8 && hour < 18) return 'day';
-    if (hour >= 18 && hour < 20) return 'dusk';
+    if (hour >= 6 && hour < 8) { return 'dawn'; }
+    if (hour >= 8 && hour < 18) { return 'day'; }
+    if (hour >= 18 && hour < 20) { return 'dusk'; }
     return 'night';
   };
 
@@ -188,7 +188,7 @@ const GameBoard: React.FC = () => {
       
       notify({
         type: result.success ? 'success' : 'warning',
-        message: result.message
+        message: result.message,
       });
     }
   }, [playerInventory, state.player, dispatch]);
@@ -209,7 +209,7 @@ const GameBoard: React.FC = () => {
         type: 'success',
         message: previousItem 
           ? `Equipped ${item.name} (replaced ${previousItem.name})`
-          : `Equipped ${item.name}`
+          : `Equipped ${item.name}`,
       });
     }
   }, [playerInventory, state.player, dispatch]);
@@ -227,7 +227,7 @@ const GameBoard: React.FC = () => {
     if (unequippedItem) {
       notify({
         type: 'success',
-        message: `Unequipped ${unequippedItem.name}`
+        message: `Unequipped ${unequippedItem.name}`,
       });
     }
   }, [state.player, dispatch]);
@@ -250,7 +250,7 @@ const GameBoard: React.FC = () => {
     if (state.notification) {
       notify({
         type: 'info',
-        message: state.notification
+        message: state.notification,
       });
       dispatch({ type: 'CLEAR_NOTIFICATION' });
     }
@@ -264,7 +264,7 @@ const GameBoard: React.FC = () => {
               msg.includes('heal') ? 'healing' as const : 
               msg.includes('uses') ? 'ability' as const : 'info' as const,
         message: msg,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       }));
       setCombatLog(prev => [...prev, ...newEntries].slice(-20));
     }
@@ -284,7 +284,7 @@ const GameBoard: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '600px'
+        minHeight: '600px',
       }}>
         <div>Loading map...</div>
       </div>

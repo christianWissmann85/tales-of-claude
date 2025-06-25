@@ -45,8 +45,8 @@ class TamyUltimateBugHunter {
   private bugCounter = 1;
 
   async init() {
-    console.log("🎮 TAMY'S ULTIMATE BUG HUNT BEGINS! 🐛");
-    console.log("=====================================");
+    console.log('🎮 TAMY\'S ULTIMATE BUG HUNT BEGINS! 🐛');
+    console.log('=====================================');
     
     // Create screenshot directory
     const fs = await import('fs');
@@ -56,7 +56,7 @@ class TamyUltimateBugHunter {
 
     this.browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     this.page = await this.browser.newPage();
@@ -69,7 +69,7 @@ class TamyUltimateBugHunter {
           type: 'bug',
           severity: 'medium',
           description: `Console error: ${msg.text()}`,
-          reproSteps: ['Error appeared in console during gameplay']
+          reproSteps: ['Error appeared in console during gameplay'],
         });
       }
     });
@@ -92,7 +92,7 @@ class TamyUltimateBugHunter {
   private reportBug(bug: Omit<BugReport, 'id'>): void {
     const bugReport: BugReport = {
       ...bug,
-      id: `BUG-${String(this.bugCounter).padStart(3, '0')}`
+      id: `BUG-${String(this.bugCounter).padStart(3, '0')}`,
     };
     this.bugs.push(bugReport);
     this.bugCounter++;
@@ -106,7 +106,7 @@ class TamyUltimateBugHunter {
   }
 
   async testGameLoading() {
-    console.log("\n🔍 Testing: Game Loading...");
+    console.log('\n🔍 Testing: Game Loading...');
     
     try {
       await this.page.goto(GAME_URL, { waitUntil: 'networkidle', timeout: 30000 });
@@ -120,13 +120,13 @@ class TamyUltimateBugHunter {
           severity: 'critical',
           description: 'Game canvas not found',
           reproSteps: ['Navigate to game URL', 'Wait for page load'],
-          screenshot: await this.screenshot('no-game-canvas')
+          screenshot: await this.screenshot('no-game-canvas'),
         });
         
         this.addTestResult({
           feature: 'Game Loading',
           status: 'broken',
-          notes: 'Game canvas element missing'
+          notes: 'Game canvas element missing',
         });
         return false;
       }
@@ -135,7 +135,7 @@ class TamyUltimateBugHunter {
       this.addTestResult({
         feature: 'Game Loading',
         status: 'working',
-        notes: 'Game loads successfully'
+        notes: 'Game loads successfully',
       });
       return true;
     } catch (error) {
@@ -144,20 +144,20 @@ class TamyUltimateBugHunter {
         severity: 'critical',
         description: `Game failed to load: ${error}`,
         reproSteps: ['Navigate to game URL'],
-        screenshot: await this.screenshot('game-load-error')
+        screenshot: await this.screenshot('game-load-error'),
       });
       return false;
     }
   }
 
   async testUIHotkeys() {
-    console.log("\n🔍 Testing: UI Hotkeys (I, Q, C, F)...");
+    console.log('\n🔍 Testing: UI Hotkeys (I, Q, C, F)...');
     
     const hotkeys = [
       { key: 'i', name: 'Inventory', expectedClass: 'inventory' },
       { key: 'q', name: 'Quest Journal', expectedClass: 'questJournal' },
       { key: 'c', name: 'Character Stats', expectedClass: 'characterSheet' },
-      { key: 'f', name: 'Faction Screen', expectedClass: 'faction' }
+      { key: 'f', name: 'Faction Screen', expectedClass: 'faction' },
     ];
 
     for (const hotkey of hotkeys) {
@@ -178,13 +178,13 @@ class TamyUltimateBugHunter {
             severity: 'high',
             description: `${hotkey.name} panel doesn't open with '${hotkey.key}' key`,
             reproSteps: [`Press '${hotkey.key}' key`, 'Panel should open'],
-            screenshot: await this.screenshot(`${hotkey.name.toLowerCase().replace(' ', '-')}-missing`)
+            screenshot: await this.screenshot(`${hotkey.name.toLowerCase().replace(' ', '-')}-missing`),
           });
           
           this.addTestResult({
             feature: `${hotkey.name} Hotkey`,
             status: 'broken',
-            notes: 'Panel does not open'
+            notes: 'Panel does not open',
           });
         } else {
           await this.screenshot(`${hotkey.name.toLowerCase().replace(' ', '-')}-open`);
@@ -199,14 +199,14 @@ class TamyUltimateBugHunter {
               type: 'ux',
               severity: 'medium',
               description: `${hotkey.name} panel doesn't close with ESC`,
-              reproSteps: [`Open ${hotkey.name} with '${hotkey.key}'`, 'Press ESC', 'Panel should close']
+              reproSteps: [`Open ${hotkey.name} with '${hotkey.key}'`, 'Press ESC', 'Panel should close'],
             });
           }
           
           this.addTestResult({
             feature: `${hotkey.name} Hotkey`,
             status: 'working',
-            notes: 'Panel opens and closes correctly'
+            notes: 'Panel opens and closes correctly',
           });
         }
       } catch (error) {
@@ -214,14 +214,14 @@ class TamyUltimateBugHunter {
           type: 'bug',
           severity: 'medium',
           description: `Error testing ${hotkey.name}: ${error}`,
-          reproSteps: [`Press '${hotkey.key}' key`]
+          reproSteps: [`Press '${hotkey.key}' key`],
         });
       }
     }
   }
 
   async testRapidPanelSwitching() {
-    console.log("\n🔍 Testing: Rapid Panel Switching (Stress Test)...");
+    console.log('\n🔍 Testing: Rapid Panel Switching (Stress Test)...');
     
     try {
       // Rapidly switch between panels
@@ -243,13 +243,13 @@ class TamyUltimateBugHunter {
           type: 'bug',
           severity: 'high',
           description: 'Game crashed after rapid panel switching',
-          reproSteps: ['Rapidly press I, Q, C, F keys', 'Game should remain stable']
+          reproSteps: ['Rapidly press I, Q, C, F keys', 'Game should remain stable'],
         });
         
         this.addTestResult({
           feature: 'Rapid Panel Switching',
           status: 'broken',
-          notes: 'Game crashes under stress'
+          notes: 'Game crashes under stress',
         });
       } else {
         // Check for visual glitches
@@ -260,14 +260,14 @@ class TamyUltimateBugHunter {
             severity: 'high',
             description: 'Multiple panels open simultaneously after rapid switching',
             reproSteps: ['Rapidly switch between panels', 'Only one panel should be open at a time'],
-            screenshot: await this.screenshot('multiple-panels-bug')
+            screenshot: await this.screenshot('multiple-panels-bug'),
           });
         }
         
         this.addTestResult({
           feature: 'Rapid Panel Switching',
           status: openPanels.length > 1 ? 'partially-working' : 'working',
-          notes: openPanels.length > 1 ? 'Multiple panels can be open' : 'Handles rapid switching well'
+          notes: openPanels.length > 1 ? 'Multiple panels can be open' : 'Handles rapid switching well',
         });
       }
     } catch (error) {
@@ -275,13 +275,13 @@ class TamyUltimateBugHunter {
         type: 'bug',
         severity: 'high',
         description: `Rapid panel switching caused error: ${error}`,
-        reproSteps: ['Rapidly switch between UI panels']
+        reproSteps: ['Rapidly switch between UI panels'],
       });
     }
   }
 
   async testMovement() {
-    console.log("\n🔍 Testing: Player Movement...");
+    console.log('\n🔍 Testing: Player Movement...');
     
     try {
       // Clear any open panels
@@ -292,7 +292,7 @@ class TamyUltimateBugHunter {
         { key: 'ArrowUp', direction: 'up' },
         { key: 'ArrowDown', direction: 'down' },
         { key: 'ArrowLeft', direction: 'left' },
-        { key: 'ArrowRight', direction: 'right' }
+        { key: 'ArrowRight', direction: 'right' },
       ];
 
       for (const move of movements) {
@@ -318,7 +318,7 @@ class TamyUltimateBugHunter {
       this.addTestResult({
         feature: 'Player Movement',
         status: 'working',
-        notes: 'Basic movement appears functional'
+        notes: 'Basic movement appears functional',
       });
       
     } catch (error) {
@@ -326,13 +326,13 @@ class TamyUltimateBugHunter {
         type: 'gameplay',
         severity: 'critical',
         description: `Movement system error: ${error}`,
-        reproSteps: ['Use arrow keys to move player']
+        reproSteps: ['Use arrow keys to move player'],
       });
     }
   }
 
   async testNPCInteraction() {
-    console.log("\n🔍 Testing: NPC Interactions...");
+    console.log('\n🔍 Testing: NPC Interactions...');
     
     try {
       // Move to find an NPC (we'll try to find Compiler Cat)
@@ -363,20 +363,20 @@ class TamyUltimateBugHunter {
             type: 'gameplay',
             severity: 'medium',
             description: 'Dialogue may not close properly',
-            reproSteps: ['Talk to NPC', 'Progress through dialogue', 'Dialogue should close at end']
+            reproSteps: ['Talk to NPC', 'Progress through dialogue', 'Dialogue should close at end'],
           });
         }
         
         this.addTestResult({
           feature: 'NPC Interaction',
           status: 'working',
-          notes: 'Can interact with NPCs and view dialogue'
+          notes: 'Can interact with NPCs and view dialogue',
         });
       } else {
         this.addTestResult({
           feature: 'NPC Interaction',
           status: 'partially-working',
-          notes: 'Could not find NPC to test interaction'
+          notes: 'Could not find NPC to test interaction',
         });
       }
     } catch (error) {
@@ -384,13 +384,13 @@ class TamyUltimateBugHunter {
         type: 'gameplay',
         severity: 'high',
         description: `NPC interaction error: ${error}`,
-        reproSteps: ['Approach NPC', 'Press Enter to interact']
+        reproSteps: ['Approach NPC', 'Press Enter to interact'],
       });
     }
   }
 
   async testMapTransitions() {
-    console.log("\n🔍 Testing: Map Transitions...");
+    console.log('\n🔍 Testing: Map Transitions...');
     
     try {
       // Try to find a map exit (usually at edges)
@@ -416,7 +416,7 @@ class TamyUltimateBugHunter {
       this.addTestResult({
         feature: 'Map Transitions',
         status: 'partially-working',
-        notes: 'Map transition testing requires specific exit points'
+        notes: 'Map transition testing requires specific exit points',
       });
       
     } catch (error) {
@@ -424,13 +424,13 @@ class TamyUltimateBugHunter {
         type: 'gameplay',
         severity: 'high',
         description: `Map transition error: ${error}`,
-        reproSteps: ['Move to map edge', 'Should transition to new area']
+        reproSteps: ['Move to map edge', 'Should transition to new area'],
       });
     }
   }
 
   async testCombatSystem() {
-    console.log("\n🔍 Testing: Combat System...");
+    console.log('\n🔍 Testing: Combat System...');
     
     try {
       // Try to find an enemy
@@ -444,7 +444,7 @@ class TamyUltimateBugHunter {
         // Check if we entered combat
         const battleScene = await this.page.$('.battleScene');
         if (battleScene) {
-          console.log("⚔️ Combat encountered!");
+          console.log('⚔️ Combat encountered!');
           await this.screenshot('combat-started');
           
           // Test combat actions
@@ -461,7 +461,7 @@ class TamyUltimateBugHunter {
                 type: 'gameplay',
                 severity: 'high',
                 description: `Combat action ${action} may not be working`,
-                reproSteps: ['Enter combat', `Press ${action} key`, 'Action should execute']
+                reproSteps: ['Enter combat', `Press ${action} key`, 'Action should execute'],
               });
             }
           }
@@ -469,7 +469,7 @@ class TamyUltimateBugHunter {
           this.addTestResult({
             feature: 'Combat System',
             status: 'working',
-            notes: 'Combat triggers and actions respond'
+            notes: 'Combat triggers and actions respond',
           });
           
           // Try to flee
@@ -484,7 +484,7 @@ class TamyUltimateBugHunter {
         this.addTestResult({
           feature: 'Combat System',
           status: 'partially-working',
-          notes: 'Could not trigger combat encounter for full testing'
+          notes: 'Could not trigger combat encounter for full testing',
         });
       }
       
@@ -493,13 +493,13 @@ class TamyUltimateBugHunter {
         type: 'gameplay',
         severity: 'high',
         description: `Combat system error: ${error}`,
-        reproSteps: ['Encounter enemy', 'Combat should start']
+        reproSteps: ['Encounter enemy', 'Combat should start'],
       });
     }
   }
 
   async testShopSystem() {
-    console.log("\n🔍 Testing: Shop System...");
+    console.log('\n🔍 Testing: Shop System...');
     
     try {
       // Try to find a shop (usually Bit & Byte's Binary Boutique)
@@ -516,7 +516,7 @@ class TamyUltimateBugHunter {
         
         const shop = await this.page.$('.shop');
         if (shop) {
-          console.log("🛍️ Shop found!");
+          console.log('🛍️ Shop found!');
           await this.screenshot('shop-open');
           
           // Test buying something
@@ -530,7 +530,7 @@ class TamyUltimateBugHunter {
               type: 'gameplay',
               severity: 'medium',
               description: 'Shop purchase feedback missing',
-              reproSteps: ['Open shop', 'Try to buy item', 'Should show success/failure message']
+              reproSteps: ['Open shop', 'Try to buy item', 'Should show success/failure message'],
             });
           }
           
@@ -541,7 +541,7 @@ class TamyUltimateBugHunter {
           this.addTestResult({
             feature: 'Shop System',
             status: 'working',
-            notes: 'Shop opens and responds to input'
+            notes: 'Shop opens and responds to input',
           });
           break;
         }
@@ -552,7 +552,7 @@ class TamyUltimateBugHunter {
         this.addTestResult({
           feature: 'Shop System',
           status: 'partially-working',
-          notes: 'Could not find shop NPC for full testing'
+          notes: 'Could not find shop NPC for full testing',
         });
       }
       
@@ -561,13 +561,13 @@ class TamyUltimateBugHunter {
         type: 'gameplay',
         severity: 'medium',
         description: `Shop system error: ${error}`,
-        reproSteps: ['Find shop NPC', 'Interact to open shop']
+        reproSteps: ['Find shop NPC', 'Interact to open shop'],
       });
     }
   }
 
   async testSaveLoadSystem() {
-    console.log("\n🔍 Testing: Save/Load System...");
+    console.log('\n🔍 Testing: Save/Load System...');
     
     try {
       // Find Compiler Cat (save point)
@@ -602,21 +602,21 @@ class TamyUltimateBugHunter {
           this.addTestResult({
             feature: 'Save/Load System',
             status: 'working',
-            notes: 'Save and reload functionality works'
+            notes: 'Save and reload functionality works',
           });
         } else {
           this.reportBug({
             type: 'bug',
             severity: 'critical',
             description: 'Game fails to load after save',
-            reproSteps: ['Save game', 'Reload page', 'Game should load with saved data']
+            reproSteps: ['Save game', 'Reload page', 'Game should load with saved data'],
           });
         }
       } else {
         this.addTestResult({
           feature: 'Save/Load System',
           status: 'partially-working',
-          notes: 'Could not find save point for full testing'
+          notes: 'Could not find save point for full testing',
         });
       }
       
@@ -625,17 +625,17 @@ class TamyUltimateBugHunter {
         type: 'bug',
         severity: 'high',
         description: `Save/Load system error: ${error}`,
-        reproSteps: ['Find Compiler Cat', 'Try to save game']
+        reproSteps: ['Find Compiler Cat', 'Try to save game'],
       });
     }
   }
 
   async testEdgeCases() {
-    console.log("\n🔍 Testing: Edge Cases & Weird Behavior...");
+    console.log('\n🔍 Testing: Edge Cases & Weird Behavior...');
     
     // Test 1: Spam all keys simultaneously
     try {
-      console.log("  - Testing key spam...");
+      console.log('  - Testing key spam...');
       const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'i', 'q', 'c', 'f', 'Enter', 'Escape'];
       
       // Press multiple keys at once
@@ -658,7 +658,7 @@ class TamyUltimateBugHunter {
           type: 'bug',
           severity: 'high',
           description: 'Game crashes when multiple keys pressed simultaneously',
-          reproSteps: ['Press many keys at once', 'Game should handle gracefully']
+          reproSteps: ['Press many keys at once', 'Game should handle gracefully'],
         });
       }
     } catch (error) {
@@ -666,13 +666,13 @@ class TamyUltimateBugHunter {
         type: 'bug',
         severity: 'medium',
         description: `Key spam caused error: ${error}`,
-        reproSteps: ['Spam multiple keys simultaneously']
+        reproSteps: ['Spam multiple keys simultaneously'],
       });
     }
 
     // Test 2: Rapid clicking everywhere
     try {
-      console.log("  - Testing rapid clicking...");
+      console.log('  - Testing rapid clicking...');
       for (let i = 0; i < 20; i++) {
         const x = Math.random() * 1280;
         const y = Math.random() * 720;
@@ -686,13 +686,13 @@ class TamyUltimateBugHunter {
         type: 'bug',
         severity: 'low',
         description: `Rapid clicking caused error: ${error}`,
-        reproSteps: ['Click rapidly around the screen']
+        reproSteps: ['Click rapidly around the screen'],
       });
     }
 
     // Test 3: Browser resize
     try {
-      console.log("  - Testing window resize...");
+      console.log('  - Testing window resize...');
       await this.page.setViewportSize({ width: 800, height: 600 });
       await this.page.waitForTimeout(500);
       await this.screenshot('small-window');
@@ -706,20 +706,20 @@ class TamyUltimateBugHunter {
       this.addTestResult({
         feature: 'Window Resizing',
         status: 'working',
-        notes: 'Game adapts to different window sizes'
+        notes: 'Game adapts to different window sizes',
       });
     } catch (error) {
       this.reportBug({
         type: 'visual',
         severity: 'medium',
         description: `Window resize handling error: ${error}`,
-        reproSteps: ['Resize browser window', 'Game should adapt']
+        reproSteps: ['Resize browser window', 'Game should adapt'],
       });
     }
   }
 
   async testPerformance() {
-    console.log("\n🔍 Testing: Performance & Memory...");
+    console.log('\n🔍 Testing: Performance & Memory...');
     
     try {
       // Get initial metrics
@@ -747,14 +747,14 @@ class TamyUltimateBugHunter {
           type: 'performance',
           severity: 'medium',
           description: `Potential memory leak detected: ${heapGrowthMB}MB heap growth`,
-          reproSteps: ['Open and close UI panels repeatedly', 'Monitor memory usage']
+          reproSteps: ['Open and close UI panels repeatedly', 'Monitor memory usage'],
         });
       }
       
       this.addTestResult({
         feature: 'Performance',
         status: heapGrowth > 50 * 1024 * 1024 ? 'partially-working' : 'working',
-        notes: `Heap growth: ${heapGrowthMB}MB after stress test`
+        notes: `Heap growth: ${heapGrowthMB}MB after stress test`,
       });
       
     } catch (error) {
@@ -763,31 +763,31 @@ class TamyUltimateBugHunter {
   }
 
   async generateReport() {
-    console.log("\n\n🎮 TAMY'S ULTIMATE BUG HUNT REPORT 🎮");
-    console.log("=====================================");
+    console.log('\n\n🎮 TAMY\'S ULTIMATE BUG HUNT REPORT 🎮');
+    console.log('=====================================');
     
-    console.log("\n📊 TEST SUMMARY:");
+    console.log('\n📊 TEST SUMMARY:');
     console.log(`Total Features Tested: ${this.testResults.length}`);
     console.log(`Working: ${this.testResults.filter(r => r.status === 'working').length}`);
     console.log(`Partially Working: ${this.testResults.filter(r => r.status === 'partially-working').length}`);
     console.log(`Broken: ${this.testResults.filter(r => r.status === 'broken').length}`);
     
-    console.log("\n✅ WORKING FEATURES:");
+    console.log('\n✅ WORKING FEATURES:');
     this.testResults
       .filter(r => r.status === 'working')
       .forEach(r => console.log(`  - ${r.feature}: ${r.notes}`));
     
-    console.log("\n⚠️ PARTIALLY WORKING:");
+    console.log('\n⚠️ PARTIALLY WORKING:');
     this.testResults
       .filter(r => r.status === 'partially-working')
       .forEach(r => console.log(`  - ${r.feature}: ${r.notes}`));
     
-    console.log("\n❌ BROKEN FEATURES:");
+    console.log('\n❌ BROKEN FEATURES:');
     this.testResults
       .filter(r => r.status === 'broken')
       .forEach(r => console.log(`  - ${r.feature}: ${r.notes}`));
     
-    console.log("\n🐛 BUG LIST (BY SEVERITY):");
+    console.log('\n🐛 BUG LIST (BY SEVERITY):');
     
     const criticalBugs = this.bugs.filter(b => b.severity === 'critical');
     const highBugs = this.bugs.filter(b => b.severity === 'high');
@@ -795,25 +795,25 @@ class TamyUltimateBugHunter {
     const lowBugs = this.bugs.filter(b => b.severity === 'low');
     
     if (criticalBugs.length > 0) {
-      console.log("\n🔴 CRITICAL:");
+      console.log('\n🔴 CRITICAL:');
       criticalBugs.forEach(b => {
         console.log(`  ${b.id}: ${b.description}`);
         console.log(`    Steps: ${b.reproSteps.join(' → ')}`);
-        if (b.screenshot) console.log(`    Screenshot: ${b.screenshot}`);
+        if (b.screenshot) { console.log(`    Screenshot: ${b.screenshot}`); }
       });
     }
     
     if (highBugs.length > 0) {
-      console.log("\n🟠 HIGH:");
+      console.log('\n🟠 HIGH:');
       highBugs.forEach(b => {
         console.log(`  ${b.id}: ${b.description}`);
         console.log(`    Steps: ${b.reproSteps.join(' → ')}`);
-        if (b.screenshot) console.log(`    Screenshot: ${b.screenshot}`);
+        if (b.screenshot) { console.log(`    Screenshot: ${b.screenshot}`); }
       });
     }
     
     if (mediumBugs.length > 0) {
-      console.log("\n🟡 MEDIUM:");
+      console.log('\n🟡 MEDIUM:');
       mediumBugs.forEach(b => {
         console.log(`  ${b.id}: ${b.description}`);
         console.log(`    Steps: ${b.reproSteps.join(' → ')}`);
@@ -821,42 +821,42 @@ class TamyUltimateBugHunter {
     }
     
     if (lowBugs.length > 0) {
-      console.log("\n🟢 LOW:");
+      console.log('\n🟢 LOW:');
       lowBugs.forEach(b => {
         console.log(`  ${b.id}: ${b.description}`);
       });
     }
     
-    console.log("\n🎯 TAMY'S PROFESSIONAL QA VERDICT:");
+    console.log('\n🎯 TAMY\'S PROFESSIONAL QA VERDICT:');
     if (criticalBugs.length > 0) {
-      console.log("⛔ NOT READY FOR RELEASE - Critical bugs found!");
-      console.log("Priority: Fix critical bugs immediately");
+      console.log('⛔ NOT READY FOR RELEASE - Critical bugs found!');
+      console.log('Priority: Fix critical bugs immediately');
     } else if (highBugs.length > 0) {
-      console.log("⚠️ NEEDS WORK - High severity bugs should be addressed");
-      console.log("Priority: Fix high bugs before launch");
+      console.log('⚠️ NEEDS WORK - High severity bugs should be addressed');
+      console.log('Priority: Fix high bugs before launch');
     } else if (mediumBugs.length > 0) {
-      console.log("✔️ ALMOST THERE - Game is playable but has rough edges");
-      console.log("Priority: Polish and fix medium bugs");
+      console.log('✔️ ALMOST THERE - Game is playable but has rough edges');
+      console.log('Priority: Polish and fix medium bugs');
     } else {
-      console.log("🎉 SHIP IT! - Game is solid and ready to play!");
-      console.log("Only minor issues found");
+      console.log('🎉 SHIP IT! - Game is solid and ready to play!');
+      console.log('Only minor issues found');
     }
     
-    console.log("\n💡 RECOMMENDATIONS:");
-    console.log("1. Fix all critical bugs immediately");
-    console.log("2. Address high severity bugs before any release");
-    console.log("3. Medium bugs can be fixed in patches");
-    console.log("4. Consider adding more error handling");
-    console.log("5. Test on different screen sizes");
-    console.log("6. Add loading indicators for better UX");
+    console.log('\n💡 RECOMMENDATIONS:');
+    console.log('1. Fix all critical bugs immediately');
+    console.log('2. Address high severity bugs before any release');
+    console.log('3. Medium bugs can be fixed in patches');
+    console.log('4. Consider adding more error handling');
+    console.log('5. Test on different screen sizes');
+    console.log('6. Add loading indicators for better UX');
     
-    console.log("\n🏆 TAMY'S FINAL WORDS:");
-    console.log("The team did AMAZING work fixing that overlay bug!");
-    console.log("The game is really coming together. With these bugs fixed,");
-    console.log("Tales of Claude will be an EPIC adventure!");
-    console.log("\nTotal bugs found: " + this.bugs.length);
-    console.log("Screenshots saved to: " + SCREENSHOT_DIR);
-    console.log("\n🎮 GAME ON! 🎮");
+    console.log('\n🏆 TAMY\'S FINAL WORDS:');
+    console.log('The team did AMAZING work fixing that overlay bug!');
+    console.log('The game is really coming together. With these bugs fixed,');
+    console.log('Tales of Claude will be an EPIC adventure!');
+    console.log('\nTotal bugs found: ' + this.bugs.length);
+    console.log('Screenshots saved to: ' + SCREENSHOT_DIR);
+    console.log('\n🎮 GAME ON! 🎮');
   }
 
   async cleanup() {
@@ -870,7 +870,7 @@ class TamyUltimateBugHunter {
       // Run all tests
       const gameLoaded = await this.testGameLoading();
       if (!gameLoaded) {
-        console.log("\n❌ CRITICAL: Game failed to load! Aborting tests.");
+        console.log('\n❌ CRITICAL: Game failed to load! Aborting tests.');
         await this.generateReport();
         return;
       }
@@ -889,12 +889,12 @@ class TamyUltimateBugHunter {
       await this.generateReport();
       
     } catch (error) {
-      console.error("\n💥 CATASTROPHIC TEST FAILURE:", error);
+      console.error('\n💥 CATASTROPHIC TEST FAILURE:', error);
       this.reportBug({
         type: 'bug',
         severity: 'critical',
         description: `Test suite crashed: ${error}`,
-        reproSteps: ['Run test suite']
+        reproSteps: ['Run test suite'],
       });
     } finally {
       await this.cleanup();

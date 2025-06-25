@@ -74,8 +74,8 @@ async function testMapTransitions() {
     } catch (error) {
         console.error('An error occurred during the test:', error);
     } finally {
-        if (page) await page.close();
-        if (browser) await browser.close();
+        if (page) { await page.close(); }
+        if (browser) { await browser.close(); }
     }
 }
 

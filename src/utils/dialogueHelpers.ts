@@ -76,7 +76,7 @@ const npcQuestDialogueMappings: Record<string, {
     questId: QuestVariant.MerchantSecret,
     offerDialogueId: 'bit_merchant_offer_secret',
     regularDialogueId: 'bit_merchant_intro',
-  }
+  },
 };
 
 /**

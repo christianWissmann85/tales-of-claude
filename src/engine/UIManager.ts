@@ -33,7 +33,7 @@ export class UIManager {
     SHOP: 600,        // Shop is slightly higher
     DIALOGUE: 1000,   // Dialogue always on top
     NOTIFICATION: 1100,
-    DEBUG: 9999
+    DEBUG: 9999,
   };
 
   private constructor() {}
@@ -53,11 +53,11 @@ export class UIManager {
     const actions: any[] = [];
     
     // First, close all other panels
-    if (panel !== 'inventory') actions.push({ type: 'SHOW_INVENTORY', payload: { show: false } });
-    if (panel !== 'questLog') actions.push({ type: 'SHOW_QUEST_LOG', payload: { show: false } });
-    if (panel !== 'characterScreen') actions.push({ type: 'SHOW_CHARACTER_SCREEN', payload: { show: false } });
-    if (panel !== 'factionStatus') actions.push({ type: 'SHOW_FACTION_STATUS', payload: { show: false } });
-    if (panel !== 'shop') actions.push({ type: 'CLOSE_SHOP' });
+    if (panel !== 'inventory') { actions.push({ type: 'SHOW_INVENTORY', payload: { show: false } }); }
+    if (panel !== 'questLog') { actions.push({ type: 'SHOW_QUEST_LOG', payload: { show: false } }); }
+    if (panel !== 'characterScreen') { actions.push({ type: 'SHOW_CHARACTER_SCREEN', payload: { show: false } }); }
+    if (panel !== 'factionStatus') { actions.push({ type: 'SHOW_FACTION_STATUS', payload: { show: false } }); }
+    if (panel !== 'shop') { actions.push({ type: 'CLOSE_SHOP' }); }
     
     // Then open the requested panel
     switch (panel) {
@@ -88,7 +88,7 @@ export class UIManager {
       { type: 'SHOW_QUEST_LOG', payload: { show: false } },
       { type: 'SHOW_CHARACTER_SCREEN', payload: { show: false } },
       { type: 'SHOW_FACTION_STATUS', payload: { show: false } },
-      { type: 'CLOSE_SHOP' }
+      { type: 'CLOSE_SHOP' },
     ];
   }
 
@@ -109,11 +109,11 @@ export class UIManager {
    * Get the currently active panel
    */
   static getActivePanel(state: any): UIPanel | null {
-    if (state.showInventory) return 'inventory';
-    if (state.showQuestLog) return 'questLog';
-    if (state.showCharacterScreen) return 'characterScreen';
-    if (state.showFactionStatus) return 'factionStatus';
-    if (state.shopState) return 'shop';
+    if (state.showInventory) { return 'inventory'; }
+    if (state.showQuestLog) { return 'questLog'; }
+    if (state.showCharacterScreen) { return 'characterScreen'; }
+    if (state.showFactionStatus) { return 'factionStatus'; }
+    if (state.shopState) { return 'shop'; }
     return null;
   }
 }

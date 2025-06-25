@@ -129,12 +129,12 @@ class PuppeteerTestRunner {
                     '--disable-dev-shm-usage', // Overcomes limited resource problems in some environments
                     '--disable-accelerated-2d-canvas',
                     '--disable-gpu', // Disable GPU hardware acceleration for consistency
-                    `--window-size=${VIEWPORT_WIDTH},${VIEWPORT_HEIGHT}` // Set initial window size
+                    `--window-size=${VIEWPORT_WIDTH},${VIEWPORT_HEIGHT}`, // Set initial window size
                 ],
                 defaultViewport: { // Set default viewport for new pages
                     width: VIEWPORT_WIDTH,
-                    height: VIEWPORT_HEIGHT
-                }
+                    height: VIEWPORT_HEIGHT,
+                },
             });
             this.page = await this.browser.newPage();
             console.log('Browser launched successfully.');
@@ -165,7 +165,7 @@ class PuppeteerTestRunner {
 
             // Wait for the window.game object to be available, which signifies the game is initialized
             await this.page.waitForFunction('window.game !== undefined && window.game !== null', {
-                timeout: GAME_LOAD_TIMEOUT_MS
+                timeout: GAME_LOAD_TIMEOUT_MS,
             });
             console.log('window.game object detected. Game is ready.');
 
@@ -250,7 +250,7 @@ class PuppeteerTestRunner {
                     // Attempt to get FCP/LCP if available (might require specific browser versions or polyfills)
                     firstContentfulPaint: performance.getEntriesByName('first-contentful-paint')[0]?.startTime,
                     largestContentfulPaint: performance.getEntriesByType('largest-contentful-paint')[0]?.startTime,
-                    totalTime: Date.now() - navigationStart // Total time elapsed since navigation started
+                    totalTime: Date.now() - navigationStart, // Total time elapsed since navigation started
                 };
             });
             this.performanceMetrics = metrics;
@@ -277,13 +277,13 @@ class PuppeteerTestRunner {
             // Inject the playtester code directly into the page's context using page.evaluate.
             // This makes the AutomatedPlaytester class available in the browser's window scope.
             await this.page.evaluate((playtesterCode: string) => {
-                // eslint-disable-next-line no-eval
+                 
                 eval(playtesterCode); // Execute the playtester code string
             }, this.playtesterCode);
 
             // Wait for the AutomatedPlaytester class to be available in the window context
             await this.page.waitForFunction('typeof AutomatedPlaytester === "function"', {
-                timeout: PLAYTESTER_INJECTION_TIMEOUT_MS
+                timeout: PLAYTESTER_INJECTION_TIMEOUT_MS,
             });
             console.log('AutomatedPlaytester injected successfully.');
 
@@ -337,9 +337,7 @@ class PuppeteerTestRunner {
         let skippedTests = 0;
 
         this.testResults.forEach(res => {
-            if (res.status === 'PASS') passedTests++;
-            else if (res.status === 'FAIL') failedTests++;
-            else if (res.status === 'SKIP') skippedTests++;
+            if (res.status === 'PASS') { passedTests++; } else if (res.status === 'FAIL') { failedTests++; } else if (res.status === 'SKIP') { skippedTests++; }
         });
 
         // Determine overall status based on test outcomes
@@ -437,7 +435,7 @@ async function main() {
 
             if (latestReportFile) {
                 const reportData: ReportData = JSON.parse(
-                    fs.readFileSync(path.join(REPORTS_DIR, latestReportFile), 'utf8')
+                    fs.readFileSync(path.join(REPORTS_DIR, latestReportFile), 'utf8'),
                 );
                 if (reportData.overallStatus === 'FAIL') {
                     exitCode = 1; // Set exit code to 1 if any test failed

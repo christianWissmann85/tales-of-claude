@@ -22,7 +22,7 @@ import {
   TileType,
   Item as IItem, // Alias Item from global.types to avoid conflict with models/Item
   WeatherType,
-  WeatherData
+  WeatherData,
 } from '../types/global.types';
 import { GameMap } from '../models/Map';
 import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
@@ -157,7 +157,7 @@ class SaveGameService {
           _baseStats: gameState.player.getBaseStats(), // Get base stats for saving
           inventory: gameState.player.inventory.map(item => ({
             variant: item.id as ItemVariant, // Item.id is the ItemVariant string
-            position: item.position // Keep position if it's an item on the map
+            position: item.position, // Keep position if it's an item on the map
           })),
           abilities: gameState.player.abilities,
           weaponSlot: gameState.player.weaponSlot ? { variant: gameState.player.weaponSlot.id as ItemVariant } : undefined,
@@ -177,8 +177,8 @@ class SaveGameService {
             Object.fromEntries(
               Array.from(gameState.player.exploredMaps.entries()).map(([mapId, tiles]) => [
                 mapId,
-                Array.from(tiles)
-              ])
+                Array.from(tiles),
+              ]),
             ) : undefined,
         },
         currentMap: {
@@ -194,7 +194,7 @@ class SaveGameService {
         npcs: gameState.npcs,
         items: gameState.items.map(item => ({
           variant: item.id as ItemVariant,
-          position: item.position
+          position: item.position,
         })),
         dialogue: gameState.dialogue,
         battle: gameState.battle,

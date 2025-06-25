@@ -58,12 +58,12 @@ async function testMapTransitions() {
   // Check current map
   const gameState = await page.evaluate(() => {
     const state = (window as any).__gameState;
-    if (!state) return null;
+    if (!state) { return null; }
     return {
       mapId: state.currentMap?.id,
       mapName: state.currentMap?.name,
       playerPos: state.player?.position,
-      mapExits: state.currentMap?.exits?.length
+      mapExits: state.currentMap?.exits?.length,
     };
   });
   console.log('Game state:', gameState);

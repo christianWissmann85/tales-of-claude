@@ -37,7 +37,7 @@ export class NPCModel implements NPC {
     role: NPCRole,
     dialogueId: string,
     questStatus?: 'not_started' | 'in_progress' | 'completed',
-    factionId?: string
+    factionId?: string,
   ) {
     this._id = id;
     this._name = name;
@@ -147,7 +147,7 @@ export class NPCModel implements NPC {
     position: Position = { x: 0, y: 0 },
     statusEffects: StatusEffect[] = [],
     questStatus?: 'not_started' | 'in_progress' | 'completed',
-    factionId?: string
+    factionId?: string,
   ): NPCModel {
     return new NPCModel(
       NPCModel.generateId(),
@@ -157,7 +157,7 @@ export class NPCModel implements NPC {
       role,
       dialogueId,
       questStatus,
-      factionId
+      factionId,
     );
   }
 
@@ -167,7 +167,7 @@ export class NPCModel implements NPC {
   public static createWizard(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'wizard', dialogueId, position);
   }
@@ -178,7 +178,7 @@ export class NPCModel implements NPC {
   public static createDebugger(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'debugger', dialogueId, position);
   }
@@ -189,7 +189,7 @@ export class NPCModel implements NPC {
   public static createLostProgram(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'lost_program', dialogueId, position);
   }
@@ -200,7 +200,7 @@ export class NPCModel implements NPC {
   public static createCompilerCat(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'compiler_cat', dialogueId, position);
   }
@@ -211,7 +211,7 @@ export class NPCModel implements NPC {
   public static createTutorial(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'tutorial', dialogueId, position);
   }
@@ -222,7 +222,7 @@ export class NPCModel implements NPC {
   public static createBard(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'bard', dialogueId, position);
   }
@@ -233,7 +233,7 @@ export class NPCModel implements NPC {
   public static createHealer(
     name: string,
     dialogueId: string,
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'healer', dialogueId, position);
   }
@@ -245,7 +245,7 @@ export class NPCModel implements NPC {
     name: string,
     dialogueId: string,
     questStatus: 'not_started' | 'in_progress' | 'completed' = 'not_started',
-    position?: Position
+    position?: Position,
   ): NPCModel {
     return NPCModel.create(name, 'quest_giver', dialogueId, position, [], questStatus);
   }

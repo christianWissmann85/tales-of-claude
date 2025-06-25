@@ -22,7 +22,7 @@ async function runVisualTest() {
       agentRole: 'Expert Playtest Agent',
       testDescription: 'Comprehensive gameplay verification',
       resolution: { width: 1920, height: 1080 }, // HD for detailed testing
-      estimatedDuration: '~2 minutes'
+      estimatedDuration: '~2 minutes',
     });
 
     // Launch browser in VISUAL mode
@@ -30,12 +30,12 @@ async function runVisualTest() {
       headless: false, // Visual mode - Chris wants to watch!
       args: [
         '--window-size=1920,1080',
-        '--window-position=100,100' // Position window nicely
-      ]
+        '--window-position=100,100', // Position window nicely
+      ],
     });
 
     page = await browser.newPage({ // Assign to the declared page variable
-      viewport: { width: 1920, height: 1080 }
+      viewport: { width: 1920, height: 1080 },
     });
 
     console.log('\n📍 Navigating to game...');
@@ -51,7 +51,7 @@ async function runVisualTest() {
     // Take initial screenshot
     await page.screenshot({ 
       path: './visual-test-results/game-initial.png',
-      fullPage: false 
+      fullPage: false, 
     });
     console.log('📸 Screenshot: game-initial.png');
 
@@ -63,7 +63,7 @@ async function runVisualTest() {
     await page.waitForTimeout(500);
     
     await page.screenshot({ 
-      path: './visual-test-results/after-movement.png' 
+      path: './visual-test-results/after-movement.png', 
     });
     console.log('📸 Screenshot: after-movement.png');
 
@@ -73,7 +73,7 @@ async function runVisualTest() {
     await page.waitForTimeout(1000);
     
     await page.screenshot({ 
-      path: './visual-test-results/inventory-open.png' 
+      path: './visual-test-results/inventory-open.png', 
     });
     console.log('📸 Screenshot: inventory-open.png');
 
@@ -85,7 +85,7 @@ async function runVisualTest() {
     await page.waitForTimeout(1000);
     
     await page.screenshot({ 
-      path: './visual-test-results/quest-journal.png' 
+      path: './visual-test-results/quest-journal.png', 
     });
     console.log('📸 Screenshot: quest-journal.png');
 
@@ -98,7 +98,7 @@ async function runVisualTest() {
     // Try to capture error screenshot using the existing 'page' variable
     if (browser && page) { // Ensure both browser and page were successfully created
       await page.screenshot({ 
-        path: './visual-test-results/error-state.png' 
+        path: './visual-test-results/error-state.png', 
       });
       console.log('📸 Error screenshot saved: error-state.png');
     }

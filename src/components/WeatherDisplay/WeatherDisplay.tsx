@@ -37,7 +37,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weatherType, effects })
   const safeEffects = effects || {
     movementSpeedModifier: 1.0,
     visibilityRadius: 3,
-    combatAccuracyModifier: 0
+    combatAccuracyModifier: 0,
   };
 
   // Determine if speed modifier should be shown

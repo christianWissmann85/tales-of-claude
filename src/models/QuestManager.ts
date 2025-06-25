@@ -119,7 +119,7 @@ export class QuestManager {
     
     return this.allQuests.filter(quest =>
       quest.isAvailable(this.completedQuestIds, this.playerFactionReputations) && 
-      quest.status === 'not_started'
+      quest.status === 'not_started',
     );
   }
 
@@ -136,7 +136,7 @@ export class QuestManager {
     const factionReputations: Record<string, number> = {
       'order': this.factionManager.getReputation('order'),
       'chaos': this.factionManager.getReputation('chaos'),
-      'memory': this.factionManager.getReputation('memory')
+      'memory': this.factionManager.getReputation('memory'),
     };
     
     if (!quest.isAvailable(this.completedQuestIds, factionReputations)) {
@@ -399,13 +399,13 @@ export class QuestManager {
         currentChoices: quest.currentChoices ? quest.currentChoices.map(c => ({
           id: c.id,
           text: c.text,
-          consequences: c.consequences.map(con => ({ ...con }))
+          consequences: c.consequences.map(con => ({ ...con })),
         })) : null,
         branches: quest.branches ? Object.fromEntries(
           Object.entries(quest.branches).map(([key, branch]) => [key, {
             ...branch,
-            objectives: branch.objectives.map((obj: any) => ({ ...obj }))
-          }])
+            objectives: branch.objectives.map((obj: any) => ({ ...obj })),
+          }]),
         ) : null,
       })),
       activeQuestIds: this.activeQuests.map(q => q.id),

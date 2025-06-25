@@ -12,11 +12,11 @@ async function testKeyboardInput() {
   try {
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     const page = await browser.newPage({
-      viewport: { width: 1280, height: 720 }
+      viewport: { width: 1280, height: 720 },
     });
     
     // Enable verbose console logging
@@ -67,7 +67,7 @@ async function testKeyboardInput() {
         key: 'ArrowRight',
         keyCode: 39,
         which: 39,
-        bubbles: true
+        bubbles: true,
       });
       window.dispatchEvent(event);
       console.log('[DEBUG] Dispatched ArrowRight keydown event');
@@ -117,7 +117,7 @@ async function testKeyboardInput() {
         return {
           found: true,
           bounds: { x: rect.left, y: rect.top },
-          positionText
+          positionText,
         };
       }
       return { found: false };
@@ -136,9 +136,9 @@ async function testKeyboardInput() {
     const errorMessages = await page.evaluate(() => {
       const text = document.body.textContent || '';
       const errors = [];
-      if (text.includes('Error')) errors.push('Found "Error" in page');
-      if (text.includes('Failed')) errors.push('Found "Failed" in page');
-      if (text.includes('Cannot')) errors.push('Found "Cannot" in page');
+      if (text.includes('Error')) { errors.push('Found "Error" in page'); }
+      if (text.includes('Failed')) { errors.push('Found "Failed" in page'); }
+      if (text.includes('Cannot')) { errors.push('Found "Cannot" in page'); }
       return errors;
     });
     

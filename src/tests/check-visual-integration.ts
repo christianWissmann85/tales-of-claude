@@ -128,7 +128,7 @@ async function checkVisualIntegration() {
     console.log('\nTest 6: Checking CSS Grid implementation...');
     const hasGridContainer = await page.evaluate(() => {
       const container = document.querySelector('[class*="mapGridContainer"]');
-      if (!container) return false;
+      if (!container) { return false; }
       const style = window.getComputedStyle(container as HTMLElement);
       return style.display === 'grid';
     });
@@ -165,10 +165,10 @@ async function checkVisualIntegration() {
     console.log('===================================');
     const issues = [];
     
-    if (consoleErrors.length > 0) issues.push(`${consoleErrors.length} console errors`);
-    if (pageErrors.length > 0) issues.push(`${pageErrors.length} page errors`);
-    if (nanElements > 0) issues.push(`${nanElements} NaN coordinates`);
-    if (cellsWithBgColor === 0) issues.push('No floor background colors');
+    if (consoleErrors.length > 0) { issues.push(`${consoleErrors.length} console errors`); }
+    if (pageErrors.length > 0) { issues.push(`${pageErrors.length} page errors`); }
+    if (nanElements > 0) { issues.push(`${nanElements} NaN coordinates`); }
+    if (cellsWithBgColor === 0) { issues.push('No floor background colors'); }
     
     if (issues.length === 0) {
       console.log('✅ All visual systems working correctly!');

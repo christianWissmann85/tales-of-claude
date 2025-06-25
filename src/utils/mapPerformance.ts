@@ -38,7 +38,7 @@ export async function measureMapLoadPerformance(mapId: string): Promise<Performa
       parseTime: 0, // Not separately measured
       memoryUsage: endMemory - startMemory,
       tileCount: map.width * map.height,
-      entityCount: map.entities.length
+      entityCount: map.entities.length,
     };
   } catch (error) {
     throw new Error(`Failed to measure performance for map ${mapId}: ${error}`);
@@ -83,7 +83,7 @@ export async function compareMapFormats(mapId: string): Promise<{
       parseTime: 0,
       memoryUsage: endMemory - startMemory,
       tileCount: mapData.width * mapData.height,
-      entityCount: mapData.entities.length
+      entityCount: mapData.entities.length,
     };
   } catch (error) {
     console.warn(`No TypeScript version found for ${mapId}`);
@@ -95,7 +95,7 @@ export async function compareMapFormats(mapId: string): Promise<{
     const loadTimeDiff = ((jsonMetrics.loadTime - tsMetrics.loadTime) / tsMetrics.loadTime) * 100;
     const memoryDiff = ((jsonMetrics.memoryUsage - tsMetrics.memoryUsage) / tsMetrics.memoryUsage) * 100;
     
-    comparison = `JSON vs TypeScript:\n`;
+    comparison = 'JSON vs TypeScript:\n';
     comparison += `Load Time: ${loadTimeDiff > 0 ? '+' : ''}${loadTimeDiff.toFixed(1)}%\n`;
     comparison += `Memory Usage: ${memoryDiff > 0 ? '+' : ''}${memoryDiff.toFixed(1)}%`;
   }
@@ -119,7 +119,7 @@ export async function testMapSizePerformance(): Promise<PerformanceMetrics[]> {
       id: `testMap_${size}x${size}`,
       name: `Test Map ${size}x${size}`,
       width: size,
-      height: size
+      height: size,
     });
 
     const endTime = performance.now();
@@ -133,7 +133,7 @@ export async function testMapSizePerformance(): Promise<PerformanceMetrics[]> {
       parseTime: 0,
       memoryUsage: endMemory - startMemory,
       tileCount: size * size,
-      entityCount: 0
+      entityCount: 0,
     });
   }
 
@@ -146,7 +146,7 @@ export async function testMapSizePerformance(): Promise<PerformanceMetrics[]> {
 export function measureRenderPerformance(
   map: IGameMap,
   renderFunction: (map: IGameMap) => void,
-  iterations: number = 100
+  iterations: number = 100,
 ): {
   averageFPS: number;
   minFPS: number;
@@ -171,7 +171,7 @@ export function measureRenderPerformance(
     averageFPS: 1000 / averageFrameTime,
     minFPS: 1000 / maxFrameTime,
     maxFPS: 1000 / minFrameTime,
-    averageFrameTime
+    averageFrameTime,
   };
 }
 
@@ -237,7 +237,7 @@ export async function runPerformanceTestSuite(): Promise<void> {
   });
   const endTime = performance.now();
   
-  console.log(`Large City Map (40x40):`);
+  console.log('Large City Map (40x40):');
   console.log(`- Tile Count: ${tileCount}`);
   console.log(`- Processing Time: ${(endTime - startTime).toFixed(2)}ms`);
   console.log(`- Time per Tile: ${((endTime - startTime) / tileCount).toFixed(4)}ms`);

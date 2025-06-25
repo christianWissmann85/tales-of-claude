@@ -15,7 +15,7 @@ const floorColorMap: Record<string, string> = {
     ice: '#b0e0e6',
     lava: '#ff4500',
     water: '#4682b4',
-    bridge: '#a0522d'
+    bridge: '#a0522d',
 };
 
 const ASCII_MODE: Record<string, string> = {
@@ -30,7 +30,7 @@ const ASCII_MODE: Record<string, string> = {
     ice: '*',
     lava: '&',
     water: '~',
-    bridge: '='
+    bridge: '=',
 };
 
 const EMOJI_MODE: Record<string, string> = {
@@ -45,7 +45,7 @@ const EMOJI_MODE: Record<string, string> = {
     ice: '🧊',
     lava: '🔥',
     water: '💧',
-    bridge: '🌉'
+    bridge: '🌉',
 };
 
 // Sample NPCs, Items, and Player
@@ -53,12 +53,12 @@ const sampleEntities = {
     player: { symbol: '🤖', position: { x: 2, y: 2 } },
     npcs: [
         { symbol: '👨‍💻', position: { x: 1, y: 1 } },
-        { symbol: '🐛', position: { x: 3, y: 3 } }
+        { symbol: '🐛', position: { x: 3, y: 3 } },
     ],
     items: [
         { symbol: '💾', position: { x: 0, y: 4 } },
-        { symbol: '⚔️', position: { x: 4, y: 0 } }
-    ]
+        { symbol: '⚔️', position: { x: 4, y: 0 } },
+    ],
 };
 
 // Sample map data
@@ -68,22 +68,22 @@ const sampleMaps = {
         ['floor', 'carpet', 'carpet', 'carpet', 'floor'],
         ['metal', 'carpet', 'wood', 'carpet', 'metal'],
         ['floor', 'carpet', 'carpet', 'carpet', 'floor'],
-        ['floor', 'floor', 'stone', 'floor', 'floor']
+        ['floor', 'floor', 'stone', 'floor', 'floor'],
     ],
     binaryForest: [
         ['grass', 'grass', 'dirt', 'grass', 'grass'],
         ['grass', 'wood', 'dirt', 'wood', 'grass'],
         ['dirt', 'dirt', 'bridge', 'dirt', 'dirt'],
         ['grass', 'wood', 'dirt', 'wood', 'grass'],
-        ['grass', 'grass', 'water', 'grass', 'grass']
+        ['grass', 'grass', 'water', 'grass', 'grass'],
     ],
     debugDungeon: [
         ['stone', 'stone', 'stone', 'stone', 'stone'],
         ['stone', 'floor', 'floor', 'floor', 'stone'],
         ['stone', 'floor', 'lava', 'floor', 'stone'],
         ['stone', 'floor', 'floor', 'floor', 'stone'],
-        ['stone', 'ice', 'ice', 'ice', 'stone']
-    ]
+        ['stone', 'ice', 'ice', 'ice', 'stone'],
+    ],
 };
 
 // --- Component Definitions ---
@@ -130,7 +130,7 @@ const Tile: React.FC<TileProps> = ({ type, isASCII, brightness, contrast, entity
             className={styles.tile}
             style={{ 
                 backgroundColor: isASCII ? '#1a1a1a' : adjustedColor,
-                color: isASCII ? adjustedColor : '#ffffff'
+                color: isASCII ? adjustedColor : '#ffffff',
             }}
         >
             {entity || (isASCII ? ASCII_MODE[type] || '?' : '')}
@@ -153,20 +153,20 @@ const GridDisplay: React.FC<GridDisplayProps> = ({
     isASCII, 
     brightness, 
     contrast, 
-    showEntities = false 
+    showEntities = false, 
 }) => {
     const getEntityAt = (x: number, y: number) => {
-        if (!showEntities) return undefined;
+        if (!showEntities) { return undefined; }
         
         if (sampleEntities.player.position.x === x && sampleEntities.player.position.y === y) {
             return sampleEntities.player.symbol;
         }
         
         const npc = sampleEntities.npcs.find(n => n.position.x === x && n.position.y === y);
-        if (npc) return npc.symbol;
+        if (npc) { return npc.symbol; }
         
         const item = sampleEntities.items.find(i => i.position.x === x && i.position.y === y);
-        if (item) return item.symbol;
+        if (item) { return item.symbol; }
         
         return undefined;
     };

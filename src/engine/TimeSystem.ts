@@ -238,7 +238,7 @@ export class TimeSystem {
    */
   public addGameMinutes(minutes: number): void {
     if (minutes < 0) {
-      console.warn("Adding negative minutes is not supported. Use setTime for specific time changes.");
+      console.warn('Adding negative minutes is not supported. Use setTime for specific time changes.');
       return;
     }
     this._addMinutes(minutes);

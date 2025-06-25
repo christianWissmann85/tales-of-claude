@@ -159,9 +159,9 @@ export class Player implements IPlayer {
     const equippedItems = this.getEquippedItems();
     for (const item of equippedItems) {
       if (item.stats) {
-        if (item.stats.attack) calculatedStats.attack += item.stats.attack;
-        if (item.stats.defense) calculatedStats.defense += item.stats.defense;
-        if (item.stats.speed) calculatedStats.speed += item.stats.speed;
+        if (item.stats.attack) { calculatedStats.attack += item.stats.attack; }
+        if (item.stats.defense) { calculatedStats.defense += item.stats.defense; }
+        if (item.stats.speed) { calculatedStats.speed += item.stats.speed; }
       }
     }
 
@@ -424,9 +424,9 @@ export class Player implements IPlayer {
    */
   getEquippedItems(): EquippableItem[] {
     const equipped: EquippableItem[] = [];
-    if (this.weaponSlot) equipped.push(this.weaponSlot);
-    if (this.armorSlot) equipped.push(this.armorSlot);
-    if (this.accessorySlot) equipped.push(this.accessorySlot);
+    if (this.weaponSlot) { equipped.push(this.weaponSlot); }
+    if (this.armorSlot) { equipped.push(this.armorSlot); }
+    if (this.accessorySlot) { equipped.push(this.accessorySlot); }
     return equipped;
   }
 
@@ -514,7 +514,7 @@ export class Player implements IPlayer {
    */
   isTileExplored(mapId: string, x: number, y: number): boolean {
     const exploredTiles = this.exploredMaps.get(mapId);
-    if (!exploredTiles) return false;
+    if (!exploredTiles) { return false; }
     return exploredTiles.has(`${x},${y}`);
   }
 

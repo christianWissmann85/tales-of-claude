@@ -37,14 +37,14 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     console.log('🚀 Launching browser...');
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     const page = await browser.newPage({
       viewport: { 
         width: options.width || 1024, 
-        height: options.height || 768 
-      }
+        height: options.height || 768, 
+      },
     });
 
     console.log(`📍 Navigating to ${TARGET_URL}...`);
@@ -95,7 +95,7 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     await page.screenshot({ 
       path: filepath, 
       fullPage: options.fullPage || false,
-      animations: 'disabled'
+      animations: 'disabled',
     });
 
     console.log(`✅ Screenshot saved: ${filepath}`);

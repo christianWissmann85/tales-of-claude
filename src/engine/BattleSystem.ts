@@ -181,7 +181,7 @@ class BattleSystem {
     const logMessages: string[] = [];
     // IMPORTANT: Operate on a copy of the array to allow modification during iteration
     // and then reassign to entity.statusEffects.
-    let currentEffects = [...entity.statusEffects];
+    const currentEffects = [...entity.statusEffects];
     const effectsToRemove: number[] = [];
 
     currentEffects.forEach((effect, index) => {

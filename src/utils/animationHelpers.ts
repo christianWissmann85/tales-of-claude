@@ -1,6 +1,6 @@
 export function addRippleEffect(event: MouseEvent): void {
     const button = event.currentTarget as HTMLElement;
-    if (!button) return;
+    if (!button) { return; }
 
     const ripple = document.createElement('span');
     ripple.classList.add('ripple');
@@ -152,7 +152,7 @@ class NotificationManager {
     }
 
     private dismissNotification(notificationElement: HTMLElement, onDismissCallback?: () => void): void {
-        if (!notificationElement || !notificationElement.parentElement) return;
+        if (!notificationElement || !notificationElement.parentElement) { return; }
 
         notificationElement.classList.remove('notification-show');
         notificationElement.classList.add('notification-hide');
@@ -184,7 +184,7 @@ export interface DamageNumberOptions {
 export function showDamageNumber(
     targetElement: HTMLElement,
     value: number | string,
-    options?: DamageNumberOptions
+    options?: DamageNumberOptions,
 ): void {
     if (!targetElement) {
         console.warn('showDamageNumber: targetElement is null or undefined.');
@@ -232,7 +232,7 @@ export function animateBar(
     barElement: HTMLElement,
     currentValue: number,
     maxValue: number,
-    durationMs: number = 500
+    durationMs: number = 500,
 ): Promise<void> {
     return new Promise(resolve => {
         if (!barElement) {

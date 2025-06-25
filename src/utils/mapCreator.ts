@@ -8,7 +8,7 @@ import {
   JsonMapNPC,
   JsonMapEnemy,
   JsonMapItem,
-  JsonMapExit
+  JsonMapExit,
 } from '../types/map-schema.types';
 import { TileType, NPCRole, Position } from '../types/global.types';
 
@@ -48,7 +48,7 @@ export function createMap(options: MapCreatorOptions): JsonMap {
     height,
     defaultTile = 'grass',
     borderTile = 'tree',
-    districts = []
+    districts = [],
   } = options;
 
   // Initialize base layer
@@ -74,7 +74,7 @@ export function createMap(options: MapCreatorOptions): JsonMap {
     tileheight: 32,
     properties: {
       music: 'ambient_theme',
-      spawnPoint: { x: Math.floor(width / 2), y: Math.floor(height / 2) }
+      spawnPoint: { x: Math.floor(width / 2), y: Math.floor(height / 2) },
     },
     layers: [
       {
@@ -84,7 +84,7 @@ export function createMap(options: MapCreatorOptions): JsonMap {
         height,
         data: baseData,
         visible: true,
-        opacity: 1
+        opacity: 1,
       },
       {
         name: 'collision',
@@ -104,16 +104,16 @@ export function createMap(options: MapCreatorOptions): JsonMap {
           }
         }),
         visible: false,
-        opacity: 1
+        opacity: 1,
       },
       {
         name: 'objects',
         type: 'objectgroup',
         objects: [],
         visible: true,
-        opacity: 1
-      }
-    ]
+        opacity: 1,
+      },
+    ],
   };
 
   // Add districts
@@ -131,7 +131,7 @@ export function addDistrict(map: JsonMap, district: District): void {
   const baseLayer = map.layers.find(l => l.type === 'tilelayer' && l.name === 'base') as JsonMapTileLayer;
   const collisionLayer = map.layers.find(l => l.type === 'tilelayer' && l.name === 'collision') as JsonMapTileLayer;
   
-  if (!baseLayer || !collisionLayer) return;
+  if (!baseLayer || !collisionLayer) { return; }
 
   // Fill district area
   for (let dy = 0; dy < district.height; dy++) {
@@ -186,12 +186,12 @@ export function generatePath(
   start: Position,
   end: Position,
   pathTile: TileType = 'path',
-  width: number = 2
+  width: number = 2,
 ): void {
   const baseLayer = map.layers.find(l => l.type === 'tilelayer' && l.name === 'base') as JsonMapTileLayer;
   const collisionLayer = map.layers.find(l => l.type === 'tilelayer' && l.name === 'collision') as JsonMapTileLayer;
   
-  if (!baseLayer || !collisionLayer) return;
+  if (!baseLayer || !collisionLayer) { return; }
 
   // Simple A* pathfinding with some randomness
   const path = findPath(map, start, end);
@@ -218,7 +218,7 @@ export function generatePath(
  */
 function findPath(map: JsonMap, start: Position, end: Position): Position[] {
   const path: Position[] = [];
-  let current = { ...start };
+  const current = { ...start };
   
   while (current.x !== end.x || current.y !== end.y) {
     path.push({ ...current });
@@ -245,12 +245,12 @@ export function scatterEntities(
   entityType: 'npc' | 'enemy' | 'item',
   count: number,
   properties: any = {},
-  allowedTiles: TileType[] = ['grass', 'floor', 'dungeon_floor']
+  allowedTiles: TileType[] = ['grass', 'floor', 'dungeon_floor'],
 ): void {
   const objectLayer = map.layers.find(l => l.type === 'objectgroup' && l.name === 'objects') as JsonMapObjectLayer;
   const baseLayer = map.layers.find(l => l.type === 'tilelayer' && l.name === 'base') as JsonMapTileLayer;
   
-  if (!objectLayer || !baseLayer) return;
+  if (!objectLayer || !baseLayer) { return; }
 
   const validPositions: Position[] = [];
   
@@ -273,7 +273,7 @@ export function scatterEntities(
       id: `${entityType}_${Date.now()}_${i}`,
       type: entityType,
       position,
-      properties: { ...properties }
+      properties: { ...properties },
     };
     
     objectLayer.objects.push(entity);
@@ -290,7 +290,7 @@ export function createCityMap(size: number = 40): JsonMap {
     width: size,
     height: size,
     defaultTile: 'grass',
-    borderTile: 'wall'
+    borderTile: 'wall',
   });
 
   // Define districts
@@ -303,7 +303,7 @@ export function createCityMap(size: number = 40): JsonMap {
       height: 10,
       baseTile: 'floor',
       borderTile: 'wall',
-      decorations: [{ tile: 'shop', density: 0.05 }]
+      decorations: [{ tile: 'shop', density: 0.05 }],
     },
     {
       name: 'Residential District',
@@ -313,7 +313,7 @@ export function createCityMap(size: number = 40): JsonMap {
       height: 15,
       baseTile: 'grass',
       borderTile: 'tree',
-      decorations: [{ tile: 'door', density: 0.1 }]
+      decorations: [{ tile: 'door', density: 0.1 }],
     },
     {
       name: 'Debug Quarter',
@@ -322,7 +322,7 @@ export function createCityMap(size: number = 40): JsonMap {
       width: 12,
       height: 10,
       baseTile: 'dungeon_floor',
-      borderTile: 'wall'
+      borderTile: 'wall',
     },
     {
       name: 'Binary Gardens',
@@ -331,8 +331,8 @@ export function createCityMap(size: number = 40): JsonMap {
       width: 10,
       height: 10,
       baseTile: 'grass',
-      decorations: [{ tile: 'tree', density: 0.2 }]
-    }
+      decorations: [{ tile: 'tree', density: 0.2 }],
+    },
   ];
 
   // Add districts
@@ -347,17 +347,17 @@ export function createCityMap(size: number = 40): JsonMap {
   // Add some NPCs
   scatterEntities(map, 'npc', 10, {
     role: 'merchant',
-    dialogueId: 'merchant_generic'
+    dialogueId: 'merchant_generic',
   });
 
   // Add some enemies
   scatterEntities(map, 'enemy', 15, {
-    variant: 'BasicBug'
+    variant: 'BasicBug',
   });
 
   // Add items
   scatterEntities(map, 'item', 20, {
-    variant: 'HealthPotion'
+    variant: 'HealthPotion',
   });
 
   return map;

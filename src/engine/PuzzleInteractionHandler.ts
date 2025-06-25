@@ -54,7 +54,7 @@ export class PuzzleInteractionHandler {
         const newState: PushBlockPuzzleState = {
             ...pushBlockState,
             blockPositions: newBlockPositions,
-            isSolved: false // The PuzzleSystem will determine if this new state is solved
+            isSolved: false, // The PuzzleSystem will determine if this new state is solved
         };
 
         this.puzzleSystem.updatePuzzleState(this.currentMapId, puzzleId, newState);
@@ -83,7 +83,7 @@ export class PuzzleInteractionHandler {
         const newState: SwitchSequencePuzzleState = {
             ...switchSequenceState,
             activatedSequence: newActivatedSequence,
-            isSolved: false // The PuzzleSystem will determine if this new state is solved
+            isSolved: false, // The PuzzleSystem will determine if this new state is solved
         };
 
         this.puzzleSystem.updatePuzzleState(this.currentMapId, puzzleId, newState);
@@ -109,7 +109,7 @@ export class PuzzleInteractionHandler {
         const newState: CodeArrangementPuzzleState = {
             ...codeArrangementState,
             currentArrangement: newArrangement,
-            isSolved: false // The PuzzleSystem will determine if this new state is solved
+            isSolved: false, // The PuzzleSystem will determine if this new state is solved
         };
 
         this.puzzleSystem.updatePuzzleState(this.currentMapId, puzzleId, newState);

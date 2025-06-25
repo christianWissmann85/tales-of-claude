@@ -250,7 +250,7 @@ WWWWWWWWWWWWWWWWWWWW  (y=19)
 // Hidden room entrance - cracked wall
 tiles[15][15] = {
   walkable: false,
-  type: 'wall' as TileType
+  type: 'wall' as TileType,
 };
 
 // Create puzzle room (16-18, 14-16)
@@ -275,7 +275,7 @@ tiles[16][19] = { ...wallTile };
 // Secret entrance
 tiles[5][5] = {
   walkable: false,
-  type: 'wall' as TileType
+  type: 'wall' as TileType,
 };
 
 // Secret chamber (2-4, 3-5)
@@ -288,7 +288,7 @@ for (let y = 3; y <= 5; y++) {
 // Secret 3: Hidden Boss Room (10,18)
 tiles[18][10] = {
   walkable: false,
-  type: 'wall' as TileType
+  type: 'wall' as TileType,
 };
 
 // Boss room already exists, just noting it visually
@@ -297,7 +297,7 @@ tiles[18][10] = {
 // Secret 4: Shortcut back to entrance (18,10)
 tiles[10][18] = {
   walkable: false,
-  type: 'wall' as TileType
+  type: 'wall' as TileType,
 };
 
 // Add puzzle entities
@@ -307,38 +307,38 @@ const puzzleEntities: any[] = [
     id: 'push_block_1',
     type: 'pushable_block',
     position: { x: 16, y: 14 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   {
     id: 'push_block_2',
     type: 'pushable_block',
     position: { x: 17, y: 15 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   {
     id: 'push_block_3',
     type: 'pushable_block',
     position: { x: 18, y: 14 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   // Pressure plates
   {
     id: 'pressure_plate_1',
     type: 'pressure_plate',
     position: { x: 17, y: 14 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   {
     id: 'pressure_plate_2',
     type: 'pressure_plate',
     position: { x: 16, y: 15 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   {
     id: 'pressure_plate_3',
     type: 'pressure_plate',
     position: { x: 18, y: 16 },
-    puzzleId: 'block_puzzle'
+    puzzleId: 'block_puzzle',
   },
   // Sequential switches
   {
@@ -346,36 +346,36 @@ const puzzleEntities: any[] = [
     type: 'switch',
     position: { x: 2, y: 3 },
     sequenceOrder: 1,
-    puzzleId: 'switch_puzzle'
+    puzzleId: 'switch_puzzle',
   },
   {
     id: 'seq_switch_2',
     type: 'switch',
     position: { x: 4, y: 3 },
     sequenceOrder: 2,
-    puzzleId: 'switch_puzzle'
+    puzzleId: 'switch_puzzle',
   },
   {
     id: 'seq_switch_3',
     type: 'switch',
     position: { x: 2, y: 5 },
     sequenceOrder: 3,
-    puzzleId: 'switch_puzzle'
+    puzzleId: 'switch_puzzle',
   },
   {
     id: 'seq_switch_4',
     type: 'switch',
     position: { x: 4, y: 5 },
     sequenceOrder: 4,
-    puzzleId: 'switch_puzzle'
+    puzzleId: 'switch_puzzle',
   },
   {
     id: 'seq_switch_5',
     type: 'switch',
     position: { x: 3, y: 4 },
     sequenceOrder: 5,
-    puzzleId: 'switch_puzzle'
-  }
+    puzzleId: 'switch_puzzle',
+  },
 ];
 
 // Secret items
@@ -383,18 +383,18 @@ const secretItems: Item[] = [
   {
     ...ItemClass.createItem(ItemVariant.DebugBlade),
     id: 'debuggers_blade',
-    position: { x: 17, y: 16 }
+    position: { x: 17, y: 16 },
   },
   {
     ...ItemClass.createItem(ItemVariant.BinaryShield),
     id: 'exception_handler',
-    position: { x: 10, y: 16 }
+    position: { x: 10, y: 16 },
   },
   {
     ...ItemClass.createItem(ItemVariant.UltraPotion),
     id: 'secret_potion_1',
-    position: { x: 3, y: 4 }
-  }
+    position: { x: 3, y: 4 },
+  },
 ];
 
 // Secret NPCs
@@ -405,15 +405,15 @@ const secretNpcs: NPC[] = [
     role: 'quest_giver' as NPCRole,
     dialogueId: 'dialogue_bug_tracker',
     position: { x: 18, y: 9 },
-    statusEffects: []
-  }
+    statusEffects: [],
+  },
 ];
 
 // Secret boss
 const secretBoss: Enemy = new EnemyClass(
   'corrupted_subroutine',
   EnemyVariant.RuntimeError, // Using existing type
-  { x: 10, y: 16 }
+  { x: 10, y: 16 },
 );
 // Would need custom boss variant in reality
 

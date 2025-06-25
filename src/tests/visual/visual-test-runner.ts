@@ -25,12 +25,12 @@ const TEST_SCENARIOS: TestScenario[] = [
   {
     name: 'initial-load',
     description: 'Initial game load state',
-    waitFor: '.gameBoard'
+    waitFor: '.gameBoard',
   },
   {
     name: 'main-menu',
     description: 'Main menu display',
-    waitFor: 1000
+    waitFor: 1000,
   },
   {
     name: 'game-board-town',
@@ -38,7 +38,7 @@ const TEST_SCENARIOS: TestScenario[] = [
     action: async (page) => {
       // Wait for game to fully load
       await page.waitForSelector('.gameBoard', { timeout: 5000 });
-    }
+    },
   },
   {
     name: 'inventory-open',
@@ -46,7 +46,7 @@ const TEST_SCENARIOS: TestScenario[] = [
     action: async (page) => {
       await page.keyboard.press('i');
       await page.waitForTimeout(500);
-    }
+    },
   },
   {
     name: 'quest-journal',
@@ -54,7 +54,7 @@ const TEST_SCENARIOS: TestScenario[] = [
     action: async (page) => {
       await page.keyboard.press('j');
       await page.waitForTimeout(500);
-    }
+    },
   },
   {
     name: 'dialogue-npc',
@@ -70,8 +70,8 @@ const TEST_SCENARIOS: TestScenario[] = [
         await npc.click();
         await page.waitForTimeout(500);
       }
-    }
-  }
+    },
+  },
 ];
 
 // Utility functions
@@ -90,7 +90,7 @@ async function takeScreenshot(page: Page, name: string, isBaseline: boolean = fa
   await page.screenshot({ 
     path: filePath, 
     fullPage: false, // Focus on viewport for consistency
-    animations: 'disabled' // Disable animations for stable screenshots
+    animations: 'disabled', // Disable animations for stable screenshots
   });
   
   return filePath;
@@ -132,11 +132,11 @@ async function runVisualTests(updateBaselines: boolean = false): Promise<TestRes
     console.log('🚀 Starting visual tests...');
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     const page = await browser.newPage({
-      viewport: { width: 1280, height: 720 }
+      viewport: { width: 1280, height: 720 },
     });
 
     // Set up console logging
@@ -183,7 +183,7 @@ async function runVisualTests(updateBaselines: boolean = false): Promise<TestRes
             baseline: baselinePath,
             current: screenshotPath,
             pixelDifference: 0,
-            passed: true
+            passed: true,
           });
         } else {
           // Compare with baseline
@@ -200,7 +200,7 @@ async function runVisualTests(updateBaselines: boolean = false): Promise<TestRes
             current: screenshotPath,
             diff: passed ? undefined : diffPath,
             pixelDifference: pixelDiff,
-            passed
+            passed,
           });
         }
 
@@ -217,7 +217,7 @@ async function runVisualTests(updateBaselines: boolean = false): Promise<TestRes
           current: path.join(SCREENSHOT_DIR, `${scenario.name}.png`),
           pixelDifference: -1,
           passed: false,
-          error: error.message
+          error: error.message,
         });
       }
     }

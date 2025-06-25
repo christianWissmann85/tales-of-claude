@@ -106,14 +106,14 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
 
   // Filter and sort items based on current state
   const getFilteredAndSortedItems = useCallback(() => {
-    let filteredItems = inventory.getItems().filter(item => {
+    const filteredItems = inventory.getItems().filter(item => {
       // Tab filtering
-      if (activeTab === 'consumables' && item.type !== 'consumable') return false;
-      if (activeTab === 'equipment' && item.type !== 'equipment') return false;
-      if (activeTab === 'quest' && (item.type !== 'quest' && item.type !== 'key')) return false;
+      if (activeTab === 'consumables' && item.type !== 'consumable') { return false; }
+      if (activeTab === 'equipment' && item.type !== 'equipment') { return false; }
+      if (activeTab === 'quest' && (item.type !== 'quest' && item.type !== 'key')) { return false; }
 
       // Search filtering
-      if (searchQuery && !item.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+      if (searchQuery && !item.name.toLowerCase().includes(searchQuery.toLowerCase())) { return false; }
 
       return true;
     });
@@ -127,7 +127,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
       } else if (sortOrder === 'value') {
         // Define a simple value for sorting: sum of stats for equipment, 'value' for consumables
         const getValue = (item: Item) => {
-          if (item.type === 'consumable' && item.value) return item.value;
+          if (item.type === 'consumable' && item.value) { return item.value; }
           if (item.type === 'equipment' && item.stats) {
             return (item.stats.attack || 0) + (item.stats.defense || 0) + (item.stats.speed || 0);
           }
@@ -193,7 +193,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
   };
 
   const handleContextMenuAction = (action: 'equip' | 'unequip' | 'use' | 'drop') => {
-    if (!contextMenu.item) return;
+    if (!contextMenu.item) { return; }
     const item = contextMenu.item;
     const count = inventory.getItemCount(item.id);
 

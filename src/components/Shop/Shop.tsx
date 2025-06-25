@@ -78,10 +78,10 @@ const Shop: React.FC = () => {
                             // The game reducer is responsible for deducting gold, adding item to inventory,
                             // and updating the shop's item quantity.
                         } else {
-                            dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: "Item is out of stock!" } });
+                            dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: 'Item is out of stock!' } });
                         }
                     } else {
-                        dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: "Not enough gold!" } });
+                        dispatch({ type: 'SHOW_NOTIFICATION', payload: { message: 'Not enough gold!' } });
                     }
                 }
             }

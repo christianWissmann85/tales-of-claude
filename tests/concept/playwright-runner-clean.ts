@@ -32,7 +32,7 @@ interface Report {
 }
 
 // --- Global Report Object ---
-let currentReport: Report = {
+const currentReport: Report = {
     timestamp: new Date().toISOString(),
     url: TARGET_URL,
     status: 'error', // Default to error, updated based on execution
@@ -212,7 +212,7 @@ async function runTests(): Promise<void> {
                         totalTests: 0,
                         passedTests: 0,
                         failedTests: 0,
-                        details: [{ name: 'Script Execution', passed: false, message: `Error: ${e.message}` }]
+                        details: [{ name: 'Script Execution', passed: false, message: `Error: ${e.message}` }],
                     };
                 }
             } else {
@@ -222,7 +222,7 @@ async function runTests(): Promise<void> {
                     totalTests: 0,
                     passedTests: 0,
                     failedTests: 0,
-                    details: [{ name: 'Function Check', passed: false, message: 'window.runAutomatedTests() not found.' }]
+                    details: [{ name: 'Function Check', passed: false, message: 'window.runAutomatedTests() not found.' }],
                 };
             }
         });
@@ -258,7 +258,7 @@ async function runTests(): Promise<void> {
         }
         currentReport.durationMs = Date.now() - startTime;
         await generateReport();
-        console.log(`\n--- Test Run Summary ---`);
+        console.log('\n--- Test Run Summary ---');
         console.log(`Status: ${currentReport.status.toUpperCase()}`);
         console.log(`Report available at: ${path.resolve(HTML_REPORT_FILE)}`);
         console.log(`Screenshots in: ${path.resolve(SCREENSHOT_DIR)}`);

@@ -11,8 +11,8 @@ async function main() {
             fullRun: true,
             debugMode: true,
             testSpeed: 'fast',
-            resetGameBeforeRun: true
-        }
+            resetGameBeforeRun: true,
+        },
     });
     
     try {

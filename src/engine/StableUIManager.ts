@@ -18,7 +18,7 @@ export class StableUIManager {
    */
   static async openPanelSafely(
     panel: UIPanel, 
-    dispatch: (action: any) => void
+    dispatch: (action: any) => void,
   ): Promise<void> {
     // Try to acquire lock for UI transition
     if (!criticalSectionManager.lock('ui_transition', this.TRANSITION_DURATION)) {
@@ -57,7 +57,7 @@ export class StableUIManager {
   static async togglePanelSafely(
     panel: UIPanel,
     currentState: any,
-    dispatch: (action: any) => void
+    dispatch: (action: any) => void,
   ): Promise<void> {
     // Check if we're already in a transition
     if (criticalSectionManager.isLocked('ui_transition')) {
@@ -108,7 +108,7 @@ export class StableUIManager {
     
     return {
       isTransitioning,
-      canAcceptInput: !isTransitioning && queueSize === 0
+      canAcceptInput: !isTransitioning && queueSize === 0,
     };
   }
   

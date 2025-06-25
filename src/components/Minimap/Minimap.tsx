@@ -100,22 +100,22 @@ const Minimap: React.FC<MinimapProps> = ({ player, currentMap, npcs, onFastTrave
 
   // Check if a tile is explored
   const isTileExplored = useCallback((x: number, y: number): boolean => {
-    if (!player.exploredMaps) return false;
+    if (!player.exploredMaps) { return false; }
     const exploredTiles = player.exploredMaps.get(currentMap.id);
-    if (!exploredTiles) return false;
+    if (!exploredTiles) { return false; }
     return exploredTiles.has(`${x},${y}`);
   }, [player.exploredMaps, currentMap.id]);
 
   // Check if a tile is a fast travel point
   const isFastTravelPoint = useCallback((x: number, y: number): boolean => {
     const tile = currentMap.tiles[y]?.[x];
-    if (!tile) return false;
+    if (!tile) { return false; }
     return tile.type === 'shop' || tile.type === 'healer' || tile.type === 'exit';
   }, [currentMap.tiles]);
 
   // Handle tile click for fast travel
   const handleTileClick = useCallback((x: number, y: number) => {
-    if (!isTileExplored(x, y) || !isFastTravelPoint(x, y)) return;
+    if (!isTileExplored(x, y) || !isFastTravelPoint(x, y)) { return; }
 
     const options: Array<{ mapId: string; position: Position; name: string }> = [];
 
@@ -158,22 +158,22 @@ const Minimap: React.FC<MinimapProps> = ({ player, currentMap, npcs, onFastTrave
     const npcKey = `${x},${y}`;
     const npc = npcPositionMap.get(npcKey);
     if (npc) {
-      if (npc.role === 'compiler_cat') return MARKER_SYMBOLS.compiler_cat;
-      if (npc.role === 'quest_giver') return MARKER_SYMBOLS.quest_npc;
-      if (npc.role === 'merchant') return MARKER_SYMBOLS.shop;
+      if (npc.role === 'compiler_cat') { return MARKER_SYMBOLS.compiler_cat; }
+      if (npc.role === 'quest_giver') { return MARKER_SYMBOLS.quest_npc; }
+      if (npc.role === 'merchant') { return MARKER_SYMBOLS.shop; }
       return MARKER_SYMBOLS.important_npc;
     }
 
     // Check for exits
-    if (exitPositionMap.has(npcKey)) return MARKER_SYMBOLS.map_transition;
+    if (exitPositionMap.has(npcKey)) { return MARKER_SYMBOLS.map_transition; }
 
     // Check for tile-based markers
     const tile = currentMap.tiles[y]?.[x];
-    if (!tile) return null;
+    if (!tile) { return null; }
 
-    if (tile.type === 'shop') return MARKER_SYMBOLS.shop;
-    if (tile.type === 'healer') return MARKER_SYMBOLS.healer;
-    if (tile.type === 'hidden_area' && isTileExplored(x, y)) return MARKER_SYMBOLS.hidden_area;
+    if (tile.type === 'shop') { return MARKER_SYMBOLS.shop; }
+    if (tile.type === 'healer') { return MARKER_SYMBOLS.healer; }
+    if (tile.type === 'hidden_area' && isTileExplored(x, y)) { return MARKER_SYMBOLS.hidden_area; }
 
     return null;
   }, [npcPositionMap, exitPositionMap, currentMap.tiles, isTileExplored]);
@@ -211,13 +211,13 @@ const Minimap: React.FC<MinimapProps> = ({ player, currentMap, npcs, onFastTrave
                 {marker}
               </div>
             )}
-          </div>
+          </div>,
         );
       }
       grid.push(
         <div key={y} className={styles.row}>
           {row}
-        </div>
+        </div>,
       );
     }
 

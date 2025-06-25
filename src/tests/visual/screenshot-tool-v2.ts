@@ -27,7 +27,7 @@ async function ensureTempDir(): Promise<void> {
 }
 
 async function waitForGameReady(page: Page, debug: boolean = false): Promise<void> {
-  if (debug) console.log('🔍 Debug: Waiting for game to be ready...');
+  if (debug) { console.log('🔍 Debug: Waiting for game to be ready...'); }
   
   // Strategy 1: Wait for root element with content
   try {
@@ -35,9 +35,9 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
       const root = document.getElementById('root');
       return root && root.children.length > 0;
     }, { timeout: 20000 });
-    if (debug) console.log('✅ Debug: Root element found with children');
+    if (debug) { console.log('✅ Debug: Root element found with children'); }
   } catch (e) {
-    if (debug) console.log('⚠️ Debug: Root element check timed out, trying alternative...');
+    if (debug) { console.log('⚠️ Debug: Root element check timed out, trying alternative...'); }
   }
   
   // Strategy 2: Wait for game-specific element (more reliable)
@@ -45,11 +45,11 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
     // Try to find game board or any game-specific element
     await page.waitForSelector('.game-board, .splash-screen, .game-container, [class*="GameBoard"], [class*="SplashScreen"]', { 
       timeout: 20000,
-      state: 'visible'
+      state: 'visible',
     });
-    if (debug) console.log('✅ Debug: Game-specific element found');
+    if (debug) { console.log('✅ Debug: Game-specific element found'); }
   } catch (e) {
-    if (debug) console.log('⚠️ Debug: Game element check failed, continuing anyway...');
+    if (debug) { console.log('⚠️ Debug: Game element check failed, continuing anyway...'); }
   }
   
   // Strategy 3: Check for any visible content
@@ -58,9 +58,9 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
       const body = document.body;
       return body && body.innerText && body.innerText.trim().length > 0;
     }, { timeout: 10000 });
-    if (debug) console.log('✅ Debug: Page has visible text content');
+    if (debug) { console.log('✅ Debug: Page has visible text content'); }
   } catch (e) {
-    if (debug) console.log('⚠️ Debug: Text content check failed');
+    if (debug) { console.log('⚠️ Debug: Text content check failed'); }
   }
 }
 
@@ -81,14 +81,14 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
       console.log('🚀 Launching browser...');
       browser = await chromium.launch({ 
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
       });
       
       const page = await browser.newPage({
         viewport: { 
           width: options.width || 1280, 
-          height: options.height || 720 
-        }
+          height: options.height || 720, 
+        },
       });
 
       // Set a reasonable default timeout for all operations
@@ -105,14 +105,14 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
         try {
           await page.goto(targetUrl, { 
             waitUntil: 'domcontentloaded', // Less strict than networkidle
-            timeout: 30000
+            timeout: 30000,
           });
           navigationSuccess = true;
           console.log('✅ Navigation successful');
         } catch (navError: any) {
           navRetries--;
           console.log(`⚠️ Navigation attempt failed, ${navRetries} retries left...`);
-          if (navRetries === 0) throw navError;
+          if (navRetries === 0) { throw navError; }
           await page.waitForTimeout(2000);
         }
       }
@@ -188,7 +188,7 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
       await page.screenshot({ 
         path: filepath, 
         fullPage: options.fullPage || false,
-        animations: 'disabled'
+        animations: 'disabled',
       });
 
       console.log(`✅ Screenshot saved: ${filepath}`);
@@ -284,7 +284,7 @@ Troubleshooting:
   }
 
   const options: ScreenshotOptions = {
-    actions: []
+    actions: [],
   };
 
   // Parse command line arguments

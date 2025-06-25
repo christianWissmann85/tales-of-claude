@@ -16,7 +16,7 @@ const FACTION_IDS = ['order', 'chaos', 'memory'];
 const FACTION_NAMES: Record<string, string> = {
   'order': 'Order of Clean Code',
   'chaos': 'Chaos Coders',
-  'memory': 'Memory Guardians'
+  'memory': 'Memory Guardians',
 };
 
 
@@ -57,7 +57,7 @@ const FactionStatus: React.FC = () => {
       id,
       name: FACTION_NAMES[id],
       reputation,
-      tier
+      tier,
     };
   });
 
@@ -131,7 +131,7 @@ const FactionStatus: React.FC = () => {
         {factionData.map(renderFaction)}
       </div>
       <pre className={styles.asciiBorder}>
-        {`+---------------------------------------+`}
+        {'+---------------------------------------+'}
       </pre>
     </div>
   );

@@ -368,7 +368,7 @@ suite('MapLoader and Map Structure Tests', () => {
         assert.ok(err.message.includes('Could not load map "nonExistentMap" from JSON or TS'), 'Error message should contain expected text');
         return true; // Return true if the error matches
       },
-      'Loading a non-existent map should throw an error with a specific message'
+      'Loading a non-existent map should throw an error with a specific message',
     );
   });
 

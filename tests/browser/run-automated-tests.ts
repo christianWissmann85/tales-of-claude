@@ -11,7 +11,7 @@ function runAutomatedTests() {
         debugMode: true,
         testSpeed: 'fast' as const,
         fullRun: true,
-        resetGameBeforeRun: true
+        resetGameBeforeRun: true,
     };
     
     const playtester = new AutomatedPlaytester(config);

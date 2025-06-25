@@ -8,7 +8,7 @@ import { Player } from '../models/Player';
 // Mock player for testing
 const mockPlayer = {
   addExperience: (exp: number) => console.log(`Player gained ${exp} EXP`),
-  addItem: (item: any) => console.log(`Player received item:`, item.name),
+  addItem: (item: any) => console.log('Player received item:', item.name),
 } as unknown as Player;
 
 console.log('=== Testing Branching Quest System ===\n');
@@ -46,7 +46,7 @@ console.log('');
 // 4. Simulate completing an objective that leads to choices
 console.log('4. Simulating reaching the branching point...');
 virusQuest.updateObjectiveProgress('reach_location', 'infected_sector', 1);
-console.log(`Objective completed!`);
+console.log('Objective completed!');
 console.log(`Available choices: ${virusQuest.currentChoices?.length || 0}`);
 if (virusQuest.currentChoices) {
   console.log('\nChoices available:');
@@ -61,7 +61,7 @@ console.log('5. Making a choice (Contact Glitch Gang)...');
 const choiceSuccess = virusQuest.handleChoice('choice_contact_glitch');
 console.log(`Choice handled: ${choiceSuccess}`);
 console.log(`Current branch: ${virusQuest.currentBranchId}`);
-console.log(`New objectives:`);
+console.log('New objectives:');
 virusQuest.objectives.forEach(obj => {
   if (!obj.isCompleted) {
     console.log(`  - ${obj.description} (${obj.currentProgress}/${obj.quantity})`);
@@ -85,7 +85,7 @@ console.log('');
 console.log('7. Testing save/load of branching quest state...');
 const saveState = questManager.saveState();
 console.log('Quest state saved.');
-console.log(`Saved faction reputations:`, saveState.playerFactionReputations);
+console.log('Saved faction reputations:', saveState.playerFactionReputations);
 
 // Simulate loading
 questManager.loadState(saveState);

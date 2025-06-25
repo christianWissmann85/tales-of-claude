@@ -54,7 +54,7 @@ export class GameMap implements IGameMap { // Added 'implements IGameMap' for cl
           (entity as any).statusEffects || [], // statusEffects might be optional or undefined in plain data
           (entity as any).role,
           (entity as any).dialogueId,
-          (entity as any).questStatus // questStatus is optional
+          (entity as any).questStatus, // questStatus is optional
         );
         this.addEntity(npcInstance);
       } else {

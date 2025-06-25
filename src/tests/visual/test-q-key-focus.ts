@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testQKeyFocus() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   const page = await browser.newPage();
@@ -58,7 +58,7 @@ async function testQKeyFocus() {
     const gameState = (window as any).__gameState;
     return {
       showQuestLog: gameState?.showQuestLog,
-      showInventory: gameState?.showInventory
+      showInventory: gameState?.showInventory,
     };
   });
   

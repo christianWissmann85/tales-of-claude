@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testUIHotkeysIsolated() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   console.log('🎮 Testing UI Hotkeys in Isolation...\n');

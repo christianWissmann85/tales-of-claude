@@ -13,7 +13,7 @@ import { FactionManager } from '../engine/FactionManager';
 export function applyFactionPricing(
     items: ShopItem[],
     npc: NPC,
-    factionManager: FactionManager
+    factionManager: FactionManager,
 ): ShopItem[] {
     // If NPC has no faction affiliation, return items unchanged
     if (!npc.factionId) {

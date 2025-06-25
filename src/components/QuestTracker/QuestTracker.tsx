@@ -76,7 +76,7 @@ const QuestTracker: React.FC<QuestTrackerProps> = ({ onOpenJournal, playerPositi
 
   const renderObjectiveProgress = (quest: Quest) => {
     const objective = quest.getCurrentObjective();
-    if (!objective) return null;
+    if (!objective) { return null; }
 
     const distance = calculateDistance(objective);
 
@@ -90,7 +90,7 @@ const QuestTracker: React.FC<QuestTrackerProps> = ({ onOpenJournal, playerPositi
             <div 
               className={styles.progressFill}
               style={{ 
-                width: `${(objective.currentProgress / objective.quantity) * 100}%` 
+                width: `${(objective.currentProgress / objective.quantity) * 100}%`, 
               }}
             />
             <span className={styles.progressText}>
@@ -108,8 +108,8 @@ const QuestTracker: React.FC<QuestTrackerProps> = ({ onOpenJournal, playerPositi
   };
 
   const getQuestIcon = (quest: Quest): string => {
-    if (quest.id.startsWith('mq_')) return '⭐';
-    if (quest.id.startsWith('sq_')) return '◆';
+    if (quest.id.startsWith('mq_')) { return '⭐'; }
+    if (quest.id.startsWith('sq_')) { return '◆'; }
     return '•';
   };
 
@@ -129,7 +129,7 @@ const QuestTracker: React.FC<QuestTrackerProps> = ({ onOpenJournal, playerPositi
         <button 
           onClick={toggleMinimize}
           className={styles.minimizeButton}
-          title={isMinimized ? "Expand (M)" : "Minimize (M)"}
+          title={isMinimized ? 'Expand (M)' : 'Minimize (M)'}
         >
           {isMinimized ? '▶' : '▼'}
         </button>

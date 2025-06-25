@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testUIHotkeysFinal() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   const page = await browser.newPage();
@@ -24,7 +24,7 @@ async function testUIHotkeysFinal() {
       { key: 'i', name: 'Inventory', selector: '[class*="inventoryOverlay"]' },
       { key: 'q', name: 'Quest Journal', selector: '[class*="questLogOverlay"]' },
       { key: 'c', name: 'Character Screen', selector: '[class*="characterScreen"]' },
-      { key: 'f', name: 'Faction Status', selector: '[class*="factionStatus"]' }
+      { key: 'f', name: 'Faction Status', selector: '[class*="factionStatus"]' },
     ];
 
     for (const test of tests) {
@@ -41,7 +41,7 @@ async function testUIHotkeysFinal() {
         // Close it
         await page.keyboard.press('Escape');
         await page.waitForSelector(test.selector, { state: 'hidden', timeout: 1000 });
-        console.log(`  ✅ ESC closed the panel`);
+        console.log('  ✅ ESC closed the panel');
       } catch (e) {
         console.log(`  ❌ ${test.name} failed to open`);
       }

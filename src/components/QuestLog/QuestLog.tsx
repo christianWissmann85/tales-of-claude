@@ -22,7 +22,7 @@ const QuestLog: React.FC = () => {
   const activeQuests = questManager.getActiveQuests();
   const availableQuests = questManager.getAvailableQuests();
   const completedQuests = questManager.allQuests.filter(
-    quest => quest.status === 'completed'
+    quest => quest.status === 'completed',
   );
 
   // Get current category's quests
@@ -60,7 +60,7 @@ const QuestLog: React.FC = () => {
 
     if (pressedKeys.has('ArrowDown') && !prevPressedKeys.has('ArrowDown')) {
       setSelectedQuestIndex(prev => 
-        Math.min(currentQuests.length - 1, prev + 1)
+        Math.min(currentQuests.length - 1, prev + 1),
       );
     }
 
@@ -71,7 +71,7 @@ const QuestLog: React.FC = () => {
         if (started) {
           dispatch({
             type: 'SHOW_NOTIFICATION',
-            payload: { message: `Quest started: ${selectedQuest.name}` }
+            payload: { message: `Quest started: ${selectedQuest.name}` },
           });
           // Move to active quests
           setSelectedCategory('active');
@@ -91,7 +91,7 @@ const QuestLog: React.FC = () => {
   // Render quest objective progress
   const renderObjectiveProgress = (quest: Quest) => {
     const currentObjective = quest.getCurrentObjective();
-    if (!currentObjective) return null;
+    if (!currentObjective) { return null; }
 
     return (
       <div className={styles.objectiveProgress}>

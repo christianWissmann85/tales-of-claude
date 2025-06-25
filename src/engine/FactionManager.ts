@@ -66,11 +66,11 @@ export class FactionManager {
      * but not less than the previous tier's threshold.
      */
     private static readonly REPUTATION_TIERS = [
-        { name: "Hostile", threshold: -500 },      // Reputation < -500
-        { name: "Unfriendly", threshold: -100 },   // Reputation >= -500 and < -100
-        { name: "Neutral", threshold: 100 },       // Reputation >= -100 and < 100
-        { name: "Friendly", threshold: 500 },      // Reputation >= 100 and < 500
-        { name: "Allied", threshold: FactionManager.REPUTATION_MAX + 1 } // Reputation >= 500 and <= REPUTATION_MAX
+        { name: 'Hostile', threshold: -500 },      // Reputation < -500
+        { name: 'Unfriendly', threshold: -100 },   // Reputation >= -500 and < -100
+        { name: 'Neutral', threshold: 100 },       // Reputation >= -100 and < 100
+        { name: 'Friendly', threshold: 500 },      // Reputation >= 100 and < 500
+        { name: 'Allied', threshold: FactionManager.REPUTATION_MAX + 1 }, // Reputation >= 500 and <= REPUTATION_MAX
     ];
 
     /**
@@ -107,7 +107,7 @@ export class FactionManager {
         this.factions.set('chaos', new Faction('chaos', 'Chaos Coders', 0));
         this.factions.set('memory', new Faction('memory', 'Memory Guardians', 0));
 
-        console.log("FactionManager: Factions initialized.");
+        console.log('FactionManager: Factions initialized.');
     }
 
     /**
@@ -136,7 +136,7 @@ export class FactionManager {
         // Apply reputation change and clamp the value within defined bounds
         targetFaction.reputation = Math.min(
             FactionManager.REPUTATION_MAX,
-            Math.max(FactionManager.REPUTATION_MIN, targetFaction.reputation + amount)
+            Math.max(FactionManager.REPUTATION_MIN, targetFaction.reputation + amount),
         );
 
         // Handle inter-faction conflicts if the reputation increased (player helped the faction)
@@ -186,7 +186,7 @@ export class FactionManager {
 
             faction.reputation = Math.min(
                 FactionManager.REPUTATION_MAX,
-                Math.max(FactionManager.REPUTATION_MIN, faction.reputation + amount)
+                Math.max(FactionManager.REPUTATION_MIN, faction.reputation + amount),
             );
 
             const newReputation = faction.reputation;
@@ -232,7 +232,7 @@ export class FactionManager {
             }
         }
         // This line should theoretically not be reached if REPUTATION_MAX + 1 is the last threshold
-        return "Unknown";
+        return 'Unknown';
     }
 
     /**
@@ -241,7 +241,7 @@ export class FactionManager {
      * @returns True if the reputation tier is "Hostile", false otherwise.
      */
     public isHostile(factionId: string): boolean {
-        return this.getReputationTier(factionId) === "Hostile";
+        return this.getReputationTier(factionId) === 'Hostile';
     }
 
     /**
@@ -252,7 +252,7 @@ export class FactionManager {
      */
     public isNeutral(factionId: string): boolean {
         const tier = this.getReputationTier(factionId);
-        return tier === "Neutral" || tier === "Unfriendly" || tier === "Friendly";
+        return tier === 'Neutral' || tier === 'Unfriendly' || tier === 'Friendly';
     }
 
     /**
@@ -261,7 +261,7 @@ export class FactionManager {
      * @returns True if the reputation tier is "Allied", false otherwise.
      */
     public isAllied(factionId: string): boolean {
-        return this.getReputationTier(factionId) === "Allied";
+        return this.getReputationTier(factionId) === 'Allied';
     }
 
     /**
@@ -276,9 +276,9 @@ export class FactionManager {
     public getAttitudeModifier(factionId: string): number {
         const tier = this.getReputationTier(factionId);
         switch (tier) {
-            case "Allied":
+            case 'Allied':
                 return -0.20; // 20% discount
-            case "Hostile":
+            case 'Hostile':
                 return 0.20;  // 20% markup
             default:
                 return 0;    // Neutral, Unfriendly, Friendly have no direct price modifier
@@ -295,7 +295,7 @@ export class FactionManager {
         this.factions.forEach(faction => {
             factionData.push({
                 id: faction.id,
-                reputation: faction.reputation
+                reputation: faction.reputation,
             });
         });
         return { factions: factionData };
@@ -311,7 +311,7 @@ export class FactionManager {
      */
     public deserialize(data: SerializedFactionManagerState): void {
         if (!data || !Array.isArray(data.factions)) {
-            throw new Error("FactionManager: Invalid data format for deserialization. Expected an object with a 'factions' array.");
+            throw new Error('FactionManager: Invalid data format for deserialization. Expected an object with a \'factions\' array.');
         }
 
         data.factions.forEach(serializedFaction => {
@@ -323,7 +323,7 @@ export class FactionManager {
                 // Update reputation, clamping it to ensure it stays within valid bounds
                 faction.reputation = Math.min(
                     FactionManager.REPUTATION_MAX,
-                    Math.max(FactionManager.REPUTATION_MIN, serializedFaction.reputation)
+                    Math.max(FactionManager.REPUTATION_MIN, serializedFaction.reputation),
                 );
 
                 const newReputation = faction.reputation;
@@ -338,7 +338,7 @@ export class FactionManager {
                 console.warn(`FactionManager: Faction with ID '${serializedFaction.id}' from save data not found in current game setup. Skipping.`);
             }
         });
-        console.log("FactionManager: Faction data deserialized.");
+        console.log('FactionManager: Faction data deserialized.');
     }
 
     /**

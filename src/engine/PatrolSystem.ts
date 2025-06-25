@@ -45,36 +45,36 @@ export class PatrolSystem {
             visionRange: 5,
             alertRadius: 3,
             patrolType: 'random' as const,
-            sleepDuringDay: true
+            sleepDuringDay: true,
         },
         SyntaxError: {
             movementSpeed: 2.0, // medium
             visionRange: 5,
             alertRadius: 3,
             patrolType: 'circular' as const,
-            sleepDuringDay: false
+            sleepDuringDay: false,
         },
         RuntimeError: {
             movementSpeed: 1.5, // slow
             visionRange: 5,
             alertRadius: 3,
             patrolType: 'back-forth' as const,
-            sleepDuringDay: false
+            sleepDuringDay: false,
         },
         NullPointer: {
             movementSpeed: 2.5, // erratic - will vary
             visionRange: 5,
             alertRadius: 3,
             patrolType: 'random' as const,
-            sleepDuringDay: false
+            sleepDuringDay: false,
         },
         SegfaultSovereign: {
             movementSpeed: 1.0, // boss - slow but menacing
             visionRange: 7,
             alertRadius: 5,
             patrolType: 'stationary' as const,
-            sleepDuringDay: false
-        }
+            sleepDuringDay: false,
+        },
     };
 
     constructor(timeSystem: TimeSystem, weatherSystem: WeatherSystem, gameMap: GameMap) {
@@ -104,7 +104,7 @@ export class PatrolSystem {
             lastSeenPlayerPosition: null,
             movementSpeed: config.movementSpeed,
             visionRange: config.visionRange,
-            alertRadius: config.alertRadius
+            alertRadius: config.alertRadius,
         };
 
         // Check if should sleep during day
@@ -133,7 +133,7 @@ export class PatrolSystem {
             waypoints: [],
             currentWaypointIndex: 0,
             waitTime: 1500, // 1.5 seconds at each waypoint
-            isReversing: false
+            isReversing: false,
         };
 
         switch (type) {
@@ -143,7 +143,7 @@ export class PatrolSystem {
                     { ...startPos },
                     { x: startPos.x + 3, y: startPos.y },
                     { x: startPos.x + 3, y: startPos.y + 3 },
-                    { x: startPos.x, y: startPos.y + 3 }
+                    { x: startPos.x, y: startPos.y + 3 },
                 ];
                 break;
 
@@ -151,7 +151,7 @@ export class PatrolSystem {
                 // Create a line patrol route
                 route.waypoints = [
                     { ...startPos },
-                    { x: startPos.x + 4, y: startPos.y }
+                    { x: startPos.x + 4, y: startPos.y },
                 ];
                 break;
 
@@ -302,11 +302,11 @@ export class PatrolSystem {
                 this.getDistance(enemyData.currentPosition, enemyData.route.waypoints[0]) < 0.1) {
                 const randomOffset = {
                     x: Math.floor(Math.random() * 7) - 3,
-                    y: Math.floor(Math.random() * 7) - 3
+                    y: Math.floor(Math.random() * 7) - 3,
                 };
                 const newWaypoint = {
                     x: enemyData.originalPosition.x + randomOffset.x,
-                    y: enemyData.originalPosition.y + randomOffset.y
+                    y: enemyData.originalPosition.y + randomOffset.y,
                 };
                 enemyData.route.waypoints[0] = newWaypoint;
             }
@@ -602,7 +602,7 @@ export class PatrolSystem {
                         const enemyClass = new Enemy(
                             defeatedInfo.originalEnemy.id,
                             enemyData.type as EnemyVariant,
-                            { ...enemyData.originalPosition }
+                            { ...enemyData.originalPosition },
                         );
                         
                         // Convert to plain object matching Enemy interface
@@ -614,7 +614,7 @@ export class PatrolSystem {
                             type: enemyClass.type,
                             stats: { ...enemyClass.stats },
                             abilities: enemyClass.abilities.map(a => ({ ...a })),
-                            expReward: enemyClass.expReward
+                            expReward: enemyClass.expReward,
                         };
                         
                         // Reset patrol data

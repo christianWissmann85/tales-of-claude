@@ -38,7 +38,7 @@ async function runTamyEpicPlaytest() {
     agentRole: 'Beta-Tester Extraordinaire & Professional Game Breaker',
     testDescription: 'EPIC Full HD Visual Playtest with Live Commentary!',
     resolution: { width: 1920, height: 1080 }, // Full HD
-    estimatedDuration: '15-20 minutes of PURE ENTERTAINMENT'
+    estimatedDuration: '15-20 minutes of PURE ENTERTAINMENT',
   });
 
   let browser: Browser | null = null;
@@ -47,46 +47,46 @@ async function runTamyEpicPlaytest() {
   const bugsFound: string[] = [];
   
   try {
-    tamyLog("Alright Chris, buckle up! Time for the ULTIMATE Tales of Claude showcase!");
-    tamyLog("Booting up in glorious FULL HD resolution for your viewing pleasure!");
+    tamyLog('Alright Chris, buckle up! Time for the ULTIMATE Tales of Claude showcase!');
+    tamyLog('Booting up in glorious FULL HD resolution for your viewing pleasure!');
     
     browser = await chromium.launch({
       headless: false,
       args: ['--window-size=1920,1080'],
-      slowMo: 150 // Optimal speed for following along!
+      slowMo: 150, // Optimal speed for following along!
     });
     
     const context = await browser.newContext({
-      viewport: { width: 1920, height: 1080 }
+      viewport: { width: 1920, height: 1080 },
     });
     
     const page = await context.newPage();
     
-    tamyLog("Browser locked and loaded! Let's see what Tales of Claude has in store!");
+    tamyLog('Browser locked and loaded! Let\'s see what Tales of Claude has in store!');
     await page.goto('http://localhost:5174');
     
     // Create screenshot context
     const screenshotContext = { totalScreenshots: 0, featuresShowcased };
     
     // Wait for game to load
-    tamyLog("Loading that beautiful title screen... *chef's kiss*");
+    tamyLog('Loading that beautiful title screen... *chef\'s kiss*');
     await page.waitForTimeout(3000);
     await takeEpicScreenshot(page, '01-epic-title-screen', screenshotContext);
     featuresShowcased.push('Title Screen');
     
     // Start the game
-    tamyLog("Alright, pressing ENTER to start the adventure!");
+    tamyLog('Alright, pressing ENTER to start the adventure!');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2000);
     
     // Check if we're in the intro
     const introText = await page.$('text=/Press SPACE to skip/');
     if (introText) {
-      tamyLog("Intro cutscene detected! Getting a screenshot of this ASCII art!");
+      tamyLog('Intro cutscene detected! Getting a screenshot of this ASCII art!');
       await takeEpicScreenshot(page, '02-intro-cutscene', screenshotContext);
       featuresShowcased.push('Intro Cutscene');
       
-      tamyLog("Pressing SPACE to skip the intro...");
+      tamyLog('Pressing SPACE to skip the intro...');
       await page.keyboard.press('Space');
       await page.waitForTimeout(2000);
     }
@@ -97,39 +97,39 @@ async function runTamyEpicPlaytest() {
     const gameStarted = mapElement !== null || mapNameElement !== null;
     
     if (!gameStarted) {
-      tamyLog("Game hasn't loaded yet. Let me give it another moment...");
+      tamyLog('Game hasn\'t loaded yet. Let me give it another moment...');
       await page.waitForTimeout(3000);
       
       // Try one more time with different selectors
       const gameBoardRetry = await page.$('.gameBoard, .game-container, #root > div');
       if (!gameBoardRetry) {
-        tamyLog("Interesting... Let me capture what's on screen!");
+        tamyLog('Interesting... Let me capture what\'s on screen!');
         await takeEpicScreenshot(page, '03-game-state-check', screenshotContext);
-        tamyLog("Actually, looking at the screenshot, the game might be running! Let me continue...");
+        tamyLog('Actually, looking at the screenshot, the game might be running! Let me continue...');
       }
     } else {
-      tamyLog("Game detected! We're in business!");
+      tamyLog('Game detected! We\'re in business!');
     }
     
     // PHASE 1: TERMINAL TOWN EXPLORATION
-    tamyLog("\n=== PHASE 1: TERMINAL TOWN EXPLORATION ===");
-    tamyLog("We're in! Time to explore Terminal Town in all its glory!");
+    tamyLog('\n=== PHASE 1: TERMINAL TOWN EXPLORATION ===');
+    tamyLog('We\'re in! Time to explore Terminal Town in all its glory!');
     await takeEpicScreenshot(page, '03-terminal-town-initial-view', screenshotContext);
     featuresShowcased.push('Terminal Town Map');
     
     // Character close-up
-    tamyLog("Let's get a good look at our hero Claude!");
+    tamyLog('Let\'s get a good look at our hero Claude!');
     await page.waitForTimeout(1000);
     await takeEpicScreenshot(page, '04-claude-character-model', screenshotContext);
     featuresShowcased.push('Player Character Model');
     
     // Movement showcase
-    tamyLog("Movement test - showing off the smooth animations!");
+    tamyLog('Movement test - showing off the smooth animations!');
     const movements = [
       { key: 'ArrowRight', direction: 'right' },
       { key: 'ArrowDown', direction: 'down' },
       { key: 'ArrowLeft', direction: 'left' },
-      { key: 'ArrowUp', direction: 'up' }
+      { key: 'ArrowUp', direction: 'up' },
     ];
     
     for (const move of movements) {
@@ -141,7 +141,7 @@ async function runTamyEpicPlaytest() {
     featuresShowcased.push('Character Movement');
     
     // Find and interact with NPCs
-    tamyLog("Time to meet the locals! Looking for NPCs...");
+    tamyLog('Time to meet the locals! Looking for NPCs...');
     // Move around to find NPCs
     for (let i = 0; i < 5; i++) {
       await page.keyboard.press('ArrowRight');
@@ -154,7 +154,7 @@ async function runTamyEpicPlaytest() {
     
     const dialogueBox = await page.$('.dialogueBox');
     if (dialogueBox) {
-      tamyLog("Found an NPC! Let's chat!");
+      tamyLog('Found an NPC! Let\'s chat!');
       await takeEpicScreenshot(page, '06-npc-interaction-dialogue', screenshotContext);
       featuresShowcased.push('NPC Dialogue System');
       // Continue dialogue
@@ -162,15 +162,15 @@ async function runTamyEpicPlaytest() {
       await page.waitForTimeout(500);
       await page.keyboard.press('Enter');
     } else {
-      tamyLog("No dialogue appeared - dialogue system might be broken!");
+      tamyLog('No dialogue appeared - dialogue system might be broken!');
       bugsFound.push('Dialogue system not triggering');
     }
     
     // PHASE 2: UI SYSTEMS SHOWCASE
-    tamyLog("\n=== PHASE 2: UI SYSTEMS SHOWCASE ===");
+    tamyLog('\n=== PHASE 2: UI SYSTEMS SHOWCASE ===');
     
     // Inventory
-    tamyLog("Opening inventory with 'i' key!");
+    tamyLog('Opening inventory with \'i\' key!');
     await page.keyboard.press('i');
     await page.waitForTimeout(1000);
     
@@ -194,7 +194,7 @@ async function runTamyEpicPlaytest() {
     }
     
     // Equipment screen
-    tamyLog("Equipment screen time! Pressing 'e'!");
+    tamyLog('Equipment screen time! Pressing \'e\'!');
     await page.keyboard.press('e');
     await page.waitForTimeout(1000);
     
@@ -206,7 +206,7 @@ async function runTamyEpicPlaytest() {
     }
     
     // Quest Journal
-    tamyLog("Quest journal - the heart of the adventure! Pressing 'j'!");
+    tamyLog('Quest journal - the heart of the adventure! Pressing \'j\'!');
     await page.keyboard.press('j');
     await page.waitForTimeout(1000);
     
@@ -218,7 +218,7 @@ async function runTamyEpicPlaytest() {
       // Check for rendering bug
       const questSize = await questPanel.evaluate(el => ({
         width: el.clientWidth,
-        height: el.clientHeight
+        height: el.clientHeight,
       }));
       
       if (questSize.width === 0 || questSize.height === 0) {
@@ -229,7 +229,7 @@ async function runTamyEpicPlaytest() {
     }
     
     // Check for shop
-    tamyLog("Looking for the shop! Moving around Terminal Town...");
+    tamyLog('Looking for the shop! Moving around Terminal Town...');
     // Move to find shop
     for (let i = 0; i < 8; i++) {
       await page.keyboard.press('ArrowUp');
@@ -241,7 +241,7 @@ async function runTamyEpicPlaytest() {
     
     const shopPanel = await page.$('.shopPanel');
     if (shopPanel) {
-      tamyLog("Found the shop! Time to browse!");
+      tamyLog('Found the shop! Time to browse!');
       await takeEpicScreenshot(page, '11-shop-interface', screenshotContext);
       featuresShowcased.push('Shop System');
       
@@ -257,10 +257,10 @@ async function runTamyEpicPlaytest() {
     }
     
     // PHASE 3: MAP TRANSITIONS
-    tamyLog("\n=== PHASE 3: EPIC MAP TRANSITIONS ===");
+    tamyLog('\n=== PHASE 3: EPIC MAP TRANSITIONS ===');
     
     // Move to Binary Forest
-    tamyLog("Heading east to the mysterious Binary Forest!");
+    tamyLog('Heading east to the mysterious Binary Forest!');
     for (let i = 0; i < 15; i++) {
       await page.keyboard.press('ArrowRight');
       await page.waitForTimeout(200);
@@ -273,14 +273,14 @@ async function runTamyEpicPlaytest() {
     if (mapName) {
       const mapText = await mapName.textContent();
       if (mapText?.includes('Binary Forest')) {
-        tamyLog("Entered Binary Forest! Checking for the infamous invisible Claude bug...");
+        tamyLog('Entered Binary Forest! Checking for the infamous invisible Claude bug...');
         await takeEpicScreenshot(page, '13-binary-forest-entrance', screenshotContext);
         featuresShowcased.push('Binary Forest Map');
         
         // Check if Claude is visible
         const player = await page.$('.player');
         if (!player) {
-          tamyLog("CONFIRMED: Claude is INVISIBLE in Binary Forest!");
+          tamyLog('CONFIRMED: Claude is INVISIBLE in Binary Forest!');
           bugsFound.push('Player invisible in Binary Forest - CRITICAL!');
           await takeEpicScreenshot(page, '14-invisible-claude-bug-confirmed', screenshotContext);
         } else {
@@ -291,7 +291,7 @@ async function runTamyEpicPlaytest() {
         }
         
         // Explore Binary Forest
-        tamyLog("Exploring the digital wilderness...");
+        tamyLog('Exploring the digital wilderness...');
         for (let i = 0; i < 5; i++) {
           await page.keyboard.press('ArrowUp');
           await page.waitForTimeout(300);
@@ -301,7 +301,7 @@ async function runTamyEpicPlaytest() {
     }
     
     // Try to reach Debug Dungeon
-    tamyLog("Attempting to reach the legendary Debug Dungeon!");
+    tamyLog('Attempting to reach the legendary Debug Dungeon!');
     // Move south and west to try to find it
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press('ArrowDown');
@@ -317,15 +317,15 @@ async function runTamyEpicPlaytest() {
     if (currentMap) {
       const currentMapText = await currentMap.textContent();
       if (currentMapText?.includes('Debug Dungeon')) {
-        tamyLog("Made it to Debug Dungeon! The final frontier!");
+        tamyLog('Made it to Debug Dungeon! The final frontier!');
         await takeEpicScreenshot(page, '16-debug-dungeon-entrance', screenshotContext);
         featuresShowcased.push('Debug Dungeon Map');
       }
     }
     
     // PHASE 4: COMBAT SYSTEM
-    tamyLog("\n=== PHASE 4: EPIC BATTLE SEQUENCES ===");
-    tamyLog("Time to pick a fight! Looking for enemies...");
+    tamyLog('\n=== PHASE 4: EPIC BATTLE SEQUENCES ===');
+    tamyLog('Time to pick a fight! Looking for enemies...');
     
     // Move around to trigger a battle
     for (let i = 0; i < 10; i++) {
@@ -335,7 +335,7 @@ async function runTamyEpicPlaytest() {
       // Check for battle
       const battleScene = await page.$('.battleScene');
       if (battleScene) {
-        tamyLog("BATTLE ENGAGED! Time to show off the combat system!");
+        tamyLog('BATTLE ENGAGED! Time to show off the combat system!');
         await takeEpicScreenshot(page, '17-battle-scene-start', screenshotContext);
         featuresShowcased.push('Battle System');
         
@@ -356,7 +356,7 @@ async function runTamyEpicPlaytest() {
         await page.waitForTimeout(2000);
         const victoryText = await page.$('text=/victory/i');
         if (victoryText) {
-          tamyLog("VICTORY! We defeated the bug!");
+          tamyLog('VICTORY! We defeated the bug!');
           await takeEpicScreenshot(page, '19-battle-victory-screen', screenshotContext);
           featuresShowcased.push('Victory Screen');
         }
@@ -366,10 +366,10 @@ async function runTamyEpicPlaytest() {
     }
     
     // PHASE 5: SAVE/LOAD SYSTEM
-    tamyLog("\n=== PHASE 5: SAVE/LOAD FUNCTIONALITY ===");
+    tamyLog('\n=== PHASE 5: SAVE/LOAD FUNCTIONALITY ===');
     
     // Try to save
-    tamyLog("Looking for Compiler Cat to save our progress!");
+    tamyLog('Looking for Compiler Cat to save our progress!');
     // Return to Terminal Town first
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press('ArrowLeft');
@@ -382,7 +382,7 @@ async function runTamyEpicPlaytest() {
     
     const saveOption = await page.$('text=/save/i');
     if (saveOption) {
-      tamyLog("Found save option! Saving the game...");
+      tamyLog('Found save option! Saving the game...');
       await takeEpicScreenshot(page, '20-save-dialogue', screenshotContext);
       featuresShowcased.push('Save System');
       
@@ -392,7 +392,7 @@ async function runTamyEpicPlaytest() {
     }
     
     // PHASE 6: EASTER EGGS AND SPECIAL FEATURES
-    tamyLog("\n=== PHASE 6: HUNTING FOR EASTER EGGS ===");
+    tamyLog('\n=== PHASE 6: HUNTING FOR EASTER EGGS ===');
     
     // Check status bars
     const statusBars = await page.$$('.statusBar');
@@ -403,12 +403,12 @@ async function runTamyEpicPlaytest() {
     }
     
     // Look for any special animations or effects
-    tamyLog("Final beauty shots of the game world...");
+    tamyLog('Final beauty shots of the game world...');
     await page.waitForTimeout(1000);
     await takeEpicScreenshot(page, '23-final-terminal-town-vista', screenshotContext);
     
     // Try talent panel
-    tamyLog("One more UI check - the talent system!");
+    tamyLog('One more UI check - the talent system!');
     await page.keyboard.press('t');
     await page.waitForTimeout(1000);
     
@@ -419,40 +419,40 @@ async function runTamyEpicPlaytest() {
     }
     
     // Final epic shot
-    tamyLog("And for the grand finale...");
+    tamyLog('And for the grand finale...');
     await page.waitForTimeout(1000);
     await takeEpicScreenshot(page, '25-epic-finale-shot', screenshotContext);
     
     totalScreenshots = screenshotContext.totalScreenshots;
     
     // Final summary
-    tamyLog("\n" + "=".repeat(70));
-    tamyLog("🎮 EPIC PLAYTEST COMPLETE! HERE'S MY BETA TESTER VERDICT 🎮");
-    tamyLog("=".repeat(70));
+    tamyLog('\n' + '='.repeat(70));
+    tamyLog('🎮 EPIC PLAYTEST COMPLETE! HERE\'S MY BETA TESTER VERDICT 🎮');
+    tamyLog('='.repeat(70));
     tamyLog(`📸 Total Screenshots Taken: ${totalScreenshots}`);
     tamyLog(`✨ Features Showcased: ${featuresShowcased.length}`);
     featuresShowcased.forEach(feature => tamyLog(`   ✅ ${feature}`));
     tamyLog(`\n🐛 Visual Issues Found: ${bugsFound.length}`);
     bugsFound.forEach(bug => tamyLog(`   ❌ ${bug}`));
     
-    tamyLog("\n💭 TAMY'S FINAL THOUGHTS:");
-    tamyLog("Chris, this game is ABSOLUTELY GORGEOUS! The pixel art is crisp,");
-    tamyLog("the UI is clean, and the overall aesthetic is *chef's kiss*!");
-    tamyLog("We've got some bugs to squash (invisible Claude is the big one),");
-    tamyLog("but the foundation is SOLID. This is going to be EPIC!");
-    tamyLog("\nVISUAL STATE VERDICT: 8.5/10 - Beautiful but needs bug fixes!");
-    tamyLog("=".repeat(70));
+    tamyLog('\n💭 TAMY\'S FINAL THOUGHTS:');
+    tamyLog('Chris, this game is ABSOLUTELY GORGEOUS! The pixel art is crisp,');
+    tamyLog('the UI is clean, and the overall aesthetic is *chef\'s kiss*!');
+    tamyLog('We\'ve got some bugs to squash (invisible Claude is the big one),');
+    tamyLog('but the foundation is SOLID. This is going to be EPIC!');
+    tamyLog('\nVISUAL STATE VERDICT: 8.5/10 - Beautiful but needs bug fixes!');
+    tamyLog('='.repeat(70));
     
     // Keep browser open for Chris to admire
-    tamyLog("\nLeaving the game open for 10 seconds so you can admire it!");
+    tamyLog('\nLeaving the game open for 10 seconds so you can admire it!');
     await page.waitForTimeout(10000);
     
   } catch (error) {
     tamyLog(`OH NO! Epic fail! Error: ${error}`);
-    tamyLog("Don't worry Chris, even crashes are data points!");
+    tamyLog('Don\'t worry Chris, even crashes are data points!');
   } finally {
     if (browser) {
-      tamyLog("Closing browser... Thanks for watching the show! 🎮✨");
+      tamyLog('Closing browser... Thanks for watching the show! 🎮✨');
       await browser.close();
     }
   }

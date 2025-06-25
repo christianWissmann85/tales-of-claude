@@ -12,7 +12,7 @@ import {
   JsonMapStructure,
   JsonMapObjectType,
   JsonMapTileLayer,
-  JsonMapObjectLayer
+  JsonMapObjectLayer,
 } from '../types/map-schema.types';
 import { Enemy, EnemyVariant } from '../models/Enemy';
 import { Item as ItemClass, ItemVariant } from '../models/Item';
@@ -465,7 +465,7 @@ export class MapLoader {
               },
               visual: jsonStructure.properties.visual,
               collisionMap: new Set(
-                jsonStructure.properties.collision.map(pos => `${pos.x},${pos.y}`)
+                jsonStructure.properties.collision.map(pos => `${pos.x},${pos.y}`),
               ),
               interactionPoints: (jsonStructure.properties.interactionPoints || []).map(point => ({
                 relativePosition: { x: point.x, y: point.y },

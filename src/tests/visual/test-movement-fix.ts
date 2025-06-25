@@ -12,11 +12,11 @@ async function testMovementWithProperKeyEvents() {
   try {
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
     const page = await browser.newPage({
-      viewport: { width: 1280, height: 720 }
+      viewport: { width: 1280, height: 720 },
     });
     
     // Capture relevant console logs
@@ -71,14 +71,14 @@ async function testMovementWithProperKeyEvents() {
         key: 'ArrowDown',
         keyCode: 40,
         which: 40,
-        bubbles: true
+        bubbles: true,
       });
       const keyupEvent = new KeyboardEvent('keyup', {
         code: 'ArrowDown',
         key: 'ArrowDown',
         keyCode: 40,
         which: 40,
-        bubbles: true
+        bubbles: true,
       });
       
       window.dispatchEvent(keydownEvent);

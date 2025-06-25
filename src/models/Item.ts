@@ -308,10 +308,10 @@ export class Item implements IItem {
         return { success: false, message: `You examine the ${this.name}. It seems important for a quest.` };
 
       case 'key':
-        return { success: false, message: `This is a key item. It needs to be used at the right location.` };
+        return { success: false, message: 'This is a key item. It needs to be used at the right location.' };
 
       case 'equipment':
-        return { success: false, message: `This is an equipment item. You need to equip it, not use it directly.` };
+        return { success: false, message: 'This is an equipment item. You need to equip it, not use it directly.' };
 
       default:
         return { success: false, message: `This item (${this.name}) cannot be used directly.` };

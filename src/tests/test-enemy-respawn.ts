@@ -12,7 +12,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
   const results: TestResult[] = [];
   const browser = await puppeteer.launch({ 
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   
   try {
@@ -37,7 +37,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       testName: 'Game loads with enemies',
       passed: initialEnemyCount > 0,
       error: initialEnemyCount === 0 ? `No enemies found, count: ${initialEnemyCount}` : undefined,
-      duration: Date.now() - startTime
+      duration: Date.now() - startTime,
     });
     
     // Test 2: Find and battle an enemy
@@ -53,7 +53,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
         return state?.battle !== null;
       });
       
-      if (inBattle) break;
+      if (inBattle) { break; }
     }
     
     const inBattle = await page.evaluate(() => {
@@ -65,7 +65,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       testName: 'Enemy encounter triggers battle',
       passed: inBattle,
       error: !inBattle ? 'Could not trigger battle' : undefined,
-      duration: Date.now() - battleStartTime
+      duration: Date.now() - battleStartTime,
     });
     
     if (inBattle) {
@@ -82,7 +82,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
           return state?.battle === null;
         });
         
-        if (battleEnded) break;
+        if (battleEnded) { break; }
       }
       
       const battleEnded = await page.evaluate(() => {
@@ -94,7 +94,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
         testName: 'Battle can be won',
         passed: battleEnded,
         error: !battleEnded ? 'Battle did not end' : undefined,
-        duration: Date.now() - winStartTime
+        duration: Date.now() - winStartTime,
       });
       
       // Test 4: Check enemy count after battle
@@ -112,7 +112,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
         passed: enemyCountAfterBattle === initialEnemyCount,
         error: enemyCountAfterBattle !== initialEnemyCount ? 
           `Enemy count changed: ${initialEnemyCount} -> ${enemyCountAfterBattle}` : undefined,
-        duration: Date.now() - afterBattleTime
+        duration: Date.now() - afterBattleTime,
       });
       
       // Test 5: Check if enemy is marked as respawning
@@ -121,7 +121,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       const enemyStates = await page.evaluate(() => {
         const state = (window as any).__gameState;
         const gameEngine = (window as any).__gameEngine;
-        if (!gameEngine?._patrolSystem) return null;
+        if (!gameEngine?._patrolSystem) { return null; }
         
         const enemyStates: any[] = [];
         state.enemies.forEach((enemy: any) => {
@@ -129,7 +129,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
           enemyStates.push({
             id: enemy.id,
             name: enemy.name,
-            state: patrolData?.state || 'unknown'
+            state: patrolData?.state || 'unknown',
           });
         });
         return enemyStates;
@@ -142,7 +142,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
         passed: hasRespawningEnemy === true,
         error: !hasRespawningEnemy ? 
           `Enemy states: ${JSON.stringify(enemyStates)}` : undefined,
-        duration: Date.now() - respawnCheckTime
+        duration: Date.now() - respawnCheckTime,
       });
       
       // Test 6: Wait for respawn (using shorter test time)
@@ -153,7 +153,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       const respawnedEnemyData = await page.evaluate(() => {
         const state = (window as any).__gameState;
         const gameEngine = (window as any).__gameEngine;
-        if (!gameEngine?._patrolSystem) return null;
+        if (!gameEngine?._patrolSystem) { return null; }
         
         const visibleEnemies = state.enemies.filter((enemy: any) => {
           const patrolData = gameEngine._patrolSystem.getEnemyData(enemy.id);
@@ -167,9 +167,9 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
             const patrolData = gameEngine._patrolSystem.getEnemyData(enemy.id);
             return {
               name: enemy.name,
-              state: patrolData?.state || 'unknown'
+              state: patrolData?.state || 'unknown',
             };
-          })
+          }),
         };
       });
       
@@ -179,7 +179,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
         error: !respawnedEnemyData ? 
           'Could not check respawn data' : 
           `Enemies: ${respawnedEnemyData.visibleEnemies}/${respawnedEnemyData.totalEnemies}, States: ${JSON.stringify(respawnedEnemyData.states)}`,
-        duration: Date.now() - respawnWaitTime
+        duration: Date.now() - respawnWaitTime,
       });
     }
     
@@ -188,7 +188,7 @@ async function testEnemyRespawn(): Promise<TestResult[]> {
       testName: 'Test execution',
       passed: false,
       error: error instanceof Error ? error.message : String(error),
-      duration: 0
+      duration: 0,
     });
   } finally {
     await browser.close();

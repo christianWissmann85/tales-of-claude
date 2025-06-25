@@ -169,7 +169,7 @@ export class WeatherSystem {
    */
   public start(timeSystem: ITimeSystem, isOutdoorMap: boolean): void {
     if (this._timeSystem) {
-      console.warn("WeatherSystem already started. Calling stop() first for a clean restart.");
+      console.warn('WeatherSystem already started. Calling stop() first for a clean restart.');
       this.stop(); // Ensure clean restart if already running
     }
 
@@ -213,7 +213,7 @@ export class WeatherSystem {
     this._transitionProgress = 1;
     this._timeUntilNextChange = 0;
     this._lastTransitionUpdateTime = 0;
-    console.log("WeatherSystem stopped.");
+    console.log('WeatherSystem stopped.');
   }
 
   /**
@@ -351,7 +351,7 @@ export class WeatherSystem {
         }
 
         // Normalize probabilities after adjustments
-        let currentSum = Object.values(probabilities).reduce((acc, p) => acc + p, 0);
+        const currentSum = Object.values(probabilities).reduce((acc, p) => acc + p, 0);
         if (Math.abs(currentSum - 1.0) > 0.001) { // Check if sum deviates significantly from 1
           const factor = 1.0 / currentSum;
           for (const key in probabilities) {
@@ -366,7 +366,7 @@ export class WeatherSystem {
         'fog': 0.3,
         'rain': 0,
         'storm': 0,
-        'codeSnow': 0
+        'codeSnow': 0,
       } as Record<WeatherType, number>; // Fixed probabilities for indoor
     }
 
@@ -401,7 +401,7 @@ export class WeatherSystem {
     }
 
     // Perform weighted random selection
-    let rand = Math.random();
+    const rand = Math.random();
     let cumulativeProbability = 0;
     for (const weather of filteredWeathers) {
       const prob = filteredProbabilities[weather];
@@ -529,7 +529,7 @@ export class WeatherSystem {
       return {
         movementSpeedModifier: 1.0,
         visibilityRadius: 3,
-        combatAccuracyModifier: 0
+        combatAccuracyModifier: 0,
       };
     }
     

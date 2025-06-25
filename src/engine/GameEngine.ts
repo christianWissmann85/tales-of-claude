@@ -108,7 +108,7 @@ export class GameEngine {
       // Ensure gameTimeElapsedMs has a default value
       const timeDataWithDefaults = {
         ...initialState.timeData,
-        gameTimeElapsedMs: initialState.timeData.gameTimeElapsedMs ?? 0
+        gameTimeElapsedMs: initialState.timeData.gameTimeElapsedMs ?? 0,
       };
       this._timeSystem.deserialize(timeDataWithDefaults);
     }
@@ -288,7 +288,7 @@ export class GameEngine {
           console.error('Error processing movement:', error);
           this._dispatch({
             type: 'SHOW_NOTIFICATION',
-            payload: { message: 'Error: Failed to process movement.' }
+            payload: { message: 'Error: Failed to process movement.' },
           });
         });
         this._lastMovementTime = now;
@@ -497,16 +497,16 @@ export class GameEngine {
           type: 'UPDATE_MAP', 
           payload: { 
             newMap: newMap, 
-            playerNewPosition: exit.targetPosition 
-          } 
+            playerNewPosition: exit.targetPosition, 
+          }, 
         });
         
         // Show a notification about the map transition
         this._dispatch({ 
           type: 'SHOW_NOTIFICATION', 
           payload: { 
-            message: `Entering ${newMap.name}...` 
-          } 
+            message: `Entering ${newMap.name}...`, 
+          }, 
         });
         
         return; // Prevent further movement processing in this frame
@@ -515,8 +515,8 @@ export class GameEngine {
         this._dispatch({ 
           type: 'SHOW_NOTIFICATION', 
           payload: { 
-            message: `Error: Could not load ${exit.targetMapId}` 
-          } 
+            message: `Error: Could not load ${exit.targetMapId}`, 
+          }, 
         });
         return; // Don't allow movement onto broken exit
       }
@@ -556,14 +556,14 @@ export class GameEngine {
         // Optional: Show a success notification
         this._dispatch({ 
           type: 'SHOW_NOTIFICATION', 
-          payload: { message: "You used the Boss Key to open the door!" } 
+          payload: { message: 'You used the Boss Key to open the door!' }, 
         });
         return false; // No collision, player can pass
       } else {
         // 4. If player doesn't have the key, dispatch a SHOW_NOTIFICATION action
         this._dispatch({ 
           type: 'SHOW_NOTIFICATION', 
-          payload: { message: "The door is locked. You need the Boss Key to open it." } 
+          payload: { message: 'The door is locked. You need the Boss Key to open it.' }, 
         });
         // 5. Return true (collision) if no key
         return true; // Collision, player cannot pass
@@ -777,7 +777,7 @@ export class GameEngine {
             // Create a new enemy object with updated position to avoid mutating state
             const updatedEnemy = {
               ...enemy,
-              position: { ...newPosition }
+              position: { ...newPosition },
             };
             updatedEnemies.push(updatedEnemy);
             positionsChanged = true;
@@ -806,7 +806,7 @@ export class GameEngine {
         this._lastEnemyUpdateTime = now;
         this._dispatch({
           type: 'UPDATE_ENEMIES',
-          payload: { enemies: updatedEnemies }
+          payload: { enemies: updatedEnemies },
         });
       }
       
@@ -858,7 +858,7 @@ export class GameEngine {
       console.error(`Failed to load map '${mapId}':`, error);
       this._dispatch({
         type: 'SHOW_NOTIFICATION',
-        payload: { message: `Error: Could not load map '${mapId}'.` }
+        payload: { message: `Error: Could not load map '${mapId}'.` },
       });
       return null;
     }
@@ -913,7 +913,7 @@ export class GameEngine {
     return this._weatherSystem?.getWeatherEffects() || {
       movementSpeedModifier: 1,
       visibilityRadius: 3,
-      combatAccuracyModifier: 0
+      combatAccuracyModifier: 0,
     };
   }
   
@@ -922,18 +922,14 @@ export class GameEngine {
    * @param map The game map containing enemies
    */
   private _initializeMapEnemies(map: GameMap): void {
-    if (!this._patrolSystem) return;
+    if (!this._patrolSystem) { return; }
     
     // Initialize each enemy in the patrol system
     this._currentGameState.enemies.forEach(enemy => {
       // Determine enemy variant from its name
       let variant: EnemyVariant | null = null;
       
-      if (enemy.name === 'Basic Bug') variant = EnemyVariant.BasicBug;
-      else if (enemy.name === 'Syntax Error') variant = EnemyVariant.SyntaxError;
-      else if (enemy.name === 'Runtime Error') variant = EnemyVariant.RuntimeError;
-      else if (enemy.name === 'Null Pointer') variant = EnemyVariant.NullPointer;
-      else if (enemy.name === 'The Segfault Sovereign') variant = EnemyVariant.SegfaultSovereign;
+      if (enemy.name === 'Basic Bug') { variant = EnemyVariant.BasicBug; } else if (enemy.name === 'Syntax Error') { variant = EnemyVariant.SyntaxError; } else if (enemy.name === 'Runtime Error') { variant = EnemyVariant.RuntimeError; } else if (enemy.name === 'Null Pointer') { variant = EnemyVariant.NullPointer; } else if (enemy.name === 'The Segfault Sovereign') { variant = EnemyVariant.SegfaultSovereign; }
       
       if (variant) {
         this._patrolSystem!.initializeEnemy(enemy as any, variant);

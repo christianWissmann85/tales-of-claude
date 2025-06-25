@@ -160,7 +160,7 @@ const HitParticles: React.FC<ParticleProps> = ({ targetId }) => {
         // Random direction for burst using CSS variables
         '--x': `${(Math.random() - 0.5) * 200}px`, // Move up to 100px left/right
         '--y': `${(Math.random() - 1) * 150}px`, // Move up to 150px upwards
-      }
+      },
     }));
     setParticles(newParticles);
 
@@ -225,7 +225,7 @@ const Battle: React.FC = () => {
 
   // Effect to detect HP/Energy changes and trigger damage numbers, and critical hit for shake
   useEffect(() => {
-    if (!localBattleState) return;
+    if (!localBattleState) { return; }
 
     const newDamageNumbers: { id: string; value: number; type: 'damage' | 'heal'; isCritical?: boolean; key: number; }[] = [];
     let criticalHitOccurred = false;
@@ -236,7 +236,7 @@ const Battle: React.FC = () => {
       if (diff > 0) { // Damage
         // Simulate critical hit for player damage (e.g., if damage is very high relative to max HP)
         const isCrit = diff > (localBattleState.player.maxHp * 0.25); // Example: 25% of max HP
-        if (isCrit) criticalHitOccurred = true;
+        if (isCrit) { criticalHitOccurred = true; }
         newDamageNumbers.push({ id: localBattleState.player.id, value: diff, type: 'damage', isCritical: isCrit, key: Date.now() + Math.random() });
       } else if (diff < 0) { // Heal
         newDamageNumbers.push({ id: localBattleState.player.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
@@ -258,7 +258,7 @@ const Battle: React.FC = () => {
         if (diff > 0) { // Damage
           // Simulate critical hit for enemy damage
           const isCrit = diff > (currentEnemy.maxHp * 0.25); // Example: 25% of max HP
-          if (isCrit) criticalHitOccurred = true;
+          if (isCrit) { criticalHitOccurred = true; }
           newDamageNumbers.push({ id: currentEnemy.id, value: diff, type: 'damage', isCritical: isCrit, key: Date.now() + Math.random() });
         } else if (diff < 0) { // Heal
           newDamageNumbers.push({ id: currentEnemy.id, value: -diff, type: 'heal', key: Date.now() + Math.random() });
@@ -323,7 +323,7 @@ const Battle: React.FC = () => {
 
   // Effect to trigger battle result display (Victory/Defeat)
   useEffect(() => {
-    if (!localBattleState) return;
+    if (!localBattleState) { return; }
     
     // Check victory condition
     if (localBattleState.enemies.every(e => e.hp <= 0) && localBattleState.enemies.length > 0) { // Ensure there were enemies to begin with
@@ -397,8 +397,8 @@ const Battle: React.FC = () => {
               playerExpGained: totalExp,
               itemsDropped: [],
               playerCombatState: localBattleState?.player,
-              defeatedEnemyIds
-            }
+              defeatedEnemyIds,
+            },
           });
         }} className={styles.continueButton}>Continue</button>
       </div>
@@ -416,8 +416,8 @@ const Battle: React.FC = () => {
               playerWon: false,
               playerExpGained: 0,
               itemsDropped: [],
-              playerCombatState: localBattleState?.player
-            }
+              playerCombatState: localBattleState?.player,
+            },
           });
         }} className={styles.continueButton}>Restart</button>
       </div>
@@ -431,9 +431,9 @@ const Battle: React.FC = () => {
 
   const getBattleBackground = () => {
     const mapId = state.currentMap?.id || '';
-    if (mapId.includes('town') || mapId.includes('Town')) return ASCII_BACKGROUNDS.terminalTown;
-    if (mapId.includes('forest') || mapId.includes('Forest')) return ASCII_BACKGROUNDS.binaryForest;
-    if (mapId.includes('dungeon') || mapId.includes('Dungeon')) return ASCII_BACKGROUNDS.debugDungeon;
+    if (mapId.includes('town') || mapId.includes('Town')) { return ASCII_BACKGROUNDS.terminalTown; }
+    if (mapId.includes('forest') || mapId.includes('Forest')) { return ASCII_BACKGROUNDS.binaryForest; }
+    if (mapId.includes('dungeon') || mapId.includes('Dungeon')) { return ASCII_BACKGROUNDS.debugDungeon; }
     return ASCII_BACKGROUNDS.default;
   };
 
@@ -580,8 +580,8 @@ const Battle: React.FC = () => {
 
   const playerInventory = state.player.inventory;
   const currentTurnDisplay = localBattleState.currentTurn === player.id
-    ? "Claude's Turn!"
-    : "Enemy Turn!";
+    ? 'Claude\'s Turn!'
+    : 'Enemy Turn!';
 
   return (
     <div className={`${styles.battleContainer} ${screenShake ? styles.shake : ''}`}>

@@ -9,7 +9,7 @@ import {
   JsonMapEnemy,
   JsonMapItem,
   JsonMapExit,
-  JsonMapDoor
+  JsonMapDoor,
 } from '../types/map-schema.types';
 import { GameMap as IGameMap, Tile, TileType, NPC, Enemy as IEnemy, Item, Exit, ItemType } from '../types/global.types'; // Added ItemType
 import { Enemy, EnemyVariant } from '../models/Enemy'; // EnemyVariant is not directly used in this file's logic, but Enemy class is.
@@ -144,7 +144,7 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
     width: tsMap.width,
     height: tsMap.height,
     version: '1.0', // Default version
-    layers: []
+    layers: [],
   };
 
   // Convert tiles to tile layer
@@ -176,7 +176,7 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
     type: 'tilelayer',
     width: tsMap.width,
     height: tsMap.height,
-    data: tileData
+    data: tileData,
   };
   jsonMap.layers.push(tileLayer);
 
@@ -195,8 +195,8 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
         properties: {
           name: npc.name,
           role: npc.role,
-          dialogueId: npc.dialogueId
-        }
+          dialogueId: npc.dialogueId,
+        },
       };
       objects.push(npcObject);
     } else if ('stats' in entity && typeof entity.stats === 'object' && 'hp' in (entity.stats as any) && 'maxHp' in (entity.stats as any)) {
@@ -208,8 +208,8 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
         position: { x: enemy.position.x, y: enemy.position.y }, // Correction 1: Use position: {x, y}
         properties: {
           variant: (enemy as any).variant || 'bug', // Correction 1: Track variant
-          level: 1 // Correction 1: Default level to 1
-        }
+          level: 1, // Correction 1: Default level to 1
+        },
       };
       objects.push(enemyObject);
     } else if ('type' in entity && ['consumable', 'key', 'equipment', 'quest'].includes((entity as Item).type)) {
@@ -222,8 +222,8 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
           position: { x: item.position.x, y: item.position.y }, // Correction 1: Use position: {x, y}
           properties: {
             variant: (item as any).variant || 'health_potion', // Correction 1: Track variant
-            quantity: 1 // Assuming quantity is always 1 for items placed on map
-          }
+            quantity: 1, // Assuming quantity is always 1 for items placed on map
+          },
         };
         objects.push(itemObject);
       }
@@ -239,8 +239,8 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
       properties: {
         targetMapId: exit.targetMapId, // Correction 1: Use targetMapId
         targetPositionX: exit.targetPosition.x, // Correction 1: Use targetPositionX
-        targetPositionY: exit.targetPosition.y // Correction 1: Use targetPositionY
-      }
+        targetPositionY: exit.targetPosition.y, // Correction 1: Use targetPositionY
+      },
     };
     objects.push(exitObject);
   });
@@ -249,7 +249,7 @@ export function convertTsMapToJson(tsMap: IGameMap): JsonMap {
     const objectLayer: JsonMapObjectLayer = {
       name: 'Objects',
       type: 'objectgroup',
-      objects: objects
+      objects: objects,
     };
     jsonMap.layers.push(objectLayer);
   }

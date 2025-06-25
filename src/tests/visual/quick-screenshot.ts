@@ -5,7 +5,7 @@ import * as fs from 'fs';
 async function takeScreenshot() {
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
   try {
@@ -40,7 +40,7 @@ async function takeScreenshot() {
     console.log('Taking screenshot of new UI...');
     await page.screenshot({
       path: path.join(screenshotDir, 'new-ui-layout.png') as `${string}.png`,
-      fullPage: true
+      fullPage: true,
     });
     
     console.log('Screenshot saved!');

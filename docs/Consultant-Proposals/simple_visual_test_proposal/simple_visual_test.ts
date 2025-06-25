@@ -15,7 +15,7 @@ class SimpleScreenshotTool {
     url: 'http://localhost:5173',
     outputDir: './visual-tests',
     name: 'game-screenshot',
-    wait: 3000
+    wait: 3000,
   };
 
   async takeScreenshot(options: ScreenshotOptions = {}): Promise<string> {
@@ -42,10 +42,10 @@ class SimpleScreenshotTool {
         '/usr/bin/google-chrome-stable', // Linux
         '/usr/bin/google-chrome', // Linux alt
         'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // Windows
-        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' // Windows 32-bit
+        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', // Windows 32-bit
       ];
 
-      let executablePath = chromePaths.find(path => {
+      const executablePath = chromePaths.find(path => {
         try {
           return existsSync(path);
         } catch {
@@ -60,7 +60,7 @@ class SimpleScreenshotTool {
       const browser = await puppeteer.launch({
         executablePath,
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
       });
 
       const page = await browser.newPage();
@@ -74,7 +74,7 @@ class SimpleScreenshotTool {
       await page.screenshot({ 
         path: filepath, 
         fullPage: true,
-        type: 'png'
+        type: 'png',
       });
 
       await browser.close();
@@ -102,7 +102,7 @@ class SimpleScreenshotTool {
       // macOS - use built-in screencapture with Safari
       execSync(`osascript -e 'tell application "Safari" to make new document with properties {URL:"${url}"}' && sleep 3`);
       execSync(`screencapture -x "${filepath}"`);
-      execSync(`osascript -e 'tell application "Safari" to close front document'`);
+      execSync('osascript -e \'tell application "Safari" to close front document\'');
     } else if (platform === 'linux') {
       // Linux - use xvfb + chromium if available
       try {

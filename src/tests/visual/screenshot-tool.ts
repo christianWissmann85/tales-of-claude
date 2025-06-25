@@ -42,14 +42,14 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     console.log('🚀 Launching browser...');
     browser = await chromium.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
     });
     
     const page = await browser.newPage({
       viewport: { 
         width: options.width || 1280, 
-        height: options.height || 720 
-      }
+        height: options.height || 720, 
+      },
     });
 
     const targetUrl = options.url || TARGET_URL;
@@ -63,13 +63,13 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
       try {
         await page.goto(targetUrl, { 
           waitUntil: 'networkidle',
-          timeout: 60000 // Increased navigation timeout
+          timeout: 60000, // Increased navigation timeout
         });
         navigationSuccess = true;
       } catch (navError: any) {
         retries--;
         console.log(`⚠️ Navigation attempt failed, ${retries} retries left...`);
-        if (retries === 0) throw navError;
+        if (retries === 0) { throw navError; }
         await page.waitForTimeout(2000); // Wait before retry
       }
     }
@@ -132,7 +132,7 @@ async function captureScreenshot(options: ScreenshotOptions = {}): Promise<strin
     await page.screenshot({ 
       path: filepath, 
       fullPage: options.fullPage || false,
-      animations: 'disabled'
+      animations: 'disabled',
     });
 
     console.log(`✅ Screenshot saved: ${filepath}`);
@@ -207,7 +207,7 @@ Examples:
   }
 
   const options: ScreenshotOptions = {
-    actions: []
+    actions: [],
   };
 
   // Parse command line arguments

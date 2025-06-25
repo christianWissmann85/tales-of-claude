@@ -52,7 +52,7 @@ async function closeAnyOpenUI(page: Page) {
     '.equipmentOverlay',
     '.questOverlay',
     '.shopOverlay',
-    '.talentOverlay'
+    '.talentOverlay',
   ];
   
   for (const selector of closeSelectors) {
@@ -80,7 +80,7 @@ async function runTamyRedemptionPlaytest() {
     agentRole: 'REDEMPTION Beta-Tester - Now With 100% More Success!',
     testDescription: 'REDEMPTION PLAYTEST - Showing off ALL the fixes!',
     resolution: { width: 1920, height: 1080 }, // Full HD
-    estimatedDuration: '20 minutes of PURE GAMING GLORY'
+    estimatedDuration: '20 minutes of PURE GAMING GLORY',
   });
 
   let browser: Browser | null = null;
@@ -90,43 +90,43 @@ async function runTamyRedemptionPlaytest() {
   const fixesConfirmed: string[] = [];
   
   try {
-    tamyLog("CHRIS! Welcome to REDEMPTION PLAYTEST!", true);
-    tamyLog("Last time bugs stopped me, but the team has been BUSY!");
-    tamyLog("Time to show you what Tales of Claude is REALLY capable of!");
+    tamyLog('CHRIS! Welcome to REDEMPTION PLAYTEST!', true);
+    tamyLog('Last time bugs stopped me, but the team has been BUSY!');
+    tamyLog('Time to show you what Tales of Claude is REALLY capable of!');
     
     browser = await chromium.launch({
       headless: false,
       args: ['--window-size=1920,1080'],
-      slowMo: 200 // Slightly slower for dramatic effect!
+      slowMo: 200, // Slightly slower for dramatic effect!
     });
     
     const context = await browser.newContext({
-      viewport: { width: 1920, height: 1080 }
+      viewport: { width: 1920, height: 1080 },
     });
     
     const page = await context.newPage();
     
-    tamyLog("Browser ready! Navigating to the FIXED game at port 5174!");
+    tamyLog('Browser ready! Navigating to the FIXED game at port 5174!');
     await page.goto('http://localhost:5174');
     
     // Create screenshot context
     const screenshotContext = { totalScreenshots: 0, featuresShowcased };
     
     // PHASE 0: EPIC TITLE SCREEN
-    tamyLog("\n=== PHASE 0: THE GLORIOUS RETURN ===");
+    tamyLog('\n=== PHASE 0: THE GLORIOUS RETURN ===');
     await page.waitForTimeout(3000);
     await takeRedemptionScreenshot(page, 'epic-title-screen-redemption', screenshotContext);
     featuresShowcased.push('Title Screen - Still Beautiful!');
     
     // Start the game
-    tamyLog("Starting the adventure with confidence!");
+    tamyLog('Starting the adventure with confidence!');
     await page.keyboard.press('Enter');
     await page.waitForTimeout(2000);
     
     // Handle intro
     const introText = await page.$('text=/Press SPACE to skip/');
     if (introText) {
-      tamyLog("ASCII art intro detected! Getting a clean shot!");
+      tamyLog('ASCII art intro detected! Getting a clean shot!');
       await takeRedemptionScreenshot(page, 'ascii-intro-art', screenshotContext);
       featuresShowcased.push('ASCII Art Intro');
       await page.keyboard.press('Space');
@@ -134,17 +134,17 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // PHASE 1: TERMINAL TOWN - THE REDEMPTION
-    tamyLog("\n=== PHASE 1: TERMINAL TOWN REDEMPTION ===", true);
+    tamyLog('\n=== PHASE 1: TERMINAL TOWN REDEMPTION ===', true);
     await takeRedemptionScreenshot(page, 'terminal-town-spawn', screenshotContext);
     featuresShowcased.push('Terminal Town - We\'re In!');
     
     // Test movement extensively
-    tamyLog("Testing movement system - no more getting stuck!");
+    tamyLog('Testing movement system - no more getting stuck!');
     const movements = [
       { key: 'ArrowRight', count: 3 },
       { key: 'ArrowDown', count: 2 },
       { key: 'ArrowLeft', count: 3 },
-      { key: 'ArrowUp', count: 2 }
+      { key: 'ArrowUp', count: 2 },
     ];
     
     for (const move of movements) {
@@ -158,8 +158,8 @@ async function runTamyRedemptionPlaytest() {
     fixesConfirmed.push('Movement system working perfectly!');
     
     // PHASE 2: NPC DIALOGUE - THE BIG FIX
-    tamyLog("\n=== PHASE 2: NPC DIALOGUE REDEMPTION ===", true);
-    tamyLog("Time to prove the dialogue system is FIXED!");
+    tamyLog('\n=== PHASE 2: NPC DIALOGUE REDEMPTION ===', true);
+    tamyLog('Time to prove the dialogue system is FIXED!');
     
     // Move to find NPCs
     for (let i = 0; i < 8; i++) {
@@ -173,7 +173,7 @@ async function runTamyRedemptionPlaytest() {
     
     const dialogueBox = await page.$('.dialogueBox');
     if (dialogueBox) {
-      tamyLog("DIALOGUE WORKS! The NPCs can speak again!", true);
+      tamyLog('DIALOGUE WORKS! The NPCs can speak again!', true);
       await takeRedemptionScreenshot(page, 'npc-dialogue-working', screenshotContext);
       featuresShowcased.push('NPC Dialogue System - FIXED!');
       fixesConfirmed.push('Dialogue system fully functional!');
@@ -184,15 +184,15 @@ async function runTamyRedemptionPlaytest() {
       await page.keyboard.press('Enter');
       await page.waitForTimeout(500);
     } else {
-      tamyLog("No dialogue yet, let me find another NPC...");
+      tamyLog('No dialogue yet, let me find another NPC...');
       bugsFound.push('First NPC interaction attempt failed');
     }
     
     // PHASE 3: UI SYSTEMS - NO MORE CONFLICTS
-    tamyLog("\n=== PHASE 3: UI SYSTEMS WITHOUT CONFLICTS ===", true);
+    tamyLog('\n=== PHASE 3: UI SYSTEMS WITHOUT CONFLICTS ===', true);
     
     // Test Inventory
-    tamyLog("Opening inventory - it better not soft-lock!");
+    tamyLog('Opening inventory - it better not soft-lock!');
     await closeAnyOpenUI(page);
     await page.keyboard.press('i');
     await page.waitForTimeout(1000);
@@ -209,7 +209,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Test Equipment
-    tamyLog("Equipment screen test!");
+    tamyLog('Equipment screen test!');
     await closeAnyOpenUI(page);
     await page.keyboard.press('e');
     await page.waitForTimeout(1000);
@@ -223,7 +223,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Test Quest Journal
-    tamyLog("Quest Journal - the most important UI!");
+    tamyLog('Quest Journal - the most important UI!');
     await closeAnyOpenUI(page);
     await page.keyboard.press('j');
     await page.waitForTimeout(1000);
@@ -238,8 +238,8 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // PHASE 4: MAP TRANSITIONS - THE MOMENT OF TRUTH
-    tamyLog("\n=== PHASE 4: MAP TRANSITION REDEMPTION ===", true);
-    tamyLog("This is it - can we reach Binary Forest without going invisible?");
+    tamyLog('\n=== PHASE 4: MAP TRANSITION REDEMPTION ===', true);
+    tamyLog('This is it - can we reach Binary Forest without going invisible?');
     
     // Move east to Binary Forest
     await closeAnyOpenUI(page);
@@ -252,7 +252,7 @@ async function runTamyRedemptionPlaytest() {
       if (mapName) {
         const mapText = await mapName.textContent();
         if (mapText?.includes('Binary Forest')) {
-          tamyLog("WE MADE IT TO BINARY FOREST!", true);
+          tamyLog('WE MADE IT TO BINARY FOREST!', true);
           break;
         }
       }
@@ -270,16 +270,16 @@ async function runTamyRedemptionPlaytest() {
         // Double-check Claude visibility
         const player = await page.$('.player');
         if (player && await player.isVisible()) {
-          tamyLog("CLAUDE IS VISIBLE IN BINARY FOREST! THE BUG IS FIXED!", true);
+          tamyLog('CLAUDE IS VISIBLE IN BINARY FOREST! THE BUG IS FIXED!', true);
           fixesConfirmed.push('Player visibility in Binary Forest - FIXED!');
           featuresShowcased.push('Binary Forest - Fully Explorable!');
         } else {
-          tamyLog("Oh no... Claude is still invisible!");
+          tamyLog('Oh no... Claude is still invisible!');
           bugsFound.push('Player still invisible in Binary Forest');
         }
         
         // Explore Binary Forest
-        tamyLog("Exploring the digital wilderness with confidence!");
+        tamyLog('Exploring the digital wilderness with confidence!');
         for (let i = 0; i < 5; i++) {
           await page.keyboard.press(['ArrowUp', 'ArrowRight'][i % 2]);
           await page.waitForTimeout(300);
@@ -289,7 +289,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Try to reach Debug Dungeon
-    tamyLog("Now for the ultimate test - reaching Debug Dungeon!");
+    tamyLog('Now for the ultimate test - reaching Debug Dungeon!');
     // Navigate to Debug Dungeon
     for (let i = 0; i < 15; i++) {
       await page.keyboard.press('ArrowDown');
@@ -305,7 +305,7 @@ async function runTamyRedemptionPlaytest() {
     if (debugDungeonCheck) {
       const mapText = await debugDungeonCheck.textContent();
       if (mapText?.includes('Debug Dungeon')) {
-        tamyLog("DEBUG DUNGEON REACHED! Map transitions are PERFECT!", true);
+        tamyLog('DEBUG DUNGEON REACHED! Map transitions are PERFECT!', true);
         await takeRedemptionScreenshot(page, 'debug-dungeon-success', screenshotContext);
         featuresShowcased.push('Debug Dungeon - Accessible!');
         fixesConfirmed.push('All map transitions working!');
@@ -313,8 +313,8 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // PHASE 5: COMBAT EXCELLENCE
-    tamyLog("\n=== PHASE 5: COMBAT SYSTEM SHOWCASE ===");
-    tamyLog("Time to battle some bugs!");
+    tamyLog('\n=== PHASE 5: COMBAT SYSTEM SHOWCASE ===');
+    tamyLog('Time to battle some bugs!');
     
     // Move around to trigger combat
     for (let i = 0; i < 15; i++) {
@@ -323,7 +323,7 @@ async function runTamyRedemptionPlaytest() {
       
       const battleScene = await page.$('.battleScene');
       if (battleScene) {
-        tamyLog("BATTLE ENGAGED! Time to show our moves!");
+        tamyLog('BATTLE ENGAGED! Time to show our moves!');
         await takeRedemptionScreenshot(page, 'battle-encounter', screenshotContext);
         featuresShowcased.push('Battle System - Engaged!');
         
@@ -343,7 +343,7 @@ async function runTamyRedemptionPlaytest() {
         for (let turn = 0; turn < 10; turn++) {
           const victoryText = await page.$('text=/victory/i');
           if (victoryText) {
-            tamyLog("VICTORY ACHIEVED!", true);
+            tamyLog('VICTORY ACHIEVED!', true);
             await takeRedemptionScreenshot(page, 'battle-victory', screenshotContext);
             featuresShowcased.push('Victory Screen!');
             break;
@@ -360,10 +360,10 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // PHASE 6: SHOP AND SAVE SYSTEMS
-    tamyLog("\n=== PHASE 6: SHOPPING AND SAVING ===");
+    tamyLog('\n=== PHASE 6: SHOPPING AND SAVING ===');
     
     // Return to Terminal Town
-    tamyLog("Heading back to Terminal Town for shopping!");
+    tamyLog('Heading back to Terminal Town for shopping!');
     for (let i = 0; i < 20; i++) {
       await page.keyboard.press('ArrowLeft');
       await page.waitForTimeout(100);
@@ -378,7 +378,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Find shop
-    tamyLog("Looking for Merchant Mika's shop!");
+    tamyLog('Looking for Merchant Mika\'s shop!');
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press('ArrowUp');
       await page.waitForTimeout(200);
@@ -389,7 +389,7 @@ async function runTamyRedemptionPlaytest() {
     
     const shopPanel = await page.$('.shopPanel');
     if (shopPanel && await shopPanel.isVisible()) {
-      tamyLog("SHOP FOUND! Time to browse the wares!");
+      tamyLog('SHOP FOUND! Time to browse the wares!');
       await takeRedemptionScreenshot(page, 'shop-interface-working', screenshotContext);
       featuresShowcased.push('Shop System - Functional!');
       
@@ -406,7 +406,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Find save point
-    tamyLog("Time to save our progress with Compiler Cat!");
+    tamyLog('Time to save our progress with Compiler Cat!');
     // Look for save NPC
     for (let i = 0; i < 5; i++) {
       await page.keyboard.press('ArrowDown');
@@ -420,7 +420,7 @@ async function runTamyRedemptionPlaytest() {
     if (saveDialogue) {
       const dialogueText = await saveDialogue.textContent();
       if (dialogueText?.toLowerCase().includes('save')) {
-        tamyLog("Found Compiler Cat! Saving the game!");
+        tamyLog('Found Compiler Cat! Saving the game!');
         await takeRedemptionScreenshot(page, 'save-system-dialogue', screenshotContext);
         featuresShowcased.push('Save System - Available!');
         
@@ -438,11 +438,11 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // PHASE 7: FINAL SHOWCASE
-    tamyLog("\n=== PHASE 7: GRAND FINALE ===", true);
+    tamyLog('\n=== PHASE 7: GRAND FINALE ===', true);
     
     // Talent system
     await closeAnyOpenUI(page);
-    tamyLog("One more UI to test - the talent tree!");
+    tamyLog('One more UI to test - the talent tree!');
     await page.keyboard.press('t');
     await page.waitForTimeout(1000);
     
@@ -454,7 +454,7 @@ async function runTamyRedemptionPlaytest() {
     }
     
     // Final beauty shots
-    tamyLog("Taking final beauty shots of our incredible game!");
+    tamyLog('Taking final beauty shots of our incredible game!');
     await page.waitForTimeout(1000);
     
     // Move to a scenic spot
@@ -468,7 +468,7 @@ async function runTamyRedemptionPlaytest() {
     // Check Claude's HP bars
     const statusBars = await page.$$('.statusBar');
     if (statusBars.length === 1) {
-      tamyLog("Only ONE status bar! The double HP bug is FIXED!", true);
+      tamyLog('Only ONE status bar! The double HP bug is FIXED!', true);
       fixesConfirmed.push('Double HP bar bug - FIXED!');
     } else if (statusBars.length > 1) {
       tamyLog(`Still seeing ${statusBars.length} status bars...`);
@@ -482,9 +482,9 @@ async function runTamyRedemptionPlaytest() {
     totalScreenshots = screenshotContext.totalScreenshots;
     
     // REDEMPTION SUMMARY
-    tamyLog("\n" + "=".repeat(80));
-    tamyLog("🌟 TAMY'S REDEMPTION PLAYTEST COMPLETE! 🌟", true);
-    tamyLog("=".repeat(80));
+    tamyLog('\n' + '='.repeat(80));
+    tamyLog('🌟 TAMY\'S REDEMPTION PLAYTEST COMPLETE! 🌟', true);
+    tamyLog('='.repeat(80));
     tamyLog(`📸 Total Screenshots Taken: ${totalScreenshots}`);
     tamyLog(`✨ Features Successfully Showcased: ${featuresShowcased.length}`);
     featuresShowcased.forEach(feature => tamyLog(`   ✅ ${feature}`));
@@ -495,32 +495,32 @@ async function runTamyRedemptionPlaytest() {
     tamyLog(`\n🐛 Remaining Issues: ${bugsFound.length}`);
     bugsFound.forEach(bug => tamyLog(`   ⚠️ ${bug}`));
     
-    tamyLog("\n💭 TAMY'S REDEMPTION VERDICT:", true);
-    tamyLog("CHRIS! The team has done INCREDIBLE work!");
-    tamyLog("Compared to my first playtest:");
-    tamyLog("- ✅ Dialogue system: FIXED!");
-    tamyLog("- ✅ UI conflicts: MOSTLY FIXED!");
-    tamyLog("- ✅ Map transitions: WORKING!");
-    tamyLog("- ✅ Combat system: SMOOTH!");
-    tamyLog("- ✅ Save system: FUNCTIONAL!");
+    tamyLog('\n💭 TAMY\'S REDEMPTION VERDICT:', true);
+    tamyLog('CHRIS! The team has done INCREDIBLE work!');
+    tamyLog('Compared to my first playtest:');
+    tamyLog('- ✅ Dialogue system: FIXED!');
+    tamyLog('- ✅ UI conflicts: MOSTLY FIXED!');
+    tamyLog('- ✅ Map transitions: WORKING!');
+    tamyLog('- ✅ Combat system: SMOOTH!');
+    tamyLog('- ✅ Save system: FUNCTIONAL!');
     
-    tamyLog("\nThis is what I call a COMEBACK story!");
-    tamyLog("Tales of Claude has gone from buggy prototype to");
-    tamyLog("a genuinely playable adventure game!");
+    tamyLog('\nThis is what I call a COMEBACK story!');
+    tamyLog('Tales of Claude has gone from buggy prototype to');
+    tamyLog('a genuinely playable adventure game!');
     
-    tamyLog("\n🎮 AAA VERDICT: 9.2/10 - SHIP IT! 🎮", true);
-    tamyLog("=".repeat(80));
+    tamyLog('\n🎮 AAA VERDICT: 9.2/10 - SHIP IT! 🎮', true);
+    tamyLog('='.repeat(80));
     
     // Victory lap
-    tamyLog("\nLeaving the game open for 15 seconds so you can admire our SUCCESS!");
+    tamyLog('\nLeaving the game open for 15 seconds so you can admire our SUCCESS!');
     await page.waitForTimeout(15000);
     
   } catch (error) {
     tamyLog(`Redemption interrupted! Error: ${error}`);
-    tamyLog("But hey, we got way further than last time!");
+    tamyLog('But hey, we got way further than last time!');
   } finally {
     if (browser) {
-      tamyLog("Closing browser... REDEMPTION ACHIEVED! 🎮🌟✨");
+      tamyLog('Closing browser... REDEMPTION ACHIEVED! 🎮🌟✨');
       await browser.close();
     }
   }

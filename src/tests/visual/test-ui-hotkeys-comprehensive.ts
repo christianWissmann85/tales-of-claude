@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 async function testUIHotkeysComprehensive() {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--window-size=1280,720']
+    args: ['--window-size=1280,720'],
   });
 
   const page = await browser.newPage();
@@ -35,7 +35,7 @@ async function testUIHotkeysComprehensive() {
       { key: 'i', name: 'Inventory', stateKey: 'showInventory', selector: '[class*="inventory"], [class*="Inventory"]' },
       { key: 'q', name: 'Quest Journal', stateKey: 'showQuestLog', selector: '[class*="questJournal"], [class*="QuestJournal"], [class*="questLog"], [class*="QuestLog"]' },
       { key: 'c', name: 'Character Screen', stateKey: 'showCharacterScreen', selector: '[class*="characterScreen"], [class*="CharacterScreen"]' },
-      { key: 'f', name: 'Faction Status', stateKey: 'showFactionStatus', selector: '[class*="factionStatus"], [class*="FactionStatus"]' }
+      { key: 'f', name: 'Faction Status', stateKey: 'showFactionStatus', selector: '[class*="factionStatus"], [class*="FactionStatus"]' },
     ];
 
     for (const hotkey of hotkeys) {
@@ -57,8 +57,8 @@ async function testUIHotkeysComprehensive() {
             showInventory: gameState?.showInventory,
             showQuestLog: gameState?.showQuestLog,
             showCharacterScreen: gameState?.showCharacterScreen,
-            showFactionStatus: gameState?.showFactionStatus
-          }
+            showFactionStatus: gameState?.showFactionStatus,
+          },
         };
       }, hotkey.stateKey);
       
@@ -68,14 +68,14 @@ async function testUIHotkeysComprehensive() {
       // Report results
       console.log(`  State ${hotkey.stateKey}: ${state[hotkey.stateKey]}`);
       console.log(`  DOM element found: ${!!element}`);
-      console.log(`  All UI states:`, JSON.stringify(state.allStates, null, 2));
+      console.log('  All UI states:', JSON.stringify(state.allStates, null, 2));
       
       // Check for dispatch in logs
       const dispatchLog = consoleLogs.find(log => log.includes(`TOGGLE_${hotkey.stateKey.replace('show', '').toUpperCase()}`));
       if (dispatchLog) {
-        console.log(`  ✅ Dispatch action found`);
+        console.log('  ✅ Dispatch action found');
       } else {
-        console.log(`  ❌ No dispatch action found`);
+        console.log('  ❌ No dispatch action found');
       }
       
       // Close if opened
@@ -101,7 +101,7 @@ async function testUIHotkeysComprehensive() {
       const gameState = (window as any).__gameState;
       return {
         showInventory: gameState?.showInventory,
-        showQuestLog: gameState?.showQuestLog
+        showQuestLog: gameState?.showQuestLog,
       };
     });
     

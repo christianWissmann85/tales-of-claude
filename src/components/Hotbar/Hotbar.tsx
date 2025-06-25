@@ -106,7 +106,7 @@ const Hotbar: React.FC<HotbarProps> = ({
     e.currentTarget.classList.remove(styles.dragOver);
 
     const itemId = e.dataTransfer.getData('text/plain'); // Get the item ID from the dragged data
-    if (!itemId) return;
+    if (!itemId) { return; }
 
     // Check if the item exists in the inventory before adding to hotbar
     if (inventory.getItemCount(itemId) === 0) {
@@ -148,7 +148,7 @@ const Hotbar: React.FC<HotbarProps> = ({
   // Function to use an item from a specific hotbar slot
   const useItemFromHotbar = useCallback((slotIndex: number) => {
     const itemId = hotbarSlots[slotIndex];
-    if (!itemId) return; // Do nothing if slot is empty
+    if (!itemId) { return; } // Do nothing if slot is empty
 
     const currentTime = Date.now();
     const cooldownEndTime = cooldowns[itemId];

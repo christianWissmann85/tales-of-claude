@@ -20,17 +20,17 @@ const getItemRarity = (item: Item): ItemRarity => {
 
   if (item.type === 'equipment' && item.stats) {
     const totalStats = (item.stats.attack || 0) + (item.stats.defense || 0) + (item.stats.speed || 0);
-    if (totalStats >= 15) return ItemRarity.Legendary;
-    if (totalStats >= 10) return ItemRarity.Epic;
-    if (totalStats >= 5) return ItemRarity.Rare;
-    if (totalStats >= 1) return ItemRarity.Uncommon;
+    if (totalStats >= 15) { return ItemRarity.Legendary; }
+    if (totalStats >= 10) { return ItemRarity.Epic; }
+    if (totalStats >= 5) { return ItemRarity.Rare; }
+    if (totalStats >= 1) { return ItemRarity.Uncommon; }
   }
 
   if (item.type === 'consumable' && item.value !== undefined) {
-    if (item.value >= 999) return ItemRarity.Legendary;
-    if (item.value >= 100) return ItemRarity.Epic;
-    if (item.value >= 30) return ItemRarity.Rare;
-    if (item.value >= 20) return ItemRarity.Uncommon;
+    if (item.value >= 999) { return ItemRarity.Legendary; }
+    if (item.value >= 100) { return ItemRarity.Epic; }
+    if (item.value >= 30) { return ItemRarity.Rare; }
+    if (item.value >= 20) { return ItemRarity.Uncommon; }
   }
 
   return ItemRarity.Common;
@@ -76,12 +76,12 @@ const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, player, mouseX, mouseY 
 
         if (newX + tooltipWidth > viewportWidth - 10) {
           newX = mouseX - tooltipWidth - 15;
-          if (newX < 10) newX = 10;
+          if (newX < 10) { newX = 10; }
         }
 
         if (newY + tooltipHeight > viewportHeight - 10) {
           newY = mouseY - tooltipHeight - 15;
-          if (newY < 10) newY = 10;
+          if (newY < 10) { newY = 10; }
         }
 
         setPosition({ x: newX, y: newY });
@@ -110,7 +110,7 @@ const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, player, mouseX, mouseY 
     }
 
     const equippedItem = player.getEquippedItems().find(
-      (eqItem) => eqItem.equipmentSlotType === item.equipmentSlotType
+      (eqItem) => eqItem.equipmentSlotType === item.equipmentSlotType,
     );
 
     const currentStat = equippedItem?.stats?.[statName] || 0;
@@ -118,7 +118,7 @@ const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, player, mouseX, mouseY 
 
     const diff = newItemStat - currentStat;
 
-    if (diff === 0) return null;
+    if (diff === 0) { return null; }
     
     const sign = diff > 0 ? '+' : '';
     const diffColor = diff > 0 ? 'green' : 'red';

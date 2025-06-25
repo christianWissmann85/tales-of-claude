@@ -77,20 +77,20 @@ export const FLOOR_VISUAL_WEIGHT = {
 // Helper function to test visual hierarchy
 export function getVisualWeight(emoji: string): 'lowest' | 'low' | 'medium' | 'high' | 'highest' {
   // Floors should be lowest/low
-  if (FLOOR_VISUAL_WEIGHT.LOWEST.includes(emoji)) return 'lowest';
-  if (FLOOR_VISUAL_WEIGHT.LOW.includes(emoji)) return 'low';
-  if (FLOOR_VISUAL_WEIGHT.MEDIUM_LOW.includes(emoji)) return 'low';
-  if (FLOOR_VISUAL_WEIGHT.MEDIUM.includes(emoji)) return 'medium';
+  if (FLOOR_VISUAL_WEIGHT.LOWEST.includes(emoji)) { return 'lowest'; }
+  if (FLOOR_VISUAL_WEIGHT.LOW.includes(emoji)) { return 'low'; }
+  if (FLOOR_VISUAL_WEIGHT.MEDIUM_LOW.includes(emoji)) { return 'low'; }
+  if (FLOOR_VISUAL_WEIGHT.MEDIUM.includes(emoji)) { return 'medium'; }
   
   // Player is highest
-  if (emoji === '🤖') return 'highest';
+  if (emoji === '🤖') { return 'highest'; }
   
   // Items with sparkles are high
-  if (emoji.includes('✨') || emoji.includes('💫')) return 'high';
+  if (emoji.includes('✨') || emoji.includes('💫')) { return 'high'; }
   
   // NPCs and walls are medium-high
-  if (Object.values(VISUAL_CATEGORIES.CHARACTER_NPCS).flat().includes(emoji)) return 'high';
-  if (Object.values(VISUAL_CATEGORIES.BOLD_BARRIERS).flat().includes(emoji)) return 'high';
+  if (Object.values(VISUAL_CATEGORIES.CHARACTER_NPCS).flat().includes(emoji)) { return 'high'; }
+  if (Object.values(VISUAL_CATEGORIES.BOLD_BARRIERS).flat().includes(emoji)) { return 'high'; }
   
   return 'medium';
 }

@@ -20,14 +20,14 @@ export interface VisualTestConfig {
  */
 export async function showVisualTestWarning(
   config: VisualTestConfig,
-  countdownSeconds: number = 3
+  countdownSeconds: number = 3,
 ): Promise<void> {
   const {
     agentName,
     agentRole,
     testDescription,
     resolution = { width: 1280, height: 720 },
-    estimatedDuration = '~30 seconds'
+    estimatedDuration = '~30 seconds',
   } = config;
 
   console.log('\n' + '='.repeat(60));

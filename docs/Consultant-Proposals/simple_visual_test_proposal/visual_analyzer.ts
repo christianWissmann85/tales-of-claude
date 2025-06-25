@@ -15,19 +15,19 @@ class VisualTestSuite {
   private tests: VisualTest[] = [
     {
       name: 'main-menu',
-      description: 'Main menu should be visible and properly styled'
+      description: 'Main menu should be visible and properly styled',
     },
     {
       name: 'game-loaded',
       gameState: 'loaded',
       waitFor: 5000,
-      description: 'Game canvas should be rendered and interactive elements visible'
+      description: 'Game canvas should be rendered and interactive elements visible',
     },
     {
       name: 'player-movement',
       gameState: 'playing',
-      description: 'Player character should be visible and UI elements properly positioned'
-    }
+      description: 'Player character should be visible and UI elements properly positioned',
+    },
   ];
 
   async runAll(): Promise<string[]> {

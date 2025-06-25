@@ -73,7 +73,7 @@ function generateReport(
     pageErrors: PageError[],
     automatedTestReport: AutomatedTestReport | null,
     screenshots: string[],
-    runnerError: string | null
+    runnerError: string | null,
 ): string {
     const reportFilePath = path.join(__dirname, REPORTS_DIR, `report-${timestamp}.html`);
 
@@ -83,7 +83,7 @@ function generateReport(
 
     if (runnerError) {
         overallStatus = 'FAILED (Runner Error)';
-        testSummary = `<p class="status-fail">Test Runner encountered a critical error.</p>`;
+        testSummary = '<p class="status-fail">Test Runner encountered a critical error.</p>';
         testDetails = `<pre class="error-block">${runnerError}</pre>`;
     } else if (automatedTestReport) {
         overallStatus = automatedTestReport.success ? 'PASSED' : 'FAILED';
@@ -103,7 +103,7 @@ function generateReport(
         `;
     } else {
         overallStatus = 'FAILED (No Automated Test Report)';
-        testSummary = `<p class="status-fail">Automated tests did not run or failed to report results.</p>`;
+        testSummary = '<p class="status-fail">Automated tests did not run or failed to report results.</p>';
     }
 
     const htmlContent = `
@@ -282,7 +282,7 @@ async function runTests() {
             pageErrors,
             automatedTestReport,
             screenshots,
-            runnerError
+            runnerError,
         );
         console.log('--- Test Runner Finished ---');
 

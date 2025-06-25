@@ -31,8 +31,8 @@ export function validateMap(map: JsonMap): ValidationResult {
       entityCount: 0,
       walkableTiles: 0,
       unreachableAreas: 0,
-      exits: 0
-    }
+      exits: 0,
+    },
   };
 
   // Basic structure validation
@@ -119,7 +119,7 @@ function isWalkable(tileType: TileType | string): boolean {
   const walkableTiles: string[] = [
     'walkable', 'grass', 'floor', 'path', 
     'path_one', 'path_zero', 'dungeon_floor', 
-    'exit', 'door'
+    'exit', 'door',
   ];
   return walkableTiles.includes(tileType);
 }
@@ -129,13 +129,13 @@ function isWalkable(tileType: TileType | string): boolean {
  */
 function findUnreachableAreas(map: JsonMap): Position[][] {
   const collisionLayer = map.layers.find(
-    l => l.type === 'tilelayer' && (l.name === 'collision' || l.name === 'base')
+    l => l.type === 'tilelayer' && (l.name === 'collision' || l.name === 'base'),
   ) as JsonMapTileLayer;
 
-  if (!collisionLayer) return [];
+  if (!collisionLayer) { return []; }
 
   const visited = new Array(map.height).fill(null).map(() => 
-    new Array(map.width).fill(false)
+    new Array(map.width).fill(false),
   );
   
   const areas: Position[][] = [];
@@ -154,7 +154,7 @@ function findUnreachableAreas(map: JsonMap): Position[][] {
   }
 
   // Return all areas except the largest (main area)
-  if (areas.length <= 1) return [];
+  if (areas.length <= 1) { return []; }
   
   areas.sort((a, b) => b.length - a.length);
   return areas.slice(1);
@@ -168,7 +168,7 @@ function floodFill(
   layer: JsonMapTileLayer,
   startX: number,
   startY: number,
-  visited: boolean[][]
+  visited: boolean[][],
 ): Position[] {
   const area: Position[] = [];
   const queue: Position[] = [{ x: startX, y: startY }];
@@ -204,13 +204,13 @@ function floodFill(
  */
 export function generateAsciiMap(map: JsonMap): string {
   const baseLayer = map.layers.find(
-    l => l.type === 'tilelayer' && l.name === 'base'
+    l => l.type === 'tilelayer' && l.name === 'base',
   ) as JsonMapTileLayer;
 
-  if (!baseLayer) return 'No base layer found';
+  if (!baseLayer) { return 'No base layer found'; }
 
   const objectLayer = map.layers.find(
-    l => l.type === 'objectgroup'
+    l => l.type === 'objectgroup',
   ) as JsonMapObjectLayer;
 
   // Create character map
@@ -226,7 +226,7 @@ export function generateAsciiMap(map: JsonMap): string {
     'dungeon_floor': ':',
     'exit': 'E',
     'shop': 'S',
-    'healer': 'H'
+    'healer': 'H',
   };
 
   let ascii = '';
@@ -243,7 +243,7 @@ export function generateAsciiMap(map: JsonMap): string {
       // Check for objects at this position
       if (objectLayer) {
         const obj = objectLayer.objects.find(
-          o => o.position.x === x && o.position.y === y
+          o => o.position.x === x && o.position.y === y,
         );
         if (obj) {
           switch (obj.type) {

@@ -20,7 +20,7 @@ const localStorageMock = (function () {
     // Helper for testing internal state of the mock
     getStore: function() {
       return store;
-    }
+    },
   };
 })();
 
@@ -56,7 +56,7 @@ const windowMock = {
         // In reality we'd need to store the callbacks, but for now just skip
       }
     }
-  }
+  },
 };
 
 // Assign mocks to global objects
@@ -80,10 +80,7 @@ const mockDispatch = (action: any) => {
       const { direction } = action.payload;
       const { x, y } = mockGameState.player.position;
       let newX = x, newY = y;
-      if (direction === 'up') newY--;
-      else if (direction === 'down') newY++;
-      else if (direction === 'left') newX--;
-      else if (direction === 'right') newX++;
+      if (direction === 'up') { newY--; } else if (direction === 'down') { newY++; } else if (direction === 'left') { newX--; } else if (direction === 'right') { newX++; }
       mockGameState.player.position = { x: newX, y: newY };
       break;
     case 'UPDATE_MAP':
@@ -728,7 +725,7 @@ function testPlayerModel(): void {
 
       const hpTalent = player.talentTree.getTalent('hp_boost');
       assert(hpTalent !== undefined, 'hp_boost talent should exist');
-      if (!hpTalent) return; // Type guard
+      if (!hpTalent) { return; } // Type guard
 
       // Need to add points to the TalentTree for spendTalentPoint to work
       player.talentTree.addPoints(3);
@@ -792,7 +789,7 @@ function testEnemyModel(): void {
       const playerDefense = 5;
       const bugBite = bug.getAbility('bug_bite');
       assert(bugBite !== undefined, 'Bug Bite ability should exist');
-      if (!bugBite) return;
+      if (!bugBite) { return; }
 
       const damage = bug.calculateDamageOutput(bugBite, playerDefense);
       // Base damage: Enemy Attack (6) + Ability Damage (4) = 10
@@ -815,7 +812,7 @@ function testEnemyModel(): void {
       const initialEnergy = runtimeError.stats.energy;
       const crashProgram = runtimeError.getAbility('crash_program'); // Cost 15
       assert(crashProgram !== undefined, 'Crash Program ability should exist');
-      if (!crashProgram) return;
+      if (!crashProgram) { return; }
 
       assertTrue(runtimeError.useAbility(crashProgram), 'Should be able to use ability with enough energy');
       assertEqual(runtimeError.stats.energy, initialEnergy - crashProgram.cost, 'Energy should decrease after using ability');
@@ -1963,7 +1960,7 @@ function testSaveGameService(): void {
           rewards: { exp: 0, items: [] },
           currentObjectiveIndex: 0,
           prerequisites: [],
-        }
+        },
       ];
       // mockQuestManager.deserialize(undefined, mockQuestsForSave);
       mockQuestManager.startQuest('test_quest_save');
@@ -2064,7 +2061,7 @@ function testSaveGameService(): void {
           rewards: { exp: 0, items: [] },
           currentObjectiveIndex: 0,
           prerequisites: [],
-        }
+        },
       ];
       // loadedQm.deserialize(loadedGameState?.questManagerState, mockQuestsForLoad);
       assertEqual(loadedQm.getActiveQuests().length, 1, 'Loaded QuestManager should have 1 active quest');

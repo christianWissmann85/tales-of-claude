@@ -42,7 +42,7 @@ export const useStableKeyboard = () => {
     
     while (keyEventQueue.current.length > 0) {
       const eventData = keyEventQueue.current.shift();
-      if (!eventData) continue;
+      if (!eventData) { continue; }
       
       const [eventType, keyCode] = eventData.split(':');
       
@@ -66,7 +66,7 @@ export const useStableKeyboard = () => {
 
   // Debounced queue processor
   const debouncedProcessQueue = useRef(
-    debounce(processKeyQueue, 10)
+    debounce(processKeyQueue, 10),
   ).current;
 
   // Handle keydown with stability checks
@@ -168,10 +168,10 @@ export const useStableKeyboard = () => {
     const rightActive = isAnyOfKeysPressed(RIGHT_KEYS);
 
     // Check for single, unambiguous direction
-    if (upActive && !downActive && !leftActive && !rightActive) return 'up';
-    if (downActive && !upActive && !leftActive && !rightActive) return 'down';
-    if (leftActive && !rightActive && !upActive && !downActive) return 'left';
-    if (rightActive && !leftActive && !upActive && !downActive) return 'right';
+    if (upActive && !downActive && !leftActive && !rightActive) { return 'up'; }
+    if (downActive && !upActive && !leftActive && !rightActive) { return 'down'; }
+    if (leftActive && !rightActive && !upActive && !downActive) { return 'left'; }
+    if (rightActive && !leftActive && !upActive && !downActive) { return 'right'; }
 
     return null;
   }, [isAnyOfKeysPressed]);

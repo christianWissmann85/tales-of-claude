@@ -44,7 +44,7 @@ async function takeScreenshot(options: ScreenshotOptions): Promise<string> {
   
   const browser = await chromium.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   
   try {
@@ -125,7 +125,7 @@ Examples:
   
   const options: ScreenshotOptions = {
     name: args[0],
-    actions: []
+    actions: [],
   };
   
   for (let i = 1; i < args.length; i++) {
