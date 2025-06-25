@@ -1,0 +1,589 @@
+/* typography.css - Complete Typography System for Tales of Claude */
+
+/* ===== FONT LOADING & FALLBACKS ===== */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@400;700;900&display=swap');
+
+/* ===== CSS VARIABLES - TYPOGRAPHY SYSTEM ===== */
+:root {
+  /* === Font Families === */
+  --font-primary: 'VT323', 'Courier New', 'Consolas', monospace; /* Main retro font */
+  --font-headers: 'Orbitron', 'VT323', monospace; /* Headers - cleaner but still retro */
+  --font-monospace: 'Consolas', 'Courier New', 'Monaco', monospace; /* Code/stats */
+  --font-system: system-ui, -apple-system, sans-serif; /* Fallback only */
+
+  /* === Type Scale (Mobile-first, Responsive) === */
+  /* Base: 16px at mobile, 18px at desktop */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);     /* 12px - 14px */
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);       /* 14px - 16px */
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);       /* 16px - 18px */
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);      /* 18px - 20px */
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);       /* 20px - 24px */
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);            /* 24px - 32px */
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);    /* 30px - 40px */
+  --text-4xl: clamp(2.25rem, 1.8rem + 2.25vw, 3rem);        /* 36px - 48px */
+
+  /* === Font Weights === */
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* === Line Heights === */
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 1.8;
+
+  /* === Letter Spacing === */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.05em;
+  --letter-spacing-wider: 0.1em;
+  --letter-spacing-widest: 0.2em;
+
+  /* === Text Shadows & Glows === */
+  --text-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
+  --text-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.8);
+  --text-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.8);
+  
+  --text-glow-green: 0 0 10px var(--primary-green);
+  --text-glow-blue: 0 0 10px var(--ui-accent);
+  --text-glow-yellow: 0 0 10px var(--warning-yellow);
+  --text-glow-red: 0 0 10px var(--danger-red);
+  
+  --text-glow-green-strong: 0 0 15px var(--primary-green), 0 0 25px rgba(0, 255, 136, 0.5);
+  --text-glow-blue-strong: 0 0 15px var(--ui-accent), 0 0 25px rgba(74, 158, 255, 0.5);
+
+  /* === Color Variables (from your existing scheme) === */
+  --primary-green: #00ff88;
+  --ui-accent: #4a9eff;
+  --warning-yellow: #ffaa00;
+  --danger-red: #ff4444;
+  --ui-light-text: #e0e0e0;
+  --ui-dark-text: #0a0a0f;
+  --ui-medium-text: #a0a0a0;
+  --ui-faded-text: #666666;
+}
+
+/* ===== BASE TYPOGRAPHY RESET ===== */
+* {
+  /* Prevent layout shifts from font loading */
+  font-display: swap;
+}
+
+html {
+  /* Set base font size - 16px at mobile, scales up */
+  font-size: clamp(16px, 1rem + 0.25vw, 18px);
+  /* Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+  color: var(--ui-light-text);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* ===== HEADING HIERARCHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headers);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-wide);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green-strong);
+  letter-spacing: var(--letter-spacing-widest);
+  font-weight: var(--font-weight-black);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  color: var(--ui-accent);
+  text-shadow: var(--text-glow-blue-strong);
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green);
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+h4 {
+  font-size: var(--text-xl);
+  color: var(--ui-light-text);
+  text-shadow: var(--text-shadow-md);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+h5 {
+  font-size: var(--text-lg);
+  color: var(--ui-light-text);
+  text-shadow: var(--text-shadow-sm);
+}
+
+h6 {
+  font-size: var(--text-base);
+  color: var(--ui-medium-text);
+  text-shadow: var(--text-shadow-sm);
+}
+
+/* ===== BODY TEXT & PARAGRAPHS ===== */
+p {
+  margin: 0 0 1rem 0;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===== UTILITY CLASSES - TYPE SIZES ===== */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+.text-4xl { font-size: var(--text-4xl); }
+
+/* ===== UTILITY CLASSES - FONT FAMILIES ===== */
+.font-primary { font-family: var(--font-primary); }
+.font-headers { font-family: var(--font-headers); }
+.font-mono { font-family: var(--font-monospace); }
+
+/* ===== UTILITY CLASSES - FONT WEIGHTS ===== */
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+/* ===== UTILITY CLASSES - LINE HEIGHTS ===== */
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+/* ===== UTILITY CLASSES - LETTER SPACING ===== */
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+.tracking-wider { letter-spacing: var(--letter-spacing-wider); }
+.tracking-widest { letter-spacing: var(--letter-spacing-widest); }
+
+/* ===== UTILITY CLASSES - COLORS ===== */
+.text-primary { color: var(--primary-green); }
+.text-accent { color: var(--ui-accent); }
+.text-warning { color: var(--warning-yellow); }
+.text-danger { color: var(--danger-red); }
+.text-light { color: var(--ui-light-text); }
+.text-medium { color: var(--ui-medium-text); }
+.text-faded { color: var(--ui-faded-text); }
+.text-dark { color: var(--ui-dark-text); }
+
+/* ===== UTILITY CLASSES - TEXT EFFECTS ===== */
+.text-glow-green { text-shadow: var(--text-glow-green); }
+.text-glow-blue { text-shadow: var(--text-glow-blue); }
+.text-glow-yellow { text-shadow: var(--text-glow-yellow); }
+.text-glow-red { text-shadow: var(--text-glow-red); }
+.text-glow-strong-green { text-shadow: var(--text-glow-green-strong); }
+.text-glow-strong-blue { text-shadow: var(--text-glow-blue-strong); }
+
+.text-shadow-sm { text-shadow: var(--text-shadow-sm); }
+.text-shadow-md { text-shadow: var(--text-shadow-md); }
+.text-shadow-lg { text-shadow: var(--text-shadow-lg); }
+
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+
+/* ===== JRPG-SPECIFIC TEXT STYLES ===== */
+
+/* Game Title / Logo */
+.game-title {
+  font-family: var(--font-headers);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-black);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green-strong);
+  letter-spacing: var(--letter-spacing-widest);
+  text-transform: uppercase;
+  line-height: var(--line-height-tight);
+}
+
+/* UI Panel Headers */
+.panel-header {
+  font-family: var(--font-headers);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  line-height: var(--line-height-tight);
+  margin: 0 0 0.75rem 0;
+}
+
+/* Stats and Numbers */
+.stat-text {
+  font-family: var(--font-monospace);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--ui-light-text);
+  text-shadow: var(--text-shadow-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-normal);
+}
+
+.stat-label {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--ui-medium-text);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.stat-value {
+  font-family: var(--font-monospace);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green);
+}
+
+/* Health/Energy specific colors */
+.stat-hp { color: var(--danger-red); text-shadow: var(--text-glow-red); }
+.stat-energy { color: var(--primary-green); text-shadow: var(--text-glow-green); }
+.stat-xp { color: var(--warning-yellow); text-shadow: var(--text-glow-yellow); }
+
+/* Dialogue Text */
+.dialogue-text {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  color: var(--ui-light-text);
+  line-height: var(--line-height-relaxed);
+  text-shadow: var(--text-shadow-sm);
+  margin: 0 0 1rem 0;
+}
+
+.dialogue-speaker {
+  font-family: var(--font-headers);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--ui-accent);
+  text-shadow: var(--text-glow-blue);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin: 0 0 0.5rem 0;
+}
+
+/* Quest Text */
+.quest-title {
+  font-family: var(--font-headers);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  line-height: var(--line-height-tight);
+  margin: 0 0 1rem 0;
+}
+
+.quest-description {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  color: var(--ui-light-text);
+  line-height: var(--line-height-relaxed);
+  text-shadow: var(--text-shadow-sm);
+  margin: 0 0 1rem 0;
+}
+
+.quest-objective {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--ui-medium-text);
+  line-height: var(--line-height-normal);
+  text-shadow: var(--text-shadow-sm);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.quest-objective::before {
+  content: '▸';
+  position: absolute;
+  left: 0.5rem;
+  color: var(--primary-green);
+}
+
+.quest-objective.completed {
+  color: var(--ui-faded-text);
+  text-decoration: line-through;
+}
+
+/* Combat Text */
+.combat-damage {
+  font-family: var(--font-headers);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--danger-red);
+  text-shadow: var(--text-glow-red);
+  position: absolute;
+  animation: floatUp 1s ease-out forwards;
+}
+
+.combat-heal {
+  font-family: var(--font-headers);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green-strong);
+  position: absolute;
+  animation: floatUp 1s ease-out forwards;
+}
+
+.combat-critical {
+  font-size: var(--text-3xl);
+  animation: criticalHit 0.5s ease-out;
+}
+
+.status-effect {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-style: italic;
+  text-shadow: var(--text-shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.status-buff { color: var(--ui-accent); }
+.status-debuff { color: var(--danger-red); }
+
+.turn-order {
+  font-family: var(--font-monospace);
+  font-size: var(--text-sm);
+  color: var(--ui-medium-text);
+  text-shadow: var(--text-shadow-sm);
+  text-align: center;
+}
+
+/* Tooltip Text */
+.tooltip-header {
+  font-family: var(--font-headers);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+  margin: 0 0 0.5rem 0;
+}
+
+.tooltip-body {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--ui-light-text);
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 0.5rem 0;
+}
+
+.tooltip-stats {
+  font-family: var(--font-monospace);
+  font-size: var(--text-sm);
+  color: var(--primary-green);
+  text-shadow: var(--text-shadow-sm);
+}
+
+/* Button Text */
+.button-text {
+  font-family: var(--font-headers);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  text-shadow: var(--text-shadow-md);
+}
+
+.button-primary {
+  color: var(--primary-green);
+}
+
+.button-secondary {
+  color: var(--ui-accent);
+}
+
+.button-danger {
+  color: var(--danger-red);
+}
+
+.button-disabled {
+  color: var(--ui-faded-text);
+  cursor: not-allowed;
+}
+
+/* Notification Text */
+.notification-title {
+  font-family: var(--font-headers);
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin: 0 0 0.25rem 0;
+}
+
+.notification-success {
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green);
+}
+
+.notification-info {
+  color: var(--ui-accent);
+  text-shadow: var(--text-glow-blue);
+}
+
+.notification-warning {
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+}
+
+.notification-error {
+  color: var(--danger-red);
+  text-shadow: var(--text-glow-red);
+}
+
+.notification-body {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--ui-light-text);
+  line-height: var(--line-height-normal);
+}
+
+/* Menu/Navigation Text */
+.nav-item {
+  font-family: var(--font-headers);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--ui-light-text);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  text-shadow: var(--text-shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green);
+}
+
+.nav-item.active {
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+}
+
+/* Loading Screen Text */
+.loading-title {
+  font-family: var(--font-headers);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-black);
+  color: var(--primary-green);
+  text-shadow: var(--text-glow-green-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-widest);
+  animation: pulse 2s infinite;
+}
+
+.loading-message {
+  font-family: var(--font-primary);
+  font-size: var(--text-lg);
+  color: var(--ui-medium-text);
+  animation: fadeInOut 2s infinite;
+}
+
+/* Error/Warning Text */
+.error-text {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--danger-red);
+  text-shadow: var(--text-glow-red);
+}
+
+.warning-text {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+}
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px; /* Slightly smaller base size on mobile */
+  }
+  
+  /* Reduce heading sizes on mobile */
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+  h3 { font-size: var(--text-xl); }
+  
+  /* Adjust UI text */
+  .panel-header { font-size: var(--text-lg); }
+  .stat-text { font-size: var(--text-sm); }
+  .dialogue-text { font-size: var(--text-sm); }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    font-size: 20px; /* Larger base size on big screens */
+  }
+}
+
+/* ===== TEXT ANIMATIONS ===== */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes criticalHit {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Utility animation classes */
+.animate-pulse { animation: pulse 2s infinite; }
+.animate-float { animation: floatUp 1s ease-out; }
+.animate-fade { animation: fadeInOut 2s infinite; }
+.animate-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end);
+}

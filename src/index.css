@@ -1,5 +1,8 @@
 /* src/index.css */
 
+/* Import the unified typography system */
+@import './styles/typography.css';
+
 /* CSS Reset */
 *,
 *::before,
@@ -24,6 +27,6 @@ body {
 
 body {
   background-color: var(--bg-color); /* Dark blue/black background */
-  color: var(--text-color); /* Bright cyan text */
-  font-family: 'Consolas', 'Courier New', monospace; /* Monospace font for retro feel */
+  color: var(--ui-light-text); /* Use typography system color */
+  /* Font family now handled by typography.css */
 }

@@ -5,8 +5,8 @@
   width: 100%;
   background-color: transparent; /* Transparent to use panel background */
   color: #e0e0e0; /* UI light text */
-  font-family: 'Press Start 2P', 'Courier New', Courier, monospace; /* Monospace font */
-  font-size: 0.9em;
+  /* Typography handled by typography.css */
+  font-size: var(--text-sm);
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -22,19 +22,21 @@
 }
 
 .statusBarText {
-  color: #e0e0e0; /* UI light text */
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+  color: var(--ui-light-text);
+  text-shadow: var(--text-shadow-sm);
 }
 
 .levelText {
-  color: #ffaa00; /* Warning yellow for Level */
-  text-shadow: 0 0 5px rgba(255, 170, 0, 0.5); /* Yellow glow */
-  font-weight: bold;
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-monospace);
 }
 
 .xpText {
-  color: #ffaa00; /* Warning yellow for XP */
-  text-shadow: 0 0 5px rgba(255, 170, 0, 0.5); /* Yellow glow */
+  color: var(--warning-yellow);
+  text-shadow: var(--text-glow-yellow);
+  font-family: var(--font-monospace);
 }
 
 .progressBarContainer {

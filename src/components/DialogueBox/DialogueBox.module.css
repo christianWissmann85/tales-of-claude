@@ -99,22 +99,15 @@
 
 /* Styling for NPC names */
 .npcName {
-  color: #00ff88; /* Green for NPC names matching theme */
+  composes: dialogue-speaker from global;
   margin-bottom: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-shadow: 
-    0 0 10px rgba(0, 255, 136, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Styling for dialogue text */
 .dialogueText {
-  color: #e0e0e0; /* Light text for dialogue */
+  composes: dialogue-text from global;
   margin-bottom: 20px;
   white-space: pre-wrap; /* Preserves whitespace and line breaks from content */
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Subtle shadow for readability */
 }
 
 /* Container for choice buttons */
