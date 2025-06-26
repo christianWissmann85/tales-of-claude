@@ -2,7 +2,7 @@
 import { strict as assert } from 'assert';
 import { MapLoader } from '../../src/engine/MapLoader';
 import { getMap } from '../../src/assets/maps';
-import { GameMap as IGameMap, TileType, NPCRole, ItemType } from '../../src/types/global.types';
+import {} from '../../src/types/global.types';
 import { JsonMap } from '../../src/types/map-schema.types';
 
 // Import actual TS map data for testing legacy maps
@@ -10,8 +10,7 @@ import { binaryForestData } from '../../src/assets/maps/binaryForest';
 import { debugDungeonData } from '../../src/assets/maps/debugDungeon';
 
 // Import actual model classes that MapLoader instantiates
-import { Enemy, EnemyVariant } from '../../src/models/Enemy';
-import { Item as ItemClass, ItemVariant } from '../../src/models/Item';
+import { Enemy } from '../../src/models/Enemy';
 
 // Mock JSON map data (simplified for testing specific aspects)
 const mockTerminalTownJson: JsonMap = {
@@ -144,8 +143,8 @@ const mockJsonMaps: Record<string, JsonMap | undefined> = { // Allow undefined f
 // Mock fetch for JSON maps. This is necessary because MapLoader uses `fetch`
 // to load JSON files, and in a Node.js test environment, `fetch` needs to be
 // mocked to serve local data instead of making actual HTTP requests.
-const originalFetch = global.fetch; // Store original fetch if it exists
-global.fetch = async (url: RequestInfo | URL, init?: RequestInit) => {
+// Mock fetch - originalFetch not needed as we're not restoring it
+global.fetch = async (url: RequestInfo | URL, _init?: RequestInit) => {
   const mapIdMatch = String(url).match(/\/src\/assets\/maps\/json\/(.*)\.json$/);
   if (mapIdMatch && mockJsonMaps[mapIdMatch[1]]) {
     return {
@@ -176,7 +175,7 @@ let consoleWarnMessages: string[] = [];
 function spyOnConsoleWarn() {
   originalConsoleWarn = console.warn;
   consoleWarnMessages = [];
-  console.warn = (...args: any[]) => {
+  console.warn = (...args: unknown[]) => {
     consoleWarnMessages.push(args.map(arg => String(arg)).join(' '));
     // Optionally call original console.warn if you still want output during tests
     // originalConsoleWarn(...args);
@@ -199,10 +198,12 @@ suite('MapLoader and Map Structure Tests', () => {
 
   beforeEach(() => {
     // Ensure MapLoader is a fresh instance for each test by resetting its singleton instance
-    (MapLoader as any).instance = undefined;
+    // Using type assertion to access private static property for testing
+    (MapLoader as unknown as { instance: undefined }).instance = undefined;
     // Clear the cache of the singleton MapLoader instance before each test
     const mapLoader = MapLoader.getInstance();
-    (mapLoader as any).cache.clear(); // Access private property for testing
+    // Access private property for testing
+    (mapLoader as unknown as { cache: Map<string, unknown> }).cache.clear();
 
     // Reset mockJsonMaps entries that might be modified by specific tests
     // This ensures each test starts with a clean slate for these dynamic mocks.
@@ -331,8 +332,13 @@ suite('MapLoader and Map Structure Tests', () => {
     assert.ok(npc, 'NPC should be defined');
     assert.strictEqual(npc!.name, 'Debugger Great', 'NPC name should be Debugger Great');
     assert.deepStrictEqual(npc!.position, { x: 1, y: 1 }, 'NPC position should be (1,1)');
-    assert.strictEqual((npc as any).role, 'debugger', 'NPC role should be debugger');
-    assert.strictEqual((npc as any).dialogueId, 'debuggerGreat_intro', 'NPC dialogueId should be debuggerGreat_intro');
+    // NPC-specific properties check using type narrowing
+    if ('role' in npc && 'dialogueId' in npc) {
+      assert.strictEqual(npc.role, 'debugger', 'NPC role should be debugger');
+      assert.strictEqual(npc.dialogueId, 'debuggerGreat_intro', 'NPC dialogueId should be debuggerGreat_intro');
+    } else {
+      assert.fail('Entity should have NPC properties');
+    }
 
     const enemy = map.entities.find(e => e.id === 'enemy_01');
     assert.ok(enemy, 'Enemy should be defined');
@@ -345,7 +351,12 @@ suite('MapLoader and Map Structure Tests', () => {
     assert.ok(item, 'Item should be defined');
     assert.strictEqual(item!.name, 'Health Potion', 'Item name should be Health Potion');
     assert.deepStrictEqual(item!.position, { x: 3, y: 3 }, 'Item position should be (3,3)');
-    assert.strictEqual((item as any).type, 'consumable', 'Item type should be consumable');
+    // Item type check using type narrowing
+    if ('type' in item) {
+      assert.strictEqual(item.type, 'consumable', 'Item type should be consumable');
+    } else {
+      assert.fail('Entity should have item type property');
+    }
 
     // Test Exits: (already covered in #4, but re-verify count)
     assert.strictEqual(map.exits.length, 1, 'Map should have 1 exit');

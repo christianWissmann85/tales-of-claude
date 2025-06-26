@@ -29,14 +29,14 @@ export interface WeatherEffects {
  * A simple custom event emitter for the WeatherSystem.
  */
 class EventEmitter {
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, ((...args: unknown[]) => void)[]> = new Map();
 
   /**
    * Registers an event listener for a specific event.
    * @param eventName The name of the event to listen for.
    * @param listener The function to call when the event is emitted.
    */
-  on(eventName: string, listener: Function): void {
+  on(eventName: string, listener: (...args: unknown[]) => void): void {
     if (!this.listeners.has(eventName)) {
       this.listeners.set(eventName, []);
     }
@@ -48,7 +48,7 @@ class EventEmitter {
    * @param eventName The name of the event.
    * @param listener The function to remove.
    */
-  off(eventName: string, listener: Function): void {
+  off(eventName: string, listener: (...args: unknown[]) => void): void {
     if (!this.listeners.has(eventName)) {
       return;
     }
@@ -61,7 +61,7 @@ class EventEmitter {
    * @param eventName The name of the event to emit.
    * @param args Arguments to pass to the listeners.
    */
-  emit(eventName: string, ...args: any[]): void {
+  emit(eventName: string, ...args: unknown[]): void {
     if (!this.listeners.has(eventName)) {
       return;
     }
@@ -83,8 +83,8 @@ type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
  */
 interface ITimeSystem {
   currentPeriod: TimeOfDay;
-  on(eventName: 'timeChanged' | 'periodChanged', listener: Function): void;
-  off(eventName: 'timeChanged' | 'periodChanged', listener: Function): void;
+  on(eventName: 'timeChanged' | 'periodChanged', listener: (...args: unknown[]) => void): void;
+  off(eventName: 'timeChanged' | 'periodChanged', listener: (...args: unknown[]) => void): void;
 }
 
 /**
@@ -177,7 +177,7 @@ export class WeatherSystem {
     this._isOutdoorMap = isOutdoorMap;
 
     // Listen for time period changes to influence weather probabilities
-    this._timeSystem.on('periodChanged', this._handlePeriodChange);
+    this._timeSystem.on('periodChanged', this._handlePeriodChange as (...args: unknown[]) => void);
 
     // Ensure initial weather is valid for the map type
     if (!this._isValidWeatherForMap(this._currentWeather, this._isOutdoorMap)) {
@@ -204,7 +204,7 @@ export class WeatherSystem {
       this._transitionAnimationFrameId = null;
     }
     if (this._timeSystem) {
-      this._timeSystem.off('periodChanged', this._handlePeriodChange);
+      this._timeSystem.off('periodChanged', this._handlePeriodChange as (...args: unknown[]) => void);
       this._timeSystem = null;
     }
     this._eventEmitter = new EventEmitter(); // Clear all registered listeners
@@ -479,7 +479,7 @@ export class WeatherSystem {
    *   - 'weatherTransitionComplete': Emitted when a weather transition finishes.
    * @param listener The function to call when the event is emitted.
    */
-  public on(eventName: 'weatherChangeStarted' | 'weatherTransition' | 'weatherTransitionComplete', listener: Function): void {
+  public on(eventName: 'weatherChangeStarted' | 'weatherTransition' | 'weatherTransitionComplete', listener: (...args: unknown[]) => void): void {
     this._eventEmitter.on(eventName, listener);
   }
 
@@ -488,7 +488,7 @@ export class WeatherSystem {
    * @param eventName The name of the event.
    * @param listener The function to remove.
    */
-  public off(eventName: 'weatherChangeStarted' | 'weatherTransition' | 'weatherTransitionComplete', listener: Function): void {
+  public off(eventName: 'weatherChangeStarted' | 'weatherTransition' | 'weatherTransitionComplete', listener: (...args: unknown[]) => void): void {
     this._eventEmitter.off(eventName, listener);
   }
 
@@ -581,7 +581,7 @@ export class WeatherSystem {
     this._timeSystem = timeSystem;
     this._isOutdoorMap = isOutdoorMap;
 
-    this._timeSystem.on('periodChanged', this._handlePeriodChange);
+    this._timeSystem.on('periodChanged', this._handlePeriodChange as (...args: unknown[]) => void);
 
     // If a transition was active when saved, restart its animation loop
     if (this._previousWeather !== null && this._transitionProgress < 1) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BattleState, CombatEntity, Ability, Item, StatusEffect, StatusEffectType } from '../../types/global.types';
+import { BattleState, CombatEntity, Item, StatusEffect, StatusEffectType } from '../../types/global.types';
 import { useGameContext } from '../../context/GameContext';
 import BattleSystem from '../../engine/BattleSystem';
 import styles from './Battle.module.css';
@@ -192,7 +192,6 @@ const Battle: React.FC = () => {
   const battleSystem = battleSystemRef.current;
 
   const [selectedAbilityId, setSelectedAbilityId] = useState<string | null>(null);
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
   const [actionType, setActionType] = useState<'attack' | 'ability' | null>(null);
 
@@ -524,7 +523,7 @@ const Battle: React.FC = () => {
     if (!localBattleState){ return; }
     const updatedBattleState = battleSystem.useItem(localBattleState, player.id, item);
     setLocalBattleState(updatedBattleState);
-    setSelectedItemId(null);
+    // Item selection is handled immediately, no need to track selected item
   }, [localBattleState, battleSystem, player.id]);
 
   const handleFlee = useCallback(() => {
@@ -552,13 +551,11 @@ const Battle: React.FC = () => {
       setIsSelectingTarget(true);
       setActionType('attack');
       setSelectedAbilityId(null);
-      setSelectedItemId(null);
     } else if (type === 'ability') {
       if (typeof value === 'string') {
         const ability = player.abilities.find(a => a.id === value);
         if (ability) {
           setSelectedAbilityId(ability.id);
-          setSelectedItemId(null);
           if (ability.effect.target === 'singleEnemy') {
             setIsSelectingTarget(true);
             setActionType('ability');
@@ -569,7 +566,6 @@ const Battle: React.FC = () => {
       }
     } else if (type === 'item') {
       if (value && typeof value !== 'string') {
-        setSelectedItemId(value.id);
         setSelectedAbilityId(null);
         handlePlayerItem(value);
       }

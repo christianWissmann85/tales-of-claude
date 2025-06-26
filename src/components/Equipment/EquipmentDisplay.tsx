@@ -4,8 +4,7 @@ import styles from './Equipment.module.css'; // CSS module for styling
 // Import necessary types and the Player class from their respective files
 // Player class, EquippableItem interface, and EquipmentSlotType are defined in Player.ts
 import { Player as PlayerClass, EquippableItem, EquipmentSlotType } from '../../models/Player';
-// PlayerStats interface is defined in global.types.ts
-import { PlayerStats } from '../../types/global.types';
+// PlayerStats interface would be imported from global.types.ts if needed
 
 // --- Component Props Interface ---
 interface EquipmentDisplayProps {

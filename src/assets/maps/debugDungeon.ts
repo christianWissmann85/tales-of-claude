@@ -1,7 +1,6 @@
 // src/assets/maps/debugDungeon.ts
 
-import { Position, Tile, TileType, Exit, Enemy, NPC, NPCRole, Item, GameMap as IGameMap } from '../../types/global.types';
-import { GameMap } from '../../models/Map';
+import { Tile, TileType, Exit, Enemy, NPC, NPCRole, Item, GameMap } from '../../types/global.types';
 import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy';
 import { Item as ItemClass, ItemVariant } from '../../models/Item';
 
@@ -301,7 +300,9 @@ tiles[10][18] = {
 };
 
 // Add puzzle entities
-const puzzleEntities: any[] = [
+// Note: These puzzle blocks don't match Enemy | NPC | Item types
+// This appears to be an unfinished puzzle system implementation
+const puzzleEntities: unknown[] = [
   // Push blocks for puzzle 1
   {
     id: 'push_block_1',
@@ -422,13 +423,15 @@ items.push(...secretItems);
 npcs.push(...secretNpcs);
 enemies.push(secretBoss);
 
-// Export the map data conforming to the IGameMap interface
-export const debugDungeonData: IGameMap = {
+// Export the map data conforming to the GameMap interface
+export const debugDungeonData: GameMap = {
   id: 'debugDungeon',
   name: 'Debug Dungeon',
   width: MAP_WIDTH,
   height: MAP_HEIGHT,
   tiles: tiles,
-  entities: [...npcs, ...enemies, ...items, ...puzzleEntities], // Initial entities on the map (NPCs, Enemies, and Items)
+  // NOTE: puzzleEntities removed as they don't match (Enemy | NPC | Item)[] type
+  // This appears to be an unfinished puzzle system that needs proper implementation
+  entities: [...npcs, ...enemies, ...items], // Initial entities on the map (NPCs, Enemies, and Items)
   exits: exits,
 };

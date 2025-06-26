@@ -170,6 +170,8 @@ export class GameEngine {
       // Reinitialize patrol system with new map
       if (newState.currentMap) {
         this._patrolSystem = new PatrolSystem(this._timeSystem, this._weatherSystem, newState.currentMap);
+        // Update game state before initializing
+        this._currentGameState = newState;
         this._initializeMapEnemies(newState.currentMap);
       }
     }
@@ -310,8 +312,9 @@ export class GameEngine {
     // Check for inventory toggle (i key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyI', 'i'])) {
       if (now - this._lastUITime > this._uiCooldown) {
-        console.log('[VICTOR DEBUG] Inventory key pressed, dispatching TOGGLE_INVENTORY');
-        this._dispatch({ type: 'TOGGLE_INVENTORY' });
+        console.log('[UI Manager] I key pressed - opening Inventory');
+        const actions = UIManager.getOpenPanelAction('inventory');
+        actions.forEach(action => this._dispatch(action));
         this._lastUITime = now;
       }
     }
@@ -319,8 +322,9 @@ export class GameEngine {
     // Check for quest journal toggle (q key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyQ', 'q'])) {
       if (now - this._lastUITime > this._uiCooldown) {
-        console.log('[VICTOR DEBUG] Quest key pressed, dispatching TOGGLE_QUEST_LOG');
-        this._dispatch({ type: 'TOGGLE_QUEST_LOG' });
+        console.log('[UI Manager] Q key pressed - opening Quest Log');
+        const actions = UIManager.getOpenPanelAction('questLog');
+        actions.forEach(action => this._dispatch(action));
         this._lastUITime = now;
       }
     }
@@ -328,8 +332,9 @@ export class GameEngine {
     // Check for character screen toggle (c key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyC', 'c'])) {
       if (now - this._lastUITime > this._uiCooldown) {
-        console.log('[VICTOR DEBUG] Character key pressed, dispatching TOGGLE_CHARACTER_SCREEN');
-        this._dispatch({ type: 'TOGGLE_CHARACTER_SCREEN' });
+        console.log('[UI Manager] C key pressed - opening Character Screen');
+        const actions = UIManager.getOpenPanelAction('characterScreen');
+        actions.forEach(action => this._dispatch(action));
         this._lastUITime = now;
       }
     }
@@ -337,8 +342,9 @@ export class GameEngine {
     // Check for faction screen toggle (f key)
     if (this._isAnyOfKeysPressed(this._pressedKeys, ['KeyF', 'f'])) {
       if (now - this._lastUITime > this._uiCooldown) {
-        console.log('[VICTOR DEBUG] Faction key pressed, dispatching TOGGLE_FACTION_STATUS');
-        this._dispatch({ type: 'TOGGLE_FACTION_STATUS' });
+        console.log('[UI Manager] F key pressed - opening Faction Status');
+        const actions = UIManager.getOpenPanelAction('factionStatus');
+        actions.forEach(action => this._dispatch(action));
         this._lastUITime = now;
       }
     }
@@ -810,6 +816,36 @@ export class GameEngine {
         });
       }
       
+      // Update NPC positions
+      const updatedNPCs: NPC[] = [];
+      let npcPositionsChanged = false;
+      
+      this._currentGameState.npcs.forEach(npc => {
+        const patrolData = this._patrolSystem!.getNPCPosition(npc.id);
+        if (patrolData) {
+          const newPosition = patrolData;
+          if (npc.position.x !== newPosition.x || npc.position.y !== newPosition.y) {
+            npcPositionsChanged = true;
+            updatedNPCs.push({
+              ...npc,
+              position: { x: Math.floor(newPosition.x), y: Math.floor(newPosition.y) }
+            });
+          } else {
+            updatedNPCs.push(npc);
+          }
+        } else {
+          updatedNPCs.push(npc);
+        }
+      });
+      
+      // Dispatch NPC updates if positions changed
+      if (npcPositionsChanged) {
+        this._dispatch({
+          type: 'UPDATE_NPCS',
+          payload: { npcs: updatedNPCs },
+        });
+      }
+      
       // Report dispatch frequency every 5 seconds for debugging
       if (now - this._lastDispatchReportTime >= 5000) {
         if (this._updateDispatchCount > 0) {
@@ -934,6 +970,21 @@ export class GameEngine {
       if (variant) {
         this._patrolSystem!.initializeEnemy(enemy as any, variant);
       }
+    });
+    
+    // Initialize NPCs for patrol
+    this._initializeMapNPCs();
+  }
+  
+  /**
+   * Initialize NPCs with patrol routes
+   */
+  private _initializeMapNPCs(): void {
+    if (!this._patrolSystem) { return; }
+    
+    // Initialize all NPCs - PatrolSystem will decide who moves based on role
+    this._currentGameState.npcs.forEach(npc => {
+      this._patrolSystem!.initializeNPC(npc);
     });
   }
   

@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+  static getDerivedStateFromError(_error: Error): Partial<ErrorBoundaryState> {
     // Update state so the next render will show the fallback UI
     return { hasError: true };
   }
@@ -122,9 +122,13 @@ export function withErrorBoundary<P extends object>(
   fallbackComponent?: ReactNode,
   onError?: (error: Error, errorInfo: ErrorInfo) => void,
 ) {
-  return (props: P) => (
+  const WithErrorBoundaryComponent = (props: P) => (
     <ErrorBoundary fallbackComponent={fallbackComponent} onError={onError}>
       <Component {...props} />
     </ErrorBoundary>
   );
+  
+  WithErrorBoundaryComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name || 'Component'})`;
+  
+  return WithErrorBoundaryComponent;
 }

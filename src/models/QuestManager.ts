@@ -9,6 +9,7 @@ import {
 } from '../types/global.types';
 import { mainQuests } from '../assets/quests/mainQuests';
 import { sideQuests } from '../assets/quests/sideQuests';
+import { session4MainQuests } from '../assets/quests/session4MainQuests';
 
 /**
  * Enhanced QuestManager state interface for save/load functionality
@@ -83,6 +84,11 @@ export class QuestManager {
 
     // First, register the main quest data
     for (const [questId, questData] of Object.entries(mainQuests)) {
+      Quest.registerQuestData(questId, questData);
+    }
+    
+    // Register Session 4 main quest data
+    for (const [questId, questData] of Object.entries(session4MainQuests)) {
       Quest.registerQuestData(questId, questData);
     }
     

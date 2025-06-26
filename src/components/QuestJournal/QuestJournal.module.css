@@ -280,6 +280,151 @@
 }
 
 /* 4. Three-column Content Layout */
+.contentWrapper {
+  display: flex;
+  flex-grow: 1;
+  min-height: 0; /* Important for flex/grid items with overflow */
+  position: relative;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Quest List | Quest Details */
+  gap: 20px; /* Space between columns */
+  flex-grow: 1; /* Allows content to take up remaining vertical space */
+  min-height: 0; /* Important for flex/grid items with overflow, prevents content from pushing container */
+  padding: 10px 20px; /* Padding inside borders */
+  width: 100%;
+}
+
+/* ASCII borders */
+.borderLeft,
+.borderRight {
+  color: var(--terminal-border);
+  font-family: 'VT323', monospace;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.borderTop,
+.borderBottom {
+  color: var(--terminal-border);
+  font-family: 'VT323', monospace;
+  text-align: center;
+  user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Header with borders */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 2em;
+  color: var(--terminal-text-secondary);
+  text-shadow: 0 0 15px var(--terminal-text-secondary);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Categories/tabs section */
+.categories {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px dashed var(--terminal-border);
+  border-bottom: 1px dashed var(--terminal-border);
+}
+
+.categoryTabs {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.tab,
+.activeTab {
+  cursor: pointer;
+  padding: 5px 15px;
+  transition: all var(--transition-speed-fast) ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tab {
+  color: var(--terminal-text-primary);
+  opacity: 0.7;
+}
+
+.tab:hover {
+  opacity: 1;
+  text-shadow: 0 0 10px var(--terminal-text-primary);
+}
+
+.activeTab {
+  color: var(--terminal-text-secondary);
+  text-shadow: 0 0 15px var(--terminal-text-secondary);
+  font-weight: bold;
+  border-bottom: 2px solid var(--terminal-text-secondary);
+}
+
+/* Search bar section */
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.searchInput {
+  flex-grow: 1;
+  background-color: var(--terminal-bg-medium);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text-primary);
+  padding: 8px 12px;
+  margin: 0 20px;
+  font-family: 'VT323', monospace;
+  font-size: 1.1em;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2);
+  transition: all var(--transition-speed-fast) ease-in-out;
+}
+
+.searchInput::placeholder {
+  color: rgba(0, 255, 0, 0.5);
+}
+
+.searchInput:focus {
+  border-color: var(--terminal-text-secondary);
+  box-shadow: inset 0 0 10px var(--terminal-text-secondary), 0 0 10px var(--terminal-text-secondary);
+}
+
+/* Controls section */
+.controls {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px dashed var(--terminal-border);
+}
+
+.controlText {
+  flex-grow: 1;
+  text-align: center;
+  color: var(--terminal-text-primary);
+  opacity: 0.8;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+}
+
 .questLogMainContent {
   display: grid;
   grid-template-columns: 1fr 2fr 1.5fr; /* Quest List | Quest Details | Branch Visualization */
@@ -300,6 +445,8 @@
   overflow-y: auto; /* Enable scrolling for content within each column */
   flex-shrink: 0; /* Prevent these columns from shrinking below their content size */
   position: relative; /* For ASCII borders */
+  min-height: 300px; /* Ensure minimum height for visibility */
+  max-height: 60vh; /* Limit height to viewport for scrolling */
 }
 
 /* ASCII Borders for columns (conceptual, using simple lines) */
@@ -320,6 +467,24 @@
 }
 
 /* 5. Quest List Items */
+.listHeader {
+  font-size: 1.2em;
+  color: var(--terminal-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed var(--terminal-border);
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--terminal-text-primary);
+  opacity: 0.6;
+  font-style: italic;
+  padding: 20px;
+}
+
 .questItem {
   padding: 10px 12px; /* Increased padding */
   margin-bottom: 8px; /* More space */
@@ -459,8 +624,47 @@
 .questItem .factionIcon.synthetics { background-color: var(--faction-synthetics); }
 .questItem .factionIcon.nomads { background-color: var(--faction-nomads); }
 
+/* Mini progress shown under quest name in list */
+.miniProgress {
+  font-size: 0.85em;
+  color: var(--terminal-text-accent);
+  opacity: 0.8;
+  margin-top: 3px;
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 /* 6. Quest Details Section */
+.detailsHeader {
+  font-size: 1.8em;
+  color: var(--terminal-text-secondary);
+  text-shadow: 0 0 10px var(--terminal-text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.questStatus {
+  font-size: 1.1em;
+  color: var(--terminal-text-primary);
+  margin-bottom: 15px;
+  padding: 5px 10px;
+  background-color: var(--terminal-bg-light);
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.description {
+  font-size: 1.05em;
+  color: var(--terminal-text-accent);
+  margin-bottom: 20px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
 .detailTitle {
   font-size: 2em;
   color: var(--terminal-text-secondary); /* Brighter green for the detail title */
@@ -538,6 +742,20 @@
 .collapsibleContent.collapsed {
   max-height: 0;
   opacity: 0;
+}
+
+.objectives {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--terminal-border);
+}
+
+.objectivesHeader {
+  font-size: 1.3em;
+  color: var(--terminal-text-primary);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .objectives h4 {
@@ -667,6 +885,35 @@
   font-size: 1.5em;
   margin-bottom: 10px;
   letter-spacing: 2px;
+}
+
+.rewards {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--terminal-border);
+}
+
+.rewardsHeader {
+  font-size: 1.3em;
+  color: var(--quest-main-color);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px var(--quest-main-color);
+}
+
+.rewards > div {
+  margin-bottom: 5px;
+  color: var(--terminal-text-primary);
+}
+
+.prerequisites {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: var(--terminal-bg-light);
+  border-radius: 3px;
+  color: var(--terminal-text-accent);
+  font-size: 0.95em;
 }
 
 .questReward {

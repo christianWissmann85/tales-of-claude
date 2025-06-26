@@ -4,18 +4,17 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useGameContext } from '../../context/GameContext';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { GameEngine } from '../../engine/GameEngine';
-import { MovementSystem } from '../../engine/MovementSystem';
-import { Position, TileType, Enemy, NPC, Item as IItem, CombatLogEntry, TimeOfDay } from '../../types/global.types';
+import { Position, CombatLogEntry, TimeOfDay } from '../../types/global.types';
 import Inventory from '../Inventory/Inventory';
 import { Inventory as InventoryModel } from '../../models/Inventory';
 import { Player } from '../../models/Player';
-import { Item as ItemClass } from '../../models/Item';
+import { Item as ItemModel, ItemVariant } from '../../models/Item';
 import QuestJournal from '../QuestJournal/QuestJournal';
 import QuestTracker from '../QuestTracker/QuestTracker';
 import CharacterScreen from '../CharacterScreen/CharacterScreen';
 import { EquipmentSlotType } from '../../models/Player';
 import { TalentTree } from '../../models/TalentTree';
-import PlayerProgressBar from '../PlayerProgressBar/PlayerProgressBar';
+// import PlayerProgressBar from '../PlayerProgressBar/PlayerProgressBar'; // Removed - using only left status bar
 import MiniCombatLog from '../MiniCombatLog/MiniCombatLog';
 import { useNotification } from '../NotificationSystem/NotificationSystem';
 import Hotbar from '../Hotbar/Hotbar';
@@ -70,7 +69,7 @@ const clonePlayer = (player: Player): Player => {
 
 const GameBoard: React.FC = () => {
   const { state, dispatch } = useGameContext();
-  const { pressedKeys, getDirection } = useKeyboard();
+  const { pressedKeys } = useKeyboard();
   const gameEngineRef = useRef<GameEngine | null>(null);
   const { notify } = useNotification();
   const [combatLog, setCombatLog] = React.useState<CombatLogEntry[]>([]);
@@ -82,11 +81,9 @@ const GameBoard: React.FC = () => {
     const inventory = new InventoryModel();
     state.player.inventory.forEach(item => {
       if (item && item.id && item.type) {
-        if (!(item instanceof ItemClass) && 'name' in item) {
-          inventory.addItem(item as any);
-        } else {
-          inventory.addItem(item);
-        }
+        // Create an Item instance from the serialized data
+        const itemInstance = ItemModel.createItem(item.id as ItemVariant);
+        inventory.addItem(itemInstance);
       } else {
         console.error('Invalid item in player inventory:', item);
       }
@@ -126,8 +123,13 @@ const GameBoard: React.FC = () => {
       gameEngineRef.current.setGameState(state);
     }
     // Expose game state and engine for debugging
-    (window as any).__gameState = state;
-    (window as any).__gameEngine = gameEngineRef.current;
+    // Debug globals - properly typed
+    interface DebugWindow extends Window {
+      __gameState?: typeof state;
+      __gameEngine?: GameEngine | null;
+    }
+    (window as DebugWindow).__gameState = state;
+    (window as DebugWindow).__gameEngine = gameEngineRef.current;
   }, [state]);
 
   // Pass raw keyboard input (set of pressed keys) to the GameEngine.
@@ -165,9 +167,9 @@ const GameBoard: React.FC = () => {
     }
   }, [dispatch, notify, state.currentMap.id]);
 
-  const handleUseItem = useCallback((itemId: string, quantity?: number) => {
+  const handleUseItem = useCallback((itemId: string, _quantity?: number) => {
     const item = playerInventory.getItem(itemId);
-    if (item && item instanceof ItemClass) {
+    if (item && item instanceof ItemModel) {
       const result = item.use(state.player);
       
       if (result.success) {
@@ -325,16 +327,8 @@ const GameBoard: React.FC = () => {
           />
         )}
       </div>
-      {/* Player Progress Bar */}
-      <PlayerProgressBar
-        level={state.player.stats.level}
-        currentXP={state.player.stats.exp}
-        maxXpForLevel={state.player.stats.level * 100}
-        currentHP={state.player.stats.hp}
-        maxHP={state.player.stats.maxHp}
-        currentEnergy={state.player.stats.energy}
-        maxEnergy={state.player.stats.maxEnergy}
-      />
+      {/* Player Progress Bar - REMOVED per Chris's request to fix duplication */}
+      {/* Keeping only the left-side status bar display */}
       {/* Mini Combat Log - only show during battles */}
       {state.battle && (
         <MiniCombatLog logEntries={combatLog} />

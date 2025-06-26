@@ -1,0 +1,85 @@
+{
+  "name": "agent-diary",
+  "version": "1.0.0",
+  "description": "MCP server for agent diary management with SQLite backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js",
+    "migrate": "node scripts/migrate-diaries.js",
+    "init-db": "node -e \"import('./lib/diary-api.js').then(m => m.initializeDatabase())\""
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.1",
+    "better-sqlite3": "^9.2.2"
+  },
+  "devDependencies": {
+    "glob": "^10.3.10"
+  },
+  "mcp": {
+    "tools": {
+      "saveEntry": {
+        "description": "Save diary entry with automatic chunking",
+        "parameters": {
+          "agentName": "string",
+          "title": "string",
+          "content": "string",
+          "entryType": "string",
+          "tags": "string",
+          "priority": "number"
+        }
+      },
+      "recallEntries": {
+        "description": "Query specific entries with filters",
+        "parameters": {
+          "agentName": "string",
+          "query": "string",
+          "dateStart": "string",
+          "dateEnd": "string",
+          "entryType": "string",
+          "limit": "number",
+          "offset": "number"
+        }
+      },
+      "searchDiaries": {
+        "description": "Full-text search across all diaries",
+        "parameters": {
+          "query": "string",
+          "agentFilter": "string",
+          "typeFilter": "string",
+          "limit": "number",
+          "offset": "number"
+        }
+      },
+      "getSummary": {
+        "description": "Get agent summaries (daily/weekly/monthly)",
+        "parameters": {
+          "agentName": "string",
+          "summaryType": "string",
+          "date": "string",
+          "autoGenerate": "boolean"
+        }
+      },
+      "trackRelationships": {
+        "description": "Update cross-agent relationships",
+        "parameters": {
+          "fromAgent": "string",
+          "toAgent": "string",
+          "relationshipType": "string",
+          "context": "string",
+          "strength": "number"
+        }
+      },
+      "getEmotions": {
+        "description": "Get emotion analysis for entries",
+        "parameters": {
+          "agentName": "string",
+          "dateStart": "string",
+          "dateEnd": "string",
+          "emotionType": "string"
+        }
+      }
+    }
+  }
+}

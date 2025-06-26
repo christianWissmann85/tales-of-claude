@@ -13,7 +13,7 @@ async function testMapLoading() {
     console.log(`✅ terminalTown loaded: ${terminalTown.name} (${terminalTown.width}x${terminalTown.height})`);
     
     // Test loading other maps
-    const mapsToTest = ['binaryForest', 'debugDungeon'];
+    const mapsToTest = ['binaryForest', 'debugDungeon', 'terminalFields'];
     
     for (const mapId of mapsToTest) {
       console.log(`\n2. Testing ${mapId} load...`);

@@ -1,6 +1,6 @@
 // src/models/Map.ts
 
-import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../types/global.types';
+import { Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../types/global.types';
 import { NPCModel } from './NPC'; // Import the NPCModel class
 
 /**

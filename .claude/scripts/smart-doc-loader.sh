@@ -23,24 +23,30 @@ echo ""
 detect_role() {
     local name="$1"
     
+    # Team leads/orchestrators (check first)
+    if [[ "$name" =~ lead|orchestrat|coordinat|manag ]]; then
+        echo "team-lead"
     # Bug fixers
-    if [[ "$name" =~ fix|debug|repair|patch|emergency|critical ]]; then
+    elif [[ "$name" =~ fix|debug|repair|patch|emergency|critical ]]; then
         echo "bug-fixer"
     # Test writers
     elif [[ "$name" =~ test|spec|verification|quality ]]; then
         echo "test-writer"
-    # Visual/UI
-    elif [[ "$name" =~ visual|ui|layout|style|design|color|animation ]]; then
-        echo "visual-ui"
-    # Team leads/orchestrators
-    elif [[ "$name" =~ lead|orchestrat|coordinat|manag ]]; then
-        echo "team-lead"
     # Knowledge/documentation
     elif [[ "$name" =~ knowledge|document|consolidat|manual ]]; then
         echo "knowledge-worker"
     # System/architecture
-    elif [[ "$name" =~ system|architect|infrastructure|integration ]]; then
+    elif [[ "$name" =~ system|architect|infrastructure ]]; then
         echo "system-architect"
+    # Integration specialists
+    elif [[ "$name" =~ integration && ! "$name" =~ test ]]; then
+        echo "system-architect"
+    # Visual/UI (check after other specific roles, avoid "build" matching "ui")
+    elif [[ "$name" =~ visual|[^b]ui|layout|style|design|color|animation ]]; then
+        echo "visual-ui"
+    # Code builders (check for explicit builder/coder patterns)
+    elif [[ "$name" =~ build|code|implement|develop|program ]]; then
+        echo "code-builder"
     # Default
     else
         echo "code-builder"
@@ -123,6 +129,18 @@ case "$ROLE" in
         ;;
         
     "system-architect")
+        echo "## System Architecture (Nina's Lean Docs)"
+        echo '```markdown'
+        # Include ARCHITECTURE_LEAN.md for system architects
+        cat "$SCRIPT_DIR/../../docs/ARCHITECTURE_LEAN.md" 2>/dev/null || echo "Architecture guide not found"
+        echo '```'
+        echo ""
+        echo "## Integration Guide (Hidden Features)"
+        echo '```markdown'
+        # Show first 50 lines of integration guide
+        head -50 "$SCRIPT_DIR/../../docs/INTEGRATION_GUIDE.md" 2>/dev/null || echo "Integration guide not found"
+        echo '```'
+        echo ""
         echo "## System Patterns"
         echo '```typescript'
         echo "// Event-driven pattern (preferred)"
@@ -138,6 +156,12 @@ case "$ROLE" in
         ;;
         
     *)  # code-builder (default)
+        echo "## API Reference (Essential Methods)"
+        echo '```markdown'
+        # Show key sections of API reference for builders
+        grep -A20 "## [0-9]\." "$SCRIPT_DIR/../../docs/API_REFERENCE_LEAN.md" 2>/dev/null | head -100 || echo "API reference not found"
+        echo '```'
+        echo ""
         echo "## Delegate Best Practices"
         echo '```typescript'
         grep -A10 "Delegate.*Communication" "$REVOLUTION_DIR/knowledge/CLAUDE_KNOWLEDGE_LEAN.md" 2>/dev/null | head -15

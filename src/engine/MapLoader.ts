@@ -24,6 +24,7 @@ import terminalTownExpandedJson from '../assets/maps/json/terminalTownExpanded.j
 import crystalCavernsJson from '../assets/maps/json/crystalCaverns.json';
 import syntaxSwampJson from '../assets/maps/json/syntaxSwamp.json';
 import overworldJson from '../assets/maps/json/overworld.json';
+import terminalFieldsJson from '../assets/maps/json/terminalFields.json';
 
 // Define base directories for map files as relative URLs for browser
 // These are primarily for the TS map fallback, as JSON maps are now statically imported.
@@ -107,6 +108,7 @@ export class MapLoader {
     crystalCaverns: crystalCavernsJson as any as JsonMap,
     syntaxSwamp: syntaxSwampJson as any as JsonMap,
     overworld: overworldJson as any as JsonMap,
+    terminalFields: terminalFieldsJson as any as JsonMap,
   };
 
   private constructor() {

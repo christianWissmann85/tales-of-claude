@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './CharacterScreen.module.css';
 import { Player, EquipmentSlotType } from '../../models/Player';
 import { Item } from '../../types/global.types';
-import { TalentTree, Talent, TalentEffectType, TalentSpecialEffect } from '../../models/TalentTree'; // Import TalentTree and Talent
+import { Talent } from '../../models/TalentTree'; // Import Talent
 
 interface CharacterScreenProps {
   player: Player;
@@ -27,7 +27,7 @@ const CharacterScreen: React.FC<CharacterScreenProps> = ({
   const baseStats = player.getBaseStats();
 
   // Define the structure for equipment slots
-  const slots: { label: string; type: EquipmentSlotType; item?: any }[] = [
+  const slots: { label: string; type: EquipmentSlotType; item?: Item | null }[] = [
     { label: 'Weapon', type: 'weapon', item: player.weaponSlot },
     { label: 'Armor', type: 'armor', item: player.armorSlot },
     { label: 'Accessory', type: 'accessory', item: player.accessorySlot },

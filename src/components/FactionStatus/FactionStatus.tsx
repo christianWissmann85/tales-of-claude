@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './FactionStatus.module.css';
 import { useGameContext } from '../../context/GameContext';
 import { useKeyboard } from '../../hooks/useKeyboard'; // Adjust path as needed
@@ -34,7 +34,7 @@ const FactionStatus: React.FC = () => {
     
     // Check for 'f' key press (rising edge)
     if (currentPressedKeys.has('KeyF') && !prevPressedKeys.current.has('KeyF')) {
-      dispatch({ type: 'TOGGLE_FACTION_STATUS' });
+      dispatch({ type: 'SHOW_FACTION_STATUS', payload: { show: !isVisible } });
     }
     
     // Check for 'ESC' key press to close

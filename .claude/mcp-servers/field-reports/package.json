@@ -1,0 +1,24 @@
+{
+  "name": "field-reports-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for managing field reports with advanced extraction and analysis capabilities",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.1",
+    "better-sqlite3": "^11.7.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "mcp",
+    "field-reports",
+    "knowledge-management",
+    "token-optimization"
+  ],
+  "author": "Jordan (Integration Specialist)",
+  "license": "MIT"
+}

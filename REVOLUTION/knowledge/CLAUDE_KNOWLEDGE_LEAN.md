@@ -2,6 +2,32 @@
 
 This guide provides critical patterns and solutions to save tokens, prevent errors, and optimize agent performance. Scan it before starting any task.
 
+## 📚 Essential Documentation
+
+When working on Tales of Claude, always check these core documents:
+
+1. **ARCHITECTURE_LEAN.md** (70 lines) - System overview, patterns, event flows
+   - Read this when: Starting new features, understanding system interactions
+   - Location: `docs/ARCHITECTURE_LEAN.md`
+
+2. **API_REFERENCE_LEAN.md** (470 lines) - Complete method signatures
+   - Read this when: Implementing features, fixing bugs, integrating systems
+   - Location: `docs/API_REFERENCE_LEAN.md`
+
+3. **INTEGRATION_GUIDE.md** - Hidden features activation guide
+   - Read this when: Activating PatrolSystem, UIManager, PuzzleSystem, etc.
+   - Location: `docs/INTEGRATION_GUIDE.md`
+
+4. **DOCUMENTATION_INDEX.md** - Complete documentation map
+   - Read this when: Looking for any specific documentation
+   - Location: `docs/DOCUMENTATION_INDEX.md`
+
+### Quick Doc Loading
+```bash
+# Get role-specific documentation (saves 85-91% tokens!)
+source .claude/scripts/smart-doc-loader.sh "your-agent-name"
+```
+
 ## 🚀 Delegate Communication & Token Efficiency
 
 *   **Context is King:** Always attach ALL relevant files (`files=["..."]`) to delegate calls. Show, don't just tell.
@@ -12,6 +38,18 @@ This guide provides critical patterns and solutions to save tokens, prevent erro
 *   **Strategic Bundling:** For analyzing large documentation (e.g., 4.3MB), bundle logically by topic or use `find src -name "*.ts" | xargs cat > bundle.tmp`.
 *   **Snippet Extraction:** To get specific code, use `grep -n "funcName" file.ts` to find line numbers, then `sed -n 'startLine,endLinep' file.ts`.
 *   **Optimal Timeouts:** Use 400-600s for creative or complex tasks. Agents don't experience the wait.
+*   **Documentation Context:** Always include relevant docs when delegating complex tasks:
+    ```typescript
+    delegate_invoke({
+      model: "gemini-2.5-flash",
+      files: [
+        "src/models/Player.ts",           // The file to work on
+        "docs/API_REFERENCE_LEAN.md",     // API signatures
+        "docs/ARCHITECTURE_LEAN.md"       // System patterns
+      ],
+      prompt: "Implement the new companion system following our architecture patterns..."
+    })
+    ```
 
 ## 🐛 Common Bug Fixes & Code Patterns
 

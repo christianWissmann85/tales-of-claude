@@ -1,0 +1,20 @@
+{
+  "name": "mcp-migration-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Migration scripts for moving markdown data to MCP tools",
+  "main": "migrate-to-mcp.js",
+  "scripts": {
+    "migrate": "node migrate-to-mcp.js",
+    "migrate:dry": "node migrate-to-mcp.js --dry-run",
+    "migrate:verbose": "node migrate-to-mcp.js --verbose",
+    "test": "node migrate-to-mcp.js --dry-run --verbose"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.2.2",
+    "chalk": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -267,13 +267,11 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
         if (selectedQuantityItem) {
           setSelectedQuantityItem(null);
           setQuantityToUse(1);
-        } 
-        // If context menu is open, close it
-        else if (contextMenu.visible) {
+        } else if (contextMenu.visible) {
+          // If context menu is open, close it
           setContextMenu({ visible: false, x: 0, y: 0, item: null });
-        }
-        // Otherwise close the inventory
-        else {
+        } else {
+          // Otherwise close the inventory
           onClose();
         }
       }

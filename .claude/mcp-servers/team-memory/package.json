@@ -1,0 +1,45 @@
+{
+  "name": "team-memory",
+  "version": "1.0.0",
+  "description": "MCP server for persistent team memory - saves and recalls solutions",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "mcp": {
+    "tools": {
+      "save": {
+        "description": "Store a solution that worked",
+        "parameters": {
+          "key": "string",
+          "value": "string",
+          "agent": "string"
+        }
+      },
+      "recall": {
+        "description": "Get relevant past solutions",
+        "parameters": {
+          "query": "string"
+        }
+      },
+      "check": {
+        "description": "Check if we've solved this before",
+        "parameters": {
+          "task": "string"
+        }
+      },
+      "consolidate": {
+        "description": "Merge duplicate solutions/agents",
+        "parameters": {}
+      },
+      "report": {
+        "description": "Show learning metrics",
+        "parameters": {}
+      }
+    }
+  }
+}

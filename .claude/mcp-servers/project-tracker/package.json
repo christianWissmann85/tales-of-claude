@@ -1,0 +1,26 @@
+{
+  "name": "project-tracker-mcp",
+  "version": "1.0.0",
+  "description": "Project tracker MCP server for Tales of Claude - A narrative-driven development chronicle",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "mcp",
+    "project-tracker",
+    "tales-of-claude",
+    "development-chronicle"
+  ],
+  "author": "Patricia (AI Behavior & Learning Systems)",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

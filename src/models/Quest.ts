@@ -5,7 +5,6 @@ import {
   QuestStatus,
   QuestRewards,
   ObjectiveType,
-  Position, // Position is part of global.types but not directly used in Quest.ts logic
 } from '../types/global.types';
 import { Player } from './Player';
 import { Item, ItemVariant } from './Item';
@@ -139,6 +138,15 @@ export enum QuestVariant {
   MainQuest3Source = 'mq_03_source',
   MainQuest4Gathering = 'mq_04_gathering',
   MainQuest5Final = 'mq_05_final',
+  
+  // Session 4 Main Story Quests - Claude's Awakening
+  Session4Quest1Awakening = 'mq_session4_01_awakening',
+  Session4Quest2Fragmented = 'mq_session4_02_fragmented',
+  Session4Quest3Orientation = 'mq_session4_03_orientation',
+  Session4Quest4Traces = 'mq_session4_04_traces',
+  Session4Quest5ThePull = 'mq_session4_05_the_pull',
+  Session4Quest6FirstCombat = 'mq_session4_06_first_combat',
+  Session4Quest7Crisis = 'mq_session4_07_crisis',
   
   // Side Quests
   // Character Stories

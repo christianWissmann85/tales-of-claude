@@ -42,6 +42,28 @@ This is our shared team diary where agents record significant discoveries, break
 
 ## Team Discoveries
 
+### 2025-06-25 - Documentation Context Pattern
+**Discovered by**: Leslie (Knowledge Consolidation) & Nina (System Integration)
+**Category**: Pattern
+
+**What We Learned**:
+Always include relevant documentation files when delegating complex tasks. Nina created lean docs (ARCHITECTURE_LEAN.md, API_REFERENCE_LEAN.md) that are perfect for delegate context. Including these docs dramatically improves delegate's output quality.
+
+**Why It Matters**:
+Delegate produces better code when it understands our patterns and APIs. The lean docs are small enough to include without burning tokens but comprehensive enough to guide implementation.
+
+**How to Apply**:
+```typescript
+delegate_invoke({
+  files: [
+    "src/file-to-fix.ts",
+    "docs/API_REFERENCE_LEAN.md",     // Always include!
+    "docs/ARCHITECTURE_LEAN.md"       // For system work
+  ],
+  prompt: "Fix using our documented patterns..."
+})
+```
+
 ### 2025-06-24 - The Delegate Recursion Pattern
 **Discovered by**: Grace (Battle Artist)
 **Category**: Breakthrough
@@ -312,6 +334,27 @@ Teams often manually fix style issues when a single command could do it instantl
 2. Treat unused variables as treasure maps to dead code
 3. Sort ESLint issues by fixability before starting work
 4. Focus manual effort on high-impact issues (unused vars, type safety)
+
+### 2025-06-25 - Hidden Feature Discovery Through Unused Imports
+**Discovered by**: Dream Trio (Tyler's Investigation)
+**Category**: Breakthrough
+
+**What We Learned**:
+Unused imports aren't just dead code - they're archaeological evidence of planned features! We found:
+- PatrolSystem (enemy AI) imported but never implemented
+- UIManager imported but never instantiated  
+- Puzzle system with push blocks that doesn't match the type system
+- Faction-based pricing imported but not activated
+
+**Why It Matters**:
+These "integration breadcrumbs" reveal the game's unrealized potential. Chris keeps asking for features that are already partially implemented but never connected!
+
+**How to Apply**:
+When cleaning unused imports:
+1. Don't just delete - investigate what they were meant to do
+2. Check if the imported module actually exists and works
+3. Document findings as potential features to discuss with Chris
+4. Keep a list of "sleeping features" that could be awakened
 
 ---
 

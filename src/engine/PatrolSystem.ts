@@ -1,7 +1,7 @@
 import { TimeSystem } from './TimeSystem';
 import { WeatherSystem } from './WeatherSystem';
 import { GameMap } from '../models/Map';
-import { Position, Enemy as IEnemy, WeatherType } from '../types/global.types';
+import { Position, Enemy as IEnemy, WeatherType, NPC } from '../types/global.types';
 import { Enemy, EnemyVariant } from '../models/Enemy';
 
 // Data structure for patrol routes as per requirements
@@ -30,9 +30,24 @@ interface EnemyPatrolData {
   waitUntil?: number; // timestamp for waypoint waits or alert state
 }
 
+// Data structure for NPC patrol state
+interface NPCPatrolData {
+  id: string;
+  state: 'PATROL' | 'IDLE' | 'SCHEDULE_MOVE';
+  currentPosition: Position;
+  route: PatrolRoute;
+  originalPosition: Position;
+  targetPosition: Position | null;
+  movementSpeed: number; // tiles per second
+  waitUntil?: number; // timestamp for waypoint waits
+  chatChance: number; // 0-1 chance to pause and "chat"
+  scheduleIndex?: number; // Current schedule entry index
+}
+
 export class PatrolSystem {
     private enemies: Map<string, EnemyPatrolData> = new Map();
     private defeatedEnemies: Map<string, { data: EnemyPatrolData; originalEnemy: IEnemy }> = new Map();
+    private npcs: Map<string, NPCPatrolData> = new Map();
     private timeSystem: TimeSystem;
     private weatherSystem: WeatherSystem;
     private gameMap: GameMap;
@@ -74,6 +89,35 @@ export class PatrolSystem {
             alertRadius: 5,
             patrolType: 'stationary' as const,
             sleepDuringDay: false,
+        },
+    };
+
+    // NPC type configurations
+    private readonly NPC_CONFIGS = {
+        townsperson: {
+            movementSpeed: 1.0, // slow walk
+            patrolType: 'random' as const,
+            chatChance: 0.3, // 30% chance to pause
+        },
+        guard: {
+            movementSpeed: 1.5, // steady patrol
+            patrolType: 'circular' as const,
+            chatChance: 0.1, // 10% chance to pause
+        },
+        child: {
+            movementSpeed: 2.5, // runs around
+            patrolType: 'random' as const,
+            chatChance: 0.5, // 50% chance to pause
+        },
+        shopkeeper: {
+            movementSpeed: 0.5, // very slow
+            patrolType: 'stationary' as const,
+            chatChance: 0.8, // 80% chance to stay still
+        },
+        merchant: {
+            movementSpeed: 1.2,
+            patrolType: 'back-forth' as const,
+            chatChance: 0.4,
         },
     };
 
@@ -122,6 +166,70 @@ export class PatrolSystem {
         if (storeOriginal) {
             this.defeatedEnemies.set(enemy.id, { data: patrolData, originalEnemy: enemy });
         }
+    }
+
+    /**
+     * Initialize an NPC with patrol data
+     */
+    public initializeNPC(npc: NPC, npcType?: string): void {
+        // Determine NPC type from role or use provided type
+        const type = npcType || this.getNPCTypeFromRole(npc.role);
+        const config = this.NPC_CONFIGS[type as keyof typeof this.NPC_CONFIGS] || this.NPC_CONFIGS.townsperson;
+        
+        const patrolData: NPCPatrolData = {
+            id: npc.id,
+            state: 'IDLE',
+            currentPosition: { ...npc.position },
+            originalPosition: { ...npc.position },
+            route: this.generatePatrolRoute(npc.position, config.patrolType),
+            targetPosition: null,
+            movementSpeed: config.movementSpeed,
+            chatChance: config.chatChance,
+            scheduleIndex: 0,
+        };
+
+        // Start with a chat pause
+        patrolData.waitUntil = Date.now() + (2000 + Math.random() * 3000); // 2-5 seconds
+        
+        this.npcs.set(npc.id, patrolData);
+    }
+
+    /**
+     * Helper to determine NPC type from role
+     */
+    private getNPCTypeFromRole(role: string): string {
+        const roleMap: { [key: string]: string } = {
+            'guard': 'guard',
+            'Guard': 'guard',
+            'shopkeeper': 'shopkeeper',
+            'Shopkeeper': 'shopkeeper',
+            'merchant': 'merchant',
+            'Merchant': 'merchant',
+            'memory_merchant': 'merchant',
+            'child': 'child',
+            'Child': 'child',
+            'villager': 'townsperson',
+            'Villager': 'townsperson',
+            'townsperson': 'townsperson',
+            'Townsperson': 'townsperson',
+            'debugger': 'townsperson',
+            'pip': 'child', // Pip should move around like a child
+            'compiler_cat': 'stationary', // Compiler Cat should mostly stay put
+        };
+        
+        // Direct match first
+        if (roleMap[role]) {
+            return roleMap[role];
+        }
+        
+        // Check if role contains any of these keywords
+        for (const [keyword, type] of Object.entries(roleMap)) {
+            if (role.toLowerCase().includes(keyword.toLowerCase())) {
+                return type;
+            }
+        }
+        
+        return 'townsperson'; // Default
     }
 
     /**
@@ -217,6 +325,28 @@ export class PatrolSystem {
                     break;
                 case 'RETURNING':
                     this.updateReturning(enemyData, deltaTime);
+                    break;
+            }
+        });
+
+        // Update NPCs
+        this.npcs.forEach((npcData) => {
+            // Check if waiting (chatting)
+            if (npcData.waitUntil && Date.now() < npcData.waitUntil) {
+                return;
+            }
+
+            // Update NPC movement
+            switch (npcData.state) {
+                case 'IDLE':
+                    this.updateNPCIdle(npcData, deltaTime);
+                    break;
+                case 'PATROL':
+                    this.updateNPCPatrol(npcData, deltaTime);
+                    break;
+                case 'SCHEDULE_MOVE':
+                    // TODO: Implement schedule-based movement
+                    this.updateNPCPatrol(npcData, deltaTime);
                     break;
             }
         });
@@ -529,6 +659,102 @@ export class PatrolSystem {
                 defeatedInfo.data = enemyData;
             }
         }
+    }
+
+    /**
+     * Update NPC in idle state
+     */
+    private updateNPCIdle(npcData: NPCPatrolData, deltaTime: number): void {
+        // Decide next action
+        if (npcData.route.type === 'stationary') {
+            // Stationary NPCs just wait longer
+            npcData.waitUntil = Date.now() + (5000 + Math.random() * 10000); // 5-15 seconds
+            return;
+        }
+
+        // Transition to patrol
+        npcData.state = 'PATROL';
+        
+        if (npcData.route.type === 'random') {
+            // Pick a random destination within range
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 5; // 5 tile radius
+            const targetX = npcData.originalPosition.x + Math.cos(angle) * distance;
+            const targetY = npcData.originalPosition.y + Math.sin(angle) * distance;
+            npcData.targetPosition = { x: Math.floor(targetX), y: Math.floor(targetY) };
+        } else {
+            // Move to next waypoint
+            const nextIndex = (npcData.route.currentWaypointIndex + 1) % npcData.route.waypoints.length;
+            npcData.route.currentWaypointIndex = nextIndex;
+            npcData.targetPosition = npcData.route.waypoints[nextIndex];
+        }
+    }
+
+    /**
+     * Update NPC in patrol state
+     */
+    private updateNPCPatrol(npcData: NPCPatrolData, deltaTime: number): void {
+        if (!npcData.targetPosition) {
+            npcData.state = 'IDLE';
+            return;
+        }
+
+        // Move toward target
+        const reached = this.moveTowardNPC(npcData, npcData.targetPosition, deltaTime);
+        
+        if (reached) {
+            // Reached destination - decide to chat or continue
+            npcData.state = 'IDLE';
+            
+            if (Math.random() < npcData.chatChance) {
+                // Pause to "chat"
+                npcData.waitUntil = Date.now() + (3000 + Math.random() * 5000); // 3-8 seconds
+            } else {
+                // Continue moving immediately
+                npcData.waitUntil = Date.now() + 500; // Brief pause
+            }
+        }
+    }
+
+    /**
+     * Move NPC toward a target position
+     */
+    private moveTowardNPC(npcData: NPCPatrolData, target: Position, deltaTime: number): boolean {
+        const dx = target.x - npcData.currentPosition.x;
+        const dy = target.y - npcData.currentPosition.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 0.1) {
+            return true; // Reached target
+        }
+
+        // NPCs move at consistent speed (no weather/time effects for simplicity)
+        const speed = npcData.movementSpeed;
+        const moveDistance = speed * (deltaTime / 1000);
+        const moveRatio = Math.min(moveDistance / distance, 1);
+
+        const newX = npcData.currentPosition.x + dx * moveRatio;
+        const newY = npcData.currentPosition.y + dy * moveRatio;
+
+        // Check collision
+        const tile = this.gameMap.getTile(Math.floor(newX), Math.floor(newY));
+        if (tile && tile.walkable) {
+            npcData.currentPosition.x = newX;
+            npcData.currentPosition.y = newY;
+        } else {
+            // NPCs just stop at obstacles (no pathfinding for now)
+            npcData.state = 'IDLE';
+            npcData.waitUntil = Date.now() + 2000; // Wait 2 seconds
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the current position of an NPC
+     */
+    public getNPCPosition(npcId: string): Position | undefined {
+        return this.npcs.get(npcId)?.currentPosition;
     }
 
     /**

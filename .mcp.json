@@ -5,6 +5,34 @@
       "command": "delegate",
       "args": [],
       "env": {}
+    },
+    "team-memory": {
+      "type": "stdio",
+      "command": "node",
+      "args": [".claude/mcp-servers/team-memory/index.js"],
+      "env": {}
+    },
+    "agent-diary": {
+      "type": "stdio",
+      "command": "node",
+      "args": [".claude/mcp-servers/agent-diary/index.js"],
+      "env": {
+        "AGENT_DIARY_DB_PATH": "./memory/agent_diary.db"
+      }
+    },
+    "field-reports": {
+      "type": "stdio",
+      "command": "node",
+      "args": [".claude/mcp-servers/field-reports/index.js"],
+      "env": {
+        "FIELD_REPORTS_DB_PATH": "./memory/field_reports.db"
+      }
+    },
+    "project-tracker": {
+      "type": "stdio",
+      "command": "node",
+      "args": [".claude/mcp-servers/project-tracker/index.js"],
+      "env": {}
     }
   }
 }

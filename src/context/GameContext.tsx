@@ -1,6 +1,7 @@
+// src/context/GameContext.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import {
-  GameState as IGameState, // Renamed to IGameState to avoid conflict with local GameState interface
+  GameState as IGameState,
   Position,
   Direction,
   DialogueState,
@@ -9,7 +10,7 @@ import {
   Enemy,
   NPC,
   PlayerStats,
-  GameMap as IGameMap, // Renamed to IGameMap to avoid conflict with local GameMap class
+  GameMap as IGameMap,
   CombatEntity,
   ShopState,
   ShopItem,
@@ -21,19 +22,15 @@ import {
 } from '../types/global.types';
 import { Player } from '../models/Player';
 import { TalentTree } from '../models/TalentTree';
-import { GameMap } from '../models/Map'; // Import the GameMap class
-import { getMap } from '../assets/maps'; // Import getMap function for async map loading
-import SaveGameService from '../services/SaveGame'; // Import SaveGameService
-import dialoguesData from '../assets/dialogues.json'; // Import dialogue data
-import { QuestManager } from '../models/QuestManager'; // Import QuestManager
-import { Quest, QuestVariant } from '../models/Quest'; // Import Quest and QuestVariant
-import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
-import { applyFactionPricing } from '../utils/shopPricing'; // Import shop pricing utility
-import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Import dialogue helper
-import { UIManager } from '../engine/UIManager'; // Import UIManager
-
-// Export GameAction type for external use
-// REMOVED: export type { GameAction }; // This line was removed as per instruction 1 & 3
+import { GameMap } from '../models/Map';
+import { getMap } from '../assets/maps';
+import SaveGameService from '../services/SaveGame';
+import dialoguesData from '../assets/dialogues.json';
+import { QuestManager } from '../models/QuestManager';
+import { Quest, QuestVariant } from '../models/Quest';
+import { FactionManager } from '../engine/FactionManager';
+import { getNPCDialogueId } from '../utils/dialogueHelpers';
+import { UIManager } from '../engine/UIManager'; // Add this import
 
 /**
  * Represents the entire game state, using concrete class instances for Player and GameMap.
@@ -41,13 +38,14 @@ import { UIManager } from '../engine/UIManager'; // Import UIManager
  * new instances must be created to ensure immutability for React's change detection.
  */
 interface GameState extends IGameState {
-  player: Player; // Use the Player class instance
-  currentMap: GameMap; // Use the GameMap class instance
-  showCharacterScreen: boolean; // Add character screen visibility state
-  gamePhase: 'splash' | 'intro' | 'playing'; // Add game phase tracking
-  shopState: ShopState | null; // Add shop state
-  factionManager: FactionManager; // Add faction manager
-  showFactionStatus: boolean; // Add faction status visibility
+  player: Player;
+  currentMap: GameMap;
+  showCharacterScreen: boolean;
+  gamePhase: 'splash' | 'intro' | 'playing';
+  shopState: ShopState | null;
+  factionManager: FactionManager;
+  showFactionStatus: boolean;
+  uiManager: UIManager; // Add UIManager instance
 }
 
 /**
@@ -99,6 +97,45 @@ const clonePlayer = (player: Player): Player => {
 };
 
 /**
+ * Apply faction-based pricing to shop items
+ */
+function applyFactionPricing(
+  baseItems: ShopItem[],
+  npc: NPC,
+  factionManager: FactionManager
+): ShopItem[] {
+  if (!npc.factionId) return baseItems;
+  
+  const reputation = factionManager.getReputation(npc.factionId);
+  const tier = factionManager.getReputationTier(npc.factionId);
+  
+  // Apply price modifiers based on reputation tier
+  let priceModifier = 1;
+  switch (tier) {
+    case 'honored':
+      priceModifier = 0.8; // 20% discount
+      break;
+    case 'friendly':
+      priceModifier = 0.9; // 10% discount
+      break;
+    case 'neutral':
+      priceModifier = 1; // No change
+      break;
+    case 'hostile':
+      priceModifier = 1.2; // 20% markup
+      break;
+    case 'hated':
+      priceModifier = 1.5; // 50% markup
+      break;
+  }
+  
+  return baseItems.map(item => ({
+    ...item,
+    price: Math.floor(item.price * priceModifier),
+  }));
+}
+
+/**
  * Defines all possible actions that can be dispatched to modify the game state.
  */
 type GameAction =
@@ -115,15 +152,16 @@ type GameAction =
   | { type: 'ADD_ENEMY'; payload: { enemy: Enemy } }
   | { type: 'REMOVE_ENEMY'; payload: { enemyId: string } }
   | { type: 'UPDATE_ENEMIES'; payload: { enemies: Enemy[] } }
+  | { type: 'UPDATE_NPCS'; payload: { npcs: NPC[] } }
   | { type: 'ADD_NPC'; payload: { npc: NPC } }
   | { type: 'REMOVE_NPC'; payload: { npcId: string } }
-  | { type: 'TOGGLE_INVENTORY' }
+  // REMOVED: | { type: 'TOGGLE_INVENTORY' }
   | { type: 'SHOW_INVENTORY'; payload: { show: boolean } }
-  | { type: 'TOGGLE_QUEST_LOG' }
+  // REMOVED: | { type: 'TOGGLE_QUEST_LOG' }
   | { type: 'SHOW_QUEST_LOG'; payload: { show: boolean } }
-  | { type: 'TOGGLE_CHARACTER_SCREEN' }
+  // REMOVED: | { type: 'TOGGLE_CHARACTER_SCREEN' }
   | { type: 'SHOW_CHARACTER_SCREEN'; payload: { show: boolean } }
-  | { type: 'TOGGLE_FACTION_STATUS' }
+  // REMOVED: | { type: 'TOGGLE_FACTION_STATUS' }
   | { type: 'SHOW_FACTION_STATUS'; payload: { show: boolean } }
   | { type: 'DIALOGUE_CHOICE'; payload: { action: string } }
   | { type: 'SAVE_GAME' }
@@ -384,80 +422,26 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'UPDATE_ENEMIES':
       return { ...state, enemies: action.payload.enemies };
 
+    case 'UPDATE_NPCS':
+      return { ...state, npcs: action.payload.npcs };
+
     case 'ADD_NPC':
       return { ...state, npcs: [...state.npcs, action.payload.npc] };
 
     case 'REMOVE_NPC':
       return { ...state, npcs: state.npcs.filter(n => n.id !== action.payload.npcId) };
 
-    case 'TOGGLE_INVENTORY':
-      // If inventory is already open, close it. Otherwise close all panels and open inventory
-      if (state.showInventory) {
-        return { ...state, showInventory: false };
-      } else {
-        return {
-          ...state,
-          showInventory: true,
-          showQuestLog: false,
-          showCharacterScreen: false,
-          showFactionStatus: false,
-          shopState: null, // Close shop too
-        };
-      }
+    // Removed TOGGLE_INVENTORY, TOGGLE_QUEST_LOG, TOGGLE_CHARACTER_SCREEN, TOGGLE_FACTION_STATUS
+    // UIManager now dispatches SHOW_ actions directly.
 
     case 'SHOW_INVENTORY':
       return { ...state, showInventory: action.payload.show };
 
-    case 'TOGGLE_QUEST_LOG':
-      // If quest log is already open, close it. Otherwise close all panels and open quest log
-      if (state.showQuestLog) {
-        return { ...state, showQuestLog: false };
-      } else {
-        return {
-          ...state,
-          showInventory: false,
-          showQuestLog: true,
-          showCharacterScreen: false,
-          showFactionStatus: false,
-          shopState: null, // Close shop too
-        };
-      }
-
     case 'SHOW_QUEST_LOG':
       return { ...state, showQuestLog: action.payload.show };
 
-    case 'TOGGLE_CHARACTER_SCREEN':
-      // If character screen is already open, close it. Otherwise close all panels and open it
-      if (state.showCharacterScreen) {
-        return { ...state, showCharacterScreen: false };
-      } else {
-        return {
-          ...state,
-          showInventory: false,
-          showQuestLog: false,
-          showCharacterScreen: true,
-          showFactionStatus: false,
-          shopState: null, // Close shop too
-        };
-      }
-
     case 'SHOW_CHARACTER_SCREEN':
       return { ...state, showCharacterScreen: action.payload.show };
-
-    case 'TOGGLE_FACTION_STATUS':
-      // If faction status is already open, close it. Otherwise close all panels and open it
-      if (state.showFactionStatus) {
-        return { ...state, showFactionStatus: false };
-      } else {
-        return {
-          ...state,
-          showInventory: false,
-          showQuestLog: false,
-          showCharacterScreen: false,
-          showFactionStatus: true,
-          shopState: null, // Close shop too
-        };
-      }
 
     case 'SHOW_FACTION_STATUS':
       return { ...state, showFactionStatus: action.payload.show };
@@ -520,6 +504,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             gamePhase: 'playing', // Ensure we're in playing phase after loading
             shopState: null, // Ensure shop is closed when loading
             factionManager, // Include faction manager in state
+            uiManager: UIManager.getInstance(), // Include UIManager instance
           };
         } else {
           return { 
@@ -891,6 +876,7 @@ const defaultGameState: GameState = {
   },
   factionManager: FactionManager.getInstance(), // Initialize faction manager
   showFactionStatus: false, // Faction status hidden initially
+  uiManager: UIManager.getInstance(), // Initialize UIManager
 };
 
 /**

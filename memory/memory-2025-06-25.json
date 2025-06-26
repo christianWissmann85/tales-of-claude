@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  }
+]
