@@ -5,8 +5,8 @@ import {
   Position,
   Direction,
   DialogueState,
-  BattleState,
-  Item,
+  // BattleState, // Unused import
+  // Item, // Use Item from models/Item.ts instead
   Enemy,
   NPC,
   PlayerStats,
@@ -16,20 +16,21 @@ import {
   ShopItem,
   TileType,
   TimeData,
-  TimeOfDay,
+  // TimeOfDay, // Unused import
   WeatherData,
-  WeatherType,
+  // WeatherType, // Unused import
 } from '../types/global.types';
 import { Player } from '../models/Player';
 import { TalentTree } from '../models/TalentTree';
 import { GameMap } from '../models/Map';
+import { Item } from '../models/Item';
 import { getMap } from '../assets/maps';
 import SaveGameService from '../services/SaveGame';
 import dialoguesData from '../assets/dialogues.json';
-import { QuestManager } from '../models/QuestManager';
-import { Quest, QuestVariant } from '../models/Quest';
-import { FactionManager } from '../engine/FactionManager';
-import { getNPCDialogueId } from '../utils/dialogueHelpers';
+import { QuestManager, QuestManagerState } from '../models/QuestManager';
+// import { Quest, QuestVariant } from '../models/Quest'; // Unused imports
+import { FactionManager, SerializedFactionData } from '../engine/FactionManager';
+// import { getNPCDialogueId } from '../utils/dialogueHelpers'; // Unused import
 import { UIManager } from '../engine/UIManager'; // Add this import
 
 /**
@@ -45,7 +46,9 @@ interface GameState extends IGameState {
   shopState: ShopState | null;
   factionManager: FactionManager;
   showFactionStatus: boolean;
-  uiManager: UIManager; // Add UIManager instance
+  // Override items to use Item from models/Item.ts
+  items: Item[];
+  // uiManager already defined in base IGameState
 }
 
 /**
@@ -59,15 +62,25 @@ const clonePlayer = (player: Player): Player => {
   newPlayer.statusEffects = player.statusEffects.map(se => ({ ...se }));
   newPlayer.updateBaseStats(player.getBaseStats()); // Copy base stats using the new methods
   // Deep copy items in inventory, ensuring they retain their full structure
-  newPlayer.inventory = player.inventory.map(item => ({
-    ...item,
-    position: item.position ? { ...item.position } : undefined,
-  }));
+  newPlayer.inventory = player.inventory.map(item => {
+    // Clone the Item instance properly
+    const clonedItem = Object.assign(Object.create(Object.getPrototypeOf(item)), item);
+    if (item.position) {
+      clonedItem.position = { ...item.position };
+    }
+    return clonedItem;
+  });
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability })); // Deep copy abilities
   // Copy equipped items
-  if (player.weaponSlot) { newPlayer.weaponSlot = { ...player.weaponSlot }; }
-  if (player.armorSlot) { newPlayer.armorSlot = { ...player.armorSlot }; }
-  if (player.accessorySlot) { newPlayer.accessorySlot = { ...player.accessorySlot }; }
+  if (player.weaponSlot) { 
+    newPlayer.weaponSlot = Object.assign(Object.create(Object.getPrototypeOf(player.weaponSlot)), player.weaponSlot);
+  }
+  if (player.armorSlot) { 
+    newPlayer.armorSlot = Object.assign(Object.create(Object.getPrototypeOf(player.armorSlot)), player.armorSlot);
+  }
+  if (player.accessorySlot) { 
+    newPlayer.accessorySlot = Object.assign(Object.create(Object.getPrototypeOf(player.accessorySlot)), player.accessorySlot);
+  }
   // Copy quest tracking
   newPlayer.activeQuestIds = [...player.activeQuestIds];
   newPlayer.completedQuestIds = [...player.completedQuestIds];
@@ -102,11 +115,11 @@ const clonePlayer = (player: Player): Player => {
 function applyFactionPricing(
   baseItems: ShopItem[],
   npc: NPC,
-  factionManager: FactionManager
+  factionManager: FactionManager,
 ): ShopItem[] {
-  if (!npc.factionId) return baseItems;
+  if (!npc.factionId) { return baseItems; }
   
-  const reputation = factionManager.getReputation(npc.factionId);
+  // const reputation = factionManager.getReputation(npc.factionId); // Unused variable
   const tier = factionManager.getReputationTier(npc.factionId);
   
   // Apply price modifiers based on reputation tier
@@ -320,7 +333,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           'abilities' in entity && 
           Array.isArray(entity.abilities) &&
           'stats' in entity &&
-          'hp' in (entity as any).stats,
+          'hp' in (entity as Enemy).stats,
       );
       const newItems = newMap.entities.filter(
         (entity): entity is Item => 
@@ -376,7 +389,10 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       } else if (position) {
         // Add item to map's dynamic items list (e.g., dropped loot)
         // Note: This does not update the GameMap instance's internal entities due to private fields.
-        return { ...state, items: [...state.items, { ...item, position }] };
+        // Create a new Item instance with the position
+        const itemWithPosition = Object.assign(Object.create(Object.getPrototypeOf(item)), item);
+        itemWithPosition.position = position;
+        return { ...state, items: [...state.items, itemWithPosition] };
       }
       return state;
     }
@@ -462,7 +478,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
           ...state,
           questManagerState: questManager.saveState(),
         };
-        const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
+        const saveSuccess = SaveGameService.saveGame(stateWithQuests);
         if (saveSuccess) {
             return { 
             ...state, 
@@ -488,13 +504,17 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
   if (questManager.allQuests.length === 0) {
     questManager.initializeQuests();
   }
-          if (loadedState.questManagerState) {
-            questManager.loadState(loadedState.questManagerState);
+          if (loadedState.questManagerState && 
+              typeof loadedState.questManagerState === 'object' &&
+              'allQuests' in loadedState.questManagerState && 
+              'activeQuestIds' in loadedState.questManagerState && 
+              'completedQuestIds' in loadedState.questManagerState) {
+            questManager.loadState(loadedState.questManagerState as QuestManagerState);
           }
           // Deserialize faction manager if data exists
           const factionManager = FactionManager.getInstance();
-          if (loadedState.factionReputations) {
-            factionManager.deserialize({ factions: loadedState.factionReputations });
+          if (loadedState.factionReputations && Array.isArray(loadedState.factionReputations)) {
+            factionManager.deserialize({ factions: loadedState.factionReputations as SerializedFactionData[] });
           }
           
           return { 
@@ -673,8 +693,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         ...state,
         questManagerState: questManager.saveState(),
       };
-      const saveSuccess = SaveGameService.saveGame(stateWithQuests as any);
+      const saveSuccess = SaveGameService.saveGame(stateWithQuests);
       if (saveSuccess) {
+        // Auto-save successful
       } else {
         console.error('Failed to save game');
       }
@@ -749,7 +770,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         return { ...state, notification: 'Not enough gold!' };
       }
       
-      newPlayer.addItem({ ...shopItem.item });
+      // Clone the item properly to maintain the Item instance with its methods
+      const itemToAdd = Object.assign(Object.create(Object.getPrototypeOf(shopItem.item)), shopItem.item);
+      newPlayer.addItem(itemToAdd);
       
       // Update shop inventory
       const newShopItems = state.shopState.items.map(si => {
@@ -905,45 +928,46 @@ interface GameProviderProps {
  */
 const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, defaultGameState);
-  const [isMapLoaded, setIsMapLoaded] = React.useState(false);
+  // const [isMapLoaded, setIsMapLoaded] = React.useState(false); // Unused variable
 
   // Initialize QuestManager and check for saved game when the game starts
   React.useEffect(() => {
+    console.log('[GameContext] Initializing...');
     const questManager = QuestManager.getInstance();
   
-  // Initialize quests if not already done
-  if (questManager.allQuests.length === 0) {
-    questManager.initializeQuests();
-  }
-    questManager.initializeQuests();
+    // Initialize quests if not already done
+    if (questManager.allQuests.length === 0) {
+      questManager.initializeQuests();
+    }
     
     // Load the initial map asynchronously
     const loadInitialMap = async () => {
+      console.log('[GameContext] Loading initial map...');
       try {
         const mapData = await getMap('terminalTown');
+        console.log('[GameContext] Map data loaded:', mapData);
+        
+        if (!mapData || !mapData.tiles || mapData.tiles.length === 0) {
+          console.error('[GameContext] Invalid map data received:', mapData);
+          throw new Error('Invalid map data');
+        }
+        
         const newMap = new GameMap(mapData);
+        console.log('[GameContext] GameMap instance created:', newMap);
         
-        // Initialize exploration for the starting area
-        state.player.markSurroundingTilesExplored(newMap.id, 3);
-        
-        // Extract entities from the loaded map
-        const npcs = newMap.entities.filter((entity): entity is NPC => 'role' in entity);
-        const enemies = newMap.entities.filter((entity): entity is Enemy => 
-          'abilities' in entity && Array.isArray(entity.abilities));
-        const items = newMap.entities.filter((entity): entity is Item => 
-          'type' in entity && typeof entity.type === 'string' && 
-          !('role' in entity) && !('abilities' in entity));
+        // Get spawn point from map data or use a safe default
+        const spawnPoint = mapData.startPosition || { x: 10, y: 10 };
+        console.log('[GameContext] Using spawn point:', spawnPoint);
         
         // Update the game state with the loaded map
         dispatch({
           type: 'UPDATE_MAP',
           payload: {
             newMap,
-            playerNewPosition: { x: 10, y: 7 },
+            playerNewPosition: spawnPoint,
           },
         });
-        
-        setIsMapLoaded(true);
+        console.log('[GameContext] Dispatched UPDATE_MAP action');
         
         // Check if there's a saved game after map loads
         if (SaveGameService.hasSaveGame()) {
@@ -955,7 +979,7 @@ const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
           });
         }
       } catch (error) {
-        console.error('Failed to load initial map:', error);
+        console.error('[GameContext] Failed to load initial map:', error);
         dispatch({
           type: 'SHOW_NOTIFICATION',
           payload: { message: 'Failed to load game map' },
@@ -964,7 +988,7 @@ const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     };
     
     loadInitialMap();
-  }, []);
+  }, []); // Empty dependency array - only run once on mount
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>

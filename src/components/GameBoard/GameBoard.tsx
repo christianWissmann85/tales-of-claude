@@ -37,14 +37,24 @@ const clonePlayer = (player: Player): Player => {
   const newPlayer = new Player(player.id, player.name, { ...player.position });
   newPlayer.statusEffects = player.statusEffects.map(se => ({ ...se }));
   newPlayer.updateBaseStats(player.getBaseStats());
-  newPlayer.inventory = player.inventory.map(item => ({
-    ...item,
-    position: item.position ? { ...item.position } : undefined,
-  }));
+  newPlayer.inventory = player.inventory.map(item => {
+    // Clone the Item instance properly
+    const clonedItem = Object.assign(Object.create(Object.getPrototypeOf(item)), item);
+    if (item.position) {
+      clonedItem.position = { ...item.position };
+    }
+    return clonedItem;
+  });
   newPlayer.abilities = player.abilities.map(ability => ({ ...ability }));
-  if (player.weaponSlot) { newPlayer.weaponSlot = { ...player.weaponSlot }; }
-  if (player.armorSlot) { newPlayer.armorSlot = { ...player.armorSlot }; }
-  if (player.accessorySlot) { newPlayer.accessorySlot = { ...player.accessorySlot }; }
+  if (player.weaponSlot) { 
+    newPlayer.weaponSlot = Object.assign(Object.create(Object.getPrototypeOf(player.weaponSlot)), player.weaponSlot);
+  }
+  if (player.armorSlot) { 
+    newPlayer.armorSlot = Object.assign(Object.create(Object.getPrototypeOf(player.armorSlot)), player.armorSlot);
+  }
+  if (player.accessorySlot) { 
+    newPlayer.accessorySlot = Object.assign(Object.create(Object.getPrototypeOf(player.accessorySlot)), player.accessorySlot);
+  }
   
   // Copy talent system
   newPlayer.talentPoints = player.talentPoints;
@@ -280,6 +290,14 @@ const GameBoard: React.FC = () => {
   }, []);
 
   // Add loading check after all hooks
+  console.log('[GameBoard] Current map state:', {
+    id: state.currentMap.id,
+    name: state.currentMap.name,
+    hasTiles: !!state.currentMap.tiles,
+    tilesLength: state.currentMap.tiles?.length,
+    firstRowLength: state.currentMap.tiles?.[0]?.length
+  });
+  
   if (state.currentMap.id === 'loading' || !state.currentMap.tiles || state.currentMap.tiles.length === 0) {
     return (
       <div className={styles.gameBoard} style={{

@@ -61,7 +61,7 @@ export class MapLoader {
         }
 
         // Try to load AI-first map and convert
-        if (mapId === 'terminal_town' || mapId === 'terminal_town_ai' || mapId === 'terminalTown') {
+        if (mapId === 'terminal_town' || mapId === 'terminal_town_ai') {
             const aiMap = new AIFirstMap(terminalTownAI);
             const legacyMap = this.convertAIMapToLegacy(aiMap);
             this.mapCache.set(mapId, legacyMap);
