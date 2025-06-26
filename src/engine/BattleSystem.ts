@@ -4,13 +4,13 @@ import {
   BattleState,
   CombatEntity,
   Ability,
-  Item,
   StatusEffect,
   StatusEffectType,
   ItemType,
 } from '../types/global.types';
 import { Player } from '../models/Player'; // Used for initial battle setup
 import { Enemy } from '../models/Enemy'; // Used for initial battle setup
+import { Item, ItemVariant } from '../models/Item'; // Use Item from models
 import { GameAction } from '../context/GameContext'; // Import GameAction type
 import { QuestManager } from '../models/QuestManager'; // Import QuestManager
 import { TalentEffect, TalentSpecialEffect } from '../models/TalentTree'; // Import TalentEffect and TalentSpecialEffect
@@ -20,28 +20,9 @@ class BattleSystem {
 
   // Define static item templates for drops
   private static readonly ITEM_TEMPLATES: { [key: string]: Item } = {
-    HEALTH_POTION: {
-      id: 'health_potion',
-      name: 'Health Potion',
-      description: 'Restores a small amount of HP.',
-      type: 'consumable',
-      effect: 'restoreHp',
-      value: 20,
-    },
-    ENERGY_DRINK: {
-      id: 'energy_drink',
-      name: 'Energy Drink',
-      description: 'Restores a small amount of Energy.',
-      type: 'consumable',
-      effect: 'restoreEnergy',
-      value: 15,
-    },
-    DEBUG_TOOL: {
-      id: 'debug_tool',
-      name: 'Debug Tool',
-      description: 'A mysterious tool. Its purpose is unclear.',
-      type: 'quest', // Using 'quest' as a generic placeholder for now
-    },
+    HEALTH_POTION: Item.createItem(ItemVariant.HealthPotion),
+    ENERGY_DRINK: Item.createItem(ItemVariant.EnergyDrink),
+    DEBUG_TOOL: Item.createItem(ItemVariant.DebugTool),
   };
 
   constructor(dispatch: React.Dispatch<GameAction>) {
@@ -358,7 +339,7 @@ class BattleSystem {
                   // }
                 }
                 break;
-              case 'stun':
+              case 'stun': {
                 // Apply 'frozen' status effect to the primary target(s)
                 const stunDuration = 1; // Example duration for stun
                 const stunEffect: StatusEffect = { type: 'frozen', duration: stunDuration };
@@ -369,7 +350,8 @@ class BattleSystem {
                   logMessages.push(`${entity.name} is stunned by ${caster.name}'s ${ability.name}!`);
                 });
                 break;
-              case 'reveal_weakness':
+              }
+              case 'reveal_weakness': {
                 // Apply 'corrupted' status effect or similar debuff to the primary target(s)
                 const weaknessDuration = 2; // Example duration
                 const weaknessEffect: StatusEffect = { type: 'corrupted', duration: weaknessDuration, damagePerTurn: 5 }; // Example: makes them take damage per turn
@@ -380,6 +362,7 @@ class BattleSystem {
                   logMessages.push(`${entity.name}'s weaknesses are revealed by ${caster.name}'s ${ability.name}!`);
                 });
                 break;
+              }
               default:
                 // Handle other special effects or log an unknown type
                 console.warn(`Unknown special effect type: ${effect.specialEffect}`);
@@ -671,24 +654,21 @@ class BattleSystem {
 
     // Health Potion: 30% chance
     if (Math.random() < 0.30) {
-      droppedItems.push({
-        ...BattleSystem.ITEM_TEMPLATES.HEALTH_POTION,
-        id: `health_potion_drop_${timestamp}_1`,
-      });
+      const item = Item.createItem(ItemVariant.HealthPotion);
+      item.id = `health_potion_drop_${timestamp}_1`;
+      droppedItems.push(item);
     }
     // Energy Drink: 20% chance
     if (Math.random() < 0.20) {
-      droppedItems.push({
-        ...BattleSystem.ITEM_TEMPLATES.ENERGY_DRINK,
-        id: `energy_drink_drop_${timestamp}_2`,
-      });
+      const item = Item.createItem(ItemVariant.EnergyDrink);
+      item.id = `energy_drink_drop_${timestamp}_2`;
+      droppedItems.push(item);
     }
     // Debug Tool: 10% chance
     if (Math.random() < 0.10) {
-      droppedItems.push({
-        ...BattleSystem.ITEM_TEMPLATES.DEBUG_TOOL,
-        id: `debug_tool_drop_${timestamp}_3`,
-      });
+      const item = Item.createItem(ItemVariant.DebugTool);
+      item.id = `debug_tool_drop_${timestamp}_3`;
+      droppedItems.push(item);
     }
 
     return droppedItems;

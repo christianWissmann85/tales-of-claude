@@ -59,6 +59,7 @@ export interface ItemData {
   targetId?: string; // For key items, the ID of what it unlocks (e.g., 'door_id', 'quest_id')
   stats?: { attack?: number; defense?: number; speed?: number; }; // For equipment items
   equipmentSlotType?: EquipmentSlotType; // For equipment items, specifies which slot it goes into
+  rarity?: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'unique'; // Rarity of the item
 }
 
 /**
@@ -75,6 +76,7 @@ export class Item implements IItem {
   effect?: string; // Effect of consumable items
   value?: number; // Value associated with the effect
   targetId?: string; // For key items, the ID of what it unlocks
+  rarity?: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'unique'; // Rarity of the item
 
   /**
    * Static data for all item variants. This acts as a blueprint for creating items.
@@ -269,6 +271,9 @@ export class Item implements IItem {
     // Properties for equipment items
     this.stats = data.stats;
     this.equipmentSlotType = data.equipmentSlotType;
+    
+    // Rarity property
+    this.rarity = data.rarity;
   }
 
   /**

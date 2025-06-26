@@ -249,4 +249,15 @@ export class NPCModel implements NPC {
   ): NPCModel {
     return NPCModel.create(name, 'quest_giver', dialogueId, position, [], questStatus);
   }
+
+  /**
+   * Creates a Farmer NPC.
+   */
+  public static createFarmer(
+    name: string,
+    dialogueId: string,
+    position?: Position,
+  ): NPCModel {
+    return NPCModel.create(name, 'farmer', dialogueId, position);
+  }
 }

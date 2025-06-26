@@ -1,7 +1,7 @@
 import { TimeSystem } from './TimeSystem';
 import { WeatherSystem } from './WeatherSystem';
 import { GameMap } from '../models/Map';
-import { Position, Enemy as IEnemy, WeatherType, NPC } from '../types/global.types';
+import { Position, Enemy as IEnemy, NPC } from '../types/global.types';
 import { Enemy, EnemyVariant } from '../models/Enemy';
 
 // Data structure for patrol routes as per requirements
@@ -139,7 +139,7 @@ export class PatrolSystem {
 
         const patrolData: EnemyPatrolData = {
             id: enemy.id,
-            type: type as any, // Trust that EnemyVariant matches our types
+            type: type as EnemyVariant, // Trust that EnemyVariant matches our types
             state: 'PATROL',
             currentPosition: { ...enemy.position },
             originalPosition: { ...enemy.position },
@@ -282,10 +282,10 @@ export class PatrolSystem {
      */
     public update(deltaTime: number, playerPosition: Position): void {
         // Replaced getCurrentTime() with currentTime getter
-        const currentTime = this.timeSystem.currentTime;
+        // const currentTime = this.timeSystem.currentTime; // Unused variable
         // Replaced isNight() with currentPeriod check
         const isNight = this.timeSystem.currentPeriod === 'night';
-        const weather = this.weatherSystem.getCurrentWeather();
+        // const weather = this.weatherSystem.getCurrentWeather(); // Unused variable
 
         this.enemies.forEach((enemyData) => {
             // Check for respawn
@@ -491,9 +491,8 @@ export class PatrolSystem {
         const weather = this.weatherSystem.getCurrentWeather();
         if (weather === 'storm') {
             speed *= 0.8; // -20% in rain
-        } 
-        // Fixed WeatherType comparison - use 'codeSnow' instead of 'snow'
-        else if (weather === 'codeSnow') {
+        } else if (weather === 'codeSnow') {
+            // Fixed WeatherType comparison - use 'codeSnow' instead of 'snow'
             speed *= 0.7; // -30% in snow
         }
 

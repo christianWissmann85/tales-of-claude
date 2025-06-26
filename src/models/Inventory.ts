@@ -167,4 +167,12 @@ export class Inventory {
   public getCurrentSize(): number {
     return this.items.size;
   }
+
+  /**
+   * Returns the maximum capacity of the inventory.
+   * @returns The maximum number of unique item slots.
+   */
+  public getMaxCapacity(): number {
+    return this.MAX_SIZE;
+  }
 }

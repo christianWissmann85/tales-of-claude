@@ -7,17 +7,14 @@ import { useKeyboard } from '../../hooks/useKeyboard';
 import { QuestManager } from '../../models/QuestManager';
 import {
   Quest,
-  QuestChoice,
-  QuestBranch,
   ConsequenceType,
-  BranchingObjective,
   QuestConsequence,
 } from '../../models/Quest';
 
 type QuestCategory = 'main' | 'side' | 'completed';
 
 const QuestJournal: React.FC = () => {
-  const { state, dispatch } = useGameContext();
+  const { dispatch } = useGameContext();
   const { pressedKeys } = useKeyboard();
   const questManager = QuestManager.getInstance();
   

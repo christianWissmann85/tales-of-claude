@@ -1983,6 +1983,7 @@ function testSaveGameService(): void {
         hotbarConfig: [ItemVariant.HealthPotion, null, ItemVariant.EnergyDrink, null, null],
         factionManager: null as any,
         showFactionStatus: false,
+        uiManager: null as any, // Add UIManager for test
       };
     });
 

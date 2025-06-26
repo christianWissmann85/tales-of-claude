@@ -242,8 +242,8 @@ async function runTests() {
         console.log('Running automated tests...');
         automatedTestReport = await page.evaluate(async () => {
             // This code runs inside the browser context
-            if (typeof (window as any).runAutomatedTests === 'function') {
-                return await (window as any).runAutomatedTests();
+            if (typeof (window as unknown as { runAutomatedTests?: () => unknown }).runAutomatedTests === 'function') {
+                return await (window as unknown as { runAutomatedTests?: () => unknown }).runAutomatedTests?.();
             }
             throw new Error('window.runAutomatedTests function not found after injection.');
         }, { timeout: TEST_EXECUTION_TIMEOUT_MS }); // Set timeout for the evaluation itself
@@ -251,7 +251,7 @@ async function runTests() {
         console.log('Automated tests finished.');
         screenshots.push(await takeScreenshot(page, 'after-tests'));
 
-    } catch (error: any) {
+    } catch (error) {
         console.error(`\n!!! Test Runner Error: ${error.message}`);
         runnerError = error.message;
         if (error.stack) {
@@ -261,7 +261,7 @@ async function runTests() {
         if (page) {
             try {
                 screenshots.push(await takeScreenshot(page, 'error-state'));
-            } catch (screenshotError: any) {
+            } catch (screenshotError) {
                 console.error(`Failed to take error screenshot: ${screenshotError.message}`);
             }
         }

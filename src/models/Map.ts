@@ -1,253 +1,133 @@
-// src/models/Map.ts
+/**
+ * Map Compatibility Layer
+ * 
+ * This provides backwards compatibility for the old tile-based Map class
+ * while we transition to the AI-first zone-based system.
+ * 
+ * DEPRECATED: Use AIFirstMap and Zone classes instead!
+ */
 
-import { Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../types/global.types';
-import { NPCModel } from './NPC'; // Import the NPCModel class
+import { Position } from '../types/global.types';
+
+// Import the proper Tile type from global.types
+import { Tile as GlobalTile } from '../types/global.types';
+
+// Re-export the global Tile type for compatibility
+export type Tile = GlobalTile;
+
+// Legacy map data structure
+export interface MapData {
+    id: string;
+    name: string;
+    width: number;
+    height: number;
+    tiles: Tile[][];
+    startPosition?: Position;
+    npcs?: any[];
+    enemies?: any[];
+}
 
 /**
- * Represents a game map, managing its tiles, entities, and exits.
+ * Legacy Map class - provides compatibility with old code
+ * @deprecated Use AIFirstMap instead
  */
-export class GameMap implements IGameMap { // Added 'implements IGameMap' for clarity, though not strictly required by prompt
-  readonly id: string;
-  readonly name: string;
-  readonly width: number;
-  readonly height: number;
-  public tiles: Tile[][]; // Changed from private to public
-  public entities: (Enemy | NPC | Item)[]; // Changed from private Map to public Array
-  public exits: Exit[]; // Changed from private to public
+export class GameMap {
+    id: string;
+    name: string;
+    width: number;
+    height: number;
+    tiles: Tile[][];
+    npcs: any[];
+    enemies: any[];
+    startPosition?: Position;
+    entities: any[]; // Combined list of all entities
+    exits: any[]; // Exit points to other maps
 
-  /**
-   * Constructs a new GameMap instance from an IGameMap data object.
-   * @param data The IGameMap data object containing map details.
-   */
-  constructor(data: IGameMap) {
-    this.id = data.id;
-    this.name = data.name;
-    this.width = data.width;
-    this.height = data.height;
-    this.exits = [...data.exits]; // Shallow copy of exits array
-
-    // Deep copy tiles to ensure internal state is independent
-    this.tiles = data.tiles.map(row => row.map(tile => ({ ...tile })));
-
-    this.entities = []; // Initialize as an array
-    // Add initial entities, updating tile occupancy
-    data.entities.forEach(entity => {
-      // Check if the entity is a plain object representing an NPC.
-      // This heuristic relies on properties unique to NPCs ('role', 'dialogueId')
-      // and the absence of properties typical for Enemies ('health', 'damage')
-      // or Items ('value', 'weight').
-      // The prompt states Enemies are already instantiated, so `instanceof Enemy`
-      // would also work for them, but this approach handles plain data objects.
-      if (
-        'role' in entity &&
-        'dialogueId' in entity &&
-        typeof (entity as any).role === 'string' && // Ensure role is a string
-        typeof (entity as any).dialogueId === 'string' && // Ensure dialogueId is a string
-        !('health' in entity && 'damage' in entity) && // Not an Enemy (assuming Enemy has health/damage)
-        !('value' in entity && 'weight' in entity) // Not an Item (assuming Item has value/weight)
-      ) {
-        // It's a plain NPC object, instantiate it using NPCModel
-        const npcInstance = new NPCModel(
-          entity.id,
-          entity.name,
-          entity.position,
-          (entity as any).statusEffects || [], // statusEffects might be optional or undefined in plain data
-          (entity as any).role,
-          (entity as any).dialogueId,
-          (entity as any).questStatus, // questStatus is optional
-        );
-        this.addEntity(npcInstance);
-      } else {
-        // It's either an already instantiated Enemy, or an Item (plain or instantiated),
-        // or any other entity type that doesn't match the NPC criteria.
-        this.addEntity(entity);
-      }
-    });
-  }
-
-  /**
-   * Checks if a given position is within the map boundaries.
-   * @param x The x-coordinate.
-   * @param y The y-coordinate.
-   * @returns True if the position is valid, false otherwise.
-   */
-  private isValidPosition(x: number, y: number): boolean {
-    return x >= 0 && x < this.width && y >= 0 && y < this.height;
-  }
-
-  /**
-   * Retrieves the tile at the specified coordinates.
-   * @param x The x-coordinate of the tile.
-   * @param y The y-coordinate of the tile.
-   * @returns The Tile object if found, otherwise undefined.
-   */
-  getTile(x: number, y: number): Tile | undefined {
-    if (!this.isValidPosition(x, y)) {
-      return undefined;
-    }
-    return this.tiles[y][x];
-  }
-
-  /**
-   * Sets the tile at the specified coordinates.
-   * @param x The x-coordinate of the tile.
-   * @param y The y-coordinate of the tile.
-   * @param tile The new Tile object to set.
-   */
-  setTile(x: number, y: number, tile: Tile): void {
-    if (!this.isValidPosition(x, y)) {
-      console.warn(`GameMap: Attempted to set tile out of bounds at (${x}, ${y}) on map ${this.id}`);
-      return;
-    }
-    this.tiles[y][x] = { ...tile }; // Store a copy to prevent external modification
-  }
-
-  /**
-   * Checks if the tile at the specified coordinates is walkable.
-   * @param x The x-coordinate.
-   * @param y The y-coordinate.
-   * @returns True if the tile is walkable, false if it's out of bounds or not walkable.
-   */
-  isWalkable(x: number, y: number): boolean {
-    const tile = this.getTile(x, y);
-    return tile ? tile.walkable : false;
-  }
-
-  /**
-   * Retrieves an entity (Enemy, NPC, or Item) at the specified coordinates.
-   * Prioritizes checking the tile's occupyingEntityId for efficiency, then falls back to iterating.
-   * @param x The x-coordinate.
-   * @param y The y-coordinate.
-   * @returns The entity object if found, otherwise undefined.
-   */
-  getEntityAt(x: number, y: number): (Enemy | NPC | Item) | undefined {
-    if (!this.isValidPosition(x, y)) {
-      return undefined;
+    constructor(data: MapData) {
+        this.id = data.id;
+        this.name = data.name;
+        this.width = data.width;
+        this.height = data.height;
+        this.tiles = data.tiles || this.createEmptyTiles(data.width, data.height);
+        this.npcs = data.npcs || [];
+        this.enemies = data.enemies || [];
+        this.startPosition = data.startPosition;
+        // Initialize entities as combined list
+        this.entities = [...this.npcs, ...this.enemies];
+        this.exits = []; // Initialize empty exits array
     }
 
-    const tile = this.getTile(x, y);
-    if (tile?.occupyingEntityId) {
-      // With entities as an array, this is now an O(N) operation
-      const entity = this.entities.find(e => e.id === tile.occupyingEntityId);
-      // Double-check position in case tile.occupyingEntityId is stale or incorrect
-      if (entity && entity.position && entity.position.x === x && entity.position.y === y) {
-        return entity;
-      }
-    }
-
-    // Fallback: Iterate through all entities if tile.occupyingEntityId was not set or incorrect
-    // or if the primary lookup failed.
-    for (const entity of this.entities) { // Iterate array directly
-      if (entity.position && entity.position.x === x && entity.position.y === y) {
-        return entity;
-      }
-    }
-    return undefined;
-  }
-
-  /**
-   * Adds an entity to the map. Updates the corresponding tile's occupyingEntityId.
-   * If an entity with the same ID already exists, it will be replaced.
-   * @param entity The entity to add.
-   */
-  addEntity(entity: Enemy | NPC | Item): void {
-    // Ensure the entity has a position before attempting to place it on the map
-    if (!entity.position) {
-      console.warn(`GameMap: Attempted to add entity ${entity.id} without a position to map ${this.id}`);
-      return;
-    }
-    if (!this.isValidPosition(entity.position.x, entity.position.y)) {
-      console.warn(`GameMap: Attempted to add entity ${entity.id} out of bounds at (${entity.position.x}, ${entity.position.y}) on map ${this.id}`);
-      return;
-    }
-
-    // Replace existing entity or add new one (mimics Map.set behavior)
-    const existingIndex = this.entities.findIndex(e => e.id === entity.id);
-    if (existingIndex !== -1) {
-      this.entities[existingIndex] = entity;
-    } else {
-      this.entities.push(entity);
-    }
-
-    const tile = this.getTile(entity.position.x, entity.position.y);
-    if (tile) {
-      tile.occupyingEntityId = entity.id;
-    }
-  }
-
-  /**
-   * Removes an entity from the map by its ID. Clears the corresponding tile's occupyingEntityId.
-   * @param entityId The ID of the entity to remove.
-   */
-  removeEntity(entityId: string): void {
-    const entity = this.entities.find(e => e.id === entityId); // Find the entity first
-    if (entity) {
-      this.entities = this.entities.filter(e => e.id !== entityId); // Filter out the entity
-
-      // Only attempt to clear tile if the entity had a position (which it should if it was added)
-      if (entity.position) {
-        const tile = this.getTile(entity.position.x, entity.position.y);
-        if (tile && tile.occupyingEntityId === entityId) {
-          delete tile.occupyingEntityId; // Remove the property
+    private createEmptyTiles(width: number, height: number): Tile[][] {
+        const tiles: Tile[][] = [];
+        for (let y = 0; y < height; y++) {
+            tiles[y] = [];
+            for (let x = 0; x < width; x++) {
+                tiles[y][x] = { type: 'walkable', walkable: true } as Tile;
+            }
         }
-      } else {
-        console.warn(`GameMap: Removed entity ${entity.id} which was on map but had no position property.`);
-      }
-    }
-  }
-
-  /**
-   * Retrieves an exit point at the specified coordinates.
-   * @param x The x-coordinate.
-   * @param y The y-coordinate.
-   * @returns The Exit object if found, otherwise undefined.
-   */
-  getExitAt(x: number, y: number): Exit | undefined {
-    if (!this.isValidPosition(x, y)) {
-      return undefined;
-    }
-    return this.exits.find(exit => exit.position.x === x && exit.position.y === y);
-  }
-
-  /**
-   * Static method to create a GameMap instance from an IGameMap data object.
-   * This is the recommended way to instantiate a GameMap from pre-defined map data.
-   * @param data The IGameMap data object.
-   * @returns A new GameMap instance.
-   */
-  static fromGameMapData(data: IGameMap): GameMap {
-    return new GameMap(data);
-  }
-
-  /**
-   * Static method to create a default 20x15 map filled with walkable grass tiles.
-   * This can be used for testing or generating simple maps dynamically.
-   * @param id The ID for the new map.
-   * @param name The name for the new map.
-   * @param width The width of the map (default: 20).
-   * @param height The height of the map (default: 15).
-   * @returns A new GameMap instance with default grass tiles.
-   */
-  static createDefaultMap(id: string, name: string, width: number = 20, height: number = 15): GameMap {
-    const defaultTiles: Tile[][] = [];
-    for (let y = 0; y < height; y++) {
-      const row: Tile[] = [];
-      for (let x = 0; x < width; x++) {
-        row.push({ walkable: true, type: 'grass' });
-      }
-      defaultTiles.push(row);
+        return tiles;
     }
 
-    const defaultGameMap: IGameMap = {
-      id,
-      name,
-      width,
-      height,
-      tiles: defaultTiles,
-      entities: [],
-      exits: [],
-    };
+    getTile(x: number, y: number): Tile | null {
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+            return null;
+        }
+        return this.tiles[y][x];
+    }
 
-    return new GameMap(defaultGameMap);
-  }
+    isWalkable(x: number, y: number): boolean {
+        const tile = this.getTile(x, y);
+        return tile ? (tile.walkable !== false) : false;
+    }
+
+    isValidPosition(x: number, y: number): boolean {
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    }
+
+    getAllNPCs(): any[] {
+        return this.npcs;
+    }
+
+    getAllEnemies(): any[] {
+        return this.enemies;
+    }
+
+    getNPCAt(x: number, y: number): any {
+        return this.npcs.find(npc => npc.position.x === x && npc.position.y === y);
+    }
+
+    getEnemyAt(x: number, y: number): any {
+        return this.enemies.find(enemy => enemy.position.x === x && enemy.position.y === y);
+    }
+
+    getEntityAt(x: number, y: number): any {
+        // Check NPCs first
+        const npc = this.getNPCAt(x, y);
+        if (npc) { return npc; }
+        
+        // Then check enemies
+        const enemy = this.getEnemyAt(x, y);
+        if (enemy) { return enemy; }
+        
+        // Could also check items if they have positions
+        return null;
+    }
+
+    // Compatibility methods
+    toJSON(): MapData {
+        return {
+            id: this.id,
+            name: this.name,
+            width: this.width,
+            height: this.height,
+            tiles: this.tiles,
+            npcs: this.npcs,
+            enemies: this.enemies,
+            startPosition: this.startPosition,
+        };
+    }
+
+    static fromJSON(data: MapData): GameMap {
+        return new GameMap(data);
+    }
 }

@@ -1,4 +1,4 @@
-import { chromium, Browser, Page, ConsoleMessage, Request, Response } from 'playwright';
+import { chromium, Browser, Page, ConsoleMessage } from 'playwright';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -60,7 +60,7 @@ async function takeScreenshot(page: Page, name: string): Promise<void> {
         await page.screenshot({ path: filePath, fullPage: true });
         currentReport.screenshots.push(filePath);
         console.log(`Screenshot taken: ${filePath}`);
-    } catch (error: any) {
+    } catch (error) {
         console.error(`Failed to take screenshot ${name}: ${error.message}`);
         currentReport.errors.push(`Failed to take screenshot ${name}: ${error.message}`);
     }
@@ -201,11 +201,11 @@ async function runTests(): Promise<void> {
         console.log('Injecting and running automated tests via window.runAutomatedTests()...');
         const automatedTestResults: AutomatedTestResult | null = await page.evaluate(async () => {
             // Ensure window.runAutomatedTests exists before calling
-            if (typeof (window as any).runAutomatedTests === 'function') {
+            if (typeof (window as unknown as { runAutomatedTests?: () => unknown }).runAutomatedTests === 'function') {
                 try {
-                    const result = await (window as any).runAutomatedTests();
+                    const result = await (window as unknown as { runAutomatedTests?: () => unknown }).runAutomatedTests?.();
                     return result;
-                } catch (e: any) {
+                } catch (e) {
                     console.error('Error during window.runAutomatedTests execution:', e);
                     return {
                         overallPassed: false,
@@ -247,7 +247,7 @@ async function runTests(): Promise<void> {
             currentReport.status = 'failure';
         }
 
-    } catch (error: any) {
+    } catch (error) {
         console.error('A critical error occurred during the test run:', error);
         currentReport.errors.push(`Critical test runner error: ${error.message}`);
         currentReport.status = 'error'; // Indicate a runner error, not just test failure

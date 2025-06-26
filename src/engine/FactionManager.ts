@@ -8,7 +8,7 @@ import { Faction } from '../models/Faction';
 /**
  * Defines the structure for serialized data of a single faction.
  */
-interface SerializedFactionData {
+export interface SerializedFactionData {
     id: string;
     reputation: number;
 }

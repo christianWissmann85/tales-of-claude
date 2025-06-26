@@ -1,5 +1,5 @@
 
-import { Position } from './global.types'; // Changed import source for Position
+// import { Position } from './global.types'; // Unused import // Changed import source for Position
 import { JsonMapObject } from './map-schema.types';
 
 /**

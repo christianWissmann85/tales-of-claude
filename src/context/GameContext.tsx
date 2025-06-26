@@ -855,7 +855,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 /**
  * Initializes the default game state.
  */
-const initialPlayer = new Player('claude', 'Claude', { x: 10, y: 7 });
+const initialPlayer = new Player('claude', 'Claude', { x: 50, y: 35 });
 
 // Create a temporary empty map for initial state
 const emptyMapData: IGameMap = {

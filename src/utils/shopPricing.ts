@@ -21,7 +21,7 @@ export function applyFactionPricing(
     }
 
     // Get the player's reputation with the NPC's faction
-    const reputation = factionManager.getReputation(npc.factionId);
+    // const reputation = factionManager.getReputation(npc.factionId); // Unused variable
     const reputationTier = factionManager.getReputationTier(npc.factionId);
     
     let priceMultiplier: number = 1.0; // Default: no change

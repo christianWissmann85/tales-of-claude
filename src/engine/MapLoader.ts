@@ -61,7 +61,7 @@ export class MapLoader {
         }
 
         // Try to load AI-first map and convert
-        if (mapId === 'terminal_town' || mapId === 'terminal_town_ai') {
+        if (mapId === 'terminal_town_ai') {
             const aiMap = new AIFirstMap(terminalTownAI);
             const legacyMap = this.convertAIMapToLegacy(aiMap);
             this.mapCache.set(mapId, legacyMap);
@@ -124,7 +124,7 @@ export class MapLoader {
                 const walkable = aiMap.isWalkable({ x: worldX, y: worldY });
                 
                 tiles[y][x] = {
-                    type: walkable ? 'floor' : 'wall',
+                    type: walkable ? 'floor' : 'water',
                     walkable: walkable,
                 };
             }

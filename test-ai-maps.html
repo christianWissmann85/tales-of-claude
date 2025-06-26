@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-First Maps Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 20px;
+        }
+        .console {
+            background: #000;
+            border: 2px solid #0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0a0;
+        }
+        h1 {
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 AI-First Map System Demo</h1>
+    
+    <div>
+        <button onclick="testZoneSystem()">Test Zone System</button>
+        <button onclick="testMapAI()">Test Map AI</button>
+        <button onclick="testPathfinding()">Test Pathfinding</button>
+        <button onclick="testValidation()">Test Validation</button>
+        <button onclick="clearConsole()">Clear</button>
+    </div>
+    
+    <div class="console" id="console">Ready to test AI-first maps...</div>
+
+    <script type="module">
+        // Import the new system
+        import { AIFirstMap } from './src/models/AIFirstMap.js';
+        import { Zone } from './src/models/Zone.js';
+        import { MapAI } from './src/models/MapAI.js';
+        import { ZoneEngine } from './src/engine/ZoneEngine.js';
+        import { terminalTownAI } from './src/maps/TerminalTown.js';
+        
+        const output = document.getElementById('console');
+        
+        function log(message) {
+            output.textContent += message + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        window.clearConsole = function() {
+            output.textContent = '';
+        }
+        
+        window.testZoneSystem = function() {
+            log('\n=== Testing Zone System ===');
+            
+            try {
+                const map = new AIFirstMap(terminalTownAI);
+                log(`✅ Loaded map: ${map.name}`);
+                log(`   Zones: ${map.zones.length}`);
+                log(`   Connections: ${map.connections.length}`);
+                
+                // Test zone queries
+                const townSquare = map.getZone('town_square');
+                if (townSquare) {
+                    log(`\n✅ Found Town Square:`);
+                    log(`   Purpose: ${townSquare.purpose}`);
+                    log(`   Entities: ${townSquare.entities.length}`);
+                    log(`   Description: ${townSquare.getDescription()}`);
+                }
+                
+                // Test position queries
+                const pos = { x: 150, y: 150 };
+                const zoneAtPos = map.getZoneAtPosition(pos);
+                log(`\n✅ Zone at position (150, 150): ${zoneAtPos?.name || 'None'}`);
+                log(`   Walkable: ${map.isWalkable(pos)}`);
+                
+                // Test connections
+                const connected = map.getConnectedZones('town_square');
+                log(`\n✅ Zones connected to Town Square:`);
+                connected.forEach(zone => log(`   - ${zone.name} (${zone.purpose})`));
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        window.testMapAI = function() {
+            log('\n=== Testing Map AI ===');
+            
+            try {
+                const map = new AIFirstMap(terminalTownAI);
+                const ai = new MapAI(map);
+                
+                // Test location description
+                const playerPos = { x: 150, y: 150 };
+                log(`\n📍 Describing location at (150, 150):`);
+                log(ai.describeLocation(playerPos));
+                
+                // Test movement options
+                log(`\n🚶 Movement options:`);
+                const options = ai.getMovementOptions(playerPos);
+                options.forEach(opt => 
+                    log(`   ${opt.direction}: ${opt.description}`)
+                );
+                
+                // Test nearby features
+                log(`\n🔍 Nearby features:`);
+                const features = ai.findNearbyFeatures(playerPos, 20);
+                features.forEach(feat => 
+                    log(`   ${feat.description} (${feat.distance} steps away)`)
+                );
+                
+                // Test suggested actions
+                log(`\n💡 Suggested actions:`);
+                const actions = ai.suggestActions(playerPos);
+                actions.forEach(action => log(`   - ${action}`));
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        window.testPathfinding = function() {
+            log('\n=== Testing Pathfinding ===');
+            
+            try {
+                const map = new AIFirstMap(terminalTownAI);
+                const engine = new ZoneEngine(map);
+                const ai = new MapAI(map);
+                
+                // Test path within same zone
+                const start = { x: 110, y: 110 };
+                const end = { x: 180, y: 180 };
+                
+                log(`\n🛤️ Finding path from (110, 110) to (180, 180):`);
+                const path = engine.findPath(start, end);
+                
+                if (path) {
+                    log(`✅ Path found with ${path.length} steps`);
+                    
+                    // Get natural language directions
+                    const result = ai.findPath(start, end);
+                    log(`\n📝 Directions:`);
+                    result.steps.forEach(step => log(`   ${step}`));
+                } else {
+                    log('❌ No path found');
+                }
+                
+                // Test cross-zone pathfinding
+                const marketStart = { x: 150, y: 150 }; // Town Square
+                const marketEnd = { x: 240, y: 150 };   // Market District
+                
+                log(`\n🛤️ Finding path across zones:`);
+                const crossPath = engine.findPath(marketStart, marketEnd);
+                
+                if (crossPath) {
+                    log(`✅ Cross-zone path found with ${crossPath.length} steps`);
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        window.testValidation = function() {
+            log('\n=== Testing Map Validation ===');
+            
+            try {
+                const map = new AIFirstMap(terminalTownAI);
+                const engine = new ZoneEngine(map);
+                
+                log('🔍 Validating Terminal Town...');
+                const result = engine.validateMap();
+                
+                log(`\n✅ Validation complete:`);
+                log(`   Valid: ${result.isValid}`);
+                log(`   Errors: ${result.errors.length}`);
+                log(`   Warnings: ${result.warnings.length}`);
+                
+                if (result.errors.length > 0) {
+                    log('\n❌ Errors:');
+                    result.errors.forEach(err => 
+                        log(`   - ${err.location}: ${err.message}`)
+                    );
+                }
+                
+                if (result.warnings.length > 0) {
+                    log('\n⚠️ Warnings:');
+                    result.warnings.forEach(warn => 
+                        log(`   - ${warn.location}: ${warn.message}`)
+                    );
+                }
+                
+                // Get statistics
+                log('\n📊 Map Statistics:');
+                const stats = engine.getMapStatistics();
+                log(`   Total zones: ${stats.totalZones}`);
+                log(`   Total connections: ${stats.totalConnections}`);
+                log(`   Average connections per zone: ${stats.averageConnections.toFixed(2)}`);
+                log(`   Total entities: ${stats.totalEntities}`);
+                
+                log('\n📊 Zones by purpose:');
+                stats.zonesByPurpose.forEach((count, purpose) => 
+                    log(`   ${purpose}: ${count}`)
+                );
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        // Make functions available globally
+        window.AIFirstMap = AIFirstMap;
+        window.MapAI = MapAI;
+        window.ZoneEngine = ZoneEngine;
+        window.terminalTownAI = terminalTownAI;
+        
+        log('✨ AI-First Map System loaded!');
+        log('Click the buttons above to test different features.');
+    </script>
+</body>
+</html>

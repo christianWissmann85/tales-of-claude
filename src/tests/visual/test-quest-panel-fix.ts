@@ -6,7 +6,7 @@ async function testQuestPanelFix() {
   
   const browser = await puppeteer.launch({
     headless: false,
-    defaultViewport: { width: 1920, height: 1080 }
+    defaultViewport: { width: 1920, height: 1080 },
   });
 
   try {
@@ -32,7 +32,7 @@ async function testQuestPanelFix() {
     // Take screenshot
     await page.screenshot({
       path: 'quest-panel-fixed.png',
-      fullPage: true
+      fullPage: true,
     });
     
     // Check for quest panel elements
@@ -43,7 +43,7 @@ async function testQuestPanelFix() {
       const content = document.querySelector('[class*="content"]');
       
       const getInfo = (el: Element | null, name: string) => {
-        if (!el) return { name, found: false };
+        if (!el) { return { name, found: false }; }
         const rect = el.getBoundingClientRect();
         const styles = window.getComputedStyle(el);
         return {
@@ -53,7 +53,7 @@ async function testQuestPanelFix() {
           height: rect.height,
           visible: rect.width > 0 && rect.height > 0,
           display: styles.display,
-          minHeight: styles.minHeight
+          minHeight: styles.minHeight,
         };
       };
       
@@ -61,7 +61,7 @@ async function testQuestPanelFix() {
         container: getInfo(container, 'Container'),
         content: getInfo(content, 'Content'),
         questList: getInfo(questList, 'Quest List'),
-        questDetails: getInfo(questDetails, 'Quest Details')
+        questDetails: getInfo(questDetails, 'Quest Details'),
       };
     });
     

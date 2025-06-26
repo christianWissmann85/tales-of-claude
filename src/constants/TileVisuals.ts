@@ -1,6 +1,6 @@
 // src/constants/TileVisuals.ts
 
-import { TileType } from '../types/global.types';
+// import { TileType } from '../types/global.types'; // Unused import
 
 /**
  * Visual Hierarchy Design Principles:

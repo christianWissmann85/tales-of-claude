@@ -1,6 +1,6 @@
 
 import { Item, ItemVariant } from '../models/Item';
-import { Player } from '../models/Player';
+import { Player, EquippableItem } from '../models/Player';
 import { TalentTree, Talent } from '../models/TalentTree'; // Import Talent for type checking
 import {
   GameState as IGameState,
@@ -10,7 +10,7 @@ import {
   Ability,
   StatusEffect,
   PlayerStats,
-  EquippableItem,
+  // EquippableItem, // Use from Player.ts instead
   CombatEntity,
   DialogueState,
   BattleState,
@@ -26,6 +26,7 @@ import {
 } from '../types/global.types';
 import { GameMap } from '../models/Map';
 import { FactionManager } from '../engine/FactionManager'; // Import FactionManager
+import { UIManager } from '../engine/UIManager'; // Import UIManager
 
 /**
  * Defines the actual game state with class instances.
@@ -182,13 +183,18 @@ class SaveGameService {
             ) : undefined,
         },
         currentMap: {
-          ...gameState.currentMap,
+          id: gameState.currentMap.id,
+          name: gameState.currentMap.name,
+          width: gameState.currentMap.width,
+          height: gameState.currentMap.height,
+          tiles: gameState.currentMap.tiles,
           entities: gameState.currentMap.entities.map(entity => {
             if ('use' in entity && typeof entity.use === 'function') { // Check if it's an Item instance
               return { variant: (entity as Item).id as ItemVariant, position: (entity as Item).position } as SerializableItem;
             }
             return entity; // Enemies and NPCs are already serializable
           }) as SerializableMapEntity[],
+          exits: gameState.currentMap.exits,
         },
         enemies: gameState.enemies,
         npcs: gameState.npcs,
@@ -373,9 +379,18 @@ class SaveGameService {
         return entity; // Enemies and NPCs are already fine
       }).filter(entity => entity !== null) as (Enemy | NPC | Item)[]; // Filter out nulls and assert type
 
+      // Separate entities back into npcs and enemies for GameMap constructor
+      const npcs = reconstructedMapEntities.filter(e => 'role' in e) as NPC[];
+      const enemies = reconstructedMapEntities.filter(e => 'type' in e && 'abilities' in e) as Enemy[];
+      
       const currentMap = new GameMap({
-        ...serializableGameState.currentMap,
-        entities: reconstructedMapEntities,
+        id: serializableGameState.currentMap.id,
+        name: serializableGameState.currentMap.name,
+        width: serializableGameState.currentMap.width,
+        height: serializableGameState.currentMap.height,
+        tiles: serializableGameState.currentMap.tiles,
+        npcs,
+        enemies,
       });
 
       // 3. Reconstruct dynamic items on the map
@@ -414,6 +429,7 @@ class SaveGameService {
         hotbarConfig: serializableGameState.hotbarConfig || [null, null, null, null, null],
         timeData: serializableGameState.timeData,
         weatherData: serializableGameState.weatherData,
+        uiManager: UIManager.getInstance(), // Add UIManager instance
       };
 
       // Load FactionManager state if available

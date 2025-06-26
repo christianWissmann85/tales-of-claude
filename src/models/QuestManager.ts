@@ -14,7 +14,7 @@ import { session4MainQuests } from '../assets/quests/session4MainQuests';
 /**
  * Enhanced QuestManager state interface for save/load functionality
  */
-interface QuestManagerState {
+export interface QuestManagerState {
   allQuests: any[]; // Will store serialized quest data including branching state
   activeQuestIds: string[];
   completedQuestIds: string[];

@@ -3,6 +3,7 @@
 import { binaryForestData } from './binaryForest';
 import { debugDungeonData } from './debugDungeon';
 import { terminalTownData } from './terminalTown';
+import { terminalFieldsData } from './terminalFields';
 import { GameMap as IGameMap } from '../../types/global.types';
 import { MapLoader } from '../../engine/MapLoader';
 
@@ -13,6 +14,7 @@ export const mapDataIndex: { [key: string]: IGameMap | Promise<IGameMap> } = {
   terminalTown: terminalTownData,
   binaryForest: binaryForestData,
   debugDungeon: debugDungeonData,
+  terminalFields: terminalFieldsData,
   // All other maps (terminalTownExpanded, crystalCaverns, syntaxSwamp, overworld)
   // are now loaded from JSON files by MapLoader
 };

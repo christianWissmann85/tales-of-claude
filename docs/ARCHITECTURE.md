@@ -22,13 +22,13 @@ The game's core is a central `GameState` managed by a React Context reducer. Thi
 
 ## 2. Core Patterns & Principles
 
-*   **Centralized State Management:** The `GameContext` holds the immutable `GameState`. All state modifications occur via `dispatch`ing `GameAction`s to a single `gameReducer`. This ensures predictable state changes and simplifies debugging.
-*   **Game Loop Orchestration:** The `GameEngine` runs the main game loop using `requestAnimationFrame`. It's responsible for processing player input, updating various game systems (like AI and time), and dispatching actions to reflect changes in the `GameState`.
-*   **Event-Driven Architecture:** Systems like `TimeSystem`, `WeatherSystem`, and `FactionManager` communicate changes using internal `EventEmitter`s or callback arrays. This allows for loose coupling, where components can react to events without direct knowledge of the emitter's internal workings.
-*   **Model-View-Controller (Implicit):** Game models (`Player`, `Enemy`, `Map`, `Quest`) encapsulate data and their specific business logic. The `GameEngine` acts as a controller, manipulating these models and then dispatching `GameAction`s. React components serve as the views, rendering the `GameState`.
-*   **Singleton Pattern:** Key managers (`QuestManager`, `FactionManager`, `MapLoader`, `UIManager`, `SaveGameService`) are implemented as singletons. This ensures a single, globally accessible instance for managing their respective domains, preventing inconsistent states.
-*   **Immutability:** The `GameState` is treated as immutable. Reducers always return new state objects, and mutable instances within the state (like `Player` or `GameMap`) are cloned when modified. This is crucial for React's efficient re-rendering and state predictability.
-*   **Separation of Concerns:** Core game logic and domain-specific systems are encapsulated in dedicated classes, decoupled from React components. This improves maintainability and testability.
+* **Centralized State Management:** The `GameContext` holds the immutable `GameState`. All state modifications occur via `dispatch`ing `GameAction`s to a single `gameReducer`. This ensures predictable state changes and simplifies debugging.
+* **Game Loop Orchestration:** The `GameEngine` runs the main game loop using `requestAnimationFrame`. It's responsible for processing player input, updating various game systems (like AI and time), and dispatching actions to reflect changes in the `GameState`.
+* **Event-Driven Architecture:** Systems like `TimeSystem`, `WeatherSystem`, and `FactionManager` communicate changes using internal `EventEmitter`s or callback arrays. This allows for loose coupling, where components can react to events without direct knowledge of the emitter's internal workings.
+* **Model-View-Controller (Implicit):** Game models (`Player`, `Enemy`, `Map`, `Quest`) encapsulate data and their specific business logic. The `GameEngine` acts as a controller, manipulating these models and then dispatching `GameAction`s. React components serve as the views, rendering the `GameState`.
+* **Singleton Pattern:** Key managers (`QuestManager`, `FactionManager`, `MapLoader`, `UIManager`, `SaveGameService`) are implemented as singletons. This ensures a single, globally accessible instance for managing their respective domains, preventing inconsistent states.
+* **Immutability:** The `GameState` is treated as immutable. Reducers always return new state objects, and mutable instances within the state (like `Player` or `GameMap`) are cloned when modified. This is crucial for React's efficient re-rendering and state predictability.
+* **Separation of Concerns:** Core game logic and domain-specific systems are encapsulated in dedicated classes, decoupled from React components. This improves maintainability and testability.
 
 ## 3. Key System Interactions
 
@@ -65,7 +65,7 @@ The `MapLoader` (singleton) is responsible for asynchronously loading map data (
 
 ## 4. Discovered Systems
 
-*   **PatrolSystem:** Manages enemy AI behavior, including patrol routes, vision, alert states, and respawning. It dynamically adjusts based on `TimeSystem` (day/night cycles) and `WeatherSystem` (movement penalties).
-*   **UIManager / StableUIManager:** Provides centralized control for all UI panels (inventory, quest log, character screen). It ensures only one modal panel is active at a time, manages z-indexing, and uses `criticalSectionManager` and `actionQueueManager` to prevent rapid toggles and race conditions during UI transitions, enhancing stability.
-*   **FactionSystem (FactionManager):** Tracks and manages the player's reputation with various in-game factions. It handles reputation adjustments based on player actions, implements inter-faction conflict logic, and provides reputation tiers that can influence gameplay (e.g., shop prices, dialogue options).
-*   **PuzzleSystem:** Manages the state and logic for environmental puzzles (e.g., push blocks, switch sequences) on a per-map basis. The `PuzzleInteractionHandler` acts as a facade for interacting with specific puzzle types, allowing the game to track and persist puzzle progress.
+* **PatrolSystem:** Manages enemy AI behavior, including patrol routes, vision, alert states, and respawning. It dynamically adjusts based on `TimeSystem` (day/night cycles) and `WeatherSystem` (movement penalties).
+* **UIManager / StableUIManager:** Provides centralized control for all UI panels (inventory, quest log, character screen). It ensures only one modal panel is active at a time, manages z-indexing, and uses `criticalSectionManager` and `actionQueueManager` to prevent rapid toggles and race conditions during UI transitions, enhancing stability.
+* **FactionSystem (FactionManager):** Tracks and manages the player's reputation with various in-game factions. It handles reputation adjustments based on player actions, implements inter-faction conflict logic, and provides reputation tiers that can influence gameplay (e.g., shop prices, dialogue options).
+* **PuzzleSystem:** Manages the state and logic for environmental puzzles (e.g., push blocks, switch sequences) on a per-map basis. The `PuzzleInteractionHandler` acts as a facade for interacting with specific puzzle types, allowing the game to track and persist puzzle progress.

@@ -1,0 +1,418 @@
+import { GameMap as IGameMap, Tile, TileType, Exit, NPC, NPCRole, Item as IItem, Enemy as IEnemy, Structure, StructureInteractionPoint } from '../types/global.types';
+import { 
+  JsonMap, 
+  JsonMapObject, 
+  JsonMapNPC, 
+  JsonMapEnemy, 
+  JsonMapItem, 
+  JsonMapExit,
+  JsonMapDoor,
+  JsonMapStructure,
+  JsonMapObjectType,
+  JsonMapTileLayer,
+  JsonMapObjectLayer,
+} from '../types/map-schema.types';
+import { Enemy, EnemyVariant } from '../models/Enemy';
+import { Item as ItemClass, ItemVariant } from '../models/Item';
+import { validateJsonMap } from '../utils/mapValidation';
+
+// Import all JSON map files statically for browser/Vite environment
+import terminalTownJson from '../assets/maps/json/terminalTown.json';
+import terminalTownExpandedJson from '../assets/maps/json/terminalTownExpanded.json';
+import crystalCavernsJson from '../assets/maps/json/crystalCaverns.json';
+import syntaxSwampJson from '../assets/maps/json/syntaxSwamp.json';
+import overworldJson from '../assets/maps/json/overworld.json';
+import terminalFieldsJson from '../assets/maps/json/terminalFields.json';
+
+// Define base directories for map files as relative URLs for browser
+const TS_MAPS_DIR = '/src/assets/maps';
+
+export class MapLoader {
+  private static instance: MapLoader;
+  private cache: Map<string, IGameMap> = new Map();
+  private isDevMode: boolean = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) || false;
+
+  // Registry for statically imported JSON maps
+  private static readonly jsonMapRegistry: Record<string, JsonMap> = {
+    terminalTown: terminalTownJson as any as JsonMap,
+    terminalTownExpanded: terminalTownExpandedJson as any as JsonMap,
+    crystalCaverns: crystalCavernsJson as any as JsonMap,
+    syntaxSwamp: syntaxSwampJson as any as JsonMap,
+    overworld: overworldJson as any as JsonMap,
+    terminalFields: terminalFieldsJson as any as JsonMap,
+  };
+
+  private constructor() {
+    if (this.isDevMode) {
+      console.log('MapLoader running in development mode. Hot-reloading handled by bundler (Vite).');
+    }
+  }
+
+  public static getInstance(): MapLoader {
+    if (!MapLoader.instance) {
+      MapLoader.instance = new MapLoader();
+    }
+    return MapLoader.instance;
+  }
+
+  public async loadMap(mapId: string): Promise<IGameMap> {
+    if (this.cache.has(mapId)) {
+      console.log(`MapLoader: Returning cached map "${mapId}"`);
+      return this.cache.get(mapId)!;
+    }
+
+    console.log(`MapLoader: Loading map "${mapId}"`);
+    let gameMap: IGameMap | null = null;
+    let jsonError: Error | null = null;
+
+    // 1. Try loading from JSON (statically imported)
+    try {
+      console.log(`MapLoader: Attempting to load "${mapId}" from JSON registry`);
+      const jsonMap = await this.loadJsonMap(mapId);
+      console.log(`MapLoader: Raw JSON loaded for "${mapId}", processing...`, {
+        width: jsonMap.width,
+        height: jsonMap.height,
+        layerCount: jsonMap.layers?.length
+      });
+      
+      gameMap = this.processJsonMap(jsonMap);
+      console.log(`Successfully loaded map "${mapId}" from JSON.`, {
+        processedWidth: gameMap.width,
+        processedHeight: gameMap.height,
+        tilesLength: gameMap.tiles?.length,
+        entitiesCount: gameMap.entities?.length
+      });
+    } catch (error: any) {
+      jsonError = error;
+      console.warn(`Failed to load map "${mapId}" from JSON: ${error.message}`);
+      console.error('JSON loading error details:', error);
+    }
+
+    // 2. Fallback to TS if JSON failed or was not found
+    if (!gameMap) {
+      try {
+        console.log(`MapLoader: Attempting to load "${mapId}" from TS files`);
+        const tsMap = await this.loadTsMap(mapId);
+        gameMap = tsMap;
+        console.log(`Successfully loaded map "${mapId}" from TS.`);
+      } catch (tsError: any) {
+        console.error(`Failed to load map "${mapId}" from TS: ${tsError.message}`);
+        const combinedError = `Could not load map "${mapId}" from JSON or TS. ` +
+                              `JSON Error: ${jsonError ? jsonError.message : 'N/A'}. ` +
+                              `TS Error: ${tsError.message}.`;
+        throw new Error(combinedError);
+      }
+    }
+
+    if (!gameMap) {
+      throw new Error(`Map "${mapId}" could not be loaded by any method.`);
+    }
+
+    // Validate the final game map
+    if (!gameMap.tiles || gameMap.tiles.length === 0) {
+      throw new Error(`Map "${mapId}" has no tiles after processing`);
+    }
+
+    if (gameMap.tiles.length !== gameMap.height) {
+      throw new Error(`Map "${mapId}" tiles height mismatch: expected ${gameMap.height}, got ${gameMap.tiles.length}`);
+    }
+
+    console.log(`MapLoader: Successfully processed and cached map "${mapId}"`);
+    this.cache.set(mapId, gameMap);
+    return gameMap;
+  }
+
+  private async loadJsonMap(mapId: string): Promise<JsonMap> {
+    console.log(`MapLoader: Looking for "${mapId}" in registry...`);
+    const importedJson = MapLoader.jsonMapRegistry[mapId];
+    
+    if (!importedJson) {
+      console.log(`MapLoader: Available maps in registry:`, Object.keys(MapLoader.jsonMapRegistry));
+      throw new Error(`JSON map "${mapId}" not found in static import registry.`);
+    }
+
+    console.log(`MapLoader: Found "${mapId}" in registry, validating...`);
+    try {
+      validateJsonMap(importedJson);
+      console.log(`MapLoader: Validation successful for "${mapId}"`);
+      return importedJson;
+    } catch (error: any) {
+      console.error(`MapLoader: Validation failed for "${mapId}":`, error);
+      throw new Error(`Error validating statically imported JSON map "${mapId}": ${error.message}`);
+    }
+  }
+
+  private async loadTsMap(mapId: string): Promise<IGameMap> {
+    const url = `${TS_MAPS_DIR}/${mapId}.ts`;
+    try {
+      const module = await import(/* @vite-ignore */ url);
+      const mapData = module[`${mapId}Data`];
+
+      if (!mapData || typeof mapData !== 'object' || !mapData.id) {
+        throw new Error(`Invalid or missing export for map "${mapId}" in ${url}. Expected export named "${mapId}Data".`);
+      }
+      return mapData as IGameMap;
+    } catch (error: any) {
+      throw new Error(`Error loading TS map "${mapId}" from ${url}: ${error.message}`);
+    }
+  }
+
+  private processJsonMap(jsonMap: JsonMap): IGameMap {
+    console.log(`MapLoader: Processing JSON map "${jsonMap.id}"`);
+    
+    // Enhanced mapping from numeric tile IDs to TileType strings
+    const tileIdToType: Record<number, TileType> = {
+      0: 'walkable',
+      1: 'grass',
+      2: 'wall',
+      3: 'tree',
+      4: 'door',
+      5: 'exit',
+      6: 'locked_door',
+      7: 'floor',
+      8: 'healer',
+      9: 'shop',
+      10: 'path',
+      11: 'water',
+      12: 'dungeon_floor',
+      13: 'hidden_area',
+      14: 'tech_floor',
+      15: 'metal_floor',
+      16: 'path_one',
+      17: 'path_zero',
+      18: 'walkable',
+    };
+
+    const gameMap: IGameMap = {
+      id: jsonMap.id,
+      name: jsonMap.name,
+      width: jsonMap.width,
+      height: jsonMap.height,
+      tiles: Array.from({ length: jsonMap.height }, () =>
+        Array.from({ length: jsonMap.width }, () => ({ walkable: true, type: 'walkable' })),
+      ),
+      entities: [],
+      exits: [],
+      structures: [],
+    };
+
+    console.log(`MapLoader: Initialized ${jsonMap.width}x${jsonMap.height} map grid`);
+
+    const tileCount = jsonMap.width * jsonMap.height;
+
+    // Store tile layer data by name for combined processing
+    const tileLayerData: { [key: string]: (TileType | number)[] } = {};
+    const objectLayers: JsonMapObjectType[][] = [];
+
+    // Process layers
+    console.log(`MapLoader: Processing ${jsonMap.layers?.length || 0} layers`);
+    if (!jsonMap.layers) {
+      console.warn(`MapLoader: No layers found in map "${jsonMap.id}"`);
+    } else {
+      for (const layer of jsonMap.layers) {
+        console.log(`MapLoader: Processing layer "${layer.name}" of type "${layer.type}"`);
+        
+        if (layer.type === 'tilelayer' && (layer as JsonMapTileLayer).data) {
+          const tileLayer = layer as JsonMapTileLayer;
+          if (tileLayer.data.length !== tileCount) {
+            console.warn(`Map "${jsonMap.id}": Layer "${layer.name}" data length mismatch. Expected ${tileCount}, got ${tileLayer.data.length}. Skipping.`);
+            continue;
+          }
+          tileLayerData[layer.name] = tileLayer.data;
+          console.log(`MapLoader: Processed tile layer "${layer.name}" with ${tileLayer.data.length} tiles`);
+        } else if (layer.type === 'objectgroup' && (layer as JsonMapObjectLayer).objects) {
+          const objectLayer = layer as JsonMapObjectLayer;
+          objectLayers.push(objectLayer.objects);
+          console.log(`MapLoader: Processed object layer "${layer.name}" with ${objectLayer.objects.length} objects`);
+        }
+      }
+    }
+
+    console.log(`MapLoader: Found tile layers:`, Object.keys(tileLayerData));
+
+    // Populate gameMap.tiles by combining information from different tile layers
+    console.log(`MapLoader: Populating ${jsonMap.width}x${jsonMap.height} tile grid...`);
+    for (let y = 0; y < jsonMap.height; y++) {
+      for (let x = 0; x < jsonMap.width; x++) {
+        const index = y * jsonMap.width + x;
+        const tile: Tile = { walkable: true, type: 'walkable' };
+
+        // 1. Apply base layer
+        if (tileLayerData['base'] && tileLayerData['base'][index] !== undefined) {
+          const baseValue = tileLayerData['base'][index];
+          if (typeof baseValue === 'number') {
+            tile.type = tileIdToType[baseValue] || 'walkable';
+          } else if (typeof baseValue === 'string') {
+            tile.type = baseValue as TileType;
+          }
+        }
+
+        // 2. Apply decoration layer
+        if (tileLayerData['decoration'] && tileLayerData['decoration'][index] !== undefined) {
+          const decorValue = tileLayerData['decoration'][index];
+          let mappedDecorType: TileType | undefined;
+
+          if (typeof decorValue === 'number') {
+            mappedDecorType = tileIdToType[decorValue];
+          } else if (typeof decorValue === 'string') {
+            mappedDecorType = decorValue as TileType;
+          }
+
+          if (mappedDecorType && mappedDecorType !== 'walkable') {
+            tile.type = mappedDecorType;
+          }
+        }
+
+        // 3. Apply collision layer
+        if (tileLayerData['collision'] && tileLayerData['collision'][index] !== undefined) {
+          const collisionValue = tileLayerData['collision'][index];
+          if (collisionValue === 2 || collisionValue === 'wall') {
+            tile.walkable = false;
+            tile.type = 'wall';
+          }
+        }
+
+        // Set walkability based on tile type
+        tile.walkable = ['grass', 'floor', 'walkable', 'path', 'dungeon_floor', 
+                        'tech_floor', 'metal_floor', 'path_one', 'path_zero', 
+                        'door', 'exit', 'shop', 'healer'].includes(tile.type);
+
+        gameMap.tiles[y][x] = tile;
+      }
+    }
+
+    console.log(`MapLoader: Tile grid populated, processing objects...`);
+
+    // Process object layers for entities, exits, structures
+    for (const objects of objectLayers) {
+      for (const obj of objects) {
+        this.processMapObject(obj, gameMap);
+      }
+    }
+
+    console.log(`MapLoader: Map processing complete. Entities: ${gameMap.entities.length}, Exits: ${gameMap.exits.length}, Structures: ${gameMap.structures?.length || 0}`);
+
+    return gameMap;
+  }
+
+  private processMapObject(obj: JsonMapObjectType, gameMap: IGameMap): void {
+    // FIX 2: Access position from the JsonMapObject
+    const mapObject = obj as JsonMapObject;
+    const x = mapObject.position.x;
+    const y = mapObject.position.y;
+
+    switch (obj.type) {
+      case 'npc': {
+        const npcObj = obj as JsonMapNPC;
+        // FIX 3: Create an object that conforms to the NPC interface
+        const npc: NPC = {
+          id: npcObj.id || `npc_${gameMap.entities.length}`,
+          name: npcObj.properties.name,
+          position: { x, y },
+          role: npcObj.properties.role as NPCRole,
+          dialogueId: npcObj.properties.dialogueId,
+          questStatus: npcObj.properties.questStatus as ('not_started' | 'in_progress' | 'completed' | undefined),
+          statusEffects: [],
+        };
+        gameMap.entities.push(npc);
+        break;
+      }
+      case 'enemy': {
+        const enemyObj = obj as JsonMapEnemy;
+        // FIX 4: Create Enemy with proper constructor parameters
+        const enemyId = `enemy_${enemyObj.properties.variant}_${x}_${y}_${gameMap.entities.length}`;
+        const enemyData = new Enemy(
+          enemyId,
+          enemyObj.properties.variant as EnemyVariant,
+          { x, y }
+        );
+        // Enemy already has all required properties from constructor
+        gameMap.entities.push(enemyData);
+        break;
+      }
+      case 'item': {
+        const itemObj = obj as JsonMapItem;
+        const itemData = new ItemClass(itemObj.properties.variant as ItemVariant);
+        // FIX 3: Create an object that conforms to the IItem interface
+        const itemEntity: IItem = {
+          ...itemData,
+          id: `item_${itemObj.properties.variant}_${x}_${y}_${gameMap.entities.length}`,
+          position: { x, y },
+        };
+        gameMap.entities.push(itemEntity);
+        break;
+      }
+      case 'exit': {
+        const exitObj = obj as JsonMapExit;
+        // FIX 5: Use the 'position' property to match the Exit interface
+        const exit: Exit = {
+          position: { x, y },
+          targetMapId: exitObj.properties.targetMapId,
+          targetPosition: {
+            x: exitObj.properties.targetPositionX || 50,
+            y: exitObj.properties.targetPositionY || 50,
+          },
+          // displayName is not on Exit interface, removed
+        };
+        gameMap.exits.push(exit);
+        if (x >= 0 && y >= 0 && x < gameMap.width && y < gameMap.height) {
+          gameMap.tiles[y][x].type = 'exit';
+        }
+        break;
+      }
+      case 'door':
+      case 'locked_door': {
+        const doorObj = obj as JsonMapDoor;
+        if (x >= 0 && y >= 0 && x < gameMap.width && y < gameMap.height) {
+          gameMap.tiles[y][x].type = obj.type as TileType;
+          if (obj.type === 'locked_door' && doorObj.properties?.keyItemId) {
+            // FIX 6: This line is correct, assuming the Tile interface is updated to include `keyItemId?: string;`
+            (gameMap.tiles[y][x] as any).keyItemId = doorObj.properties.keyItemId;
+          }
+        }
+        break;
+      }
+      case 'structure': {
+        const structObj = obj as JsonMapStructure;
+        
+        // FIX 7: Map interaction points from JSON to the StructureInteractionPoint interface
+        const mappedInteractionPoints: StructureInteractionPoint[] =
+          (structObj.properties.interactionPoints || []).map((ip: any): StructureInteractionPoint => ({
+            relativePosition: { x: ip.x, y: ip.y },
+            type: ip.type,
+            targetMapId: ip.targetMapId,
+            message: ip.message,
+            action: ip.action,
+          }));
+
+        const collisionMap = new Set<string>();
+        if (Array.isArray(structObj.properties.collision)) {
+          structObj.properties.collision.forEach((pos: {x: number, y: number}) => {
+            collisionMap.add(`${pos.x},${pos.y}`);
+          });
+        }
+
+        const structure: Structure = {
+          id: String(structObj.id),
+          structureId: structObj.properties.structureId,
+          position: { x, y },
+          size: {
+            width: structObj.properties.width,
+            height: structObj.properties.height,
+          },
+          visual: structObj.properties.visual,
+          collisionMap: collisionMap,
+          interactionPoints: mappedInteractionPoints,
+        };
+        
+        // FIX 1 & 8: Add null check for possibly undefined 'structures' array
+        if (gameMap.structures) {
+          gameMap.structures.push(structure);
+        }
+        break;
+      }
+    }
+  }
+}
+
+export const mapLoader = MapLoader.getInstance();

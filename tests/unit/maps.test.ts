@@ -163,7 +163,7 @@ global.fetch = async (url: RequestInfo | URL, _init?: RequestInit) => {
 
 // Custom test runner utilities (assuming these are available from node-test-runner.ts)
 // These declarations allow TypeScript to recognize `test`, `suite`, `beforeEach`, `testWithBeforeEach`.
-declare function test(name: string, fn: () => void | Promise<void>): void;
+// declare function test(name: string, fn: () => void | Promise<void>): void; // Unused declaration
 declare function suite(name: string, testsFn: () => void): void;
 declare function beforeEach(fn: () => void): void;
 declare function testWithBeforeEach(name: string, fn: () => void | Promise<void>): void;
@@ -374,7 +374,7 @@ suite('MapLoader and Map Structure Tests', () => {
     // Using Node.js's assert.rejects to check for async errors and their messages.
     await assert.rejects(
       async () => { await getMap(nonExistentMapId); },
-      (err: any) => {
+      (err) => {
         assert.ok(err instanceof Error, 'Error should be an instance of Error');
         assert.ok(err.message.includes('Could not load map "nonExistentMap" from JSON or TS'), 'Error message should contain expected text');
         return true; // Return true if the error matches
@@ -609,7 +609,7 @@ suite('MapLoader and Map Structure Tests', () => {
           name: 'objects',
           type: 'objectgroup',
           objects: [
-            { id: 'unknown_01', type: 'unknown_type' as any, position: { x: 1, y: 1 } },
+            { id: 'unknown_01', type: 'unknown_type' as unknown as string, position: { x: 1, y: 1 } },
             { id: 'npc_01', type: 'npc', position: { x: 2, y: 2 }, properties: { name: 'Test NPC', role: 'debugger', dialogueId: 'test' } },
           ],
         },

@@ -21,16 +21,16 @@ interface TimeData {
  * A simple custom event emitter for the TimeSystem.
  */
 class EventEmitter {
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, ((...args: unknown[]) => void)[]> = new Map();
 
-  on(eventName: string, listener: Function): void {
+  on(eventName: string, listener: (...args: unknown[]) => void): void {
     if (!this.listeners.has(eventName)) {
       this.listeners.set(eventName, []);
     }
     this.listeners.get(eventName)!.push(listener);
   }
 
-  off(eventName: string, listener: Function): void {
+  off(eventName: string, listener: (...args: unknown[]) => void): void {
     if (!this.listeners.has(eventName)) {
       return;
     }
@@ -38,7 +38,7 @@ class EventEmitter {
     this.listeners.set(eventName, currentListeners.filter(l => l !== listener));
   }
 
-  emit(eventName: string, ...args: any[]): void {
+  emit(eventName: string, ...args: unknown[]): void {
     if (!this.listeners.has(eventName)) {
       return;
     }
@@ -171,7 +171,7 @@ export class TimeSystem {
    * @param eventName The name of the event ('timeChanged' or 'periodChanged').
    * @param listener The function to call when the event is emitted.
    */
-  public on(eventName: 'timeChanged' | 'periodChanged', listener: Function): void {
+  public on(eventName: 'timeChanged' | 'periodChanged', listener: (...args: unknown[]) => void): void {
     this._eventEmitter.on(eventName, listener);
   }
 
@@ -180,7 +180,7 @@ export class TimeSystem {
    * @param eventName The name of the event.
    * @param listener The function to remove.
    */
-  public off(eventName: 'timeChanged' | 'periodChanged', listener: Function): void {
+  public off(eventName: 'timeChanged' | 'periodChanged', listener: (...args: unknown[]) => void): void {
     this._eventEmitter.off(eventName, listener);
   }
 

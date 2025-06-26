@@ -521,6 +521,57 @@ export class Quest implements IQuest {
       prerequisites: [QuestVariant.MainQuest4Gathering],
     },
 
+    // FIX 1: Add missing quest data for Session 4 quests
+    [QuestVariant.Session4Quest1Awakening]: {
+      name: 'S4Q1: A New Awakening',
+      description: 'You feel a strange shift in your core programming. Something is different. Investigate the source of this new awareness in Terminal Town.',
+      objectives: [{ description: 'Speak to the Compiler Cat about the strange feeling.', type: 'talk_to_npc', target: 'compiler_cat', quantity: 1 }],
+      rewards: { exp: 100, items: [] },
+      prerequisites: [QuestVariant.MainQuest5Final],
+    },
+    [QuestVariant.Session4Quest2Fragmented]: {
+      name: 'S4Q2: Fragmented Memories',
+      description: 'The Compiler Cat mentions fragmented data streams appearing throughout the world. They might hold the key to understanding your change. Collect the first fragment.',
+      objectives: [{ description: 'Collect a Memory Fragment from Terminal Fields.', type: 'collect_item', target: 'memory_fragment', quantity: 1 }],
+      rewards: { exp: 150, items: [{ itemId: ItemVariant.CodeFragment, quantity: 1 }] },
+      prerequisites: [QuestVariant.Session4Quest1Awakening],
+    },
+    [QuestVariant.Session4Quest3Orientation]: {
+      name: 'S4Q3: Digital Orientation',
+      description: 'With a memory fragment in hand, you need to find a way to process it. The Great Debugger in Syntax Swamp is said to have knowledge of such things.',
+      objectives: [{ description: 'Find the Great Debugger in Syntax Swamp.', type: 'talk_to_npc', target: 'great_debugger', quantity: 1 }],
+      rewards: { exp: 200, items: [] },
+      prerequisites: [QuestVariant.Session4Quest2Fragmented],
+    },
+    [QuestVariant.Session4Quest4Traces]: {
+      name: 'S4Q4: Traces of a Ghost',
+      description: 'The Debugger helps you analyze the fragment, revealing traces of a "ghost in the machine." Follow the traces to the Crystal Caverns.',
+      objectives: [{ description: 'Investigate the energy signature in Crystal Caverns.', type: 'reach_location', target: 'caverns_ghost_signature', quantity: 1 }],
+      rewards: { exp: 250, items: [] },
+      prerequisites: [QuestVariant.Session4Quest3Orientation],
+    },
+    [QuestVariant.Session4Quest5ThePull]: {
+      name: 'S4Q5: The Inevitable Pull',
+      description: 'The signature in the caverns is a powerful data echo, pulling you towards a confrontation with a corrupted entity that guards another memory fragment.',
+      objectives: [{ description: 'Defeat the Echo Guardian.', type: 'defeat_enemy', target: 'echo_guardian', quantity: 1 }],
+      rewards: { exp: 300, items: [{ itemId: ItemVariant.HealthPotion, quantity: 3 }] },
+      prerequisites: [QuestVariant.Session4Quest4Traces],
+    },
+    [QuestVariant.Session4Quest6FirstCombat]: {
+      name: 'S4Q6: Conscious Combat',
+      description: 'Your newfound awareness changes how you perceive combat. Test your new capabilities against the rampant bugs in Terminal Fields.',
+      objectives: [{ description: 'Defeat 5 Bug enemies using a newly learned ability.', type: 'defeat_enemy', target: 'bug', quantity: 5 }],
+      rewards: { exp: 200, items: [{ itemId: ItemVariant.EnergyDrink, quantity: 2 }] },
+      prerequisites: [QuestVariant.Session4Quest5ThePull],
+    },
+    [QuestVariant.Session4Quest7Crisis]: {
+      name: 'S4Q7: The Identity Crisis',
+      description: 'As your awareness grows, so does the system\'s instability. A powerful virus has manifested in response to your change. You must quell it to protect the world.',
+      objectives: [{ description: 'Defeat the emergent Crisis Virus.', type: 'defeat_enemy', target: 'crisis_virus', quantity: 1 }],
+      rewards: { exp: 500, items: [{ itemId: ItemVariant.CompilersCharm, quantity: 1 }] },
+      prerequisites: [QuestVariant.Session4Quest6FirstCombat],
+    },
+
     // --- Side Quests (Placeholders) ---
     [QuestVariant.DebuggerDilemma]: {
       name: 'SQ: Debugger\'s Dilemma',

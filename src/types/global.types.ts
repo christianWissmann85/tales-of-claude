@@ -89,6 +89,8 @@ export interface Item {
   value?: number;
   /** For key items, the ID of what it unlocks (e.g., 'door_id'). */
   targetId?: string;
+  /** Rarity of the item. */
+  rarity?: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'unique';
 }
 
 /**
@@ -185,7 +187,7 @@ export interface Player extends BaseCharacter {
   accessorySlot?: EquippableItem;
   activeQuestIds: string[];
   completedQuestIds: string[];
-  talentTree: any; // Using 'any' to avoid circular dependency with TalentTree class
+  talentTree: unknown; // Using 'unknown' to avoid circular dependency with TalentTree class
   talentPoints: number;
   exploredMaps?: Map<string, Set<string>>; // Map of mapId to Set of explored tile coordinates as "x,y" strings
 }
@@ -226,7 +228,7 @@ export interface Enemy extends BaseCharacter {
 /**
  * Defines the roles of Non-Player Characters.
  */
-export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver' | 'merchant';
+export type NPCRole = 'wizard' | 'debugger' | 'lost_program' | 'compiler_cat' | 'tutorial' | 'bard' | 'healer' | 'quest_giver' | 'merchant' | 'farmer';
 
 /**
  * NPC Schedule entry - where they should be at what time
@@ -265,6 +267,14 @@ export interface GameMap {
   exits: Exit[];
   /** Multi-tile structures on this map */
   structures?: Structure[];
+  /** Legacy compatibility - NPCs on the map */
+  npcs?: NPC[];
+  /** Legacy compatibility - enemies on the map */
+  enemies?: Enemy[];
+  /** Legacy compatibility - items on the map */
+  items?: Item[];
+  /** Starting position for the player */
+  startPosition?: Position;
 }
 
 /**
@@ -403,6 +413,8 @@ export interface WeatherEffects {
 
 // Import FactionManager for GameState
 import { FactionManager } from '../engine/FactionManager';
+// Import UIManager for GameState
+import { UIManager } from '../engine/UIManager';
 
 /**
  * The main interface representing the entire game state.
@@ -420,11 +432,12 @@ export interface GameState {
   showQuestLog: boolean; // Whether the quest log UI is currently displayed
   showCharacterScreen: boolean; // Whether the character screen UI is currently displayed
   notification: string | null; // Current notification message to display
-  questManagerState?: any; // Quest manager state for saving/loading
+  questManagerState?: unknown; // Quest manager state for saving/loading
   hotbarConfig: (string | null)[]; // Array of item IDs in hotbar slots
   timeData?: TimeData; // Current time state for day/night cycle
   weatherData?: WeatherData; // Current weather state
   factionManager: FactionManager; // Added: Faction manager instance
   showFactionStatus: boolean; // Added: Whether the faction status UI is currently displayed
-  factionReputations?: any; // Added: For backward compatibility with old saves that might have this directly
+  factionReputations?: unknown; // Added: For backward compatibility with old saves that might have this directly
+  uiManager: UIManager; // Added: UI manager instance for centralized UI state management
 }

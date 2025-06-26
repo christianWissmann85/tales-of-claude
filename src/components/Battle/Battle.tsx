@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BattleState, CombatEntity, Item, StatusEffect, StatusEffectType } from '../../types/global.types';
+import { BattleState, CombatEntity, StatusEffect, StatusEffectType } from '../../types/global.types';
+import { Item } from '../../models/Item';
 import { useGameContext } from '../../context/GameContext';
 import BattleSystem from '../../engine/BattleSystem';
 import styles from './Battle.module.css';

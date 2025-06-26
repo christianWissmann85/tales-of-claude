@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './Shop.module.css';
 import { useGameContext } from '../../context/GameContext';
 import { useKeyboard } from '../../hooks/useKeyboard';
-import { ShopItem, Item, ShopState } from '../../types/global.types';
+import { Item } from '../../types/global.types';
 
 // Helper function to calculate the sell price (50% of buy price)
 const getSellPrice = (buyPrice: number): number => Math.floor(buyPrice * 0.5);

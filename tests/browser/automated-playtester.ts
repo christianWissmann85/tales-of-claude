@@ -73,7 +73,7 @@ declare global {
             };
         };
         // Fix 2: Make window properties optional to allow deletion
-        _originalConsoleLog?: (...args: any[]) => void;
+        _originalConsoleLog?: (...args: unknown[]) => void;
         _capturedConsoleLogs?: string[];
         _originalWindowOnError?: OnErrorEventHandler;
         _capturedErrors?: string[];
@@ -229,7 +229,7 @@ function setupMonitoring(): void {
     if (!window._capturedConsoleLogs) {
         window._capturedConsoleLogs = [];
         window._originalConsoleLog = console.log;
-        console.log = (...args: any[]) => {
+        console.log = (...args: unknown[]) => {
             // Fix 3: Add non-null assertion as _capturedConsoleLogs is checked above
             window._capturedConsoleLogs!.push(args.map(a => String(a)).join(' '));
             window._originalConsoleLog!.apply(console, args);
@@ -356,7 +356,7 @@ class AutomatedPlaytester {
         try {
             await suiteFn();
             this.log(`--- Suite "${name}" Completed in ${((Date.now() - this.testStartTime) / 1000).toFixed(2)}s ---`);
-        } catch (error: any) {
+        } catch (error) {
             const errorMessage = `Suite "${name}" failed unexpectedly: ${error.message || error}`;
             this.logError(errorMessage);
             this.results.push({
@@ -383,7 +383,7 @@ class AutomatedPlaytester {
             status = 'PASS';
             message = 'Test passed.';
             this.log(`  PASS: ${testName}`);
-        } catch (error: any) {
+        } catch (error) {
             status = 'FAIL';
             message = error.message || String(error);
             this.logError(`  FAIL: ${testName} - ${message}`);
@@ -1102,7 +1102,7 @@ class AutomatedPlaytester {
         try {
             await waitFor(() => !!window.game, Number(this.config.stateCheckTimeout) * 2, this.config.stateCheckInterval);
             this.log('window.game detected. Proceeding with tests.');
-        } catch (e: any) {
+        } catch (e) {
             this.logError(`Game object (window.game) not found after timeout. Cannot proceed with tests: ${e.message}`);
             this.results.push({
                 suite: 'Framework Setup',

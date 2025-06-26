@@ -15,6 +15,8 @@ import {
   TimeData, // Import TimeData
   CombatEntity, // Import CombatEntity for type safety
   BattleState, // Import BattleState for type safety
+  WeatherData, // Import WeatherData for type safety
+  WeatherEffects, // Import WeatherEffects for type safety
 } from '../types/global.types';
 
 // 1. Add import for Enemy model from '../models/Enemy'
@@ -114,7 +116,8 @@ export class GameEngine {
     }
     
     // Listen to time system events
-    this._timeSystem.on('timeChanged', (timeData: any) => {
+    this._timeSystem.on('timeChanged', (...args: unknown[]) => {
+      const timeData = args[0] as TimeData;
       // Convert TimeSystem's TimeData to our GameState's TimeData format
       const gameTimeData: TimeData = {
         hours: timeData.hours,
@@ -140,7 +143,8 @@ export class GameEngine {
     }
     
     // Listen to weather system events
-    this._weatherSystem.on('weatherTransitionComplete', (weatherData: any) => {
+    this._weatherSystem.on('weatherTransitionComplete', (...args: unknown[]) => {
+      const weatherData = args[0] as WeatherData;
       this._dispatch({
         type: 'UPDATE_WEATHER',
         payload: { weatherData },
@@ -828,7 +832,7 @@ export class GameEngine {
             npcPositionsChanged = true;
             updatedNPCs.push({
               ...npc,
-              position: { x: Math.floor(newPosition.x), y: Math.floor(newPosition.y) }
+              position: { x: Math.floor(newPosition.x), y: Math.floor(newPosition.y) },
             });
           } else {
             updatedNPCs.push(npc);
@@ -945,7 +949,7 @@ export class GameEngine {
    * Get current weather effects for display
    * @returns The current weather effects
    */
-  public getWeatherEffects(): any {
+  public getWeatherEffects(): WeatherEffects {
     return this._weatherSystem?.getWeatherEffects() || {
       movementSpeedModifier: 1,
       visibilityRadius: 3,

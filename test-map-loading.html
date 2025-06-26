@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Loading Test</title>
+</head>
+<body>
+    <h1>Testing Map Loading...</h1>
+    <pre id="output"></pre>
+    
+    <script type="module">
+        // Test the MapLoader directly
+        import { mapLoader } from './src/engine/MapLoader.ts';
+        
+        const output = document.getElementById('output');
+        
+        async function testMapLoading() {
+            try {
+                output.textContent = 'Loading terminalTown map...\n';
+                console.log('Starting map load test...');
+                
+                const map = await mapLoader.loadMap('terminalTown');
+                
+                output.textContent += `✅ Map loaded successfully!\n`;
+                output.textContent += `Dimensions: ${map.width}x${map.height}\n`;
+                output.textContent += `Tiles: ${map.tiles.length} rows\n`;
+                output.textContent += `Entities: ${map.entities.length}\n`;
+                output.textContent += `Exits: ${map.exits.length}\n`;
+                output.textContent += `Structures: ${map.structures.length}\n`;
+                
+                console.log('Map loaded:', map);
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n`;
+                console.error('Map loading failed:', error);
+            }
+        }
+        
+        testMapLoading();
+    </script>
+</body>
+</html>

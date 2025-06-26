@@ -16,7 +16,7 @@
  * @param {number} delay The delay in milliseconds.
  * @returns {T & { cancel: () => void }} The debounced function with a `cancel` method.
  */
-export const debounce = <T extends (...args: any[]) => any>(func: T, delay: number): T & { cancel: () => void } => {
+export const debounce = <T extends (...args: unknown[]) => unknown>(func: T, delay: number): T & { cancel: () => void } => {
     let timeout: NodeJS.Timeout | null = null;
 
     const debounced = ((...args: Parameters<T>) => {
@@ -48,7 +48,7 @@ export const debounce = <T extends (...args: any[]) => any>(func: T, delay: numb
  * @param {number} delay The delay in milliseconds.
  * @returns {T & { cancel: () => void }} The throttled function with a `cancel` method.
  */
-export const throttle = <T extends (...args: any[]) => any>(func: T, delay: number): T & { cancel: () => void } => {
+export const throttle = <T extends (...args: unknown[]) => unknown>(func: T, delay: number): T & { cancel: () => void } => {
     let timeout: NodeJS.Timeout | null = null;
     let lastArgs: Parameters<T> | null = null;
     let lastThis: ThisParameterType<T> | null = null;
@@ -56,11 +56,12 @@ export const throttle = <T extends (...args: any[]) => any>(func: T, delay: numb
 
     const throttled = function (this: ThisParameterType<T>, ...args: Parameters<T>) {
         lastArgs = args;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         lastThis = this;
 
         if (!timeout) {
             timeout = setTimeout(() => {
-                lastResult = func.apply(lastThis, lastArgs!);
+                lastResult = func.apply(lastThis, lastArgs!) as ReturnType<T>;
                 timeout = null;
                 lastArgs = null;
                 lastThis = null;

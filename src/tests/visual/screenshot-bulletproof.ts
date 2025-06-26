@@ -65,7 +65,7 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
       async () => await page.keyboard.press('Escape'),
       async () => {
         const button = await page.$('button:has-text("Start"), button:has-text("Enter"), button:has-text("Continue")');
-        if (button) await button.click();
+        if (button) { await button.click(); }
       },
       async () => await page.click('body'), // Click anywhere
     ];
@@ -97,7 +97,7 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
     // Wait for any of these game elements to appear
     await page.waitForSelector(
       '.game-board, .gameBoard, [class*="GameBoard"], [class*="game-container"], #game-root, .game-area',
-      { timeout: 10000, state: 'visible' }
+      { timeout: 10000, state: 'visible' },
     );
     console.log('✅ Game board detected!');
   } catch (e) {
@@ -111,7 +111,7 @@ async function waitForGameReady(page: Page, debug: boolean = false): Promise<voi
         // Look for game-specific text
         return text.includes('HP:') || text.includes('MP:') || text.includes('Terminal Town') || text.includes('Level');
       },
-      { timeout: 10000 }
+      { timeout: 10000 },
     );
     console.log('✅ Game content detected!');
   }

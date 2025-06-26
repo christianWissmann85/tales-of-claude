@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, CSSProperties } from 'react';
 import styles from './ItemTooltip.module.css';
 import { Item } from '../../models/Item'; // Import the Item class
-import { Player, EquipmentSlotType } from '../../models/Player'; // Import Player and EquipmentSlotType
-import { ItemType } from '../../types/global.types'; // For ItemType enum
+import { Player } from '../../models/Player'; // Import Player
+// import { ItemType } from '../../types/global.types'; // Unused import
 
 enum ItemRarity {
   Common = 'Common',
@@ -121,7 +121,7 @@ const ItemTooltip: React.FC<ItemTooltipProps> = ({ item, player, mouseX, mouseY 
     if (diff === 0) { return null; }
     
     const sign = diff > 0 ? '+' : '';
-    const diffColor = diff > 0 ? 'green' : 'red';
+    // const diffColor = diff > 0 ? 'green' : 'red'; // Unused variable
 
     return (
       <span className={diff > 0 ? styles.statPositive : styles.statNegative}>

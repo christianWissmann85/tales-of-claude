@@ -5,7 +5,7 @@ import puppeteer, { Browser, Page, ConsoleMessage } from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
 // Import the Playtester and its types from the sibling file
-import { AutomatedPlaytester, TestConfig, TestResult, GameState } from './automated-playtester';
+import { TestResult } from './automated-playtester';
 
 // --- Constants ---
 const GAME_URL = 'http://localhost:5174';
@@ -291,14 +291,14 @@ class PuppeteerTestRunner {
             // Execute the playtester's start method within the browser context and retrieve its results.
             this.testResults = await this.page.evaluate(async () => {
                 // Instantiate the AutomatedPlaytester class now available on window
-                const playtester = new (window as any).AutomatedPlaytester({
+                const playtester = new (window as unknown as { AutomatedPlaytester: typeof AutomatedPlaytester }).AutomatedPlaytester({
                     debugMode: true, // Enable debug logs from the playtester itself
                     testSpeed: 'normal', // Configure test speed: 'fast', 'normal', or 'slow'
                     fullRun: true, // Run all available test suites
                     resetGameBeforeRun: true, // Reset game state before starting the full run
                 });
                 // Store the instance globally for potential debugging or partial result retrieval
-                (window as any).playtesterInstance = playtester;
+                (window as unknown as { playtesterInstance?: typeof playtester }).playtesterInstance = playtester;
                 await playtester.start();
                 return playtester.results; // Return the collected test results
             });
@@ -311,7 +311,7 @@ class PuppeteerTestRunner {
             // Attempt to retrieve any partial results if the playtester execution failed mid-way
             try {
                 const partialResults = await this.page.evaluate(() => {
-                    return (window as any).playtesterInstance?.results || [];
+                    return (window as unknown as { playtesterInstance?: { results?: unknown[] } }).playtesterInstance?.results || [];
                 });
                 this.testResults = partialResults;
             } catch (e) {

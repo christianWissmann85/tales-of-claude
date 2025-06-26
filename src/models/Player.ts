@@ -4,11 +4,11 @@ import {
   Player as IPlayer,
   Position,
   Direction,
-  Item,
   Ability,
   StatusEffect,
   PlayerStats,
 } from '../types/global.types';
+import { Item } from './Item'; // Import Item from models
 import { TalentTree } from './TalentTree'; // 1. Import TalentTree
 
 /**

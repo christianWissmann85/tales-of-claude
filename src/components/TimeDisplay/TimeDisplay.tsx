@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameContext } from '../../context/GameContext';
-import { TimeOfDay } from '../../types/global.types';
+// import { TimeOfDay } from '../../types/global.types'; // Unused import
 import styles from './TimeDisplay.module.css';
 
 const TimeDisplay: React.FC = () => {

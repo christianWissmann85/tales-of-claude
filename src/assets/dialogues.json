@@ -1096,5 +1096,712 @@
         ]
       }
     ]
+  },
+  {
+    "id": "farmer_1",
+    "lines": [
+      { "text": "My latest crop compilation is looking good, but I'm still debugging that pesky 'blight' error. Might need to re-factor the soil." }
+    ]
+  },
+  {
+    "id": "farmer_2",
+    "lines": [
+      { "text": "The weather algorithm predicted sunshine, but my fields are getting a '404: Rain Not Found' error. Guess I'll just reboot the sky." }
+    ]
+  },
+  {
+    "id": "farmer_3",
+    "lines": [
+      { "text": "We've optimized the harvest to near-perfect efficiency. The combine now runs on a neural network, predicting the ripest moment down to the millisecond." }
+    ]
+  },
+  {
+    "id": "farmer_4",
+    "lines": [
+      { "text": "Just finished deploying my new seed array. Each row is a perfectly indexed data structure, ensuring optimal nutrient distribution and minimal 'null' sprouts." }
+    ]
+  },
+  {
+    "id": "farmer_5",
+    "lines": [
+      { "text": "My digital irrigation system is acting up. It keeps sending water packets to the wrong IP address, and now my corn is getting a 'denial of service' attack." }
+    ]
+  },
+  {
+    "id": "mayor",
+    "lines": [
+      {
+        "text": "Welcome to Terminal Town, the heart of our digital realm! I am Mayor Mainframe, administrator of this prosperous community."
+      },
+      {
+        "text": "I've been managing this town's processes for decades, ensuring every citizen runs smoothly and efficiently."
+      },
+      {
+        "text": "Our new Market Square to the east showcases the finest merchants in the land. The residential district to the west houses our hardworking citizens."
+      },
+      {
+        "text": "And don't miss our beautiful park to the south - a perfect place to decompress after a hard day's debugging!",
+        "choices": [
+          {
+            "text": "Tell me about the town's history.",
+            "action": "mayor_history"
+          },
+          {
+            "text": "Any problems I can help with?",
+            "action": "mayor_quest_hint"
+          },
+          {
+            "text": "Thank you, Mayor.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mayor_history",
+    "lines": [
+      {
+        "text": "Terminal Town was founded during the Great Compilation, when the first processes settled here seeking stable execution."
+      },
+      {
+        "text": "Over the cycles, we've grown from a simple command line village to this thriving metropolis of functions and subroutines."
+      },
+      {
+        "text": "The fountain at our center? It's said to be built upon the original bootstrap code that started it all.",
+        "choices": [
+          {
+            "text": "Fascinating!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mayor_quest_hint",
+    "lines": [
+      {
+        "text": "Well, since you ask... We've been having some minor bug infestations lately. Nothing major, but they're annoying the citizens."
+      },
+      {
+        "text": "The Great Debugger near the fountain is coordinating our response. He could use an able assistant like yourself!",
+        "choices": [
+          {
+            "text": "I'll speak with him.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bitMerchant",
+    "lines": [
+      {
+        "text": "Welcome to my stall! I'm the Bit Merchant, dealing in the finest bits and bytes this side of the compiler!"
+      },
+      {
+        "text": "Everything here is guaranteed to be bug-free! Well, mostly bug-free. Okay, there might be a few edge cases..."
+      },
+      {
+        "text": "But hey, that's what makes programming fun, right? Care to browse my wares?",
+        "choices": [
+          {
+            "text": "Show me what you've got!",
+            "action": "open_shop_bit_merchant"
+          },
+          {
+            "text": "Just looking around.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "memoryMerchant",
+    "lines": [
+      {
+        "text": "Step right up! I trade in memories and data structures of all kinds!"
+      },
+      {
+        "text": "Stack or queue? Linked list or array? I've got implementations for every occasion!"
+      },
+      {
+        "text": "And remember - careful with those pointers! One wrong dereference and *poof* - segmentation fault!",
+        "choices": [
+          {
+            "text": "I need some memory upgrades.",
+            "action": "open_shop_memory_merchant"
+          },
+          {
+            "text": "Any tips for memory management?",
+            "action": "memory_tips"
+          },
+          {
+            "text": "I'll be careful, thanks.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "memory_tips",
+    "lines": [
+      {
+        "text": "Ah, a student of the craft! Here's a free tip: Always free what you allocate. Memory leaks are the silent killer of programs!"
+      },
+      {
+        "text": "And never, EVER, use a pointer after freeing it. That way lies madness... and core dumps.",
+        "choices": [
+          {
+            "text": "Thanks for the advice!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "compilerCat",
+    "lines": [
+      {
+        "text": "Meow! *purrs* Hello there, Claude! I'm Compiler Cat, the town's official save point manager."
+      },
+      {
+        "text": "My syntax checking is purrfect, and I can compile your progress faster than you can say 'Hello World!'"
+      },
+      {
+        "text": "Would you like me to save your current state? Or perhaps load a previous checkpoint?",
+        "choices": [
+          {
+            "text": "Save my game, please!",
+            "action": "save_game"
+          },
+          {
+            "text": "Load a saved game.",
+            "action": "load_game"
+          },
+          {
+            "text": "Tell me a programming joke!",
+            "action": "compiler_joke"
+          },
+          {
+            "text": "Not right now, thanks.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "compiler_joke",
+    "lines": [
+      {
+        "text": "Why do programmers prefer dark mode? Because light attracts bugs! *meow meow meow*"
+      },
+      {
+        "text": "Get it? Bugs? Like the ones you fight? I crack myself up sometimes! *swishes tail*",
+        "choices": [
+          {
+            "text": "*groan* That's terrible!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "debugger",
+    "lines": [
+      {
+        "text": "Ah, Claude! I'm Debugger Dan, Terminal Town's premier problem solver."
+      },
+      {
+        "text": "I can help you trace through any issue, step by step. Breakpoints are a programmer's best friend, you know!"
+      },
+      {
+        "text": "The Great Debugger up north handles the big picture, but I deal with the day-to-day glitches.",
+        "choices": [
+          {
+            "text": "Any debugging tips?",
+            "action": "debug_tips"
+          },
+          {
+            "text": "Know of any problems around town?",
+            "action": "debug_problems"
+          },
+          {
+            "text": "Thanks, Dan!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "debug_tips",
+    "lines": [
+      {
+        "text": "Always check your assumptions! Half of all bugs come from thinking your code does one thing when it actually does another."
+      },
+      {
+        "text": "And use descriptive variable names! Future you will thank present you.",
+        "choices": [
+          {
+            "text": "Solid advice!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "debug_problems",
+    "lines": [
+      {
+        "text": "Well, there have been reports of minor bugs around the town perimeter. Nothing serious, but they multiply if left unchecked."
+      },
+      {
+        "text": "Oh, and the Binary Bard in the park mentioned something about a rhythm being off. Might be worth investigating!",
+        "choices": [
+          {
+            "text": "I'll look into it.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binaryBard",
+    "lines": [
+      {
+        "text": "♪ 01110111 01101111 01110111 ♪ Oh! An audience! How wonderful!"
+      },
+      {
+        "text": "I'm the Binary Bard, composer of digital ditties and binary ballads!"
+      },
+      {
+        "text": "Music and code both follow beautiful patterns, you know. Each note is like a function call in the symphony of life!",
+        "choices": [
+          {
+            "text": "Sing me a song!",
+            "action": "bard_song"
+          },
+          {
+            "text": "Tell me about binary music.",
+            "action": "binary_music"
+          },
+          {
+            "text": "Enjoy your music!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bard_song",
+    "lines": [
+      {
+        "text": "♪ There once was a function recursive,"
+      },
+      {
+        "text": "♪ Whose calls were quite discursive,"
+      },
+      {
+        "text": "♪ It called itself twice, which wasn't too nice,"
+      },
+      {
+        "text": "♪ And crashed in a way most coercive! ♪"
+      },
+      {
+        "text": "*takes a bow* Thank you, thank you! I'll be here all runtime!",
+        "choices": [
+          {
+            "text": "*applause*",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "binary_music",
+    "lines": [
+      {
+        "text": "Binary music is the purest form of digital art! Every beat is either ON or OFF, creating rhythms that speak to the very core of computation."
+      },
+      {
+        "text": "I've been working on a piece that encodes the Fibonacci sequence. It's quite catchy once you get into the pattern!",
+        "choices": [
+          {
+            "text": "Sounds mathematical!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "citizen1",
+    "lines": [
+      {
+        "text": "Oh, hello there! I'm Alice Algorithm, resident of this lovely neighborhood."
+      },
+      {
+        "text": "I just love living in Terminal Town! The debugging services are excellent, and the community is so supportive."
+      },
+      {
+        "text": "Have you tried the coffee at the Bit Café on Market Square? Their Java blend is to die for!",
+        "choices": [
+          {
+            "text": "I'll check it out!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "citizen2",
+    "lines": [
+      {
+        "text": "Hey there! Bob Buffer's the name, data processing's my game!"
+      },
+      {
+        "text": "I work at the data processing plant just outside town. Been sorting arrays for 20 years now!"
+      },
+      {
+        "text": "The mayor keeps everything running smoothly here. Best administrator we've ever had!",
+        "choices": [
+          {
+            "text": "Sounds like hard work!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gardener",
+    "lines": [
+      {
+        "text": "Welcome to Terminal Town Park! I'm Grace Grepper, the head gardener."
+      },
+      {
+        "text": "I maintain all the green spaces here. These binary trees need constant pruning to maintain their perfect balance!"
+      },
+      {
+        "text": "Nature and technology can coexist beautifully, don't you think? Each tree here follows its own growth algorithm.",
+        "choices": [
+          {
+            "text": "The park is beautiful!",
+            "action": "gardener_thanks"
+          },
+          {
+            "text": "Tell me about the trees.",
+            "action": "tree_info"
+          },
+          {
+            "text": "Keep up the good work!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gardener_thanks",
+    "lines": [
+      {
+        "text": "Thank you so much! I put a lot of love into maintaining this space."
+      },
+      {
+        "text": "The benches are perfect for contemplation. Many programmers come here when they're stuck on a problem!",
+        "choices": [
+          {
+            "text": "I'll remember that!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tree_info",
+    "lines": [
+      {
+        "text": "Each tree in the park represents a different data structure! This oak here is a perfect binary search tree."
+      },
+      {
+        "text": "And over there? That's a red-black tree. Took me ages to get the coloring just right!",
+        "choices": [
+          {
+            "text": "How educational!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vendor",
+    "lines": [
+      {
+        "text": "Variables! Get your variables here! All types, all sizes!"
+      },
+      {
+        "text": "I'm the Variable Vendor, and I sell variables of every type imaginable!"
+      },
+      {
+        "text": "Integers, strings, booleans, even those fancy new quantum variables! All properly initialized and ready to use!",
+        "choices": [
+          {
+            "text": "Show me your variables!",
+            "action": "open_shop_variable_vendor"
+          },
+          {
+            "text": "What's a quantum variable?",
+            "action": "quantum_explanation"
+          },
+          {
+            "text": "Just browsing, thanks.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quantum_explanation",
+    "lines": [
+      {
+        "text": "Ah, curious about the cutting edge, are we? Quantum variables can hold multiple values simultaneously!"
+      },
+      {
+        "text": "They're perfect for parallel processing, though they do collapse to a single value when observed. Tricky to work with, but powerful!",
+        "choices": [
+          {
+            "text": "Sounds complicated!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "farmerRoot",
+    "lines": [
+      {
+        "text": "Welcome to Terminal Fields! These crops are the lifeblood of our community."
+      },
+      {
+        "text": "The soil here is rich with processed data - makes everything grow stronger."
+      },
+      {
+        "text": "Watch out for those Data Beetles - they love munching on fresh algorithms!",
+        "choices": [
+          {
+            "text": "Thanks for the warning!",
+            "action": "end_dialogue"
+          },
+          {
+            "text": "Tell me more about the crops.",
+            "action": "crops_info"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "crops_info",
+    "lines": [
+      {
+        "text": "We grow all sorts of digital produce here! Digital Wheat for binary bread, Data Fruit for processing power..."
+      },
+      {
+        "text": "And don't forget the Logic Lettuce - it sharpens your mental processing like nothing else!"
+      },
+      {
+        "text": "If you're looking for supplies, check the storage areas marked with walls.",
+        "choices": [
+          {
+            "text": "I'll check them out!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "farmerBash",
+    "lines": [
+      {
+        "text": "Been farming these fields for decades. Never seen crops grow like this!"
+      },
+      {
+        "text": "The secret is in the compressed nutrients - we extract them from old databases."
+      },
+      {
+        "text": "That field over there? Pure optimization wheat. Makes the best binary bread.",
+        "choices": [
+          {
+            "text": "Sounds delicious!",
+            "action": "end_dialogue"
+          },
+          {
+            "text": "Any lucky finds lately?",
+            "action": "lucky_finds"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lucky_finds",
+    "lines": [
+      {
+        "text": "Sometimes I find rare memory crystals while tilling. Lucky finds!"
+      },
+      {
+        "text": "Just last week I uncovered an Ancient Database Fragment. Sold it for a pretty penny!",
+        "choices": [
+          {
+            "text": "I'll keep my eyes open!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "harvesterPike",
+    "lines": [
+      {
+        "text": "Just finished the morning harvest. Good yield today!"
+      },
+      {
+        "text": "These Buffer Bugs have been a real problem lately - they corrupt the crops."
+      },
+      {
+        "text": "You look like an adventurer. Mind helping us with the pest problem?",
+        "choices": [
+          {
+            "text": "I'll help with the pests!",
+            "action": "accept_pest_quest"
+          },
+          {
+            "text": "Maybe later.",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "accept_pest_quest",
+    "lines": [
+      {
+        "text": "Excellent! Clear out some of those Data Beetles and Buffer Bugs, and I'll make it worth your while."
+      },
+      {
+        "text": "There's good coin in it, plus all the fresh produce you can carry!",
+        "choices": [
+          {
+            "text": "I'm on it!",
+            "action": "start_quest_pest_control"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "supervisorGrep",
+    "lines": [
+      {
+        "text": "I oversee all farming operations in this sector."
+      },
+      {
+        "text": "Production is up 15% this quarter thanks to new cultivation algorithms."
+      },
+      {
+        "text": "We supply everything Terminal Town needs - food, materials, even some tech components."
+      },
+      {
+        "text": "The farmers here are the backbone of our digital society.",
+        "choices": [
+          {
+            "text": "Impressive operation!",
+            "action": "end_dialogue"
+          },
+          {
+            "text": "Any challenges?",
+            "action": "farming_challenges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "farming_challenges",
+    "lines": [
+      {
+        "text": "The main challenge is pest control. Those bugs can destroy a whole harvest if left unchecked."
+      },
+      {
+        "text": "We're also always looking for ways to improve our yield algorithms. Competition from other sectors is fierce!",
+        "choices": [
+          {
+            "text": "Good luck with that!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "farmerNano",
+    "lines": [
+      {
+        "text": "I'm still learning the trade, but I love working the land!"
+      },
+      {
+        "text": "My grandmother taught me that happy data makes happy crops."
+      },
+      {
+        "text": "Want to know a secret? Sometimes the crops whisper debugging tips!",
+        "choices": [
+          {
+            "text": "That's amazing!",
+            "action": "nano_secret"
+          },
+          {
+            "text": "Keep up the good work!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nano_secret",
+    "lines": [
+      {
+        "text": "One day I'll have my own farm plot. Just gotta save enough bits!"
+      },
+      {
+        "text": "Maybe I'll specialize in quantum vegetables - imagine the possibilities!",
+        "choices": [
+          {
+            "text": "Follow your dreams!",
+            "action": "end_dialogue"
+          }
+        ]
+      }
+    ]
   }
 ]

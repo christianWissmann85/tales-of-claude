@@ -3,7 +3,7 @@
 import { JsonMap, JsonMapTileLayer, JsonMapObjectLayer } from '../types/map-schema.types';
 import { TileType, Position } from '../types/global.types';
 import * as fs from 'fs';
-import * as path from 'path';
+// import * as path from 'path'; // Unused import
 
 interface ValidationResult {
   valid: boolean;
@@ -70,7 +70,7 @@ export function validateMap(map: JsonMap): ValidationResult {
 
       // Count walkable tiles
       tileLayer.data.forEach(tile => {
-        if (isWalkable(tile as TileType)) {
+        if (isWalkable(String(tile))) {
           result.stats.walkableTiles++;
         }
       });
@@ -144,7 +144,7 @@ function findUnreachableAreas(map: JsonMap): Position[][] {
   for (let y = 0; y < map.height; y++) {
     for (let x = 0; x < map.width; x++) {
       const index = y * map.width + x;
-      if (!visited[y][x] && isWalkable(collisionLayer.data[index] as string)) {
+      if (!visited[y][x] && isWalkable(String(collisionLayer.data[index]))) {
         const area = floodFill(map, collisionLayer, x, y, visited);
         if (area.length > 0) {
           areas.push(area);
@@ -182,7 +182,7 @@ function floodFill(
     }
 
     const index = y * map.width + x;
-    if (!isWalkable(layer.data[index] as string)) {
+    if (!isWalkable(String(layer.data[index]))) {
       continue;
     }
 
@@ -238,7 +238,7 @@ export function generateAsciiMap(map: JsonMap): string {
     ascii += '│';
     for (let x = 0; x < map.width; x++) {
       const index = y * map.width + x;
-      let char = charMap[baseLayer.data[index] as string] || '?';
+      let char = charMap[String(baseLayer.data[index])] || '?';
 
       // Check for objects at this position
       if (objectLayer) {

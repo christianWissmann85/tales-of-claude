@@ -1,7 +1,7 @@
 // src/assets/maps/binaryForest.ts
 
 import { Position, Tile, TileType, Exit, Enemy, NPC, Item, GameMap as IGameMap } from '../../types/global.types';
-import { GameMap } from '../../models/Map';
+// import { GameMap } from '../../models/Map'; // Unused import
 import { Enemy as EnemyClass, EnemyVariant } from '../../models/Enemy';
 import { Item as ItemClass, ItemVariant } from '../../models/Item';
 import { NPCRole } from '../../types/global.types'; // Import NPCRole for NPC definitions
@@ -213,7 +213,7 @@ const pushableTrees: Position[] = [
   { x: 12, y: 11 },
 ];
 
-pushableTrees.forEach((pos, index) => {
+pushableTrees.forEach((pos, _index) => {
   tiles[pos.y][pos.x] = {
     walkable: false,
     type: 'tree' as TileType,

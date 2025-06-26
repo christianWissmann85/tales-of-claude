@@ -25,7 +25,7 @@ function runAutomatedTests() {
 }
 
 // Attach to window for browser console access
-(window as any).runAutomatedTests = runAutomatedTests;
+(window as unknown as { runAutomatedTests?: typeof runAutomatedTests }).runAutomatedTests = runAutomatedTests;
 
 // Also export for module usage
 export { runAutomatedTests };

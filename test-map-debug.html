@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Debug Test</title>
+    <style>
+        body { font-family: monospace; }
+        .grid { display: inline-block; }
+        .row { height: 10px; }
+        .cell { 
+            display: inline-block; 
+            width: 10px; 
+            height: 10px; 
+            border: 1px solid #ccc;
+        }
+        .floor { background: #90EE90; }
+        .wall { background: #8B4513; }
+        .water { background: #4169E1; }
+        .player { background: #FF0000; }
+    </style>
+</head>
+<body>
+    <h2>Terminal Town Map Debug</h2>
+    <div id="info"></div>
+    <div id="map" class="grid"></div>
+    
+    <script type="module">
+        // Simple test to visualize the map data
+        import { terminalTownData } from './src/assets/maps/terminalTown.js';
+        
+        const info = document.getElementById('info');
+        const mapDiv = document.getElementById('map');
+        
+        info.innerHTML = `
+            Map: ${terminalTownData.name}<br>
+            Size: ${terminalTownData.width} x ${terminalTownData.height}<br>
+            Start Position: (${terminalTownData.startPosition.x}, ${terminalTownData.startPosition.y})<br>
+            Tiles array length: ${terminalTownData.tiles.length}<br>
+        `;
+        
+        // Render a portion of the map around spawn point
+        const centerX = terminalTownData.startPosition.x;
+        const centerY = terminalTownData.startPosition.y;
+        const viewSize = 30;
+        
+        for (let y = centerY - viewSize/2; y < centerY + viewSize/2; y++) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            
+            for (let x = centerX - viewSize/2; x < centerX + viewSize/2; x++) {
+                const cell = document.createElement('span');
+                cell.className = 'cell';
+                
+                if (x === centerX && y === centerY) {
+                    cell.className += ' player';
+                    cell.title = 'Player spawn';
+                } else if (terminalTownData.tiles[y] && terminalTownData.tiles[y][x]) {
+                    const tile = terminalTownData.tiles[y][x];
+                    cell.className += ' ' + tile.type;
+                    cell.title = `(${x},${y}) ${tile.type} walkable:${tile.walkable}`;
+                }
+                
+                row.appendChild(cell);
+            }
+            mapDiv.appendChild(row);
+        }
+    </script>
+</body>
+</html>

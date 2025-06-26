@@ -12,7 +12,7 @@ async function testQuestPanel() {
   
   const browser = await puppeteer.launch({
     headless: false,
-    defaultViewport: { width: 1920, height: 1080 }
+    defaultViewport: { width: 1920, height: 1080 },
   });
 
   try {
@@ -33,7 +33,7 @@ async function testQuestPanel() {
     // Take initial screenshot
     await page.screenshot({
       path: join(SCREENSHOT_DIR, 'game-loaded.png') as `${string}.png`,
-      fullPage: true
+      fullPage: true,
     });
     console.log('✅ Game loaded screenshot captured');
     
@@ -45,7 +45,7 @@ async function testQuestPanel() {
     // Take quest journal screenshot
     await page.screenshot({
       path: join(SCREENSHOT_DIR, 'quest-journal-open.png') as `${string}.png`,
-      fullPage: true
+      fullPage: true,
     });
     console.log('✅ Quest journal screenshot captured');
     
@@ -74,7 +74,7 @@ async function testQuestPanel() {
               height: rect.height,
               display: styles.display,
               position: styles.position,
-              innerHTML: el.innerHTML.substring(0, 50)
+              innerHTML: el.innerHTML.substring(0, 50),
             });
           }
         }
@@ -102,7 +102,7 @@ async function testQuestPanel() {
       const questDetails = document.querySelector('[class*="questDetails"]');
       
       const getElementInfo = (el: Element | null, name: string) => {
-        if (!el) return { name, found: false };
+        if (!el) { return { name, found: false }; }
         
         const rect = el.getBoundingClientRect();
         const styles = window.getComputedStyle(el);
@@ -115,14 +115,14 @@ async function testQuestPanel() {
           display: styles.display,
           visibility: styles.visibility,
           overflow: styles.overflow,
-          classes: el.className
+          classes: el.className,
         };
       };
       
       return {
         questLog: getElementInfo(questLog, 'Quest Log Container'),
         questList: getElementInfo(questList, 'Quest List'),
-        questDetails: getElementInfo(questDetails, 'Quest Details')
+        questDetails: getElementInfo(questDetails, 'Quest Details'),
       };
     });
     
@@ -151,13 +151,13 @@ async function testQuestPanel() {
       questPanelInfo,
       screenshots: {
         gameLoaded: join(SCREENSHOT_DIR, 'game-loaded.png'),
-        questJournal: join(SCREENSHOT_DIR, 'quest-journal-open.png')
-      }
+        questJournal: join(SCREENSHOT_DIR, 'quest-journal-open.png'),
+      },
     };
     
     writeFileSync(
       join(SCREENSHOT_DIR, 'quest-panel-analysis.json'),
-      JSON.stringify(results, null, 2)
+      JSON.stringify(results, null, 2),
     );
     
     console.log('\n✅ Test complete! Results saved to quest-panel-analysis.json');

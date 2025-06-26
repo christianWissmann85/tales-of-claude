@@ -342,12 +342,11 @@ export class WeatherSystem {
           probabilities['storm'] = Math.min(probabilities['storm'] + stormIncrease, 0.5); // Cap storm chance
           probabilities['fog'] = Math.min(probabilities['fog'] + fogIncrease, 0.3);     // Cap fog chance
           totalAdjustment = stormIncrease + fogIncrease;
-        }
-        // Increase clear chance during day
-        else if (period === 'day') {
+        } else if (period === 'day') {
+          // Increase clear chance during day
           const clearIncrease = 0.1; // e.g., increase clear by 10%
           probabilities['clear'] = Math.min(probabilities['clear'] + clearIncrease, 0.6); // Cap clear chance
-          totalAdjustment = -clearIncrease; // This is a "reduction" for others
+          // totalAdjustment = -clearIncrease; // This is a "reduction" for others // Unused variable
         }
 
         // Normalize probabilities after adjustments

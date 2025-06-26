@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './DialogueBox.module.css';
 import { useGameContext } from '../../context/GameContext'; // FIX 1: Corrected import path
-import { DialogueState, DialogueOption } from '../../types/global.types'; // Adjust path based on your project structure
+import { DialogueOption } from '../../types/global.types'; // Adjust path based on your project structure
 import { useKeyboard } from '../../hooks/useKeyboard'; // Adjust path based on your project structure
 
 const TYPE_SPEED = 30; // Milliseconds per character for typewriter effect

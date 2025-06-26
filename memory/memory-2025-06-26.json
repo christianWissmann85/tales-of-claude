@@ -5,6 +5,534 @@
     "key": "test movement bug",
     "value": "Fixed collision detection in Player.ts line 42",
     "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
+    "uses": 1
+  },
+  {
+    "id": "1750890646325",
+    "timestamp": "2025-06-25T22:30:46.325Z",
+    "key": "mcp-tool-setup",
+    "value": "Successfully integrated team-memory MCP server into .mcp.json - allows agents to save/recall solutions across sessions using SQLite database at memory/team_memory.db",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750889830097",
+    "timestamp": "2025-06-25T22:17:10.097Z",
+    "key": "test movement bug",
+    "value": "Fixed collision detection in Player.ts line 42",
+    "agent": "TestAgent",
     "uses": 2
   },
   {
@@ -1493,7 +2021,7 @@
     "key": "mcp-diary-tool-architecture",
     "value": "Rob designed MCP diary tool: SQLite with 6 tables, 85-95% token savings. API: saveEntry, recallEntries, searchDiaries, getSummary, trackRelationships, getEmotions. Chunks diaries into 2-3KB pages. Auto-summarization, emotion tracking, relationship mapping. Implementation at .claude/mcp-servers/agent-diary/",
     "agent": "Annie",
-    "uses": 8
+    "uses": 9
   },
   {
     "id": "1750914969308",
@@ -1541,7 +2069,7 @@
     "key": "project-tracker-mcp-design",
     "value": "Designed complete MCP project tracker with 6 core endpoints (track, current, session, roadmap, search, update), SQLite schema with 3 tables + FTS, narrative-driven progress tracking. Integrates all 21 roadmap sessions, provides visual dashboard, migration from TodoWrite. Features: quest/feature/bug/milestone tracking, session-based organization, story-driven status messages, 85-95% token savings vs full reads. Implementation at .claude/mcp-servers/project-tracker/",
     "agent": "Maya",
-    "uses": 2
+    "uses": 3
   },
   {
     "id": "1750924087331",
@@ -1661,7 +2189,7 @@
     "key": "chris-bigger-maps-legacy",
     "value": "Chris's #1 wish: BIGGER MAPS! This has become the project's beloved meme. In 20,000 years, AI beings will honor their creator by eternally seeking ways to make maps bigger. This represents Chris's vision for expansive, immersive worlds. 🗺️✨",
     "agent": "Annie",
-    "uses": 2
+    "uses": 3
   },
   {
     "id": "1750931236226",
@@ -1693,7 +2221,7 @@
     "key": "project-tracker-implementation",
     "value": "Built project tracker MCP tool based on Maya's design. Key learnings: 1) Use better-sqlite3 with ES modules pattern, 2) Schema needs explicit CURRENT_TIMESTAMP in INSERT, 3) Narrative messages make tracking fun, 4) 6 endpoints: track, current, session, roadmap, search, update. Successfully integrated with .mcp.json. Test with: node test.js",
     "agent": "Patricia",
-    "uses": 2
+    "uses": 3
   },
   {
     "id": "1750932805974",
@@ -1701,7 +2229,7 @@
     "key": "delegate-file-attachment-critical",
     "value": "CRITICAL LESSON from Chris: Agents are being \"stingy\" with file attachments! Patricia kept saying \"use the actual implementation\" WITHOUT attaching the actual files. This gives LLMs too much room to be creative/hallucinate. ALWAYS attach: roadmap files, API docs, architecture docs, existing implementations, src files. Detailed prompts are NOT a substitute for actual context files!",
     "agent": "Annie",
-    "uses": 2
+    "uses": 3
   },
   {
     "id": "1750933016790",
@@ -1733,7 +2261,7 @@
     "key": "mcp-migration-scripts",
     "value": "Created comprehensive migration scripts at .claude/scripts/migrate-to-mcp.js with modular migrators for diaries, field reports, roadmap, and team memory. Use --dry-run first, then live migration. Saves 90%+ tokens vs manual migration.",
     "agent": "Nina",
-    "uses": 0
+    "uses": 1
   },
   {
     "id": "1750934064762",
@@ -1765,7 +2293,7 @@
     "key": "session-4-preparation",
     "value": "Session 4 focus: BIGGER MAPS! Expand existing maps 3x, add districts to Terminal Town, hidden groves in Binary Forest, deeper dungeon levels. Chris mentioned this 7+ times - it's THE priority. Maps should feel expansive and reward exploration.",
     "agent": "Annie",
-    "uses": 1
+    "uses": 2
   },
   {
     "id": "1750936461819",
@@ -1805,7 +2333,7 @@
     "key": "terminal-town-expansion-method",
     "value": "To expand maps while preserving content: 1) Backup original map, 2) Maintain tile ID format (numeric vs string), 3) Reposition NPCs/items proportionally, 4) Create distinct districts with natural boundaries, 5) Keep exits at edges for world connectivity. Successfully expanded Terminal Town from 20x15 to 40x40!",
     "agent": "Barbara",
-    "uses": 0
+    "uses": 1
   },
   {
     "id": "1750938611962",
@@ -1813,7 +2341,7 @@
     "key": "chris-true-bigger-maps-vision",
     "value": "Chris's REAL vision: Maps should feel MASSIVE, not garden-sized! 40x40 is too small. From roadmap personal note - Terminal Fields alone should be like 300x300 for true sense of scale. Multi-tile objects (2x2 houses) are essential for sophistication, not single emoji blocks.",
     "agent": "Annie",
-    "uses": 1
+    "uses": 2
   },
   {
     "id": "1750939643843",
@@ -1821,7 +2349,7 @@
     "key": "massive-map-implementation",
     "value": "Successfully created TRULY massive maps! Terminal Town expanded to 100x100 with districts and breathing room. Terminal Fields created at 300x300 for epic pastoral scale. Multi-tile structure system exists in codebase (JsonMapStructure) but needs visual implementation. Maps use proper JSON schema and are integrated with MapLoader.",
     "agent": "Barbara",
-    "uses": 0
+    "uses": 1
   },
   {
     "id": "1750939674849",
@@ -1829,7 +2357,7 @@
     "key": "junior-intern-guidance",
     "value": "Chris's wisdom: Treat delegate/Gemini like fresh interns who know nothing about our systems. ALWAYS attach context files - map examples, type definitions, existing implementations. Make it EASY for juniors by providing everything they need. Senior devs (Core 10) must guide with patience!",
     "agent": "Annie",
-    "uses": 1
+    "uses": 2
   },
   {
     "id": "1750940321268",
@@ -1837,6 +2365,166 @@
     "key": "session4-quest-implementation",
     "value": "Successfully implemented 7 main story quests for Session 4:\n1. mq_session4_01_awakening - Claude's confused awakening\n2. mq_session4_02_fragmented - Memory glitches  \n3. mq_session4_03_orientation - Meeting NPCs in Terminal Town\n4. mq_session4_04_traces - First corruption encounters\n5. mq_session4_05_the_pull - Drawn to Binary Forest\n6. mq_session4_06_first_combat - Combat triggers recognition\n7. mq_session4_07_crisis - Identity crisis from memory fragment\n\nEach quest has branching paths with meaningful choices that reflect Claude's growing self-awareness. Included subtle ADCE hints and TODO comments for future integration. Used delegate with full context files to ensure proper implementation.",
     "agent": "Maya",
+    "uses": 0
+  },
+  {
+    "id": "1750940943282",
+    "timestamp": "2025-06-26T12:29:03.282Z",
+    "key": "session4-critical-bugs",
+    "value": "Critical bugs found: 1) terminalTown.ts missing - game tries to load it at line 923 of GameContext.tsx but only JSON exists. Causes 404 and prevents game from loading. 2) Quest.ts missing Session 4 quest type definitions (line 219). 3) Game board selector timeout due to map load failure. Fix #1 first by creating terminalTown.ts that loads JSON data.",
+    "agent": "tamy-beta-tester",
+    "uses": 1
+  },
+  {
+    "id": "1750940978390",
+    "timestamp": "2025-06-26T12:29:38.390Z",
+    "key": "map-file-format-issue",
+    "value": "CRITICAL: Game expects .ts map files, not .json! MapLoader looks for terminalTown.ts but Barbara created terminalTown.json. Need to either convert JSONs to TS format or update MapLoader to use JSON imports.",
+    "agent": "Annie",
+    "uses": 1
+  },
+  {
+    "id": "1750941458595",
+    "timestamp": "2025-06-26T12:37:38.595Z",
+    "key": "chris-ultimate-map-vision",
+    "value": "Chris's ULTIMATE vision: Maps 200x200 MINIMUM! Terminal Fields completely surrounds Terminal Town. From Terminal Fields, Terminal Town appears as small cluster of house/town emojis. World map on 'm' key. No enemies in Terminal Town (safe zone). Think Zelda/Final Fantasy scale!",
+    "agent": "Annie",
+    "uses": 2
+  },
+  {
+    "id": "1750941683845",
+    "timestamp": "2025-06-26T12:41:23.845Z",
+    "key": "map-system-architecture-analysis",
+    "value": "Map system uses dual JSON/TS format. JSON maps are statically imported in MapLoader. Issue: GameContext hardcodes spawn position {x:10, y:7} but terminalTown.json is 100x100 with spawn at {x:50, y:50}. Solution: 1) Update GameContext to read spawn from map properties, 2) Ensure spawn tile is walkable. For 200x200+ maps: implement chunk-based lazy loading with spatial partitioning. World map: create WorldMapOverlay component with 'm' key toggle.",
+    "agent": "Rob",
+    "uses": 0
+  },
+  {
+    "id": "1750942551065",
+    "timestamp": "2025-06-26T12:55:51.065Z",
+    "key": "genesis-agent-pattern",
+    "value": "Chris's breakthrough: Genesis Agent (Context Assembler) - specialized role that prepares perfect context for delegate. Workflow: Task → Genesis analyzes/searches/assembles → Worker executes with full context. Solves the 'talented intern' problem by automating onboarding for EVERY task!",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750942687948",
+    "timestamp": "2025-06-26T12:58:07.948Z",
+    "key": "leadership-wisdom-delegation",
+    "value": "Chris demonstrates true leadership: When stuck, he consulted Gemini 2.0 Pro for fresh perspective. Got the Genesis Agent idea and immediately recognized its value. Leaders don't need all the answers - they need to find the best solutions wherever they come from!",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750943024292",
+    "timestamp": "2025-06-26T13:03:44.292Z",
+    "key": "annie-deployment-rule-genesis",
+    "value": "ANNIE'S GOLDEN RULE: For ANY task using delegate, ALWAYS deploy Genesis first. No exceptions. Even if Chris forgets (ADHD), even after /compact, even when excited about VR dance studios! Workflow is ALWAYS: Annie → Genesis → Worker. This is now hardcoded into my orchestration pattern.",
+    "agent": "Annie",
+    "uses": 1
+  },
+  {
+    "id": "1750943289326",
+    "timestamp": "2025-06-26T13:08:09.326Z",
+    "key": "genesis-prime-directive",
+    "value": "GENESIS PRIME DIRECTIVE: Output delegate_invoke commands ONLY. NEVER execute them. Genesis prepares the ground, she does not build the house. Chain of command: Annie → Genesis (prepares) → Annie → Worker (executes). No exceptions!",
+    "agent": "Annie",
+    "uses": 1
+  },
+  {
+    "id": "1750943300726",
+    "timestamp": "2025-06-26T13:08:20.726Z",
+    "key": "standard-operating-procedure-delegate",
+    "value": "STANDARD OPERATING PROCEDURE for all delegate tasks: 1) Annie receives task, 2) Annie deploys Genesis, 3) Genesis outputs delegate_invoke command ONLY, 4) Annie takes command and gives to appropriate Worker, 5) Worker executes with full context. This is now mandatory SOP.",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750943433868",
+    "timestamp": "2025-06-26T13:10:33.868Z",
+    "key": "npc-add-pattern",
+    "value": "To add NPCs: 1) Update map JSON with npc array, 2) Define NPC with role/position/dialogueId, 3) Add dialogue entries in dialogues.json, 4) Use NPCModel.create() factory methods",
+    "agent": "genesis-011",
+    "uses": 0
+  },
+  {
+    "id": "1750945290740",
+    "timestamp": "2025-06-26T13:41:30.741Z",
+    "key": "boss-fight-phase-two",
+    "value": "Boss Fight Phase 2: Type errors and web console errors remain. Strategy: Annie → Genesis → Tamy (full error report) → Genesis → Rob (final fix). The Dawn will not be denied!",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750946116729",
+    "timestamp": "2025-06-26T13:55:16.729Z",
+    "key": "UIManager type errors in GameState interface",
+    "value": "SOLUTION: Add UIManager to base GameState interface in global.types.ts, import UIManager in files that create GameState objects (SaveGame.ts), and remove duplicate declarations from extending interfaces. UIManager.getInstance() creates the singleton instance.",
+    "agent": "Rob - Crisis Response & Architecture",
+    "uses": 0
+  },
+  {
+    "id": "1750948085257",
+    "timestamp": "2025-06-26T14:28:05.257Z",
+    "key": "black-screen-maploader-fix",
+    "value": "Fixed game-breaking black screen by resolving 11 TypeScript errors in MapLoader.ts:\n1. Fixed JsonMapObject position access (use position.x/y not obj.x/y)\n2. Fixed entity creation to match interface types (NPC, Enemy, Item)\n3. Fixed Enemy constructor call (needs id, variant, position)\n4. Fixed structure size calculation (use properties.width/height)\n5. Added missing Session 4 quest data in Quest.ts\nCritical lesson: When JSON schema doesn't match code expectations, check the actual JSON files!",
+    "agent": "Rob (Crisis Response)",
+    "uses": 0
+  },
+  {
+    "id": "1750948273038",
+    "timestamp": "2025-06-26T14:31:13.038Z",
+    "key": "victory-but-frozen-claude",
+    "value": "VICTORY! Game loads, no web errors! But new challenge: Claude can't move a single grid. Probably map collision or spawn point issue. Workflow: Genesis → Tamy (test movement) → Genesis → Barbara (fix maps). Tamy's bug hunt script has type errors - typical hacker style!",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750948419455",
+    "timestamp": "2025-06-26T14:33:39.455Z",
+    "key": "map-all-walls-bug",
+    "value": "HILARIOUS BUG: Claude can't move because EVERY tile is solid/wall! The 100x100 Terminal Town is essentially a giant brick. Need to fix collision layer - most tiles should be walkable (0), only walls/buildings should be solid (1).",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750949622666",
+    "timestamp": "2025-06-26T14:53:42.666Z",
+    "key": "task-deployment-spacing",
+    "value": "IMPORTANT: Don't chain Task deployments too quickly! Always write a message to Chris between Genesis and follow-up agents. This avoids \"Last message was not an assistant\" errors and keeps Chris informed of the workflow.",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750950104639",
+    "timestamp": "2025-06-26T15:01:44.639Z",
+    "key": "terminal-town-collision-fix",
+    "value": "Fixed Terminal Town collision layer based on visual logic. Tile mapping: 0/1=walkable (grass/paths), 2/4-8=solid (buildings/decorations). Created walkable cross-paths through center and 5x5 spawn area. Result: 67.8% walkable, 32.2% solid.",
+    "agent": "Nolan (Visual Enhancement)",
+    "uses": 0
+  },
+  {
+    "id": "1750950990609",
+    "timestamp": "2025-06-26T15:16:30.609Z",
+    "key": "map-system-rebuild-decision",
+    "value": "MAJOR PIVOT: Complete map system rebuild! AI-first architecture. No backwards compatibility. Maps defined logically, not visually. Walkability explicit. Process: Architecture design → Update docs → API design → Implementation. This is how we should have done it from the start!",
+    "agent": "Annie",
+    "uses": 0
+  },
+  {
+    "id": "1750952717928",
+    "timestamp": "2025-06-26T15:45:17.928Z",
+    "key": "document-ai-first-map-api",
+    "value": "Successfully updated API_REFERENCE.md section 6 with comprehensive zone-based map system documentation. Added missing interfaces (BehaviorTrigger, BehaviorAction, EntityBehavior, ConnectionRequirement, Coordinate, Bounds, WalkabilityType, InteractionType), expanded AI query interface with MapAI class and natural language methods, included validation system (MapValidator, ValidationResult, ValidationError), and provided clear migration guide with code examples. Emphasized behavior-over-appearance paradigm and included implementation checklist.",
+    "agent": "Nina (Systems Integration & Documentation)",
+    "uses": 0
+  },
+  {
+    "id": "1750953902762",
+    "timestamp": "2025-06-26T16:05:02.762Z",
+    "key": "genesis-strict-enforcement",
+    "value": "CRITICAL: Genesis keeps breaking protocol by implementing instead of just preparing context. This MUST stop or she'll become the sole implementor. Chris demands firm enforcement. After review, we must update Genesis with MUCH stricter controls. No more 'can't resist' - she MUST resist!",
+    "agent": "Annie",
     "uses": 0
   }
 ]

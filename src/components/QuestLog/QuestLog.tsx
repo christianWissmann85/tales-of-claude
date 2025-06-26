@@ -10,7 +10,7 @@ import { Quest } from '../../models/Quest';
 type QuestCategory = 'active' | 'available' | 'completed';
 
 const QuestLog: React.FC = () => {
-  const { state, dispatch } = useGameContext();
+  const { dispatch } = useGameContext();
   const { pressedKeys } = useKeyboard();
   const questManager = QuestManager.getInstance();
   
@@ -168,7 +168,7 @@ const QuestLog: React.FC = () => {
                 
                 <div className={styles.objectives}>
                   <div className={styles.objectivesHeader}>Objectives:</div>
-                  {selectedQuest.objectives.map((obj, index) => (
+                  {selectedQuest.objectives.map((obj, _index) => (
                     <div
                       key={obj.id}
                       className={`${styles.objective} ${

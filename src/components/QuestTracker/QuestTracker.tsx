@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styles from './QuestTracker.module.css';
 import { QuestManager } from '../../models/QuestManager';
 import { Quest } from '../../models/Quest';
-import { Position } from '../../types/global.types';
+import { Position, QuestObjective } from '../../types/global.types';
 import { useKeyboard } from '../../hooks/useKeyboard';
 
 interface QuestTrackerProps {
@@ -65,7 +65,7 @@ const QuestTracker: React.FC<QuestTrackerProps> = ({ onOpenJournal, playerPositi
   }, [onOpenJournal]);
 
   // Calculate distance to objective (mock implementation)
-  const calculateDistance = useCallback((objective: any): number | null => {
+  const calculateDistance = useCallback((objective: QuestObjective): number | null => {
     // In a real implementation, you'd look up the target's position
     // For now, return a mock distance
     if (objective.type === 'reach_location' || objective.type === 'talk_to_npc') {

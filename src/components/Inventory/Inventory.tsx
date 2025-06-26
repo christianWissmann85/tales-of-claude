@@ -286,7 +286,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
   // Determine current and max capacity
   const currentTotalItems = calculateTotalItemCount();
   // Assuming Inventory class has getMaxCapacity() method, otherwise use fallback
-  const maxCapacity = (inventory as any).getMaxCapacity ? (inventory as any).getMaxCapacity() : MAX_INVENTORY_SLOTS;
+  const maxCapacity = inventory.getMaxCapacity ? inventory.getMaxCapacity() : MAX_INVENTORY_SLOTS;
 
   return (
     <div 
@@ -383,7 +383,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
               return (
                 <div
                   key={item.id}
-                  className={`${styles.itemSlot} ${styles[(item as any).rarity] || ''}`} // Apply rarity color class
+                  className={`${styles.itemSlot} ${styles[item.rarity || 'common'] || ''}`} // Apply rarity color class
                   onMouseEnter={(e) => setTooltip({ visible: true, x: e.clientX + 10, y: e.clientY + 10, item })}
                   onMouseLeave={() => setTooltip({ visible: false, x: 0, y: 0, item: null })}
                   onClick={() => handleItemClick(item, count)}
@@ -426,7 +426,7 @@ const InventoryComponent: React.FC<InventoryProps> = ({ inventory, onClose, onUs
               </div>
             )}
             <p className={styles.tooltipType}>Type: {tooltip.item.type}</p>
-            <p className={`${styles.tooltipRarity} ${styles[(tooltip.item as any).rarity]}`}>Rarity: {(tooltip.item as any).rarity || 'common'}</p>
+            <p className={`${styles.tooltipRarity} ${styles[tooltip.item.rarity || 'common']}`}>Rarity: {tooltip.item.rarity || 'common'}</p>
           </div>
         )}
 

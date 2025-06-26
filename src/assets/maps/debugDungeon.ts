@@ -302,83 +302,83 @@ tiles[10][18] = {
 // Add puzzle entities
 // Note: These puzzle blocks don't match Enemy | NPC | Item types
 // This appears to be an unfinished puzzle system implementation
-const puzzleEntities: unknown[] = [
-  // Push blocks for puzzle 1
-  {
-    id: 'push_block_1',
-    type: 'pushable_block',
-    position: { x: 16, y: 14 },
-    puzzleId: 'block_puzzle',
-  },
-  {
-    id: 'push_block_2',
-    type: 'pushable_block',
-    position: { x: 17, y: 15 },
-    puzzleId: 'block_puzzle',
-  },
-  {
-    id: 'push_block_3',
-    type: 'pushable_block',
-    position: { x: 18, y: 14 },
-    puzzleId: 'block_puzzle',
-  },
-  // Pressure plates
-  {
-    id: 'pressure_plate_1',
-    type: 'pressure_plate',
-    position: { x: 17, y: 14 },
-    puzzleId: 'block_puzzle',
-  },
-  {
-    id: 'pressure_plate_2',
-    type: 'pressure_plate',
-    position: { x: 16, y: 15 },
-    puzzleId: 'block_puzzle',
-  },
-  {
-    id: 'pressure_plate_3',
-    type: 'pressure_plate',
-    position: { x: 18, y: 16 },
-    puzzleId: 'block_puzzle',
-  },
-  // Sequential switches
-  {
-    id: 'seq_switch_1',
-    type: 'switch',
-    position: { x: 2, y: 3 },
-    sequenceOrder: 1,
-    puzzleId: 'switch_puzzle',
-  },
-  {
-    id: 'seq_switch_2',
-    type: 'switch',
-    position: { x: 4, y: 3 },
-    sequenceOrder: 2,
-    puzzleId: 'switch_puzzle',
-  },
-  {
-    id: 'seq_switch_3',
-    type: 'switch',
-    position: { x: 2, y: 5 },
-    sequenceOrder: 3,
-    puzzleId: 'switch_puzzle',
-  },
-  {
-    id: 'seq_switch_4',
-    type: 'switch',
-    position: { x: 4, y: 5 },
-    sequenceOrder: 4,
-    puzzleId: 'switch_puzzle',
-  },
-  {
-    id: 'seq_switch_5',
-    type: 'switch',
-    position: { x: 3, y: 4 },
-    sequenceOrder: 5,
-    puzzleId: 'switch_puzzle',
-  },
-];
-
+// // const puzzleEntities: unknown[] = [ // Unused variable
+//   // Push blocks for puzzle 1
+//   {
+//     id: 'push_block_1',
+//     type: 'pushable_block',
+//     position: { x: 16, y: 14 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   {
+//     id: 'push_block_2',
+//     type: 'pushable_block',
+//     position: { x: 17, y: 15 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   {
+//     id: 'push_block_3',
+//     type: 'pushable_block',
+//     position: { x: 18, y: 14 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   // Pressure plates
+//   {
+//     id: 'pressure_plate_1',
+//     type: 'pressure_plate',
+//     position: { x: 17, y: 14 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   {
+//     id: 'pressure_plate_2',
+//     type: 'pressure_plate',
+//     position: { x: 16, y: 15 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   {
+//     id: 'pressure_plate_3',
+//     type: 'pressure_plate',
+//     position: { x: 18, y: 16 },
+//     puzzleId: 'block_puzzle',
+//   },
+//   // Sequential switches
+//   {
+//     id: 'seq_switch_1',
+//     type: 'switch',
+//     position: { x: 2, y: 3 },
+//     sequenceOrder: 1,
+//     puzzleId: 'switch_puzzle',
+//   },
+//   {
+//     id: 'seq_switch_2',
+//     type: 'switch',
+//     position: { x: 4, y: 3 },
+//     sequenceOrder: 2,
+//     puzzleId: 'switch_puzzle',
+//   },
+//   {
+//     id: 'seq_switch_3',
+//     type: 'switch',
+//     position: { x: 2, y: 5 },
+//     sequenceOrder: 3,
+//     puzzleId: 'switch_puzzle',
+//   },
+//   {
+//     id: 'seq_switch_4',
+//     type: 'switch',
+//     position: { x: 4, y: 5 },
+//     sequenceOrder: 4,
+//     puzzleId: 'switch_puzzle',
+//   },
+//   {
+//     id: 'seq_switch_5',
+//     type: 'switch',
+//     position: { x: 3, y: 4 },
+//     sequenceOrder: 5,
+//     puzzleId: 'switch_puzzle',
+//   },
+// ];
+// 
 // Secret items
 const secretItems: Item[] = [
   {
